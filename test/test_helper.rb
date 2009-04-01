@@ -1,0 +1,5 @@
+require 'rubygems'
+require 'stringio'
+require 'test/unit'
+require 'date'
+require File.dirname(__FILE__) + File::SEPARATOR + '..' + File::SEPARATOR + "lib" + File::SEPARATOR + 'brcobranca'

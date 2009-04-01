@@ -1,0 +1,33 @@
+= brcobranca
+
+* FIX (url)
+
+== DESCRICAO:
+
+Gem para emissao de bloquetos de cobranca para bancos brasileiros
+
+== Bancos Disponíveis:
+
+* Banco do Brasil
+** 16
+** 18
+* Itaú
+
+== AJUDA?:
+
+  veja: 
+
+== REQUIREMENTS:
+
+* rghost
+* rghost_barcode
+
+== INSTALAR:
+
+* sudo gem install brcobranca
+
+== LICENSE:
+
+This gem is licensed by BSD License)
+
+Copyright (c) 2009 Kivanio Barbosa
