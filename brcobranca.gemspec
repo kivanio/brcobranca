@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{brcobranca}
-  s.version = "2.0.4"
+  s.version = "2.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kivanio Barbosa"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc"]
   s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "Rakefile", "brcobranca.gemspec", "lib/brcobranca.rb", "lib/brcobranca/boleto/bancobrasil.rb", "lib/brcobranca/boleto/base.rb", "lib/brcobranca/boleto/itau.rb", "lib/brcobranca/config.rb", "lib/brcobranca/core_ext.rb", "lib/brcobranca/currency.rb", "lib/brcobranca/logo/bb.jpg", "lib/brcobranca/logo/itau.jpg", "lib/brcobranca/retorno/retorno_cbr643.rb", "lib/brcobranca/templates/boleto_generico.eps", "script/console", "script/destroy", "script/generate", "tasks/data_test/CBR64310.RET", "test/test_banco_brasil.rb", "test/test_base.rb", "test/test_core_ext.rb", "test/test_currency.rb", "test/test_helper.rb", "test/test_itau.rb", "test/test_retorno_cbr643.rb"]
   s.has_rdoc = true
-  s.homepage = %q{FIX (url)}
+  s.homepage = %q{brcobranca.rubyforge.org}
   s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{brcobranca}

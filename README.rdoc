@@ -1,6 +1,6 @@
 = brcobranca
 
-* FIX (url)
+* brcobranca.rubyforge.org
 
 == DESCRICAO:
 

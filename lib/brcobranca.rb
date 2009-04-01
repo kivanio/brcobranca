@@ -10,5 +10,5 @@ $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) ||
 %w(retorno_cbr643).each {|req| require File.dirname(__FILE__) + File::SEPARATOR + "brcobranca"+File::SEPARATOR+"retorno"+File::SEPARATOR+"#{req}"}
 
 module Brcobranca
-  VERSION = '2.0.4'
+  VERSION = '2.0.0'
 end
