@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + File::SEPARATOR + 'test_helper.rb'
+require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class BancoBrasilTest < Test::Unit::TestCase
+class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
 
   def setup
     @boleto_novo = BancoBrasil.new

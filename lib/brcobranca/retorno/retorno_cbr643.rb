@@ -1,47 +1,81 @@
+require 'parseline'
+
 module Brcobranca
-  module Boleto
+  module Retorno
     # Modalidade de Retorno para convênio de 7 dígitos
-    class RetornoCbr643
+    class Cbr643
+      extend ParseLine::FixedWidth
 
-      attr_accessor :arquivo_cominho
+      attr_accessor :agencia_com_dv
+      attr_accessor :cedente_com_dv
+      attr_accessor :convenio
+      attr_accessor :nosso_numero
+      attr_accessor :tipo_cobranca
+      attr_accessor :tipo_cobranca_anterior
+      attr_accessor :natureza_recebimento
+      attr_accessor :carteira_variacao
+      attr_accessor :desconto
+      attr_accessor :iof
+      attr_accessor :carteira
+      attr_accessor :comando
+      attr_accessor :data_liquidacao
+      attr_accessor :data_vencimento
+      attr_accessor :valor_titulo
+      attr_accessor :banco_recebedor
+      attr_accessor :agencia_recebedora_com_dv
+      attr_accessor :especie_documento
+      attr_accessor :data_credito
+      attr_accessor :valor_tarifa
+      attr_accessor :outras_despesas
+      attr_accessor :juros_desconto
+      attr_accessor :iof_desconto
+      attr_accessor :valor_abatimento
+      attr_accessor :desconto_concedito
+      attr_accessor :valor_recebido
+      attr_accessor :juros_mora
+      attr_accessor :outros_recebimento
+      attr_accessor :abatimento_nao_aproveitado
+      attr_accessor :valor_lancamento
+      attr_accessor :indicativo_lancamento
+      attr_accessor :indicador_valor
+      attr_accessor :valor_ajuste
+      attr_accessor :sequencial
 
-      def initialize(arquivo_retorno)
-        if File.exist?(arquivo_retorno)
-          self.arquivo_cominho = arquivo_retorno
-        else
-          raise "Arquivos inexistente"
-        end
-      end
-
-      def retorno
-        pagamentos = []
-        linhas_to_array.each do |pagamento|
-          #Hash com dados de cada linha
-          pagamentos << { 
-            :agencia_com_dv => pagamento[17..21], :cedente_com_dv => pagamento[22..30], :convenio => pagamento[31..37],
-            :nosso_numero => pagamento[63..79], :tipo_cobranca => pagamento[80..80], :tipo_cobranca_anterior => pagamento[81..81],
-            :natureza_recebimento => pagamento[86..87], :carteira_variacao => pagamento[91..93], :desconto => pagamento[95..99],
-            :iof => pagamento[100..104], :carteira => pagamento[106..107], :comando => pagamento[108..109],
-            :data_liquidacao => pagamento[110..115], :data_vencimento => pagamento[146..151], :valor_titulo => pagamento[152..164],
-            :banco_recebedor => pagamento[165..167], :agencia_recebedora_com_dv => pagamento[168..172], :especie_documento => pagamento[173..174],
-            :data_credito => pagamento[175..180], :valor_tarifa => pagamento[181..187], :outras_despesas => pagamento[188..200],
-            :juros_desconto => pagamento[201..213], :iof_desconto => pagamento[214..226], :valor_abatimento => pagamento[227..239],
-            :desconto_concedito => pagamento[240..252], :valor_recebido => pagamento[253..265], :juros_mora => pagamento[266..278],
-            :outros_recebimento => pagamento[279..291], :abatimento_nao_aproveitado => pagamento[292..304], :valor_lancamento => pagamento[305..317],
-            :indicativo_lancamento => pagamento[318..318], :indicador_valor => pagamento[319..319], :valor_ajuste => pagamento[320..331],
-            :sequencial => pagamento[394..399]
-          }
-        end
-        return pagamentos
-      end
-
-      private
-      def linhas_to_array    
-        # Separa as linhas do arquivo em um array
-        linhas = File.readlines(self.arquivo_cominho).map {|l| l.rstrip}
-        # Seleciona somente as linhas que são pagamentos, baseado no fato delas sempre começarem com 7(o que indica retorno)
-        pagamentos = linhas.select{ |l| l if (l =~ /^[7]/) }
-        return pagamentos
+      fixed_width_layout do |parse|
+        parse.field :agencia_com_dv,17..21
+        parse.field :cedente_com_dv,22..30
+        parse.field :convenio,31..37
+        parse.field :nosso_numero,63..79
+        parse.field :tipo_cobranca,80..80
+        parse.field :tipo_cobranca_anterior,81..81
+        parse.field :natureza_recebimento,86..87
+        parse.field :carteira_variacao,91..93
+        parse.field :desconto,95..99
+        parse.field :iof,100..104
+        parse.field :carteira,106..107
+        parse.field :comando,108..109
+        parse.field :data_liquidacao,110..115
+        parse.field :data_vencimento,146..151
+        parse.field :valor_titulo,152..164
+        parse.field :banco_recebedor,165..167
+        parse.field :agencia_recebedora_com_dv,168..172
+        parse.field :especie_documento,173..174
+        parse.field :data_credito,175..180
+        parse.field :valor_tarifa,181..187
+        parse.field :outras_despesas,188..200
+        parse.field :juros_desconto,201..213
+        parse.field :iof_desconto,214..226
+        parse.field :valor_abatimento,227..239
+        parse.field :desconto_concedito,240..252
+        parse.field :valor_recebido,253..265
+        parse.field :juros_mora,266..278
+        parse.field :outros_recebimento,279..291
+        parse.field :abatimento_nao_aproveitado,292..304
+        parse.field :valor_lancamento,305..317
+        parse.field :indicativo_lancamento,318..318
+        parse.field :indicador_valor,319..319
+        parse.field :valor_ajuste,320..331
+        parse.field :sequencial,394..399
       end
     end
   end

@@ -2,4 +2,4 @@ require 'rubygems'
 require 'stringio'
 require 'test/unit'
 require 'date'
-require File.dirname(__FILE__) + File::SEPARATOR + '..' + File::SEPARATOR + "lib" + File::SEPARATOR + 'brcobranca'
+require File.join(File.dirname(__FILE__),'..',"lib",'brcobranca')

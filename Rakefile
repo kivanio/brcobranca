@@ -6,16 +6,19 @@ require File.dirname(__FILE__) + '/lib/brcobranca'
 $hoe = Hoe.new('brcobranca', Brcobranca::VERSION) do |p|
   p.developer('Kivanio Barbosa', 'kivanio@gmail.com')
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.post_install_message = 'PostInstall.txt' # TODO remove if post-install message not required
   p.rubyforge_name       = p.name # TODO this is default value
   p.extra_deps         = [
     ['rghost','>= 0.8.3'],
-    ['rghost','>= 0.8']
+    ['rghost_barcode','>= 0.8'],
+    ['parseline','>= 1.0.2']
   ]
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]
   
+  p.rdoc_pattern = /rb$|rdoc$/
+  p.summary = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
+  p.description = p.summary
   p.clean_globs |= %w[**/.DS_Store tmp *.log]
   path = (p.rubyforge_name == p.name) ? p.rubyforge_name : "\#{p.rubyforge_name}/\#{p.name}"
   p.remote_rdoc_dir = File.join(path.gsub(/^#{p.rubyforge_name}\/?/,''), 'rdoc')

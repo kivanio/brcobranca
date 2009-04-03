@@ -1,4 +1,4 @@
-== 2.0.0 2009-04-05
+== 2.0.0 06-04-2009
 
 * 1 acts_as_payment torna-se brcobranca:
-  * Release inicial com versão em 2.0.0
+  * Release inicial com versao em 2.0.0

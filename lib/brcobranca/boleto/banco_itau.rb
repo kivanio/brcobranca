@@ -1,6 +1,6 @@
-class Itau < Brcobranca::Boleto::Base
+class BancoItau < Brcobranca::Boleto::Base
 
-  # Responsavel por definir dados iniciais quando se cria uma nova intancia da classe BancoBrasil
+  # Responsavel por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
   def initialize
     super
     self.carteira = "175" # carteira "sem registro"
@@ -21,7 +21,7 @@ class Itau < Brcobranca::Boleto::Base
     end
   end
 
-  # Calcula o digito verificador para conta corrente do Itaa.
+  # Calcula o digito verificador para conta corrente do Itau.
   # Retorna apenas o digito verificador da conta ou nil caso seja impossivel calcular.
   def agencia_conta_corrente_dv
     "#{self.agencia}#{self.conta_corrente}".modulo10

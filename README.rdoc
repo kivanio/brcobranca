@@ -1,33 +1,54 @@
 = brcobranca
 
-* brcobranca.rubyforge.org
+* http://brcobranca.rubyforge.org
 
-== DESCRICAO:
+== DESCRIÇÃO
 
-Gem para emissao de bloquetos de cobranca para bancos brasileiros
+Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
-== Bancos Disponíveis:
+== Bancos Disponíveis
 
 * Banco do Brasil
-** 16
-** 18
+     * Carteira 16
+       - Nosso Número de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
+       - Nosso Número de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
+       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
+       - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para complemento do nosso número)
+     * Carteira 17
+       - Nosso Numero de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
+       - Nosso Numero de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
+       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
+     * Carteira 18
+       - Nosso Numero de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
+       - Nosso Numero de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
+       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
+       - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para complemento do nosso número)
+
 * Itaú
+   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
 
-== AJUDA?:
+== Esta perdido?
 
-  veja: 
+Veja a documentação em http://brcobranca.rubyforge.org/rdoc
 
-== REQUIREMENTS:
+== REQUISITOS
 
 * rghost
 * rghost_barcode
+* parseline
 
-== INSTALAR:
+== INSTALAÇÃO
 
 * sudo gem install brcobranca
 
-== LICENSE:
+== Gostou?
 
-This gem is licensed by BSD License)
+Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
 
-Copyright (c) 2009 Kivanio Barbosa
+== LICENSA
+
+Este gem e licenciada pel licensa BSD
+
+De brasileiro para brasileiros.
+
+Copyleft 2009 Kivanio Barbosa

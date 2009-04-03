@@ -42,9 +42,9 @@ module Brcobranca
     end
 
     # Completa zeros a esquerda
-    # Ex. numero="123" tamanho=3 | numero="123"
-    #     numero="123" tamanho=4 | numero="0123"
-    #     numero="123" tamanho=5 | numero="00123"
+    # Ex. numero="123" :tamanho=>3 | numero="123"
+    #     numero="123" :tamanho=>4 | numero="0123"
+    #     numero="123" :tamanho=>5 | numero="00123"
     def zeros_esquerda(options={})
       valor_inicial = self.kind_of?(String) ? self : self.to_s
       return valor_inicial if (valor_inicial !~ /\S/)
@@ -219,21 +219,21 @@ module Brcobranca
 end
 
 # Inclui os Modulos nas Classes Correspondentes
-class String
+class String #:nodoc:[all]
   include Brcobranca::Formatacao
   include Brcobranca::Validacao
   include Brcobranca::Calculo
 end
 
-class Integer
+class Integer #:nodoc:[all]
   include Brcobranca::Formatacao
   include Brcobranca::Calculo
 end
 
-class Float
+class Float #:nodoc:[all]
   include Brcobranca::Limpeza
 end
 
-class Date
+class Date #:nodoc:[all]
   include Brcobranca::CalculoData
 end

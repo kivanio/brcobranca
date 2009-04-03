@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>
+      brcobranca
+  </title>
+  <script src="javascripts/rounded_corners_lite.inc.js" type="text/javascript"></script>
+<style>
+
+</style>
+  <script type="text/javascript">
+    window.onload = function() {
+      settings = {
+          tl: { radius: 10 },
+          tr: { radius: 10 },
+          bl: { radius: 10 },
+          br: { radius: 10 },
+          antiAlias: true,
+          autoPad: true,
+          validTags: ["div"]
+      }
+      var versionBox = new curvyCorners(settings, document.getElementById("version"));
+      versionBox.applyCornersToAll();
+    }
+  </script>
+</head>
+<body>
+<div id="main">
+
+    <h1>brcobranca</h1>
+    <div class="sidebar">
+      <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/brcobranca"; return false'>
+        <p>Fazer download</p>
+        <a href="http://rubyforge.org/projects/brcobranca" class="numbers">3.0.0</a>
+      </div>
+    </div>
+    <p>Gerador de bloquetos de cobrança para bancos brasileiros.</p>
+<h2>Instalando</h2>
+<p><pre class='syntax'><span class="ident">sudo</span> <span class="ident">gem</span> <span class="ident">install</span> <span class="ident">brcobranca</span></pre></p>
+<h2>Documentação</h2>
+<ul>
+	<li><a href="http://brcobranca.rubyforge.org/rdoc">http://brcobranca.rubyforge.org/rdoc</a></li>
+</ul>
+<h2>Exemplo</h2>
+<h2>Fontes</h2>
+<ul>
+	<li>github: <a href="http://github.com/kivanio/brcobranca/tree/master">http://github.com/kivanio/brcobranca/tree/master</a></li>
+</ul>
+<pre>git clone git://github.com/kivanio/brcobranca.git</pre>
+<h3>Se preferir compilar direto do fonte</h3>
+<pre>cd brcobranca
+rake test
+rake install_gem</pre>
+<h2>Licensa</h2>
+<p>Esta gem é licenciada pel licensa <span class="caps">BSD</span></p>
+<h2>Gostou?</h2>
+<ul>
+	<li>Recomende-nos no <a href="http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa">workingwithrails.com</a></li>
+</ul>
+<h2>Contato</h2>
+<p>De brasileiro para brasileiros.</p>
+<p>Copyleft 2009 Kivanio Barbosa, kivanio@gmail.com</p>
+    <p class="coda">
+      Theme extended from <a href="http://rb2js.rubyforge.org/">Paul Battley</a>
+    </p>
+</div>
+
+<!-- insert site tracking codes here, like Google Urchin -->
+
+</body>
+</html>

@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + File::SEPARATOR + 'test_helper.rb'
+require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class BaseTest < Test::Unit::TestCase
+class BaseTest < Test::Unit::TestCase #:nodoc:[all]
 
   def setup
     @boleto = Brcobranca::Boleto::Base.new

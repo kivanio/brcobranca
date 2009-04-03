@@ -1,0 +1,41 @@
+h1. brcobranca
+
+Gerador de bloquetos de cobrança para bancos brasileiros.
+
+h2. Instalando
+
+<pre syntax="ruby">sudo gem install brcobranca</pre>
+
+h2. Documentação
+
+* "http://brcobranca.rubyforge.org/rdoc":http://brcobranca.rubyforge.org/rdoc
+
+h2. Exemplo
+
+h2. Fontes
+
+* github: "http://github.com/kivanio/brcobranca/tree/master":http://github.com/kivanio/brcobranca/tree/master
+
+<pre>git clone git://github.com/kivanio/brcobranca.git</pre>
+
+
+h3. Se preferir compilar direto do fonte
+
+<pre>cd brcobranca
+rake test
+rake install_gem</pre>
+
+
+h2. Licensa
+
+Esta gem é licenciada pel licensa BSD
+
+h2. Gostou?
+
+* Recomende-nos no "workingwithrails.com":http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
+
+h2. Contato
+
+De brasileiro para brasileiros.
+
+Copyleft 2009 Kivanio Barbosa, kivanio@gmail.com

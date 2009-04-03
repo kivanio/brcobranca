@@ -20,7 +20,7 @@ module Brcobranca
     module Number
       def to_currency(options = {})
         number = self
-        default   = Currency::DEFAULT.stringify_keys
+        default   = Brcobranca::Currency::DEFAULT.stringify_keys
         options   = default.merge(options.stringify_keys)
         precision = options["precision"] || default["precision"]
         unit      = options["unit"] || default["unit"]
@@ -56,7 +56,15 @@ module Brcobranca
   end
 end
 
-class Fixnum; include Brcobranca::Currency::Number; end
-class Bignum; include Brcobranca::Currency::Number; end
-class Float; include Brcobranca::Currency::Number; end
-class String; include Brcobranca::Currency::String; end
+class Fixnum #:nodoc:[all]
+  include Brcobranca::Currency::Number
+end
+class Bignum #:nodoc:[all]
+  include Brcobranca::Currency::Number
+end
+class Float #:nodoc:[all]
+  include Brcobranca::Currency::Number
+end
+class String #:nodoc:[all]
+  include Brcobranca::Currency::String
+end

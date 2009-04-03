@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + File::SEPARATOR + 'test_helper.rb'
+require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class ItauTest < Test::Unit::TestCase
+class ItauTest < Test::Unit::TestCase #:nodoc:[all]
 
   BOLETO_ITAU_CARTEIRA_175 = {
     :carteira => "175",
@@ -15,7 +15,7 @@ class ItauTest < Test::Unit::TestCase
   }
 
   def setup
-    @boleto_novo = Itau.new # (BOLETO_CARTEIRA_175)
+    @boleto_novo = BancoItau.new # (BOLETO_CARTEIRA_175)
     BOLETO_ITAU_CARTEIRA_175.each do |nome, valor|
       @boleto_novo.send("#{nome}=".to_sym, valor)
     end
