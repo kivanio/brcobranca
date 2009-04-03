@@ -216,4 +216,12 @@ class CoreExtTest < Test::Unit::TestCase #:nodoc:[all]
     assert_equal nil, "0019237690000c135000c0000123f7987e7773016813".linha_digitavel
   end
 
+  def test_should_return_correct_julian_date
+    assert_equal "0429", (Date.parse "2009-02-11").to_juliano
+    assert_equal "0428", (Date.parse "2008-02-11").to_juliano
+    assert_equal "0989", (Date.parse "2009-04-08").to_juliano
+    # Ano 2008 eh bisexto
+    assert_equal "0998", (Date.parse "2008-04-08").to_juliano
+  end
+
 end

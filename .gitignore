@@ -1,2 +1,6 @@
 config
 config/*.*
+pkg
+pkg/*.8
+doc
+doc/*.*

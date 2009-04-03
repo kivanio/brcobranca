@@ -6,6 +6,7 @@ module Brcobranca
     class Cbr643
       extend ParseLine::FixedWidth
 
+      # Agência com DV, posições 17 à 21
       attr_accessor :agencia_com_dv
       attr_accessor :cedente_com_dv
       attr_accessor :convenio

@@ -4,6 +4,7 @@ require 'rghost_barcode'
 module Brcobranca
   module Boleto
     module Template
+      # Templates para usar com Rghost
       module Rghost
         include RGhost unless self.include?(RGhost)
         # Responsável por setar os valores necessários no template genérico
@@ -89,7 +90,7 @@ module Brcobranca
           doc.moveto :x => '13 cm' , :y => '14.4 cm'
           doc.show self.data_processamento.to_s_br if self.data_processamento
           doc.moveto :x => '16.5 cm' , :y => '14.4 cm'
-          doc.show "#{self.convenio}#{self.nosso_numero}-#{self.nosso_numero_dv}" if self.convenio && self.nosso_numero && self.nosso_numero_dv
+          doc.show "#{self.convenio}#{self.nosso_numero}-#{self.nosso_numero_dv}"
           doc.moveto :x => '4.7 cm' , :y => '13.5 cm'
           doc.show self.carteira if self.carteira
           doc.moveto :x => '6.4 cm' , :y => '13.5 cm'

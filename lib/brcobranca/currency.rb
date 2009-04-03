@@ -1,12 +1,12 @@
 # Implementação feita por Nando Vieira do http://simplesideias.com.br
 # post http://simplesideias.com.br/usando-number_to_currency-em-modelos-no-rails
-module Brcobranca
-  module Currency
+module Brcobranca #:nodoc:[all]
+  module Currency #:nodoc:[all]
     BRL = {:delimiter => ".", :separator => ",", :unit => "R$", :precision => 2, :position => "before"}
     USD = {:delimiter => ',', :separator => ".", :unit => "US$", :precision => 2, :position => "before"}
     DEFAULT = BRL.merge(:unit => "")
 
-    module String
+    module String #:nodoc:[all]
       def to_number(options={})
         return self.gsub(/,/, '.').to_f if self.numeric?
         nil
@@ -17,7 +17,7 @@ module Brcobranca
       end
     end
 
-    module Number
+    module Number #:nodoc:[all]
       def to_currency(options = {})
         number = self
         default   = Brcobranca::Currency::DEFAULT.stringify_keys

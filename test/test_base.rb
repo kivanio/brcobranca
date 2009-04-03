@@ -13,7 +13,7 @@ class BaseTest < Test::Unit::TestCase #:nodoc:[all]
     assert_equal Date.today, @boleto.data_documento
     assert_equal 1, @boleto.dias_vencimento
     assert_equal((Date.today + 1), @boleto.data_vencimento)
-    assert_equal "N", @boleto.aceite
+    assert_equal "S", @boleto.aceite
     assert_equal 1, @boleto.quantidade
     assert_equal 0.0, @boleto.valor
     assert_equal 0.0, @boleto.valor_documento
