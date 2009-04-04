@@ -19,7 +19,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 12387989
-    @boleto_novo.nosso_numero = "777700168"
+    @boleto_novo.numero_documento = "777700168"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
   end
@@ -30,7 +30,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 12387989
-    @boleto_novo.nosso_numero = "7700168"
+    @boleto_novo.numero_documento = "7700168"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 1
   end
@@ -41,7 +41,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 1238798
-    @boleto_novo.nosso_numero = "7777700168"
+    @boleto_novo.numero_documento = "7777700168"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 2
   end
@@ -52,7 +52,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 723.56
     @boleto_novo.convenio = 1238798
-    @boleto_novo.nosso_numero = "7777700168"
+    @boleto_novo.numero_documento = "7777700168"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 2
   end
@@ -65,7 +65,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 723.56
     @boleto_novo.convenio = 1238798
-    @boleto_novo.nosso_numero = "7777700168"
+    @boleto_novo.numero_documento = "7777700168"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
   end
@@ -78,7 +78,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 123879
-    @boleto_novo.nosso_numero = "1234"
+    @boleto_novo.numero_documento = "1234"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
     @boleto_novo.codigo_servico = false
@@ -92,7 +92,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 123879
-    @boleto_novo.nosso_numero = "1234567899"
+    @boleto_novo.numero_documento = "1234567899"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
     @boleto_novo.codigo_servico = true
@@ -106,7 +106,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 123879
-    @boleto_novo.nosso_numero = "1234567899"
+    @boleto_novo.numero_documento = "1234567899"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
     @boleto_novo.codigo_servico = true
@@ -120,7 +120,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 123879
-    @boleto_novo.nosso_numero = "1234567899"
+    @boleto_novo.numero_documento = "1234567899"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
     @boleto_novo.codigo_servico = true
@@ -134,7 +134,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = "9"
     @boleto_novo.valor = 135.00
     @boleto_novo.convenio = 1238
-    @boleto_novo.nosso_numero = "123456"
+    @boleto_novo.numero_documento = "123456"
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
   end
@@ -145,7 +145,7 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.moeda = ""
     @boleto_novo.valor = 0
     @boleto_novo.convenio = ""
-    @boleto_novo.nosso_numero = "" 
+    @boleto_novo.numero_documento = "" 
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
   end
@@ -242,19 +242,19 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
   end
 
   def test_should_verify_nosso_numero_dv_calculation
-    @boleto_novo.nosso_numero = "777700168"
+    @boleto_novo.numero_documento = "777700168"
     assert_equal 0, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "77700168"
+    @boleto_novo.numero_documento = "77700168"
     assert_equal 3, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "00015448"
+    @boleto_novo.numero_documento = "00015448"
     assert_equal 2, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "15448"
+    @boleto_novo.numero_documento = "15448"
     assert_equal 2, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "12345678"
+    @boleto_novo.numero_documento = "12345678"
     assert_equal 9, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "34230"
+    @boleto_novo.numero_documento = "34230"
     assert_equal 0, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "258281"
+    @boleto_novo.numero_documento = "258281"
     assert_equal 3, @boleto_novo.nosso_numero_dv
   end
 

@@ -7,7 +7,7 @@ class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
     :moeda => "9",
     :valor => 135.00,
     :convenio => 0,
-    :nosso_numero => "12345678",
+    :numero_documento => "12345678",
     :data_documento => Date.parse("2008-02-01"),
     :dias_vencimento => 0,
     :agencia => "0810",
@@ -37,15 +37,15 @@ class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
   end
 
   def test_should_verify_nosso_numero_dv_calculation
-    @boleto_novo.nosso_numero = "00015448"
+    @boleto_novo.numero_documento = "00015448"
     assert_equal 6, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "15448"
+    @boleto_novo.numero_documento = "15448"
     assert_equal 6, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "12345678"
+    @boleto_novo.numero_documento = "12345678"
     assert_equal 4, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "34230"
+    @boleto_novo.numero_documento = "34230"
     assert_equal 5, @boleto_novo.nosso_numero_dv
-    @boleto_novo.nosso_numero = "258281"
+    @boleto_novo.numero_documento = "258281"
     assert_equal 7, @boleto_novo.nosso_numero_dv
   end
 
@@ -53,12 +53,12 @@ class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
     assert_equal "3419376900000135001751234567840810536789000", @boleto_novo.monta_codigo_43_digitos
     assert_equal "34195376900000135001751234567840810536789000", @boleto_novo.codigo_barras
     
-    @boleto_novo.nosso_numero = "258281"
+    @boleto_novo.numero_documento = "258281"
     @boleto_novo.data_documento = Date.parse("2004/09/03")
     assert_equal "3419252300000135001750025828170810536789000", @boleto_novo.monta_codigo_43_digitos
     assert_equal "34195252300000135001750025828170810536789000", @boleto_novo.codigo_barras
     
-    @boleto_novo.nosso_numero = "258281"
+    @boleto_novo.numero_documento = "258281"
     @boleto_novo.data_documento = Date.parse("2004/09/03")
     @boleto_novo.carteira = 168
     assert_equal "3419252300000135001680025828120810536789000", @boleto_novo.monta_codigo_43_digitos
@@ -66,21 +66,21 @@ class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
 
     @boleto_novo.carteira = 196
     @boleto_novo.convenio = "12345"
-    @boleto_novo.numero_documento = "1234567"
-    assert_equal "3419252300000135001960025828112345671234590", @boleto_novo.monta_codigo_43_digitos
-    assert_equal "34198252300000135001960025828112345671234590", @boleto_novo.codigo_barras
-    @boleto_novo.numero_documento = "123456"
-    assert_equal "3419252300000135001960025828101234561234590", @boleto_novo.monta_codigo_43_digitos
-    assert_equal "34191252300000135001960025828101234561234590", @boleto_novo.codigo_barras
+    @boleto_novo.seu_numero = "1234567"
+    assert_equal "3419252300000135001960025828112345671234550", @boleto_novo.monta_codigo_43_digitos
+    assert_equal "34199252300000135001960025828112345671234550", @boleto_novo.codigo_barras
+    @boleto_novo.seu_numero = "123456"
+    assert_equal "3419252300000135001960025828101234561234550", @boleto_novo.monta_codigo_43_digitos
+    assert_equal "34191252300000135001960025828101234561234550", @boleto_novo.codigo_barras
 
     @boleto_novo.convenio = "1234"
-    assert_equal "3419252300000135001960025828101234560123480", @boleto_novo.monta_codigo_43_digitos
-    assert_equal "34191252300000135001960025828101234560123480", @boleto_novo.codigo_barras
+    assert_equal "3419252300000135001960025828101234560123440", @boleto_novo.monta_codigo_43_digitos
+    assert_equal "34191252300000135001960025828101234560123440", @boleto_novo.codigo_barras
   end
 
   def test_should_build_correct_typeable_line
     assert_equal "34191.75124 34567.840813 05367.890000 5 37690000013500", @boleto_novo.codigo_barras.linha_digitavel
-    @boleto_novo.nosso_numero = "258281"
+    @boleto_novo.numero_documento = "258281"
     @boleto_novo.data_documento = Date.parse("2004/09/03")
     assert_equal "34191.75009 25828.170818 05367.890000 5 25230000013500", @boleto_novo.codigo_barras.linha_digitavel
   end

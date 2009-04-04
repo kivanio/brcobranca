@@ -55,7 +55,7 @@ module Brcobranca
           doc.moveto :x => '12 cm' , :y => '22.2 cm'
           doc.show self.data_vencimento.to_s_br
           doc.moveto :x => '16.5 cm' , :y => '23 cm'
-          doc.show "#{self.convenio}#{self.nosso_numero}-#{self.nosso_numero_dv}"
+          doc.show self.nosso_numero
           doc.moveto :x => '16.5 cm' , :y => '22.2 cm'
           doc.show self.valor_documento.to_currency
           doc.moveto :x => '1.4 cm' , :y => '20.9 cm'
@@ -90,8 +90,8 @@ module Brcobranca
           doc.moveto :x => '13 cm' , :y => '14.4 cm'
           doc.show self.data_processamento.to_s_br if self.data_processamento
           doc.moveto :x => '16.5 cm' , :y => '14.4 cm'
-          doc.show "#{self.convenio}#{self.nosso_numero}-#{self.nosso_numero_dv}"
-          doc.moveto :x => '4.7 cm' , :y => '13.5 cm'
+          doc.show self.nosso_numero
+          doc.moveto :x => '4.4 cm' , :y => '13.5 cm'
           doc.show self.carteira if self.carteira
           doc.moveto :x => '6.4 cm' , :y => '13.5 cm'
           doc.show self.moeda if self.moeda

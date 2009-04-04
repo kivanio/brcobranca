@@ -102,29 +102,29 @@ class BaseTest < Test::Unit::TestCase #:nodoc:[all]
   end
 
   def test_should_calculate_correct_nosso_numero_dv
-    @boleto.nosso_numero = "85068014982"
+    @boleto.numero_documento = "85068014982"
     assert_equal 9, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = "05009401448"
+    @boleto.numero_documento = "05009401448"
     assert_equal 1, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = "12387987777700168"
+    @boleto.numero_documento = "12387987777700168"
     assert_equal 2, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = "4042"
+    @boleto.numero_documento = "4042"
     assert_equal 8, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = "61900"
+    @boleto.numero_documento = "61900"
     assert_equal 0, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = "0719"
+    @boleto.numero_documento = "0719"
     assert_equal 6, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 85068014982
+    @boleto.numero_documento = 85068014982
     assert_equal 9, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 5009401448
+    @boleto.numero_documento = 5009401448
     assert_equal 1, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 12387987777700168
+    @boleto.numero_documento = 12387987777700168
     assert_equal 2, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 4042
+    @boleto.numero_documento = 4042
     assert_equal 8, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 61900
+    @boleto.numero_documento = 61900
     assert_equal 0, @boleto.nosso_numero_dv
-    @boleto.nosso_numero = 719
+    @boleto.numero_documento = 719
     assert_equal 6, @boleto.nosso_numero_dv
   end
 

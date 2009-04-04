@@ -21,7 +21,7 @@ module Brcobranca
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
       # <b>REQUERIDO</b>: Número sequencial utilizado para distinguir os boletos
-      attr_accessor :nosso_numero
+      # attr_accessor :nosso_numero
       # <b>REQUERIDO</b>: Número da agencia
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente
@@ -95,7 +95,11 @@ module Brcobranca
 
       # Retorna dígito verificador do nosso número, calculado com modulo11 de 9 para 2
       def nosso_numero_dv
-        self.nosso_numero.modulo11_9to2
+        self.numero_documento.modulo11_9to2
+      end
+      
+      def nosso_numero
+        self.numero_documento
       end
 
       # Retorna o valor total do documento: <b>quantidate * valor</b> ou <b>zero(0)</b> caso não consiga efetuar o cálculo.

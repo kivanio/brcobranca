@@ -1,5 +1,7 @@
 # Banco Itaú
 class BancoItau < Brcobranca::Boleto::Base
+  # Usado somente em carteiras especiais com registro para complementar o número do cocumento
+  attr_accessor :seu_numero
 
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
   def initialize
@@ -15,11 +17,15 @@ class BancoItau < Brcobranca::Boleto::Base
   # dados "CARTEIRA/NOSSO NUMERO".
   def nosso_numero_dv
     if %w(126 131 146 150 168).include?(self.carteira)
-      "#{self.carteira}#{self.nosso_numero}".modulo10
+      "#{self.carteira}#{self.numero_documento}".modulo10
     else
-      nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 8)
-      "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{nosso_numero}".modulo10
+      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 8)
+      "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{numero_documento}".modulo10
     end
+  end
+
+  def nosso_numero
+    "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
   end
 
   # Calcula o dígito verificador para conta corrente do Itau. 
@@ -32,8 +38,8 @@ class BancoItau < Brcobranca::Boleto::Base
   def monta_codigo_43_digitos
     valor_documento_formatado = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
     fator_vencimento = self.data_vencimento.fator_vencimento
-    nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 8)
-    return nil if nosso_numero.size != 8
+    numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 8)
+    return nil if numero_documento.size != 8
 
     # Monta a String baseado no tipo de carteira
     case self.carteira.to_i
@@ -52,7 +58,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{nosso_numero}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
+      codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
     when 198, 106, 107, 122, 142, 143, 195, 196
       # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
@@ -67,14 +73,14 @@ class BancoItau < Brcobranca::Boleto::Base
       # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 7)
-      return nil if numero_documento.size != 7
+      seu_numero = self.seu_numero.zeros_esquerda(:tamanho => 7)
+      return nil if seu_numero.size != 7
       convenio = self.convenio.zeros_esquerda(:tamanho => 5)
       return nil if convenio.size != 5
-      dv = "#{nosso_numero}#{numero_documento}#{convenio}".modulo10
+      dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{convenio}".modulo10
 
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{nosso_numero}#{numero_documento}#{convenio}#{dv}0"
+      codigo << "#{numero_documento}#{seu_numero}#{convenio}#{dv}0"
       codigo
     else
       # DEMAIS CARTEIRAS
@@ -91,7 +97,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{nosso_numero}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
+      codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
     end
   end
