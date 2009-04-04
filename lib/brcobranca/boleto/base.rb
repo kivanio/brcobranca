@@ -20,8 +20,6 @@ module Brcobranca
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
-      # <b>REQUERIDO</b>: Número sequencial utilizado para distinguir os boletos
-      # attr_accessor :nosso_numero
       # <b>REQUERIDO</b>: Número da agencia
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente
@@ -98,6 +96,7 @@ module Brcobranca
         self.numero_documento.modulo11_9to2
       end
       
+      # Número sequencial utilizado para distinguir os boletos na agência
       def nosso_numero
         self.numero_documento
       end

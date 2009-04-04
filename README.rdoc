@@ -10,23 +10,27 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 
 * Banco do Brasil
-     * Carteira 16
-       - Nosso Número de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
-       - Nosso Número de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
-       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
-       - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para complemento do nosso número)
-     * Carteira 17
-       - Nosso Numero de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
-       - Nosso Numero de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
-       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
-     * Carteira 18
-       - Nosso Numero de 11 dígitos(4 para convênio e 7 para complemento do nosso número)
-       - Nosso Numero de 11 dígitos(6 para convênio e 5 para complemento do nosso número)
-       - Nosso Numero de 17 dígitos(7 para convênio e 10 para complemento do nosso número)
-       - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para complemento do nosso número)
+  * Carteira 16
+    - Nosso Número de 11 dígitos(4 para convênio e 7 para número do documento)
+    - Nosso Número de 11 dígitos(6 para convênio e 5 para número do documento)
+    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
+    - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para número do documento)
+  * Carteira 17
+    - Nosso Numero de 11 dígitos(4 para convênio e 7 para número do documento)
+    - Nosso Numero de 11 dígitos(6 para convênio e 5 para número do documento)
+    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
+  * Carteira 18
+    - Nosso Numero de 11 dígitos(4 para convênio e 7 para número do documento)
+    - Nosso Numero de 11 dígitos(6 para convênio e 5 para número do documento)
+    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
+    - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para número do documento)
 
 * Itaú
-   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+  * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+
+* HSBC
+  * CNR
+
 
 == Esta perdido?
 
@@ -48,7 +52,7 @@ Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-
 
 == LICENSA
 
-Este gem e licenciada pel licensa BSD
+Este gem é licenciada pela licensa BSD
 
 De brasileiro para brasileiros.
 

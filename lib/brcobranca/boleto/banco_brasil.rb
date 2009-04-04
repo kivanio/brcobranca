@@ -30,6 +30,7 @@ class BancoBrasil < Brcobranca::Boleto::Base
     "#{self.convenio}#{self.numero_documento}".modulo11_9to2_10_como_x
   end
 
+  # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
     "#{self.convenio}#{self.numero_documento}-#{self.nosso_numero_dv}"
   end

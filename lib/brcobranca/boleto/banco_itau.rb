@@ -24,6 +24,7 @@ class BancoItau < Brcobranca::Boleto::Base
     end
   end
 
+  # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
     "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
   end

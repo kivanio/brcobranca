@@ -8,6 +8,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
     self.banco = "399"
   end
 
+  # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
     if self.data_vencimento
       self.codigo_servico = 4
@@ -47,6 +48,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
         "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
       else
         # TODO
+        nil
       end
     else
       raise "numero_documento pode ser de no máximo 6 caracteres." if (self.numero_documento.to_s.size > 6)
@@ -54,6 +56,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 9)
       self.codigo_servico = 5
       # TODO
+      nil
     end
   end
 
