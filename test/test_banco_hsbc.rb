@@ -17,8 +17,8 @@ class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.conta_corrente = "1122334"
     @boleto_novo.numero_documento = "12345678"
     @boleto_novo.dias_vencimento = 5
-    @boleto_novo.data_documento = Date.today
-    assert_equal "12345678948", @boleto_novo.nosso_numero
+    @boleto_novo.data_documento = Date.parse("2000-07-04")
+    assert_equal "12345678942", @boleto_novo.nosso_numero
     @boleto_novo.conta_corrente = "351202"
     @boleto_novo.numero_documento = "39104766"
     @boleto_novo.dias_vencimento = 0

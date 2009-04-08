@@ -7,6 +7,13 @@ module Brcobranca
       # Templates para usar com Rghost
       module Rghost
         include RGhost unless self.include?(RGhost)
+        
+        # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
+        #  Veja mais formatos na documentação do rghost: http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats
+        def to(formato)
+          modelo_generico(:tipo => formato)
+        end
+        
         # Responsável por setar os valores necessários no template genérico
         # Retorna um stream pronto para gravaçào
         #

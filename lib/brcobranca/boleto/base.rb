@@ -135,12 +135,6 @@ module Brcobranca
       def monta_codigo_43_digitos
         "Sobreescreva este método na classe referente ao banco que você esta criando"
       end
-
-      # Gera o boleto em usando o formato desejado [:pdf, :jpg, :gif, :tif, :png, :ps, :laserjet, ... etc]
-      # Veja mais formatos na documentação do rghost
-      def to(formato)
-        modelo_generico(:tipo => formato)
-      end
     end
   end
 end
