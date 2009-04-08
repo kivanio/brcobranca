@@ -20,6 +20,21 @@ class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
       @boleto_novo.send("#{nome}=".to_sym, valor)
     end
   end
+  
+  def test_should_initialize_correctly
+    assert_equal '341', @boleto_novo.banco
+    assert_equal "DM", @boleto_novo.especie_documento
+    assert_equal "R$", @boleto_novo.especie
+    assert_equal "9", @boleto_novo.moeda
+    assert_equal Date.parse("2008-02-01"), @boleto_novo.data_documento
+    assert_equal 0, @boleto_novo.dias_vencimento
+    assert_equal((@boleto_novo.data_documento + 0), @boleto_novo.data_vencimento)
+    assert_equal "S", @boleto_novo.aceite
+    assert_equal 1, @boleto_novo.quantidade
+    assert_equal 135.00, @boleto_novo.valor
+    assert_equal 135.00, @boleto_novo.valor_documento
+    assert_equal "QUALQUER BANCO ATÉ O VENCIMENTO", @boleto_novo.local_pagamento
+  end
 
   def test_should_return_correct_agencia_conta_corrente_dv
     @boleto_novo.agencia = "0607"

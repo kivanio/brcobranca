@@ -149,6 +149,21 @@ class BancoBrasilTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.data_documento = Date.parse("2008-02-01")
     @boleto_novo.dias_vencimento = 0
   end
+  
+  def test_should_initialize_correctly
+    assert_equal '001', @boleto_novo.banco
+    assert_equal "DM", @boleto_novo.especie_documento
+    assert_equal "R$", @boleto_novo.especie
+    assert_equal "9", @boleto_novo.moeda
+    assert_equal Date.today, @boleto_novo.data_documento
+    assert_equal 1, @boleto_novo.dias_vencimento
+    assert_equal((Date.today + 1), @boleto_novo.data_vencimento)
+    assert_equal "S", @boleto_novo.aceite
+    assert_equal 1, @boleto_novo.quantidade
+    assert_equal 0.0, @boleto_novo.valor
+    assert_equal 0.0, @boleto_novo.valor_documento
+    assert_equal "QUALQUER BANCO ATÉ O VENCIMENTO", @boleto_novo.local_pagamento
+  end
 
   def test_should_mont_correct_codigo_barras
     boleto_convenio8_numero9_um

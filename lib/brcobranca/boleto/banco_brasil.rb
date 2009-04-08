@@ -2,11 +2,10 @@
 class BancoBrasil < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
-  def initialize
-    super
-    self.carteira = "18"
-    self.banco = "001"
-    self.codigo_servico = false
+  def initialize(campos={})
+    padrao={:carteira => "18", :banco => "001", :codigo_servico => false}
+    campos = padrao.merge!(campos)
+    super(campos)
   end
 
   # Retorna digito verificador do banco, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'

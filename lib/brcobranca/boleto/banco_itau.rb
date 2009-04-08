@@ -4,10 +4,10 @@ class BancoItau < Brcobranca::Boleto::Base
   attr_accessor :seu_numero
 
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
-  def initialize
-    super
-    self.carteira = "175" # carteira "sem registro"
-    self.banco = "341"
+  def initialize(campos={})
+    padrao={:carteira => "175", :banco => "341"}
+    campos = padrao.merge!(campos)
+    super(campos)
   end
 
   # Retorna dígito verificador do nosso número, calculado com modulo10. 
