@@ -95,7 +95,7 @@ module Brcobranca
       def nosso_numero_dv
         self.numero_documento.modulo11_9to2
       end
-      
+
       # Número sequencial utilizado para distinguir os boletos na agência
       def nosso_numero
         self.numero_documento
@@ -136,12 +136,11 @@ module Brcobranca
         "Sobreescreva este método na classe referente ao banco que você esta criando"
       end
 
-      # Gera o boleto em pdf usando template padrão, opcoes disponiveis:
-      #  :tipo, Tipo de saida desejada (PDF, JPG, GIF)
-      def to_pdf(options={})
-        modelo_generico(:tipo => options[:tipo])
+      # Gera o boleto em usando o formato desejado [:pdf, :jpg, :gif, :tif, :png, :ps, :laserjet, ... etc]
+      # Veja mais formatos na documentação do rghost
+      def to(formato)
+        modelo_generico(:tipo => formato)
       end
-
     end
   end
 end

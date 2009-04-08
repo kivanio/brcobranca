@@ -18,8 +18,8 @@ when 'rghost'
     end
   end
 
-# when 'prawn'
-#   # require 'prawn'
+else
+  "Configure o gerador na opção 'Brcobranca::Config::OPCOES[:gerador]' corretamente!!!"
 end
 
 module Brcobranca
