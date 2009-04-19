@@ -2,6 +2,10 @@
 
 * http://brcobranca.rubyforge.org
 
+== EXEMPLO
+
+* http://www.boletorails.com.br
+
 == DESCRIÇÃO
 
 Gem para emissão de bloquetos de cobrança para bancos brasileiros
@@ -46,13 +50,25 @@ Veja a documentação em http://brcobranca.rubyforge.org/rdoc
 
 * sudo gem install brcobranca
 
+== FONTES
+
+* http://github.com/kivanio/brcobranca/tree/master
+
+== WIKI
+
+* http://wiki.github.com/kivanio/brcobranca
+
+== PROBLEMAS? QUERENDO MAIS?
+
+Informe em http://github.com/kivanio/brcobranca/issues
+
 == Gostou?
 
 Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
 
 == LICENSA
 
-Este gem é licenciada pela licensa BSD
+BSD
 
 De brasileiro para brasileiros.
 

@@ -1,5 +1,13 @@
-require 'rghost'
-require 'rghost_barcode'
+begin
+  require 'rghost' 
+rescue LoadError
+  puts 'Por favor execute `sudo gem install rghost` para usar o brcobranca'
+end
+begin
+  require 'rghost_barcode' 
+rescue LoadError
+  puts 'Por favor execute `sudo gem install rghost_barcode` para usar o brcobranca'
+end
 
 module Brcobranca
   module Boleto
