@@ -13,6 +13,8 @@ module Brcobranca
             imagem = 'itau.jpg'
           when "BancoHsbc"
             imagem = 'hsbc.jpg'
+          when "BancoReal"
+            imagem = 'real.jpg'
           else
             return false
           end

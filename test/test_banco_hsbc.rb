@@ -13,6 +13,16 @@ class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.valor = 2952.95
   end
 
+  def boleto_carteira_cnr
+    @boleto_novo.carteira = "CNR"
+    @boleto_novo.agencia = "1234"
+    @boleto_novo.conta_corrente = "0016324"
+    @boleto_novo.numero_documento = "07778899"
+    @boleto_novo.dias_vencimento = 0
+    @boleto_novo.valor = 934.23
+    @boleto_novo.data_documento = Date.parse("2004-09-03")
+  end
+
   def test_should_initialize_correctly
     assert_equal '399', @boleto_novo.banco
     assert_equal "DM", @boleto_novo.especie_documento
@@ -27,7 +37,7 @@ class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
     assert_equal 2952.95, @boleto_novo.valor_documento
     assert_equal "QUALQUER BANCO ATÉ O VENCIMENTO", @boleto_novo.local_pagamento
   end
-  
+
   def test_should_return_correct_nosso_numero
     @boleto_novo.conta_corrente = "1122334"
     @boleto_novo.numero_documento = "12345678"
@@ -53,6 +63,9 @@ class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.data_documento = Date.parse("2009-04-03")
     assert_equal "3999420100002952951122334000001234567809892", @boleto_novo.monta_codigo_43_digitos
     assert_equal "39998420100002952951122334000001234567809892", @boleto_novo.codigo_barras
+    boleto_carteira_cnr
+    assert_equal "3999252300000934230016324000000777889924742", @boleto_novo.monta_codigo_43_digitos
+    assert_equal "39993252300000934230016324000000777889924742", @boleto_novo.codigo_barras
   end
 
   def test_should_mont_correct_linha_digitalvel
@@ -61,6 +74,8 @@ class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
     @boleto_novo.dias_vencimento = 5
     @boleto_novo.data_documento = Date.parse("2009-04-03")
     assert_equal("39991.12232 34000.001239 45678.098927 8 42010000295295", @boleto_novo.codigo_barras.linha_digitavel)
+    boleto_carteira_cnr
+    assert_equal("39990.01633 24000.000778 78899.247429 3 25230000093423", @boleto_novo.codigo_barras.linha_digitavel)
   end
 
 end

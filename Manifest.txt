@@ -8,10 +8,12 @@ lib/brcobranca.rb
 lib/brcobranca/arquivos/logos/bb.jpg
 lib/brcobranca/arquivos/logos/hsbc.jpg
 lib/brcobranca/arquivos/logos/itau.jpg
+lib/brcobranca/arquivos/logos/real.jpg
 lib/brcobranca/arquivos/templates/modelo_generico.eps
 lib/brcobranca/boleto/banco_brasil.rb
 lib/brcobranca/boleto/banco_hsbc.rb
 lib/brcobranca/boleto/banco_itau.rb
+lib/brcobranca/boleto/banco_real.rb
 lib/brcobranca/boleto/base.rb
 lib/brcobranca/boleto/template/rghost.rb
 lib/brcobranca/boleto/template/util.rb
@@ -27,6 +29,7 @@ test/arquivos/CBR64310.RET
 test/test_banco_brasil.rb
 test/test_banco_hsbc.rb
 test/test_banco_itau.rb
+test/test_banco_real.rb
 test/test_base.rb
 test/test_core_ext.rb
 test/test_currency.rb

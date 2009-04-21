@@ -2,7 +2,7 @@ $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) ||
 
 %w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
 
-%w(base banco_brasil banco_itau banco_hsbc).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
+%w(base banco_brasil banco_itau banco_hsbc banco_real).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
 
 %w(util rghost).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto","template",req) }
 
@@ -23,5 +23,5 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.1'
+  VERSION = '2.0.2'
 end

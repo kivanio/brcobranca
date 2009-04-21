@@ -1,3 +1,11 @@
+== 2.0.2 21-04-2009
+
+* Incluindo cobranca do banco real(com e sem registro)
+
+== 2.0.1 19-04-2009
+
+* Ajustes finais para lancamento
+
 == 2.0.0 06-04-2009
 
 * 1 acts_as_payment torna-se brcobranca:

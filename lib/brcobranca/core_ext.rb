@@ -211,11 +211,11 @@ module Brcobranca
     def to_s_br
       self.strftime('%d/%m/%Y')
     end
-    # Retorno string contendo número de dias julianos
+    # Retorna string contendo número de dias julianos:
     #  O cálculo é feito subtraindo-se a data atual, pelo último dia válido do ano anterior, 
-    # acrescentando-se o último algarismo do ano atual na quarta posição.
-    # Deve retornar string com 4 digitos.
-    # Ex. Data atual = 11/02/2009
+    #  acrescentando-se o último algarismo do ano atual na quarta posição.
+    #  Deve retornar string com 4 digitos.
+    #  Ex. Data atual = 11/02/2009
     #     Data válida ano anterior = 31/12/2008
     #     (Data atual - Data válida ano anterior) = 42
     #     último algarismo do ano atual = 9
