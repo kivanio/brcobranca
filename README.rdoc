@@ -14,26 +14,17 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 
 * Banco do Brasil
-  * Carteira 16
-    - Nosso Número de 11 dígitos(4 para convênio e 7 para número do documento)
-    - Nosso Número de 11 dígitos(6 para convênio e 5 para número do documento)
-    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
-    - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para número do documento)
-  * Carteira 17
-    - Nosso Numero de 11 dígitos(4 para convênio e 7 para número do documento)
-    - Nosso Numero de 11 dígitos(6 para convênio e 5 para número do documento)
-    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
-  * Carteira 18
-    - Nosso Numero de 11 dígitos(4 para convênio e 7 para número do documento)
-    - Nosso Numero de 11 dígitos(6 para convênio e 5 para número do documento)
-    - Nosso Numero de 17 dígitos(7 para convênio e 10 para número do documento)
-    - Nosso Numero de 17 dígitos(convênio de 6 dígitos, porem usa-se 17 para número do documento)
-
-* Itaú
   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
 
-* HSBC
+* Banco Itaú
+  * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+
+* Banco HSBC
   * CNR
+  
+* Banco Real
+  * Sem registro
+  * Com registro
 
 
 == Esta perdido?
@@ -45,6 +36,7 @@ Veja a documentação em http://brcobranca.rubyforge.org/rdoc
 * rghost
 * rghost_barcode
 * parseline
+* GhostScript > 8.0
 
 == INSTALAÇÃO
 

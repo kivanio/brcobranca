@@ -70,11 +70,9 @@ module Brcobranca
           :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"}
 
           campos = padrao.merge!(campos)
-
           campos.each do |campo, valor|
             instance_variable_set "@#{campo}", valor if self.respond_to?(campo)
           end
-
         end
 
         # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
@@ -139,4 +137,3 @@ module Brcobranca
       end
     end
   end
-
