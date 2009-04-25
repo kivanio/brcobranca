@@ -120,6 +120,15 @@ module Brcobranca
         end
 
         # Retorna uma String com 44 caracteres representando o codigo de barras do boleto
+        #   O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
+        #   Posição Tamanho Conteúdo
+        #   01 a 03   3       Identificação do Banco
+        #   04 a 04   1       Código da Moeda (Real = 9, Outras=0)
+        #   05 a 05   1       Dígito verificador do Código de Barras
+        #   06 a 09   4       Fator de Vencimento (Vide Nota)
+        #   10 a 19   10      Valor
+        #   20 a 44   25      Campo Livre
+        #   As posições do campo livre ficam a critério de cada Banco arrecadador.
         def codigo_barras
           codigo = monta_codigo_43_digitos
           return nil unless codigo

@@ -58,6 +58,22 @@ module Brcobranca
     # Retorna + nil + para Codigo de Barras em branco, 
     # Codigo de Barras com tamanho diferente de 44 dígitos e 
     # Codigo de Barras que não tenham somente caracteres numéricos.
+    #   A linha digitável será composta por cinco campos:
+    #   1º campo
+    #   Composto pelo código de Banco, código da moeda, as cinco primeiras posições do campo livre
+    #   e o dígito verificador deste campo;
+    #   2º campo
+    #   Composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo;
+    #   3º campo
+    #   Composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo;
+    #   4º campo
+    #   Composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de
+    #   barras;
+    #   5º campo
+    #   Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com
+    #   10(dez) caracteres, sem separadores e sem edição.
+    #   Entre cada campo deverá haver espaço equivalente a 2 (duas) posições, sendo a 1ª
+    #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
     def linha_digitavel
       valor_inicial = self.kind_of?(String) ? self : self.to_s
       return nil if (valor_inicial !~ /\S/) || valor_inicial.size != 44 || (!valor_inicial.scan(/\D/).empty?)
@@ -81,7 +97,8 @@ module Brcobranca
       "#{campo_linha_1} #{campo_linha_2} #{campo_linha_3} #{campo_linha_4} #{campo_linha_5}"
     end
   end
-# métodos auxiliares de cálculos
+
+  # métodos auxiliares de cálculos
   module Calculo
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
@@ -149,7 +166,7 @@ module Brcobranca
       valor = self.modulo11_9to2
       valor == 10 ? "X" : valor
     end
-    
+
     # Retorna o dígito verificador de <b>modulo 11(9-2)</b> trocando retorno <b>10 por 0</b>.
     #  Usado por alguns bancos.
     def modulo11_9to2_10_como_zero
@@ -175,9 +192,9 @@ module Brcobranca
       return total
     end
   end
-# Métodos auxiliares de verificação e validação.
+  
+  # Métodos auxiliares de verificação e validação.
   module Validacao
-
     # Verifica se o valor é moeda.
     #  Ex. +1.232.33
     #  Ex. -1.232.33
@@ -187,7 +204,8 @@ module Brcobranca
       self =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/ ? true : false
     end
   end
-# Métodos auxiliares de limpeza.
+  
+  # Métodos auxiliares de limpeza.
   module Limpeza
     # Retorna uma String contendo exatamente o valor FLOAT
     def limpa_valor_moeda
@@ -196,7 +214,8 @@ module Brcobranca
       (valor_inicial + ("0" * (2 - valor_inicial.split(/\./).last.size ))).somente_numeros
     end
   end
-# Métodos auxiliares de cálculos envolvendo <b>Datas</b>.
+  
+  # Métodos auxiliares de cálculos envolvendo <b>Datas</b>.
   module CalculoData
     # Calcula o número de dias corridos entre a <b>data base ("Fixada" em 07.10.1997)</b> e a <b>data de vencimento</b> desejado:
     #  VENCIMENTO 04/07/2000
