@@ -6,10 +6,12 @@ brcobranca.gemspec
 config/website.yml
 lib/brcobranca.rb
 lib/brcobranca/arquivos/logos/bb.jpg
+lib/brcobranca/arquivos/logos/bradesco.jpg
 lib/brcobranca/arquivos/logos/hsbc.jpg
 lib/brcobranca/arquivos/logos/itau.jpg
 lib/brcobranca/arquivos/logos/real.jpg
 lib/brcobranca/arquivos/templates/modelo_generico.eps
+lib/brcobranca/boleto/banco_bradesco.rb
 lib/brcobranca/boleto/banco_brasil.rb
 lib/brcobranca/boleto/banco_hsbc.rb
 lib/brcobranca/boleto/banco_itau.rb
@@ -26,6 +28,7 @@ script/destroy
 script/generate
 script/txt2html
 test/arquivos/CBR64310.RET
+test/test_banco_bradesco.rb
 test/test_banco_brasil.rb
 test/test_banco_hsbc.rb
 test/test_banco_itau.rb
