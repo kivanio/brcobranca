@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class BancoRealTest < Test::Unit::TestCase #:nodoc:[all]
+class TestBancoReal < Test::Unit::TestCase #:nodoc:[all]
 
   def setup
     @boleto_novo = BancoReal.new

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class BancoHsbcTest < Test::Unit::TestCase #:nodoc:[all]
+class TestBancoHsbc < Test::Unit::TestCase #:nodoc:[all]
 
   def setup
     @boleto_novo = BancoHsbc.new(:data_documento => Date.parse("2008-02-01"))

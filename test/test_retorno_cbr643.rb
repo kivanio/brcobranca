@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class RetornoCbr643Test < Test::Unit::TestCase #:nodoc:[all]
+class TestRetornoCbr643 < Test::Unit::TestCase #:nodoc:[all]
 
   def test_should_correct_return_retorno
     @pagamentos = Brcobranca::Retorno::Cbr643.load_lines(File.join(File.dirname(__FILE__),'arquivos','CBR64310.RET'))

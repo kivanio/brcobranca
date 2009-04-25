@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class CurrencyTest < Test::Unit::TestCase #:nodoc:[all]
+class TestCurrency < Test::Unit::TestCase #:nodoc:[all]
   # Teste do modulo currency
 
   # Testa se é numero Ex. 1321 ou 13.32

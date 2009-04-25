@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class CoreExtTest < Test::Unit::TestCase #:nodoc:[all]
+class TestCoreExt < Test::Unit::TestCase #:nodoc:[all]
   # Teste da Extensão de core do Brcobranca
   def test_should_format_correct_cpf
     assert_equal "987.892.987-90", 98789298790.to_br_cpf

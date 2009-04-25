@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'test_helper.rb')
 
-class BancoItauTest < Test::Unit::TestCase #:nodoc:[all]
+class TestBancoItau < Test::Unit::TestCase #:nodoc:[all]
 
   BOLETO_ITAU_CARTEIRA_175 = {
     :carteira => "175",
