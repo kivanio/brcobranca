@@ -17,6 +17,8 @@ module Brcobranca
             imagem = 'real.jpg'
           when "BancoBradesco"
             imagem = 'bradesco.jpg'
+          when "BancoUnibanco"
+            imagem = 'unibanco.jpg'
           else
             return false
           end

@@ -1,6 +1,7 @@
 == 2.0.3 25-04-2009
 
 * Incluindo boleto para o banco Bradesco(Todas as Carteiras)
+* Incluindo boleto para o banco UNIBANCO(com e sem registro)
 
 == 2.0.2 21-04-2009
 
