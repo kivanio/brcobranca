@@ -8,9 +8,9 @@ $hoe = Hoe.new('brcobranca', Brcobranca::VERSION) do |p|
   p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
   p.rubyforge_name       = p.name # TODO this is default value
   p.extra_deps         = [
-    ['rghost','>= 0.8.3'],
+    ['rghost','>= 0.8.6'],
     ['rghost_barcode','>= 0.8'],
-    ['parseline','>= 1.0.2']
+    ['parseline','>= 1.0.3']
   ]
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]

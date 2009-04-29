@@ -3,7 +3,6 @@ Manifest.txt
 README.rdoc
 Rakefile
 brcobranca.gemspec
-config/website.yml
 lib/brcobranca.rb
 lib/brcobranca/arquivos/logos/bb.jpg
 lib/brcobranca/arquivos/logos/bradesco.jpg
@@ -24,6 +23,7 @@ lib/brcobranca/boleto/template/util.rb
 lib/brcobranca/config.rb
 lib/brcobranca/core_ext.rb
 lib/brcobranca/currency.rb
+lib/brcobranca/retorno/base.rb
 lib/brcobranca/retorno/retorno_cbr643.rb
 script/console
 script/destroy

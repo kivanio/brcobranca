@@ -6,7 +6,7 @@ $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) ||
 
 %w(util rghost).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto","template",req) }
 
-%w(retorno_cbr643).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","retorno",req) }
+%w(base retorno_cbr643).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","retorno",req) }
 
 case Brcobranca::Config::OPCOES[:gerador]
 when 'rghost'
@@ -23,5 +23,5 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.3'
+  VERSION = '2.0.5'
 end
