@@ -15,10 +15,10 @@ $hoe = Hoe.new('brcobranca', Brcobranca::VERSION) do |p|
   p.extra_dev_deps = [
     ['newgem', ">= #{::Newgem::VERSION}"]
   ]
-  
+
   p.rdoc_pattern = /rb$|rdoc$/
-  p.summary = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
-  p.description = p.summary
+  p.summary = 'Gem que permite trabalhar com cobranças via bancos brasileiros.'
+  p.description = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
   p.clean_globs |= %w[**/.DS_Store tmp *.log]
   path = (p.rubyforge_name == p.name) ? p.rubyforge_name : "\#{p.rubyforge_name}/\#{p.name}"
   p.remote_rdoc_dir = File.join(path.gsub(/^#{p.rubyforge_name}\/?/,''), 'rdoc')

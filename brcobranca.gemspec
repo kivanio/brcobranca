@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kivanio Barbosa"]
-  s.date = %q{2009-04-29}
+  s.date = %q{2009-05-04}
   s.description = %q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
   s.email = ["kivanio@gmail.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "README.rdoc", "website/index.txt"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{brcobranca}
   s.rubygems_version = %q{1.3.2}
-  s.summary = %q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
+  s.summary = %q{Gem que permite trabalhar com cobranças via bancos brasileiros.}
   s.test_files = ["test/test_banco_bradesco.rb", "test/test_banco_brasil.rb", "test/test_banco_hsbc.rb", "test/test_banco_itau.rb", "test/test_banco_real.rb", "test/test_banco_unibanco.rb", "test/test_base.rb", "test/test_core_ext.rb", "test/test_currency.rb", "test/test_helper.rb", "test/test_retorno_cbr643.rb"]
 
   if s.respond_to? :specification_version then
@@ -28,20 +28,20 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rghost>, [">= 0.8.6"])
       s.add_runtime_dependency(%q<rghost_barcode>, [">= 0.8"])
       s.add_runtime_dependency(%q<parseline>, [">= 1.0.3"])
-      s.add_development_dependency(%q<newgem>, [">= 1.3.0"])
+      s.add_development_dependency(%q<newgem>, [">= 1.4.1"])
       s.add_development_dependency(%q<hoe>, [">= 1.8.0"])
     else
       s.add_dependency(%q<rghost>, [">= 0.8.6"])
       s.add_dependency(%q<rghost_barcode>, [">= 0.8"])
       s.add_dependency(%q<parseline>, [">= 1.0.3"])
-      s.add_dependency(%q<newgem>, [">= 1.3.0"])
+      s.add_dependency(%q<newgem>, [">= 1.4.1"])
       s.add_dependency(%q<hoe>, [">= 1.8.0"])
     end
   else
     s.add_dependency(%q<rghost>, [">= 0.8.6"])
     s.add_dependency(%q<rghost_barcode>, [">= 0.8"])
     s.add_dependency(%q<parseline>, [">= 1.0.3"])
-    s.add_dependency(%q<newgem>, [">= 1.3.0"])
+    s.add_dependency(%q<newgem>, [">= 1.4.1"])
     s.add_dependency(%q<hoe>, [">= 1.8.0"])
   end
 end
