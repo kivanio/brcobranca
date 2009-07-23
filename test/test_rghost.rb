@@ -23,7 +23,6 @@ class TestRGhost < Test::Unit::TestCase #:nodoc:[all]
     @boleto.instrucao5 = "Após vencimento pagável somente nas agências do Banco do Brasil"
     @boleto.instrucao6 = "ACRESCER R$ 4,00 REFERENTE AO BOLETO BANCÁRIO"
     @boleto.sacado_endereco = "Av. Rubéns de Mendonça, 157 - 78008-000 - Cuiabá/MT"
-
   end
 
   def test_gs_presence
@@ -32,7 +31,6 @@ class TestRGhost < Test::Unit::TestCase #:nodoc:[all]
     assert_equal true, File.executable?(RGhost::Config::GS[:path])
     s=`#{RGhost::Config::GS[:path]} -v`
     assert_match(/^GPL Ghostscript 8\.[6-9]/, s)
-
   end
 
   def test_outputs
@@ -46,7 +44,6 @@ class TestRGhost < Test::Unit::TestCase #:nodoc:[all]
       assert_equal 1, File.delete(tmp_file.path)
       assert_equal false, File.exist?(tmp_file.path)
     end
-    
   end
 
 end

@@ -20,13 +20,13 @@ module Brcobranca #:nodoc:[all]
     module Number #:nodoc:[all]
       def to_currency(options = {})
         number = self
-        default   = Brcobranca::Currency::DEFAULT.stringify_keys
-        options   = default.merge(options.stringify_keys)
-        precision = options["precision"] || default["precision"]
-        unit      = options["unit"] || default["unit"]
-        position  = options["position"] || default["position"]
-        separator = precision > 0 ? options["separator"] || default["separator"] : ""
-        delimiter = options["delimiter"] || default["delimiter"]
+        default   = Brcobranca::Currency::DEFAULT
+        options   = default.merge(options)
+        precision = options[:precision] || default[:precision]
+        unit      = options[:unit] || default[:unit]
+        position  = options[:position] || default[:position]
+        separator = precision > 0 ? options[:separator] || default[:separator] : ""
+        delimiter = options[:delimiter] || default[:delimiter]
 
         begin
           parts = number.with_precision(precision).split('.')

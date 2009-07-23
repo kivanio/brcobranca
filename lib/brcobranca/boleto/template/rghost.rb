@@ -66,7 +66,7 @@ module Brcobranca
           doc.moveto :x => '0.7 cm' , :y => '22.2 cm'
           doc.show self.numero_documento
           doc.moveto :x => '7 cm' , :y => '22.2 cm'
-          doc.show "#{self.sacado_documento.formata_documento}"
+          doc.show "#{self.documento_cedente.formata_documento}"
           doc.moveto :x => '12 cm' , :y => '22.2 cm'
           doc.show self.data_vencimento.to_s_br
           doc.moveto :x => '16.5 cm' , :y => '23 cm'

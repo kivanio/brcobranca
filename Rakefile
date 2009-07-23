@@ -1,28 +1,30 @@
-%w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
+require 'rubygems'
+gem 'hoe', '>= 2.1.0'
+require 'hoe'
+require 'fileutils'
 require File.dirname(__FILE__) + '/lib/brcobranca'
+
+Hoe.plugin :newgem
+Hoe.plugin :website
 
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
-$hoe = Hoe.new('brcobranca', Brcobranca::VERSION) do |p|
-  p.developer('Kivanio Barbosa', 'kivanio@gmail.com')
-  p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  p.rubyforge_name       = p.name # TODO this is default value
-  p.extra_deps         = [
-    ['rghost','>= 0.8.6'],
+$hoe = Hoe.spec 'brcobranca' do
+  self.developer('Kivanio Barbosa', 'kivanio@gmail.com')
+  self.rubyforge_name       = self.name
+  self.extra_deps         = [
+    ['rghost','>= 0.8.7'],
     ['rghost_barcode','>= 0.8'],
     ['parseline','>= 1.0.3']
   ]
-  p.extra_dev_deps = [
-    ['newgem', ">= #{::Newgem::VERSION}"]
-  ]
 
-  p.rdoc_pattern = /rb$|rdoc$/
-  p.summary = 'Gem que permite trabalhar com cobranças via bancos brasileiros.'
-  p.description = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
-  p.clean_globs |= %w[**/.DS_Store tmp *.log]
-  path = (p.rubyforge_name == p.name) ? p.rubyforge_name : "\#{p.rubyforge_name}/\#{p.name}"
-  p.remote_rdoc_dir = File.join(path.gsub(/^#{p.rubyforge_name}\/?/,''), 'rdoc')
-  p.rsync_args = '-av --delete --ignore-errors'
+  # self.rdoc_pattern = /rb$|rdoc$/
+  self.summary = 'Gem que permite trabalhar com cobranças via bancos brasileiros.'
+  self.description = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
+  self.clean_globs |= %w[**/.DS_Store tmp *.log]
+  path = (self.rubyforge_name == self.name) ? self.rubyforge_name : "\#{self.rubyforge_name}/\#{self.name}"
+  self.remote_rdoc_dir = File.join(path.gsub(/^#{self.rubyforge_name}\/?/,''), 'rdoc')
+  self.rsync_args = '-av --delete --ignore-errors'
 end
 
 require 'newgem/tasks' # load /tasks/*.rake

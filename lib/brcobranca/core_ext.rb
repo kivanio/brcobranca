@@ -192,7 +192,7 @@ module Brcobranca
       return total
     end
   end
-  
+
   # Métodos auxiliares de verificação e validação.
   module Validacao
     # Verifica se o valor é moeda.
@@ -204,7 +204,7 @@ module Brcobranca
       self =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/ ? true : false
     end
   end
-  
+
   # Métodos auxiliares de limpeza.
   module Limpeza
     # Retorna uma String contendo exatamente o valor FLOAT
@@ -214,7 +214,7 @@ module Brcobranca
       (valor_inicial + ("0" * (2 - valor_inicial.split(/\./).last.size ))).somente_numeros
     end
   end
-  
+
   # Métodos auxiliares de cálculos envolvendo <b>Datas</b>.
   module CalculoData
     # Calcula o número de dias corridos entre a <b>data base ("Fixada" em 07.10.1997)</b> e a <b>data de vencimento</b> desejado:
