@@ -1,0 +1,4 @@
+
+Para maiores informações veja http://brcobranca.rubyforge.org
+
+Para exemplos de como usar veja http://www.boletorails.com.br

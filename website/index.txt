@@ -1,12 +1,12 @@
 h1. brcobranca
 
-Gerador de bloquetos de cobrança para bancos brasileiros.
+Gerador de bloquetos de cobran√ßa para bancos brasileiros.
 
 h2. Instalando
 
 <pre syntax="ruby">sudo gem install brcobranca</pre>
 
-h2. Documentação
+h2. Documenta√ß√£o
 
 * "http://brcobranca.rubyforge.org/rdoc":http://brcobranca.rubyforge.org/rdoc
 
@@ -33,7 +33,7 @@ h2. Bugs
 
 h2. Licensa
 
-Esta gem é licenciada pel licensa BSD
+Esta gem √© licenciada pel licensa BSD
 
 h2. Gostou?
 

@@ -56,15 +56,12 @@ module Brcobranca #:nodoc:[all]
   end
 end
 
-class Fixnum #:nodoc:[all]
-  include Brcobranca::Currency::Number
+# TODO - porque não incluir somente na Numeric?
+# [ Fixnum, Bignum, Float ].each do |klass|
+[ Numeric].each do |klass|
+  klass.class_eval { include Brcobranca::Currency::Number }
 end
-class Bignum #:nodoc:[all]
-  include Brcobranca::Currency::Number
-end
-class Float #:nodoc:[all]
-  include Brcobranca::Currency::Number
-end
-class String #:nodoc:[all]
-  include Brcobranca::Currency::String
+
+[ String ].each do |klass|
+  klass.class_eval { include Brcobranca::Currency::String }
 end

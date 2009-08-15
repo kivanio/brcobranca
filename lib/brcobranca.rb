@@ -1,8 +1,16 @@
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+begin
+  require 'date'
+rescue LoadError
+  require 'rubygems' unless ENV['NO_RUBYGEMS']
+  gem 'date'
+  require 'date'
+end
+
 %w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
 
-%w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
+%w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco banco_banespa).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
 
 %w(util rghost).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto","template",req) }
 
@@ -23,5 +31,5 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.5'
+  VERSION = '3.0.0'
 end

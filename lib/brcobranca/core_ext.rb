@@ -24,7 +24,7 @@ module Brcobranca
       when 14 then self.to_br_cnpj
       else
         self
-      end     
+      end
     end
 
     # Remove caracteres que não sejam numéricos do tipo MOEDA
@@ -54,9 +54,9 @@ module Brcobranca
       return (("0" * diferenca) + valor_inicial )
     end
 
-    # Monta a linha digitável padrão para todos os bancos segundo a BACEN. 
-    # Retorna + nil + para Codigo de Barras em branco, 
-    # Codigo de Barras com tamanho diferente de 44 dígitos e 
+    # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
+    # Retorna + nil + para Codigo de Barras em branco,
+    # Codigo de Barras com tamanho diferente de 44 dígitos e
     # Codigo de Barras que não tenham somente caracteres numéricos.
     #   A linha digitável será composta por cinco campos:
     #   1º campo
@@ -76,7 +76,9 @@ module Brcobranca
     #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
     def linha_digitavel
       valor_inicial = self.kind_of?(String) ? self : self.to_s
-      return nil if (valor_inicial !~ /\S/) || valor_inicial.size != 44 || (!valor_inicial.scan(/\D/).empty?)
+      raise ArgumentError, "Número em branco" if valor_inicial.nil?
+      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
+      raise ArgumentError, "Precisa conter 44 caracteres e você passou um valor com #{valor_inicial.size} caracteres" if valor_inicial.size != 44
 
       dv_1 = ("#{valor_inicial[0..3]}#{valor_inicial[19..23]}").modulo10
       campo_1_dv = "#{valor_inicial[0..3]}#{valor_inicial[19..23]}#{dv_1}"
@@ -103,7 +105,7 @@ module Brcobranca
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
       valor_inicial = self.kind_of?(String) ? self : self.to_s
-      return nil if (valor_inicial !~ /\S/)
+      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
 
       total = 0
       multiplicador = 2
@@ -117,47 +119,40 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
-    # Método padrão para cálculo de módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN. 
+    # Método padrão para cálculo de módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN.
     # Usado no DV do Nosso Numero, Agência e Cedente.
     #  Retorna + nil + para todos os parametros que nao forem String
     #  Retorna + nil + para String em branco
     def modulo11_9to2
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
-      return nil if (valor_inicial !~ /\S/)
-
-      multiplicadores = [9,8,7,6,5,4,3,2]
-      total = 0
-      multiplicador_posicao = 0
-
-      valor_inicial.split(//).reverse!.each do |caracter|
-        multiplicador_posicao = 0 if (multiplicador_posicao == 8)
-        total += (caracter.to_i * multiplicadores[multiplicador_posicao])
-        multiplicador_posicao += 1
-      end
+      total = self.multiplicador([9,8,7,6,5,4,3,2])
 
       return (total % 11 )
     end
 
-    # Método padrão para cálculo de módulo 11 com multiplicaroes de 2 a 9 segundo a BACEN. 
+    # Método padrão para cálculo de módulo 11 com multiplicaroes de 2 a 9 segundo a BACEN.
     # Usado no DV do Código de Barras.
     #  Retorna + nil + para todos os parametros que não forem String
     #  Retorna + nil + para String em branco
     def modulo11_2to9
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
-      return nil if (valor_inicial !~ /\S/)
-
-      multiplicadores = [2,3,4,5,6,7,8,9]
-      total = 0
-      multiplicador_posicao = 0
-
-      valor_inicial.split(//).reverse!.each do |caracter|
-        multiplicador_posicao = 0 if (multiplicador_posicao == 8)
-        total += (caracter.to_i * multiplicadores[multiplicador_posicao])
-        multiplicador_posicao += 1
-      end
+      total = self.multiplicador([2,3,4,5,6,7,8,9])
 
       valor = (11 - (total % 11))
       return [0,10,11].include?(valor) ? 1 : valor
+    end
+
+    def modulo_10_banespa
+      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
+
+      fatores = [7,3,1,9,7,3,1,9,7,3]
+      total = 0
+      posicao = 0
+      valor_inicial.split(//).each do |digito|
+        total += (digito.to_i * fatores[posicao]).to_s.split(//)[-1].to_i
+        posicao = (posicao < (fatores.size - 1)) ? (posicao + 1) : 0
+      end
+      dv = 10 - total.to_s.split(//)[-1].to_i
+      dv == 10 ? 0 : dv
     end
 
     # Retorna o dígito verificador de <b>modulo 11(9-2)</b> trocando retorno <b>10 por X</b>.
@@ -174,7 +169,7 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
-    # Soma números inteiros positivos com 2 dígitos ou mais 
+    # Soma números inteiros positivos com 2 dígitos ou mais
     # Retorna <b>0(zero)</b> caso seja impossível.
     #  Ex. 1 = 1
     #  Ex. 11 = (1+1) = 2
@@ -191,6 +186,20 @@ module Brcobranca
 
       return total
     end
+
+    def multiplicador(fatores)
+      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
+
+      total = 0
+      multiplicador_posicao = 0
+
+      valor_inicial.split(//).reverse!.each do |caracter|
+        total += (caracter.to_i * fatores[multiplicador_posicao])
+        multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
+      end
+      total.to_i
+    end
   end
 
   # Métodos auxiliares de verificação e validação.
@@ -200,8 +209,8 @@ module Brcobranca
     #  Ex. -1.232.33
     #  Ex. 1.232.33
     def moeda?
-      return false unless self.kind_of?(String)
-      self =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/ ? true : false
+      value = self.kind_of?(String) ? self : self.to_s
+      value =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/ ? true : false
     end
   end
 
@@ -209,7 +218,6 @@ module Brcobranca
   module Limpeza
     # Retorna uma String contendo exatamente o valor FLOAT
     def limpa_valor_moeda
-      return self unless self.kind_of?(Float)
       valor_inicial = self.to_s
       (valor_inicial + ("0" * (2 - valor_inicial.split(/\./).last.size ))).somente_numeros
     end
@@ -231,7 +239,7 @@ module Brcobranca
       self.strftime('%d/%m/%Y')
     end
     # Retorna string contendo número de dias julianos:
-    #  O cálculo é feito subtraindo-se a data atual, pelo último dia válido do ano anterior, 
+    #  O cálculo é feito subtraindo-se a data atual, pelo último dia válido do ano anterior,
     #  acrescentando-se o último algarismo do ano atual na quarta posição.
     #  Deve retornar string com 4 digitos.
     #  Ex. Data atual = 11/02/2009
@@ -249,21 +257,23 @@ module Brcobranca
   end
 end
 
-class String #:nodoc:[all]
-  include Brcobranca::Formatacao
-  include Brcobranca::Validacao
-  include Brcobranca::Calculo
+# NEW AND COOL
+[ String, Numeric ].each do |klass|
+  klass.class_eval { include Brcobranca::Formatacao }
 end
 
-class Integer #:nodoc:[all]
-  include Brcobranca::Formatacao
-  include Brcobranca::Calculo
+[ String, Numeric ].each do |klass|
+  klass.class_eval { include Brcobranca::Validacao }
 end
 
-class Float #:nodoc:[all]
-  include Brcobranca::Limpeza
+[ String, Numeric ].each do |klass|
+  klass.class_eval { include Brcobranca::Calculo }
 end
 
-class Date #:nodoc:[all]
-  include Brcobranca::CalculoData
+[ Float ].each do |klass|
+  klass.class_eval { include Brcobranca::Limpeza }
+end
+
+[ Date ].each do |klass|
+  klass.class_eval { include Brcobranca::CalculoData }
 end

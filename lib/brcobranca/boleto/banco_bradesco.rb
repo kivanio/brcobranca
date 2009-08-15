@@ -6,6 +6,18 @@ class BancoBradesco < Brcobranca::Boleto::Base
     campos = padrao.merge!(campos)
     super(campos)
   end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.carteira}/#{self.numero_documento.zeros_esquerda(:tamanho => 11)}-#{self.nosso_numero_dv}"
+  end
+
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def agencia_conta_boleto
+   "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
+  end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   #   As posições do campo livre ficam a critério de cada Banco arrecadador, sendo que o
@@ -26,6 +38,7 @@ class BancoBradesco < Brcobranca::Boleto::Base
     numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 11)
     conta = self.conta_corrente.zeros_esquerda(:tamanho => 7)
 
-    "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{carteira}#{numero_documento}#{conta}0"
+    numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{carteira}#{numero_documento}#{conta}0"
+    numero.size == 43 ? numero : nil
   end
 end

@@ -66,7 +66,7 @@ module Brcobranca
       # Responsável por definir dados iniciais quando se cria uma nova intância da classe Base.
       def initialize(campos={})
         padrao = { :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
-          :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0, 
+          :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
           :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"}
 
           campos = padrao.merge!(campos)
@@ -100,23 +100,28 @@ module Brcobranca
           self.numero_documento
         end
 
+        # Campo usado apenas na exibição no boleto
+        #  Deverá ser sobreescrito para cada banco
+        def nosso_numero_boleto
+          "Sobreescreva este método na classe referente ao banco que você esta criando"
+        end
+
+        # Campo usado apenas na exibição no boleto
+        #  Deverá ser sobreescrito para cada banco
+        def agencia_conta_boleto
+          "Sobreescreva este método na classe referente ao banco que você esta criando"
+        end
+
         # Retorna o valor total do documento: <b>quantidate * valor</b> ou <b>zero(0)</b> caso não consiga efetuar o cálculo.
         def valor_documento
-          begin
-            self.quantidade * self.valor.to_f
-          rescue
-            0
-          end
+          return 0 unless self.quantidade.kind_of?(Numeric) && self.valor.kind_of?(Numeric)
+          self.quantidade * self.valor.to_f
         end
 
         # Retorna data de vencimento baseado na <b>data_documento + dias_vencimento</b> ou <b>false</b> caso não consiga efetuar o cálculo.
         def data_vencimento
-          begin
-            return false unless self.data_documento.kind_of?(Date)
-            (self.data_documento + self.dias_vencimento.to_i)
-          rescue
-            false
-          end
+          return nil unless self.data_documento.kind_of?(Date) && self.dias_vencimento.kind_of?(Numeric)
+          (self.data_documento + self.dias_vencimento.to_i)
         end
 
         # Retorna uma String com 44 caracteres representando o codigo de barras do boleto
@@ -131,18 +136,19 @@ module Brcobranca
         #   As posições do campo livre ficam a critério de cada Banco arrecadador.
         def codigo_barras
           codigo = monta_codigo_43_digitos
-          return nil unless codigo
-          return nil if codigo.size != 43
+          return unless codigo
+          return if codigo.size != 43
           codigo_dv = codigo.modulo11_2to9
 
           "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
         end
 
         # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
-        #  Este metodo precisa ser reescrito para cada classe de boleto a ser criada. 
+        #  Este metodo precisa ser reescrito para cada classe de boleto a ser criada.
         def monta_codigo_43_digitos
           "Sobreescreva este método na classe referente ao banco que você esta criando"
         end
+        
       end
     end
   end

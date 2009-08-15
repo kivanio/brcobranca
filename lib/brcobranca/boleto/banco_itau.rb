@@ -10,10 +10,10 @@ class BancoItau < Brcobranca::Boleto::Base
     super(campos)
   end
 
-  # Retorna dígito verificador do nosso número, calculado com modulo10. 
-  # Para a grande maioria das carteiras, são considerados para a obtenção do DAC/DV, os dados 
-  # "AGENCIA(sem DAC/DV)/CONTA(sem DAC/DV)/CARTEIRA/NOSSO NUMERO", calculado pelo criterio do Modulo 10. 
-  # A excecao, estão as carteiras 126, 131, 146, 150 e 168 cuja obtenção esta baseada apenas nos 
+  # Retorna dígito verificador do nosso número, calculado com modulo10.
+  # Para a grande maioria das carteiras, são considerados para a obtenção do DAC/DV, os dados
+  # "AGENCIA(sem DAC/DV)/CONTA(sem DAC/DV)/CARTEIRA/NOSSO NUMERO", calculado pelo criterio do Modulo 10.
+  # A excecao, estão as carteiras 126, 131, 146, 150 e 168 cuja obtenção esta baseada apenas nos
   # dados "CARTEIRA/NOSSO NUMERO".
   def nosso_numero_dv
     if %w(126 131 146 150 168).include?(self.carteira)
@@ -24,15 +24,22 @@ class BancoItau < Brcobranca::Boleto::Base
     end
   end
 
-  # Número sequencial utilizado para distinguir os boletos na agência
-  def nosso_numero
-    "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
-  end
-
-  # Calcula o dígito verificador para conta corrente do Itau. 
+  # Calcula o dígito verificador para conta corrente do Itau.
   # Retorna apenas o dígito verificador da conta ou nil caso seja impossível calcular.
   def agencia_conta_corrente_dv
     "#{self.agencia}#{self.conta_corrente}".modulo10
+  end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
+  end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def agencia_conta_boleto
+   "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
@@ -61,6 +68,7 @@ class BancoItau < Brcobranca::Boleto::Base
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
       codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
+      codigo.size == 43 ? codigo : nil
     when 198, 106, 107, 122, 142, 143, 195, 196
       # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
       # 01 a 03 03 9(3) Código do Banco na Câmara de Compensação = ‘341’
@@ -83,6 +91,7 @@ class BancoItau < Brcobranca::Boleto::Base
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
       codigo << "#{numero_documento}#{seu_numero}#{convenio}#{dv}0"
       codigo
+      codigo.size == 43 ? codigo : nil
     else
       # DEMAIS CARTEIRAS
       # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
@@ -100,6 +109,7 @@ class BancoItau < Brcobranca::Boleto::Base
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
       codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
+      codigo.size == 43 ? codigo : nil
     end
   end
 end

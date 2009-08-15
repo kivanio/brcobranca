@@ -10,7 +10,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
   # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
-    if self.data_vencimento
+    if self.data_vencimento.kind_of?(Date)
       self.codigo_servico = 4
       dia = self.data_vencimento.day.to_s.zeros_esquerda(:tamanho => 2)
       mes = self.data_vencimento.month.to_s.zeros_esquerda(:tamanho => 2)
@@ -29,6 +29,18 @@ class BancoHsbc < Brcobranca::Boleto::Base
       numero
     end
   end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.nosso_numero}"
+  end
+
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def agencia_conta_boleto
+   "#{self.conta_corrente}"
+  end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
@@ -39,23 +51,25 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
     if self.carteira == "CNR"
-      if self.data_vencimento
+      if self.data_vencimento.kind_of?(Date)
         raise "numero_documento pode ser de no máximo 13 caracteres." if (self.numero_documento.to_s.size > 13)
         fator = self.data_vencimento.fator_vencimento
         dias_julianos = self.data_vencimento.to_juliano
         self.codigo_servico = 4
-        numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 13)       
-        "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
+        numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 13)
+        numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
+        numero.size == 43 ? numero : nil
       else
         # TODO
         nil
       end
     else
-      raise "numero_documento pode ser de no máximo 6 caracteres." if (self.numero_documento.to_s.size > 6)
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 6)
-      nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 9)
-      self.codigo_servico = 5
       # TODO
+      # raise "numero_documento pode ser de no máximo 6 caracteres." if (self.numero_documento.to_s.size > 6)
+      # numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 6)
+      # nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 9)
+      # self.codigo_servico = 5
+      
       nil
     end
   end

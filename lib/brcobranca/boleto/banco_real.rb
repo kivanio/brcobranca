@@ -6,7 +6,19 @@ class BancoReal < Brcobranca::Boleto::Base
     campos = padrao.merge!(campos)
     super(campos)
   end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.numero_documento}-#{self.nosso_numero_dv}"
+  end
 
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def agencia_conta_boleto
+   "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
+  end
+  
   # CALCULO DO DIGITO:
   #  APLICA-SE OS PESOS 2,1,2,1,.... AOS ALGARISMOS DO NUMERO COMPOSTO POR:
   #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA
@@ -46,11 +58,13 @@ class BancoReal < Brcobranca::Boleto::Base
       # Carteira sem registro
     when 57
       numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 13)
-      "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo.size == 43 ? codigo : nil
     else
       # TODO verificar com o banco, pois não consta na documentação
       numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 7)
-      "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo.size == 43 ? codigo : nil
     end
   end
 end

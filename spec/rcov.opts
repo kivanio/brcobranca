@@ -1,0 +1,2 @@
+--exclude "gems/*"
+--charset utf-8

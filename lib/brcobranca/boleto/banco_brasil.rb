@@ -28,10 +28,17 @@ class BancoBrasil < Brcobranca::Boleto::Base
   def nosso_numero_dv
     "#{self.convenio}#{self.numero_documento}".modulo11_9to2_10_como_x
   end
+  
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.convenio}#{self.numero_documento}-#{self.nosso_numero_dv}"
+  end
 
-  # Número sequencial utilizado para distinguir os boletos na agência
-  def nosso_numero
-    "#{self.convenio}#{self.numero_documento}-#{self.nosso_numero_dv}"
+  # Campo usado apenas na exibição no boleto
+  #  Deverá ser sobreescrito para cada banco
+  def agencia_conta_boleto
+   "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
   end
 
   # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
@@ -45,11 +52,11 @@ class BancoBrasil < Brcobranca::Boleto::Base
     when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
       numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 9)
       raise "Seu complemento está com #{numero_documento.size} dígitos. Com convênio de 8 dígitos, somente permite-se até 9 dígitos no numero_documento do nosso numero." if numero_documento.size > 9
-      "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{convenio}#{numero_documento}#{self.carteira}"
+      numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{convenio}#{numero_documento}#{self.carteira}"
     when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
       numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 10)
       raise "Seu complemento está com #{numero_documento.size} dígitos. Com convênio de 7 dígitos, somente permite-se até 10 dígitos no numero_documento do nosso numero." if numero_documento.size > 10
-      "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{convenio}#{numero_documento}#{self.carteira}"
+      numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{convenio}#{numero_documento}#{self.carteira}"
     when 6 # Convenio de 6 dígitos
       if self.codigo_servico == false
         # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
@@ -57,23 +64,25 @@ class BancoBrasil < Brcobranca::Boleto::Base
         raise "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 6 dígitos, somente permite-se até 5 dígitos no numero_documento do nosso numero. Para emitir boletos com nosso numero de 17 dígitos, coloque o atributo codigo_servico=true" if numero_documento.size > 5
         agencia = self.agencia.zeros_esquerda(:tamanho => 4)
         conta = self.conta_corrente.zeros_esquerda(:tamanho => 8)
-        "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
+        numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
       else
         # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
         numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 17)
         raise "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 6 dígitos, somente permite-se até 17 dígitos no numero_documento do nosso numero." if (numero_documento.size > 17)
         raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
-        "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}21"
+        numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}21"
       end
     when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
       numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 7)
       raise "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 4 dígitos, somente permite-se até 7 dígitos no numero_documento do nosso numero." if numero_documento.size > 7
       agencia = self.agencia.zeros_esquerda(:tamanho => 4)
       conta = self.conta_corrente.zeros_esquerda(:tamanho => 8)
-      "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
+      numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
     else
-      return nil
+      numero = ""
     end
+
+    numero.size == 43 ? numero : nil
   end
 
 end
