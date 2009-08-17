@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{brcobranca}
-  s.version = "3.0.0"
+  s.version = "2.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kivanio Barbosa"]
-  s.date = %q{2009-08-15}
+  s.date = %q{2009-08-17}
   s.description = %q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
   s.email = ["kivanio@gmail.com"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{brcobranca}
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{Gem que permite trabalhar com cobranças via bancos brasileiros.}
+  s.summary = %q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

@@ -31,5 +31,5 @@ else
 end
 
 module Brcobranca
-  VERSION = '3.0.0'
+  VERSION = '2.0.6'
 end
