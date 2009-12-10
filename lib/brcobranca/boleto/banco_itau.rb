@@ -39,7 +39,7 @@ class BancoItau < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-   "#{self.agencia} / #{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
+   "#{self.agencia}/#{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
