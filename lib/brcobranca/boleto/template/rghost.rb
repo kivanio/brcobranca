@@ -145,7 +145,7 @@ module Brcobranca
 
           # Gerando stream
           options[:tipo] = options[:tipo].to_sym unless options[:tipo].kind_of?(Symbol)
-          doc.render_stream(options[:tipo])
+          doc.render_stream(options[:tipo], :resolution => 300)
         end
       end
     end
