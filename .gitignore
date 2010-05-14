@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## MAC OS
 .DS_Store
 
@@ -20,11 +19,10 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
-=======
 config
 config/*.*
 pkg
 pkg/*.8
 doc
 doc/*.*
->>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
+brcobranca.gemspec
