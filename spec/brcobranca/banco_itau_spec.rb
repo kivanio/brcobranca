@@ -136,22 +136,14 @@ describe BancoItau do
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(0)
-<<<<<<< HEAD
     boleto_novo.agencia_conta_boleto.should eql("0607 / 15255-0")
-=======
-    boleto_novo.agencia_conta_boleto.should eql("0607/15255-0")
->>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
     
     @valid_attributes[:conta_corrente] = "85547"
     @valid_attributes[:agencia] = "1547"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(6)
-<<<<<<< HEAD
     boleto_novo.agencia_conta_boleto.should eql("1547 / 85547-6")
-=======
-    boleto_novo.agencia_conta_boleto.should eql("1547/85547-6")
->>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
     
     @valid_attributes[:conta_corrente] = "10207"
     @valid_attributes[:agencia] = "1547"
@@ -164,11 +156,7 @@ describe BancoItau do
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(8)
-<<<<<<< HEAD
     boleto_novo.agencia_conta_boleto.should eql("0811 / 53678-8")
-=======
-    boleto_novo.agencia_conta_boleto.should eql("0811/53678-8")
->>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
   end
   
   it "should mount a valid nosso_numero_dv" do
