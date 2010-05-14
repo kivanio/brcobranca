@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco BANESPA
 class BancoBanespa < Brcobranca::Boleto::Base
 
@@ -12,17 +11,17 @@ class BancoBanespa < Brcobranca::Boleto::Base
   def nosso_numero
     "#{self.agencia.zeros_esquerda(:tamanho => 3)}#{self.numero_documento.zeros_esquerda(:tamanho => 7)}"
   end
-  
+
   # Retorna dígito verificador do nosso número calculado como contas na documentação
   def nosso_numero_dv
     self.nosso_numero.zeros_esquerda(:tamanho => 10).modulo_10_banespa
   end
-  
+
   # Retorna nosso numero pronto para exibir no boleto
   def nosso_numero_boleto
     "#{self.nosso_numero[0..2]} #{self.nosso_numero[3..9]} #{self.nosso_numero_dv}"
   end
-  
+
   def agencia_conta_boleto
     convenio = self.convenio.zeros_esquerda(:tamanho => 11)
     "#{convenio[0..2]} #{convenio[3..4]} #{convenio[5..9]} #{convenio[10..10]}"
@@ -47,7 +46,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
   def campo_livre
     "#{self.convenio.zeros_esquerda(:tamanho => 11)}#{self.numero_documento.zeros_esquerda(:tamanho => 7)}00#{self.banco.zeros_esquerda(:tamanho => 3)}"
   end
-                                                                  
+
   #campo livre com os digitos verificadores como conta na documentação do banco
   def campo_livre_com_dv1_e_dv2
     dv1 = self.campo_livre.modulo10 #dv 1 inicial

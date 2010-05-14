@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco UNIBANCO
 class BancoUnibanco < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoUnibanco
@@ -13,7 +12,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
   def nosso_numero_dv
     self.numero_documento.modulo11_2to9
   end
-  
+
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto

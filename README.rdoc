@@ -12,9 +12,12 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 == Bancos Disponíveis
 
+<<<<<<< HEAD
 * Banco Banespa
   * COB
 
+=======
+>>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
 * Banco do Brasil
   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
 

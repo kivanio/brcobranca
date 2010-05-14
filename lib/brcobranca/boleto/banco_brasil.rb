@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco do Brasil
 class BancoBrasil < Brcobranca::Boleto::Base
 
@@ -29,7 +28,7 @@ class BancoBrasil < Brcobranca::Boleto::Base
   def nosso_numero_dv
     "#{self.convenio}#{self.numero_documento}".modulo11_9to2_10_como_x
   end
-  
+
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto

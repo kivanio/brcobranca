@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco REAL
 class BancoReal < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoReal
@@ -7,7 +6,7 @@ class BancoReal < Brcobranca::Boleto::Base
     campos = padrao.merge!(campos)
     super(campos)
   end
-  
+
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
@@ -19,7 +18,7 @@ class BancoReal < Brcobranca::Boleto::Base
   def agencia_conta_boleto
    "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
   end
-  
+
   # CALCULO DO DIGITO:
   #  APLICA-SE OS PESOS 2,1,2,1,.... AOS ALGARISMOS DO NUMERO COMPOSTO POR:
   #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA

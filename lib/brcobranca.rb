@@ -1,17 +1,12 @@
-# encoding: utf-8
 $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
-unless defined? Date
-  begin
-    require 'date'
-  rescue LoadError
-    require 'rubygems' unless ENV['NO_RUBYGEMS']
-    gem 'date'
-    require 'date'
-  end
+begin
+  require 'date'
+rescue LoadError
+  require 'rubygems' unless ENV['NO_RUBYGEMS']
+  gem 'date'
+  require 'date'
 end
-
-autoload(:Date, "date")
 
 %w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
 
@@ -33,8 +28,4 @@ when 'rghost'
 
 else
   "Configure o gerador na opção 'Brcobranca::Config::OPCOES[:gerador]' corretamente!!!"
-end
-
-module Brcobranca
-  VERSION = '2.0.6'
 end

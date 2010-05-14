@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Brcobranca
   # Métodos auxiliares de formatação
   module Formatacao
@@ -257,7 +256,6 @@ module Brcobranca
   end
 end
 
-# NEW AND COOL
 [ String, Numeric ].each do |klass|
   klass.class_eval { include Brcobranca::Formatacao }
 end

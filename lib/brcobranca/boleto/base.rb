@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
@@ -149,6 +148,7 @@ module Brcobranca
         def monta_codigo_43_digitos
           "Sobreescreva este método na classe referente ao banco que você esta criando"
         end
+
       end
     end
   end

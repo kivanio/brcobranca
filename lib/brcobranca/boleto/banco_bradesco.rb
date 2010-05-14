@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco BRADESCO
 class BancoBradesco < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoBradesco
@@ -7,7 +6,7 @@ class BancoBradesco < Brcobranca::Boleto::Base
     campos = padrao.merge!(campos)
     super(campos)
   end
-  
+
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Banco HSBC
 class BancoHsbc < Brcobranca::Boleto::Base
 
@@ -30,7 +29,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       numero
     end
   end
-  
+
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
@@ -70,7 +69,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       # numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 6)
       # nosso_numero = self.nosso_numero.zeros_esquerda(:tamanho => 9)
       # self.codigo_servico = 5
-      
+
       nil
     end
   end

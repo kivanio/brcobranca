@@ -32,6 +32,12 @@ module Brcobranca
           boleto_novo = BancoUnibanco.new
           File.exist?(boleto_novo.monta_logo).should be_true
           File.stat(boleto_novo.monta_logo).zero?.should be_false
+<<<<<<< HEAD
+=======
+          
+          boleto_novo = Brcobranca::Boleto::Base.new
+          boleto_novo.monta_logo.should be_false
+>>>>>>> b36e5b3390c605b85dc04113cd317b2560818575
         end
       end
     end
