@@ -1,0 +1,30 @@
+== 2.0.7 14-05-2010
+
+* Resolução de imagens com maior qualidade - Anderson Dias
+* Correção do campo de exibição agencia/conta no boleto do Itáu (Solicitado pelo banco em homologação) - Antonio Carlos
+
+== 2.0.6 16-08-2009
+
+* Incluindo boleto para banco Santander Banespa - Diego Lucena
+
+== 2.0.4 04-05-2009
+
+* Solucionado problemas com refatoração do retorno.
+
+== 2.0.3 25-04-2009
+
+* Incluindo boleto para o banco Bradesco(Todas as Carteiras)
+* Incluindo boleto para o banco UNIBANCO(com e sem registro)
+
+== 2.0.2 21-04-2009
+
+* Incluindo boleto para o banco Real(com e sem registro)
+
+== 2.0.1 19-04-2009
+
+* Ajustes finais para lançamento
+
+== 2.0.0 06-04-2009
+
+* 1 acts_as_payment torna-se brcobranca:
+  * Release inicial com versão em 2.0.0

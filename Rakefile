@@ -5,11 +5,17 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "brcobranca"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
+    gem.description = %Q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
     gem.email = "kivanio@gmail.com"
     gem.homepage = "http://github.com/kivanio/brcobranca"
     gem.authors = ["Kivanio Barbosa"]
+    # gem.extra_rdoc_files = ["History.txt"]
+    gem.rdoc_options = ["--main", "README.rdoc"]
+    gem.rubyforge_project = %q{brcobranca}
+    gem.add_runtime_dependency("rghost", ">= 0.8.7")
+    gem.add_runtime_dependency("rghost_barcode", ">= 0.8")
+    gem.add_runtime_dependency("parseline", ">= 1.0.3")
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "cucumber", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

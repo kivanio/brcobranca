@@ -1,17 +1,75 @@
 = brcobranca
 
-Description goes here.
+* http://brcobranca.rubyforge.org
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== EXEMPLO
 
-== Copyright
+* http://www.boletorails.com.br
 
-Copyright (c) 2010 Kivanio Barbosa. See LICENSE for details.
+== DESCRIÇÃO
+
+Gem para emissão de bloquetos de cobrança para bancos brasileiros
+
+== Bancos Disponíveis
+
+* Banco Banespa
+  * COB
+
+* Banco do Brasil
+  * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+
+* Banco Itaú
+  * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+
+* Banco HSBC
+  * CNR
+
+* Banco Real
+  * Sem registro
+  * Com registro
+
+* Banco Bradesco
+  * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
+
+* Banco UNIBANCO
+  * Sem registro
+  * Com registro
+
+== Esta perdido?
+
+Veja a documentação em http://brcobranca.rubyforge.org/rdoc
+
+== REQUISITOS
+
+* rghost
+* rghost_barcode
+* parseline
+* GhostScript > 8.0
+
+== INSTALAÇÃO
+
+* sudo gem install brcobranca
+
+== FONTES
+
+* http://github.com/kivanio/brcobranca/tree/master
+
+== WIKI
+
+* http://wiki.github.com/kivanio/brcobranca
+
+== PROBLEMAS? QUERENDO MAIS?
+
+Informe em http://github.com/kivanio/brcobranca/issues
+
+== Gostou?
+
+Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
+
+== LICENSA
+
+BSD
+
+De brasileiro para brasileiros.
+
+Copyleft 2009 Kivanio Barbosa
