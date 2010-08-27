@@ -33,13 +33,13 @@ class BancoHsbc < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-   "#{self.nosso_numero}"
+    "#{self.nosso_numero}"
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-   "#{self.conta_corrente}"
+    "#{self.conta_corrente}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -51,19 +51,15 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
     if self.carteira == "CNR"
-      if self.data_vencimento.kind_of?(Date)
-        raise "numero_documento pode ser de no máximo 13 caracteres." if (self.numero_documento.to_s.size > 13)
-        fator = self.data_vencimento.fator_vencimento
-        dias_julianos = self.data_vencimento.to_juliano
-        self.codigo_servico = 4
-        numero_documento = self.numero_documento.to_s.rjust(13,'0')
-        numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
-        numero.size == 43 ? numero : nil
-      else
-        nil
-      end
+      raise ArgumentError, "numero_documento pode ser de no máximo 13 caracteres." if (self.numero_documento.to_s.size > 13)
+      fator = self.data_vencimento.fator_vencimento
+      dias_julianos = self.data_vencimento.to_juliano
+      self.codigo_servico = 4
+      numero_documento = self.numero_documento.to_s.rjust(13,'0')
+      numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
+      numero.size == 43 ? numero : nil
     else
-      nil
+      raise "Tipo de carteira não implementado"
     end
   end
 

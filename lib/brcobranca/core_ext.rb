@@ -3,22 +3,22 @@ module Brcobranca
   module Formatacao
     # Formata como CPF
     def to_br_cpf
-      (self.kind_of?(String) ? self : self.to_s).gsub(/^(.{3})(.{3})(.{3})(.{2})$/,'\1.\2.\3-\4')
+      self.to_s.gsub(/^(.{3})(.{3})(.{3})(.{2})$/,'\1.\2.\3-\4')
     end
 
     # Formata como CEP
     def to_br_cep
-      (self.kind_of?(String) ? self : self.to_s).gsub(/^(.{5})(.{3})$/,'\1-\2')
+      self.to_s.gsub(/^(.{5})(.{3})$/,'\1-\2')
     end
 
     # Formata como CNPJ
     def to_br_cnpj
-      (self.kind_of?(String) ? self : self.to_s).gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/,'\1.\2.\3/\4-\5')
+      self.to_s.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/,'\1.\2.\3/\4-\5')
     end
 
     # Gera formatação automatica do documento baseado no tamanho do campo.
     def formata_documento
-      case (self.kind_of?(String) ? self : self.to_s).size
+      case self.to_s.size
       when 8 then self.to_br_cep
       when 11 then self.to_br_cpf
       when 14 then self.to_br_cnpj
@@ -29,13 +29,12 @@ module Brcobranca
 
     # Remove caracteres que não sejam numéricos do tipo MOEDA
     def limpa_valor_moeda
-      return self unless self.kind_of?(String) && self.moeda?
+      return self unless self.moeda?
       self.somente_numeros
     end
 
     # Remove caracteres que não sejam numéricos
     def somente_numeros
-      return self unless self.kind_of?(String)
       self.gsub(/\D/,'')
     end
 
@@ -60,7 +59,7 @@ module Brcobranca
     #   Entre cada campo deverá haver espaço equivalente a 2 (duas) posições, sendo a 1ª
     #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
     def linha_digitavel
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      valor_inicial = self.to_s
       raise ArgumentError, "Somente números" unless valor_inicial.numeric?
       raise ArgumentError, "Precisa conter 44 caracteres e você passou um valor com #{valor_inicial.size} caracteres" if valor_inicial.size != 44
 
@@ -88,7 +87,7 @@ module Brcobranca
   module Calculo
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      valor_inicial = self.to_s
       raise ArgumentError, "Somente números ou valor maior que zero" if !valor_inicial.numeric? or valor_inicial.to_i.zero?
 
       total = 0
@@ -125,7 +124,7 @@ module Brcobranca
     end
 
     def modulo_10_banespa
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      valor_inicial = self.to_s
       raise ArgumentError, "Somente números" unless valor_inicial.numeric?
 
       fatores = [7,3,1,9,7,3,1,9,7,3]
@@ -159,7 +158,7 @@ module Brcobranca
     #  Ex. 11 = (1+1) = 2
     #  Ex. 13 = (1+3) = 4
     def soma_digitos
-      valor_inicial = self.kind_of?(Fixnum) ? self : self.to_i
+      valor_inicial = self.to_i
       return 0 if valor_inicial == 0
       return valor_inicial if valor_inicial <= 9
 
@@ -172,7 +171,7 @@ module Brcobranca
     end
 
     def multiplicador(fatores)
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
+      valor_inicial = self.to_s
       raise ArgumentError, "Somente números" unless valor_inicial.numeric?
 
       total = 0
@@ -193,8 +192,7 @@ module Brcobranca
     #  Ex. -1.232.33
     #  Ex. 1.232.33
     def moeda?
-      value = self.kind_of?(String) ? self : self.to_s
-      value =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/ ? true : false
+      (self.to_s =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/) ? true : false
     end
   end
 

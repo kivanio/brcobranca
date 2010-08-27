@@ -114,13 +114,13 @@ module Brcobranca
 
         # Retorna o valor total do documento: <b>quantidate * valor</b> ou <b>zero(0)</b> caso não consiga efetuar o cálculo.
         def valor_documento
-          return 0 unless self.quantidade.kind_of?(Numeric) && self.valor.kind_of?(Numeric)
-          self.quantidade * self.valor.to_f
+          self.quantidade.to_f * self.valor.to_f
         end
 
         # Retorna data de vencimento baseado na <b>data_documento + dias_vencimento</b> ou <b>false</b> caso não consiga efetuar o cálculo.
         def data_vencimento
-          return nil unless self.data_documento.kind_of?(Date) && self.dias_vencimento.kind_of?(Numeric)
+          raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento
+          return self.data_documento unless self.dias_vencimento
           (self.data_documento + self.dias_vencimento.to_i)
         end
 

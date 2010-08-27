@@ -144,8 +144,7 @@ module Brcobranca
           doc.barcode_interleaved2of5(self.codigo_barras, :width => '10.3 cm', :height => '1.3 cm', :x => '0.7 cm', :y => '5.8 cm' ) if self.codigo_barras
 
           # Gerando stream
-          options[:tipo] = options[:tipo].to_sym unless options[:tipo].kind_of?(Symbol)
-          doc.render_stream(options[:tipo], :resolution => 150)
+          doc.render_stream(options[:tipo].to_sym, :resolution => 150)
         end
       end
     end

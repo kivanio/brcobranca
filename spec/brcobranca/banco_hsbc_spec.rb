@@ -102,8 +102,8 @@ describe BancoHsbc do
     @valid_attributes[:agencia] = "1234"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
 
     @valid_attributes[:valor] = 934.23
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
@@ -114,8 +114,8 @@ describe BancoHsbc do
     @valid_attributes[:carteira] = "OUTRA"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(RuntimeError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(RuntimeError)
   end
 
   it "Montar nosso número" do
@@ -149,7 +149,7 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = "351202"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.nosso_numero.should eql("39104766354")
+    lambda { boleto_novo.nosso_numero }.should raise_error(ArgumentError)
   end
 
   it "Montar nosso_numero_boleto" do

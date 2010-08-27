@@ -198,7 +198,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.valor_documento.should eql(135.43)
         boleto_novo.quantidade = "gh"
         boleto_novo.valor = 135.43
-        boleto_novo.valor_documento.should eql(0)
+        boleto_novo.valor_documento.should eql(0.0)
       end
 
       it "Calcula data_vencimento" do
@@ -217,7 +217,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.data_vencimento.should eql(Date.parse("2008-05-16"))
         boleto_novo.data_documento = Date.parse "2008-02-06"
         boleto_novo.dias_vencimento = "df"
-        boleto_novo.data_vencimento.should be_nil
+        boleto_novo.data_vencimento.should eql(boleto_novo.data_documento)
       end
 
       it "Mostrar aviso sobre sobrecarga de métodos padrões" do
