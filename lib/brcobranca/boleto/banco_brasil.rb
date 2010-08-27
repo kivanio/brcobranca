@@ -61,9 +61,8 @@ class BancoBrasil < Brcobranca::Boleto::Base
         # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
         raise ArgumentError, "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 6 dígitos, somente permite-se até 5 dígitos no numero_documento do nosso numero. Para emitir boletos com nosso numero de 17 dígitos, coloque o atributo codigo_servico=true" if numero_documento.to_s.size > 5
         numero_documento = self.numero_documento.to_s.rjust(5,'0')
-        agencia = self.agencia.to_s.rjust(4,'0')
         conta = self.conta_corrente.to_s.rjust(8,'0')
-        numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
+        numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{self.agencia}#{conta}#{self.carteira}"
       else
         # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
         raise ArgumentError, "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 6 dígitos, somente permite-se até 17 dígitos no numero_documento do nosso numero." if (numero_documento.to_s.size > 17)
@@ -74,9 +73,8 @@ class BancoBrasil < Brcobranca::Boleto::Base
     when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
       raise ArgumentError, "Seu numero_documento está com #{numero_documento.size} dígitos. Com convênio de 4 dígitos, somente permite-se até 7 dígitos no numero_documento do nosso numero." if numero_documento.to_s.size > 7
       numero_documento = self.numero_documento.to_s.rjust(7,'0')
-      agencia = self.agencia.to_s.rjust(4,'0')
       conta = self.conta_corrente.to_s.rjust(8,'0')
-      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{agencia}#{conta}#{self.carteira}"
+      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{convenio}#{numero_documento}#{self.agencia}#{conta}#{self.carteira}"
     else
       numero = ""
     end

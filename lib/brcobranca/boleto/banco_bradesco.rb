@@ -32,12 +32,11 @@ class BancoBradesco < Brcobranca::Boleto::Base
   def monta_codigo_43_digitos
     fator = self.data_vencimento.fator_vencimento
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
-    agencia = self.agencia.to_s.rjust(4,'0')
     carteira = self.carteira.to_s.rjust(2,'0')
     numero_documento = self.numero_documento.to_s.rjust(11,'0')
     conta = self.conta_corrente.to_s.rjust(7,'0')
 
-    numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{carteira}#{numero_documento}#{conta}0"
+    numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.agencia}#{carteira}#{numero_documento}#{conta}0"
     numero.size == 43 ? numero : nil
   end
 end

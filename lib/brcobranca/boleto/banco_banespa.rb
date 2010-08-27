@@ -7,9 +7,14 @@ class BancoBanespa < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Retorna código da agencia formatado com zeros a esquerda.
+  def agencia
+    @agencia.to_s.rjust(3,'0')
+  end
+
   # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
-    "#{self.agencia.to_s.rjust(3,'0')}#{self.numero_documento.to_s.rjust(7,'0')}"
+    "#{self.agencia}#{self.numero_documento.to_s.rjust(7,'0')}"
   end
 
   # Retorna dígito verificador do nosso número calculado como contas na documentação

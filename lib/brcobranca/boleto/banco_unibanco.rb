@@ -33,7 +33,6 @@ class BancoUnibanco < Brcobranca::Boleto::Base
 
     case carteira.to_i
     when 5
-
       # Cobrança sem registro (CÓDIGO DE BARRAS)
       # Posição Tamanho Descrição
       # 1 a 3 3 número de identificação do Unibanco: 409 (número FIXO)
@@ -52,7 +51,6 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     when 4
-
       # Cobrança com registro (CÓDIGO DE BARRAS)
       #      Posição  Tamanho Descrição
       #      1 a 3  3 Número de identificação do Unibanco: 409 (número FIXO)
@@ -67,9 +65,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       #      44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
 
       data = self.data_vencimento.strftime('%y%m%d')
-      agencia = self.agencia.to_s.rjust(4,'0')
       numero_documento = self.numero_documento.to_s.rjust(11,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{self.agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     else
       nil

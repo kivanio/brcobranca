@@ -26,8 +26,6 @@ class BancoReal < Brcobranca::Boleto::Base
   #  CODIGO DA AGENCIA: 4 DIGITOS
   #  NUMERO DA CONTA : 7 DIGITOS
   def agencia_conta_corrente_nosso_numero_dv
-    #agencia é 4 digitos
-    agencia = self.agencia.to_s.rjust(4,'0')
     #conta é 7 digitos
     conta = self.conta_corrente.to_s.rjust(7,'0')
 
@@ -35,11 +33,11 @@ class BancoReal < Brcobranca::Boleto::Base
     when 57
       #nosso número com maximo de 15 digitos
       numero_documento = self.numero_documento.to_s.rjust(15,'0')
-      "#{numero_documento}#{agencia}#{conta}".modulo10
+      "#{numero_documento}#{self.agencia}#{conta}".modulo10
     else
       #nosso número com maximo de 7 digitos
       numero_documento = self.numero_documento.to_s.rjust(7,'0')
-      "#{numero_documento}#{agencia}#{conta}".modulo10
+      "#{numero_documento}#{self.agencia}#{conta}".modulo10
     end
   end
 
@@ -47,19 +45,18 @@ class BancoReal < Brcobranca::Boleto::Base
   def monta_codigo_43_digitos
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     conta = self.conta_corrente.to_s.rjust(7,'0')
-    agencia = self.agencia.to_s.rjust(4,'0')
     fator = self.data_vencimento.fator_vencimento
     # Montagem é baseada no tipo de carteira, com registro e sem registro
     case self.carteira.to_i
       # Carteira sem registro
     when 57
       numero_documento = self.numero_documento.to_s.rjust(13,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
       codigo.size == 43 ? codigo : nil
     else
       # TODO verificar com o banco, pois não consta na documentação
       numero_documento = self.numero_documento.to_s.rjust(7,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}000000#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}000000#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
       codigo.size == 43 ? codigo : nil
     end
   end

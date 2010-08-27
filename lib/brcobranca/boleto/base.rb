@@ -21,7 +21,7 @@ module Brcobranca
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
-      attr_accessor :agencia
+      attr_writer :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
@@ -77,6 +77,7 @@ module Brcobranca
         end
       end
 
+      # Retorna código do banco formatado com zeros a esquerda.
       def banco
         @banco.to_s.rjust(3,'0')
       end
@@ -84,6 +85,11 @@ module Brcobranca
       # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
       def banco_dv
         self.banco.modulo11_9to2
+      end
+
+      # Retorna código da agencia formatado com zeros a esquerda.
+      def agencia
+        @agencia.to_s.rjust(4,'0')
       end
 
       # Retorna dígito verificador da agência, calculado com modulo11 de 9 para 2
