@@ -34,7 +34,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    fator = self.data_vencimento.fator_vencimento.to_s.rjust(4,'0')
+    fator = self.data_vencimento.fator_vencimento
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.campo_livre_com_dv1_e_dv2}"
     numero.size == 43 ? numero : nil

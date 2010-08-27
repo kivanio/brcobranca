@@ -213,7 +213,7 @@ module Brcobranca
     #  FATOR DE VENCIMENTO 1001
     def fator_vencimento
       data_base = Date.parse "1997-10-07"
-      (self - data_base).to_i
+      (self - data_base).to_i.to_s.rjust(4,'0')
     end
 
     # Mostra a data em formato <b>dia/mês/ano</b>

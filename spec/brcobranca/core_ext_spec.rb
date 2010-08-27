@@ -229,9 +229,9 @@ module Brcobranca
 
   describe CalculoData do
     it "should return number of days between Date and 1997-10-07" do
-      (Date.parse "2008-02-01").fator_vencimento.should == 3769
-      (Date.parse "2008-02-02").fator_vencimento.should == 3770
-      (Date.parse "2008-02-06").fator_vencimento.should == 3774
+      (Date.parse "2008-02-01").fator_vencimento.should == "3769"
+      (Date.parse "2008-02-02").fator_vencimento.should == "3770"
+      (Date.parse "2008-02-06").fator_vencimento.should == "3774"
     end
 
     it "should format Date to Brazillian format" do
