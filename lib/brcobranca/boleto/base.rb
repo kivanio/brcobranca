@@ -146,6 +146,11 @@ module Brcobranca
         self.data_vencimento.fator_vencimento
       end
 
+      # Retorna número da conta corrente formatado
+      def conta_corrente
+        @conta_corrente.to_s.rjust(7,'0')
+      end
+
       # Retorna uma String com 44 caracteres representando o codigo de barras do boleto
       #   O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
       #   Posição Tamanho Conteúdo

@@ -61,7 +61,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente.should eql("00061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
     boleto_novo.numero_documento.should eql("777700168")
@@ -322,12 +322,12 @@ describe BancoBrasil do #:nodoc:[all]
   it "Montar agencia_conta_boleto" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.agencia_conta_boleto.should eql("4042-8 / 61900-0")
+    boleto_novo.agencia_conta_boleto.should eql("4042-8 / 00061900-0")
     boleto_novo.agencia = "0719"
-    boleto_novo.agencia_conta_boleto.should eql("0719-6 / 61900-0")
+    boleto_novo.agencia_conta_boleto.should eql("0719-6 / 00061900-0")
     boleto_novo.agencia = "0548"
     boleto_novo.conta_corrente = "1448"
-    boleto_novo.agencia_conta_boleto.should eql("0548-7 / 1448-6")
+    boleto_novo.agencia_conta_boleto.should eql("0548-7 / 00001448-6")
   end
 
   it "Gerar boleto nos formatos válidos" do

@@ -34,9 +34,8 @@ class BancoBradesco < Brcobranca::Boleto::Base
 
   def monta_codigo_43_digitos
     carteira = self.carteira.to_s.rjust(2,'0')
-    conta = self.conta_corrente.to_s.rjust(7,'0')
 
-    numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia}#{carteira}#{self.numero_documento}#{conta}0"
+    numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia}#{carteira}#{self.numero_documento}#{self.conta_corrente}0"
     numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
   end
 end

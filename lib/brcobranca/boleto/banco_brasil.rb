@@ -18,6 +18,11 @@ class BancoBrasil < Brcobranca::Boleto::Base
     self.agencia.modulo11_9to2_10_como_x
   end
 
+  # Retorna número da conta corrente formatado
+  def conta_corrente
+    @conta_corrente.to_s.rjust(8,'0')
+  end
+
   # Retorna digito verificador da conta corrente, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
   def conta_corrente_dv
     self.conta_corrente.modulo11_9to2_10_como_x
@@ -79,16 +84,14 @@ class BancoBrasil < Brcobranca::Boleto::Base
     when 6 # Convenio de 6 dígitos
       if self.codigo_servico == false
         # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-        conta = self.conta_corrente.to_s.rjust(8,'0')
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
       else
         # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
         raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
         numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}21"
       end
     when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-      conta = self.conta_corrente.to_s.rjust(8,'0')
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
     else
       raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
     end

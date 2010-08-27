@@ -14,6 +14,11 @@ class BancoItau < Brcobranca::Boleto::Base
     @convenio.to_s.rjust(5,'0')
   end
 
+   # Retorna número da conta corrente formatado
+    def conta_corrente
+      @conta_corrente.to_s.rjust(5,'0')
+    end
+
   # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
   def numero_documento
     raise ArgumentError, "numero_documento pode ser de no máximo 8 caracteres." if @numero_documento.to_s.size > 8
@@ -71,7 +76,6 @@ class BancoItau < Brcobranca::Boleto::Base
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
-      codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     when 198, 106, 107, 122, 142, 143, 195, 196
       # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
@@ -91,7 +95,6 @@ class BancoItau < Brcobranca::Boleto::Base
 
       codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{seu_numero}#{self.convenio}#{dv}0"
-      codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       # DEMAIS CARTEIRAS
@@ -109,7 +112,6 @@ class BancoItau < Brcobranca::Boleto::Base
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
-      codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     end
   end

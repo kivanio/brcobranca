@@ -12,6 +12,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
     @agencia.to_s.rjust(3,'0')
   end
 
+  # Número do convênio/contrato do cliente junto ao banco emissor formatado com 11 dígitos
   def convenio
     @convenio.to_s.rjust(11,'0')
   end

@@ -58,7 +58,7 @@ describe BancoUnibanco do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql("12387989")
     boleto_novo.numero_documento.should eql("00000777700168")
@@ -161,10 +161,10 @@ describe BancoUnibanco do
     @valid_attributes[:agencia] = "0123"
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
-    boleto_novo.agencia_conta_boleto.should eql("0123 / 100618-5")
+    boleto_novo.agencia_conta_boleto.should eql("0123 / 0100618-5")
     boleto_novo.agencia = "0548"
     boleto_novo.conta_corrente = "1448"
-    boleto_novo.agencia_conta_boleto.should eql("0548 / 1448-6")
+    boleto_novo.agencia_conta_boleto.should eql("0548 / 0001448-6")
   end
 
   it "Gerar boleto nos formatos válidos" do
