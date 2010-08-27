@@ -17,19 +17,19 @@ class BancoHsbc < Brcobranca::Boleto::Base
   # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
     if self.data_vencimento.kind_of?(Date)
-      self.codigo_servico = 4
+      self.codigo_servico = "4"
       dia = self.data_vencimento.day.to_s.rjust(2,'0')
       mes = self.data_vencimento.month.to_s.rjust(2,'0')
       ano = self.data_vencimento.year.to_s[2..3]
       data = "#{dia}#{mes}#{ano}"
 
-      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
+      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
       soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
       numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
     else
-      self.codigo_servico = 5
-      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
+      self.codigo_servico = "5"
+      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
       soma = parte_1.to_i + self.conta_corrente.to_i
       numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
@@ -53,7 +53,6 @@ class BancoHsbc < Brcobranca::Boleto::Base
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
     if self.carteira == "CNR"
       dias_julianos = self.data_vencimento.to_juliano
-      self.codigo_servico = 4
       numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.conta_corrente}#{self.numero_documento}#{dias_julianos}2"
       numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else

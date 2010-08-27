@@ -8,6 +8,12 @@ class BancoBrasil < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Retorna Carteira utilizada formatada com 2 dígitos
+  def carteira
+    raise(ArgumentError, "A carteira informada não é válida. O Banco do Brasil utiliza carteira com apenas 2 dígitos.") if @carteira.to_s.size > 2
+    @carteira.to_s.rjust(2,'0')
+  end
+
   # Retorna digito verificador do banco, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
   def banco_dv
     self.banco.modulo11_9to2_10_como_x

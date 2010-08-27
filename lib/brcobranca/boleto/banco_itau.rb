@@ -1,7 +1,7 @@
 # Banco Itaú
 class BancoItau < Brcobranca::Boleto::Base
   # Usado somente em carteiras especiais com registro para complementar o número do cocumento
-  attr_accessor :seu_numero
+  attr_writer :seu_numero
 
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
   def initialize(campos={})
@@ -10,19 +10,25 @@ class BancoItau < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Número do convênio/contrato do cliente junto ao banco emissor formatado com 5 dígitos
   def convenio
     @convenio.to_s.rjust(5,'0')
   end
 
-   # Retorna número da conta corrente formatado
-    def conta_corrente
-      @conta_corrente.to_s.rjust(5,'0')
-    end
+  # Retorna número da conta corrente formatado
+  def conta_corrente
+    @conta_corrente.to_s.rjust(5,'0')
+  end
 
   # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
   def numero_documento
     raise ArgumentError, "numero_documento pode ser de no máximo 8 caracteres." if @numero_documento.to_s.size > 8
     @numero_documento.to_s.rjust(8,'0')
+  end
+
+  # Retorna seu número formatado com 7 dígitos
+  def seu_numero
+    @seu_numero.to_s.rjust(7,'0')
   end
 
   # Retorna dígito verificador do nosso número, calculado com modulo10.
@@ -90,11 +96,9 @@ class BancoItau < Brcobranca::Boleto::Base
       # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
-      seu_numero = self.seu_numero.to_s.rjust(7,'0')
-      dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{self.convenio}".modulo10
-
+      dv = "#{self.carteira}#{numero_documento}#{self.seu_numero}#{self.convenio}".modulo10
       codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
-      codigo << "#{self.numero_documento}#{seu_numero}#{self.convenio}#{dv}0"
+      codigo << "#{self.numero_documento}#{self.seu_numero}#{self.convenio}#{dv}0"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       # DEMAIS CARTEIRAS

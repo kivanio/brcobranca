@@ -9,8 +9,15 @@ class BancoUnibanco < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Número do convênio/contrato do cliente junto ao banco emissor formatado com 6 dígitos
   def convenio
     @convenio.to_s.rjust(6,'0')
+  end
+
+  # Retorna Carteira utilizada formatada com 1 dígitos
+  def carteira
+    raise(ArgumentError, "A carteira informada não é válida. O Banco do Brasil utiliza carteira com apenas 1 dígitos.") if @carteira.to_s.size > 1
+    @carteira
   end
 
   # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
@@ -40,9 +47,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    carteira = self.carteira.to_s.rjust(1,'0')
-
-    case carteira.to_i
+    case self.carteira.to_i
     when 5
       # Cobrança sem registro (CÓDIGO DE BARRAS)
       # Posição Tamanho Descrição
@@ -56,8 +61,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 28 a 29 2 vago. Usar 00 (número FIXO)
       # 30 a 43 14  Número de referência do cliente
       # 44  1 Dígito verificador
-
-      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     when 4
       # Cobrança com registro (CÓDIGO DE BARRAS)
@@ -72,9 +76,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 28 a 32  5 Código da agência + dígito verificador
       # 33 a 43  11  “Nosso Número” (NNNNNNNNNNN)
       # 44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
-
       data = self.data_vencimento.strftime('%y%m%d')
-      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}0#{carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       raise RuntimeError, "Tipo de carteira não implementado"
