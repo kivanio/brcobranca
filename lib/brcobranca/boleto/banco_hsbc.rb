@@ -44,7 +44,6 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    banco = self.banco.to_s.rjust(3,'0')
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     convenio = self.convenio.to_s
     conta = self.conta_corrente.to_s.rjust(7,'0')
@@ -56,7 +55,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       dias_julianos = self.data_vencimento.to_juliano
       self.codigo_servico = 4
       numero_documento = self.numero_documento.to_s.rjust(13,'0')
-      numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
+      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
       numero.size == 43 ? numero : nil
     else
       raise "Tipo de carteira não implementado"

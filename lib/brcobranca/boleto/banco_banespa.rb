@@ -29,10 +29,9 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    banco = self.banco.to_s.rjust(3,'0')
     fator = self.data_vencimento.fator_vencimento.to_s.rjust(4,'0')
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
-    numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{self.campo_livre_com_dv1_e_dv2}"
+    numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.campo_livre_com_dv1_e_dv2}"
     numero.size == 43 ? numero : nil
   end
 
@@ -44,7 +43,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
   #    Dígito verificador 1                                                                         PIC  9  (001)
   #    Dígito verificador 2                                                                         PIC  9  (001)
   def campo_livre
-    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento.to_s.rjust(7,'0')}00#{self.banco.to_s.rjust(3,'0')}"
+    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento.to_s.rjust(7,'0')}00#{self.banco}"
   end
 
   #campo livre com os digitos verificadores como consta na documentação do banco

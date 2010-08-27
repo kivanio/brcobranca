@@ -27,7 +27,6 @@ class BancoUnibanco < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    banco = self.banco.to_s.rjust(3,'0')
     fator = self.data_vencimento.fator_vencimento
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     carteira = self.carteira.to_s.rjust(1,'0')
@@ -50,7 +49,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
 
       convenio = self.convenio.to_s.rjust(6,'0')
       numero_documento = self.numero_documento.to_s.rjust(14,'0')
-      codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     when 4
 
@@ -70,7 +69,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       data = self.data_vencimento.strftime('%y%m%d')
       agencia = self.agencia.to_s.rjust(4,'0')
       numero_documento = self.numero_documento.to_s.rjust(11,'0')
-      codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     else
       nil
