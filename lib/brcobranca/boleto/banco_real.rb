@@ -49,16 +49,15 @@ class BancoReal < Brcobranca::Boleto::Base
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
     conta = self.conta_corrente.to_s.rjust(7,'0')
-    fator = self.data_vencimento.fator_vencimento
     # Montagem é baseada no tipo de carteira, com registro e sem registro
     case self.carteira.to_i
       # Carteira sem registro
     when 57
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
+      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       # TODO verificar com o banco, pois não consta na documentação
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}000000#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
+      codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     end
   end

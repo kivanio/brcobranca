@@ -141,6 +141,11 @@ module Brcobranca
         (self.data_documento + self.dias_vencimento.to_i)
       end
 
+      # Retorna o fator de vencimento calculado com base na data de vencimento
+      def fator_vencimento
+        self.data_vencimento.fator_vencimento
+      end
+
       # Retorna uma String com 44 caracteres representando o codigo de barras do boleto
       #   O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
       #   Posição Tamanho Conteúdo

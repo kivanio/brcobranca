@@ -54,10 +54,9 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
     if self.carteira == "CNR"
-      fator = self.data_vencimento.fator_vencimento
       dias_julianos = self.data_vencimento.to_juliano
       self.codigo_servico = 4
-      numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{conta}#{self.numero_documento}#{dias_julianos}2"
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{conta}#{self.numero_documento}#{dias_julianos}2"
       numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       raise RuntimeError, "Tipo de carteira não implementado"

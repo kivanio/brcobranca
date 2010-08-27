@@ -70,26 +70,25 @@ class BancoBrasil < Brcobranca::Boleto::Base
 
   # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
   def monta_codigo_43_digitos
-    fator = self.data_vencimento.fator_vencimento
     # A montagem é feita baseada na quantidade de dígitos do convênio.
     case self.convenio.to_s.size
     when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-      numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
     when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-      numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
     when 6 # Convenio de 6 dígitos
       if self.codigo_servico == false
         # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
         conta = self.conta_corrente.to_s.rjust(8,'0')
-        numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
       else
         # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
         raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
-        numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}21"
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}21"
       end
     when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
       conta = self.conta_corrente.to_s.rjust(8,'0')
-      numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{conta}#{self.carteira}"
     else
       raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
     end
