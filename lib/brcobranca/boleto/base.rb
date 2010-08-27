@@ -23,13 +23,13 @@ module Brcobranca
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
       attr_writer :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
-      attr_accessor :conta_corrente
+      attr_writer :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
-      attr_accessor :numero_documento
+      attr_writer :numero_documento
       # <b>REQUERIDO</b>: Símbolo da moeda utilizada (R$ no brasil)
       attr_accessor :especie
       # <b>REQUERIDO</b>: Tipo do documento (Geralmente DM que quer dizer Duplicata Mercantil)
@@ -100,6 +100,11 @@ module Brcobranca
       # Retorna dígito verificador da conta corrente, calculado com modulo11 de 9 para 2
       def conta_corrente_dv
         self.conta_corrente.modulo11_9to2
+      end
+
+      # Número seqüencial utilizado para identificar o boleto.
+      def numero_documento
+        @numero_documento
       end
 
       # Retorna dígito verificador do nosso número, calculado com modulo11 de 9 para 2
