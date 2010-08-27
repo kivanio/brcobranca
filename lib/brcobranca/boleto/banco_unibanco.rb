@@ -27,6 +27,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       @numero_documento.to_s.rjust(14,'0')
     when 4
       @numero_documento.to_s.rjust(11,'0')
+    else
+      raise(ArgumentError, "Tipo de carteira não implementado")
     end
   end
 
