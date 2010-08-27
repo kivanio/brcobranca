@@ -7,14 +7,17 @@ class BancoBradesco < Brcobranca::Boleto::Base
     super(campos)
   end
 
-  # Campo usado apenas na exibição no boleto
-  #  Deverá ser sobreescrito para cada banco
-  def nosso_numero_boleto
-   "#{self.carteira}/#{self.numero_documento.to_s.rjust(11,'0')}-#{self.nosso_numero_dv}"
+  # Número seqüencial de 11 dígitos utilizado para identificar o boleto.
+  def numero_documento
+    @numero_documento.to_s.rjust(11,'0')
   end
 
   # Campo usado apenas na exibição no boleto
-  #  Deverá ser sobreescrito para cada banco
+  def nosso_numero_boleto
+   "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
+  end
+
+  # Campo usado apenas na exibição no boleto
   def agencia_conta_boleto
    "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
   end
@@ -33,10 +36,9 @@ class BancoBradesco < Brcobranca::Boleto::Base
     fator = self.data_vencimento.fator_vencimento
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     carteira = self.carteira.to_s.rjust(2,'0')
-    numero_documento = self.numero_documento.to_s.rjust(11,'0')
     conta = self.conta_corrente.to_s.rjust(7,'0')
 
-    numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.agencia}#{carteira}#{numero_documento}#{conta}0"
-    numero.size == 43 ? numero : nil
+    numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.agencia}#{carteira}#{self.numero_documento}#{conta}0"
+    numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
   end
 end

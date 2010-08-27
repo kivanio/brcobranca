@@ -61,7 +61,7 @@ describe BancoUnibanco do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento.should eql("00000777700168")
     boleto_novo.carteira.should eql("5")
     boleto_novo.should be_instance_of(BancoUnibanco)
   end
@@ -111,7 +111,6 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-
     boleto_novo.monta_codigo_43_digitos.should be_nil
     boleto_novo.codigo_barras.should be_nil
   end

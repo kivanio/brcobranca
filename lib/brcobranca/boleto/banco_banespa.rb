@@ -12,17 +12,22 @@ class BancoBanespa < Brcobranca::Boleto::Base
     @agencia.to_s.rjust(3,'0')
   end
 
-  # Número sequencial utilizado para distinguir os boletos na agência
-  def nosso_numero
-    "#{self.agencia}#{self.numero_documento.to_s.rjust(7,'0')}"
+  # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
+  def numero_documento
+    @numero_documento.to_s.rjust(7,'0')
   end
 
-  # Retorna dígito verificador do nosso número calculado como contas na documentação
+  # Número sequencial utilizado para distinguir os boletos na agência.
+  def nosso_numero
+    "#{self.agencia}#{self.numero_documento}"
+  end
+
+  # Retorna dígito verificador do nosso número calculado como contas na documentação.
   def nosso_numero_dv
     self.nosso_numero.to_s.rjust(10,'0').modulo_10_banespa
   end
 
-  # Retorna nosso numero pronto para exibir no boleto
+  # Retorna nosso numero pronto para exibir no boleto.
   def nosso_numero_boleto
     "#{self.nosso_numero[0..2]} #{self.nosso_numero[3..9]} #{self.nosso_numero_dv}"
   end
@@ -37,7 +42,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
     fator = self.data_vencimento.fator_vencimento
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{self.campo_livre_com_dv1_e_dv2}"
-    numero.size == 43 ? numero : nil
+    numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
   end
 
   # CAMPO LIVRE
@@ -48,10 +53,10 @@ class BancoBanespa < Brcobranca::Boleto::Base
   #    Dígito verificador 1                                                                         PIC  9  (001)
   #    Dígito verificador 2                                                                         PIC  9  (001)
   def campo_livre
-    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento.to_s.rjust(7,'0')}00#{self.banco}"
+    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento}00#{self.banco}"
   end
 
-  #campo livre com os digitos verificadores como consta na documentação do banco
+  #campo livre com os digitos verificadores como consta na documentação do banco.
   def campo_livre_com_dv1_e_dv2
     dv1 = self.campo_livre.modulo10 #dv 1 inicial
     dv2 = nil

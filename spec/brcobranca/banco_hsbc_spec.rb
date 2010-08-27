@@ -63,7 +63,7 @@ describe BancoHsbc do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento.should eql("0000777700168")
     boleto_novo.carteira.should eql("CNR")
     boleto_novo.should be_instance_of(BancoHsbc)
   end
@@ -125,7 +125,7 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = "1122334"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.nosso_numero.should eql("12345678942")
+    boleto_novo.nosso_numero.should eql("0000012345678942")
 
     @valid_attributes[:data_documento] = Date.parse("2000-07-04")
     @valid_attributes[:dias_vencimento] = 0
@@ -133,7 +133,7 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = "351202"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.nosso_numero.should eql("39104766340")
+    boleto_novo.nosso_numero.should eql("0000039104766340")
 
     @valid_attributes[:data_documento] = Date.parse("2009-04-03")
     @valid_attributes[:dias_vencimento] = 0
@@ -141,7 +141,7 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = "351202"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.nosso_numero.should eql("39104766346")
+    boleto_novo.nosso_numero.should eql("0000039104766346")
 
     @valid_attributes[:data_documento] = nil
     @valid_attributes[:dias_vencimento] = 0
@@ -158,27 +158,27 @@ describe BancoHsbc do
     boleto_novo.should be_instance_of(BancoHsbc)
     boleto_novo.numero_documento = "4042"
     boleto_novo.carteira = "06"
-    boleto_novo.nosso_numero_boleto.should eql("4042847")
+    boleto_novo.nosso_numero_boleto.should eql("0000000004042847")
     boleto_novo.nosso_numero_dv.should eql(8)
     boleto_novo.numero_documento = "61900"
     boleto_novo.carteira = "05"
-    boleto_novo.nosso_numero_boleto.should eql("61900049")
+    boleto_novo.nosso_numero_boleto.should eql("0000000061900049")
     boleto_novo.nosso_numero_dv.should eql(0)
     boleto_novo.numero_documento = "0719"
     boleto_novo.carteira = "07"
-    boleto_novo.nosso_numero_boleto.should eql("0719640")
+    boleto_novo.nosso_numero_boleto.should eql("0000000000719640")
     boleto_novo.nosso_numero_dv.should eql(6)
     boleto_novo.numero_documento = 4042
     boleto_novo.carteira = "06"
-    boleto_novo.nosso_numero_boleto.should eql("4042847")
+    boleto_novo.nosso_numero_boleto.should eql("0000000004042847")
     boleto_novo.nosso_numero_dv.should eql(8)
     boleto_novo.numero_documento = 61900
     boleto_novo.carteira = "05"
-    boleto_novo.nosso_numero_boleto.should eql("61900049")
+    boleto_novo.nosso_numero_boleto.should eql("0000000061900049")
     boleto_novo.nosso_numero_dv.should eql(0)
     boleto_novo.numero_documento = 719
     boleto_novo.carteira = "07"
-    boleto_novo.nosso_numero_boleto.should eql("719640")
+    boleto_novo.nosso_numero_boleto.should eql("0000000000719640")
     boleto_novo.nosso_numero_dv.should eql(6)
   end
 

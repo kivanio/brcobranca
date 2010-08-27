@@ -61,7 +61,7 @@ describe BancoBradesco do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento.should eql("00777700168")
     boleto_novo.carteira.should eql("06")
     boleto_novo.should be_instance_of(BancoBradesco)
   end
@@ -95,7 +95,6 @@ describe BancoBradesco do
     boleto_novo.codigo_barras.linha_digitavel.should eql("23794.04201 30077.770011 68006.190000 1 37700000013500")
   end
 
-  # TODO -  should give exception
   it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
@@ -111,8 +110,8 @@ describe BancoBradesco do
 
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
   end
 
   it "Montar nosso_numero_boleto" do

@@ -9,20 +9,31 @@ class BancoUnibanco < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
+  def numero_documento
+    case self.carteira.to_i
+    when 5
+      @numero_documento.to_s.rjust(14,'0')
+    when 4
+      @numero_documento.to_s.rjust(11,'0')
+    end
+  end
+
   def nosso_numero_dv
+    raise(ArgumentError, "numero_documento não pode estar em branco.") unless self.numero_documento
     self.numero_documento.modulo11_2to9
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-   "#{self.numero_documento.to_s.rjust(14,'0')}-#{self.nosso_numero_dv}"
+    "#{self.numero_documento}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-   "#{self.agencia} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
+    "#{self.agencia} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -47,9 +58,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 44  1 Dígito verificador
 
       convenio = self.convenio.to_s.rjust(6,'0')
-      numero_documento = self.numero_documento.to_s.rjust(14,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{numero_documento}#{self.nosso_numero_dv}"
-      codigo.size == 43 ? codigo : nil
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
+      codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     when 4
       # Cobrança com registro (CÓDIGO DE BARRAS)
       #      Posição  Tamanho Descrição
@@ -65,9 +75,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       #      44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
 
       data = self.data_vencimento.strftime('%y%m%d')
-      numero_documento = self.numero_documento.to_s.rjust(11,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{self.agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
-      codigo.size == 43 ? codigo : nil
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
+      codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       nil
     end

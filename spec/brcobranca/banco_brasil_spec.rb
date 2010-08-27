@@ -90,7 +90,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.codigo_barras.should eql("00193377000000135000000001238798900770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798902 07700.168185 3 37700000013500")
     boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.nosso_numero_dv.should eql("X")
+    boleto_novo.nosso_numero_dv.should eql(7)
   end
 
   it "Montar código de barras para convenio de 7 digitos e nosso numero de 10" do
@@ -207,7 +207,6 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23801 12345.640424 00061.900189 1 37690000013500")
   end
 
-  # TODO -  should give exception
   it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
@@ -283,41 +282,41 @@ describe BancoBrasil do #:nodoc:[all]
   it "Montar nosso_numero_boleto" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.numero_documento = "85068014982"
-    boleto_novo.nosso_numero_boleto.should eql("1238798985068014982-6")
-    boleto_novo.nosso_numero_dv.should eql(6)
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = "05009401448"
-    boleto_novo.nosso_numero_boleto.should eql("1238798905009401448-9")
-    boleto_novo.nosso_numero_dv.should eql(9)
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = "12387987777700168"
-    boleto_novo.nosso_numero_boleto.should eql("1238798912387987777700168-9")
-    boleto_novo.nosso_numero_dv.should eql(9)
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = "4042"
-    boleto_novo.nosso_numero_boleto.should eql("123879894042-0")
-    boleto_novo.nosso_numero_dv.should eql(0)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000004042-4")
+    boleto_novo.nosso_numero_dv.should eql(4)
     boleto_novo.numero_documento = "61900"
-    boleto_novo.nosso_numero_boleto.should eql("1238798961900-1")
-    boleto_novo.nosso_numero_dv.should eql(1)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000061900-7")
+    boleto_novo.nosso_numero_dv.should eql(7)
     boleto_novo.numero_documento = "0719"
-    boleto_novo.nosso_numero_boleto.should eql("123879890719-9")
-    boleto_novo.nosso_numero_dv.should eql(9)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000000719-2")
+    boleto_novo.nosso_numero_dv.should eql(2)
     boleto_novo.numero_documento = 85068014982
-    boleto_novo.nosso_numero_boleto.should eql("1238798985068014982-6")
-    boleto_novo.nosso_numero_dv.should eql(6)
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = 5009401448
-    boleto_novo.nosso_numero_boleto.should eql("123879895009401448-X")
-    boleto_novo.nosso_numero_dv.should eql("X")
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = 12387987777700168
-    boleto_novo.nosso_numero_boleto.should eql("1238798912387987777700168-9")
-    boleto_novo.nosso_numero_dv.should eql(9)
+    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
+    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = 4042
-    boleto_novo.nosso_numero_boleto.should eql("123879894042-0")
-    boleto_novo.nosso_numero_dv.should eql(0)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000004042-4")
+    boleto_novo.nosso_numero_dv.should eql(4)
     boleto_novo.numero_documento = 61900
-    boleto_novo.nosso_numero_boleto.should eql("1238798961900-1")
-    boleto_novo.nosso_numero_dv.should eql(1)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000061900-7")
+    boleto_novo.nosso_numero_dv.should eql(7)
     boleto_novo.numero_documento = 719
-    boleto_novo.nosso_numero_boleto.should eql("12387989719-3")
-    boleto_novo.nosso_numero_dv.should eql(3)
+    boleto_novo.nosso_numero_boleto.should eql("12387989000000719-2")
+    boleto_novo.nosso_numero_dv.should eql(2)
   end
 
   it "Montar agencia_conta_boleto" do

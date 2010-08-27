@@ -8,6 +8,12 @@ class BancoHsbc < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Número seqüencial de 13 dígitos utilizado para identificar o boleto.
+  def numero_documento
+    raise ArgumentError, "numero_documento pode ser de no máximo 13 caracteres." if @numero_documento.to_s.size > 13
+    @numero_documento.to_s.rjust(13,'0')
+  end
+
   # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
     if self.data_vencimento.kind_of?(Date)
@@ -17,15 +23,15 @@ class BancoHsbc < Brcobranca::Boleto::Base
       ano = self.data_vencimento.year.to_s[2..3]
       data = "#{dia}#{mes}#{ano}"
 
-      numero_documento = "#{self.numero_documento.to_s}#{self.numero_documento.to_s.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
-      soma = numero_documento.to_i + self.conta_corrente.to_i + data.to_i
-      numero = "#{numero_documento}#{soma.to_s.modulo11_9to2_10_como_zero}"
+      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
+      soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
+      numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
     else
       self.codigo_servico = 5
-      numero_documento = "#{self.numero_documento.to_s}#{self.numero_documento.to_s.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
-      soma = numero_documento.to_i + self.conta_corrente.to_i
-      numero = "#{numero_documento}#{soma.to_s.modulo11_9to2_10_como_zero}"
+      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico.to_s}"
+      soma = parte_1.to_i + self.conta_corrente.to_i
+      numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
     end
   end
@@ -50,13 +56,11 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
     if self.carteira == "CNR"
-      raise ArgumentError, "numero_documento pode ser de no máximo 13 caracteres." if (self.numero_documento.to_s.size > 13)
       fator = self.data_vencimento.fator_vencimento
       dias_julianos = self.data_vencimento.to_juliano
       self.codigo_servico = 4
-      numero_documento = self.numero_documento.to_s.rjust(13,'0')
-      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{numero_documento}#{dias_julianos}2"
-      numero.size == 43 ? numero : nil
+      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{self.numero_documento}#{dias_julianos}2"
+      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       raise "Tipo de carteira não implementado"
     end

@@ -10,6 +10,12 @@ class BancoItau < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
+  def numero_documento
+    raise ArgumentError, "numero_documento pode ser de no máximo 8 caracteres." if @numero_documento.to_s.size > 8
+    @numero_documento.to_s.rjust(8,'0')
+  end
+
   # Retorna dígito verificador do nosso número, calculado com modulo10.
   # Para a grande maioria das carteiras, são considerados para a obtenção do DAC/DV, os dados
   # "AGENCIA(sem DAC/DV)/CONTA(sem DAC/DV)/CARTEIRA/NOSSO NUMERO", calculado pelo criterio do Modulo 10.
@@ -19,8 +25,7 @@ class BancoItau < Brcobranca::Boleto::Base
     if %w(126 131 146 150 168).include?(self.carteira)
       "#{self.carteira}#{self.numero_documento}".modulo10
     else
-      numero_documento = self.numero_documento.to_s.rjust(8,'0')
-      "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{numero_documento}".modulo10
+      "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{self.numero_documento}".modulo10
     end
   end
 
@@ -33,21 +38,19 @@ class BancoItau < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-   "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
+    "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-   "#{self.agencia} / #{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
+    "#{self.agencia} / #{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
     valor_documento_formatado = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     fator_vencimento = self.data_vencimento.fator_vencimento
-    numero_documento = self.numero_documento.to_s.rjust(8,'0')
-    return nil if numero_documento.to_i.zero?
 
     # Monta a String baseado no tipo de carteira
     case self.carteira.to_i
@@ -66,9 +69,9 @@ class BancoItau < Brcobranca::Boleto::Base
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
+      codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
-      codigo.size == 43 ? codigo : nil
+      codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     when 198, 106, 107, 122, 142, 143, 195, 196
       # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
       # 01 a 03 03 9(3) Código do Banco na Câmara de Compensação = ‘341’
@@ -89,9 +92,9 @@ class BancoItau < Brcobranca::Boleto::Base
       dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{convenio}".modulo10
 
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{numero_documento}#{seu_numero}#{convenio}#{dv}0"
+      codigo << "#{self.numero_documento}#{seu_numero}#{convenio}#{dv}0"
       codigo
-      codigo.size == 43 ? codigo : nil
+      codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       # DEMAIS CARTEIRAS
       # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
@@ -107,9 +110,9 @@ class BancoItau < Brcobranca::Boleto::Base
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
+      codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
-      codigo.size == 43 ? codigo : nil
+      codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     end
   end
 end
