@@ -22,7 +22,7 @@ describe BancoReal do
     }
   end
 
-  it "should create a new default instance" do
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoReal.new
     boleto_novo.banco.should eql("356")
     boleto_novo.especie_documento.should eql("DM")
@@ -40,7 +40,7 @@ describe BancoReal do
     boleto_novo.should be_instance_of(BancoReal)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.banco.should eql("356")
     boleto_novo.especie_documento.should eql("DM")
@@ -66,7 +66,7 @@ describe BancoReal do
     boleto_novo.should be_instance_of(BancoReal)
   end
 
-  it "should mount a valid bank invoice para carteira registrada" do
+  it "Gerar boleto para carteira registrada" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -77,10 +77,10 @@ describe BancoReal do
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(8)
     boleto_novo.monta_codigo_43_digitos.should eql("3569376900000135000000004042006190087701684")
     boleto_novo.codigo_barras.should eql("35691376900000135000000004042006190087701684")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("35690.00007 04042.006199 00877.016840 1 37690000013500")    
+    boleto_novo.codigo_barras.linha_digitavel.should eql("35690.00007 04042.006199 00877.016840 1 37690000013500")
   end
 
-  it "should mount a valid bank invoice pra carteiras sem registro" do
+  it "Gerar boleto pra carteiras sem registro" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 1
@@ -108,7 +108,7 @@ describe BancoReal do
     boleto_novo.codigo_barras.linha_digitavel.should eql("35691.01805 01632.490007 00000.050203 7 25230000093423")
   end
 
-  it "should NOT mount a valid bank invoice" do
+  it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
     @valid_attributes[:dias_vencimento] = 0
@@ -123,7 +123,7 @@ describe BancoReal do
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
   end
 
-  it "should test outputs" do
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0

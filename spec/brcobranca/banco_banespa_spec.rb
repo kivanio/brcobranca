@@ -24,7 +24,7 @@ describe BancoBanespa do
     }
   end
 
-  it "should create a new default instance" do
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoBanespa.new
     boleto_novo.banco.should eql("033")
     boleto_novo.especie_documento.should eql("DM")
@@ -42,7 +42,7 @@ describe BancoBanespa do
     boleto_novo.should be_instance_of(BancoBanespa)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.banco.should eql("033")
     boleto_novo.especie_documento.should eql("DM")
@@ -68,8 +68,7 @@ describe BancoBanespa do
     boleto_novo.should be_instance_of(BancoBanespa)
   end
 
-  # TODO -  should give exception
-  it "should return nil when attributes are nil" do
+  it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -77,15 +76,15 @@ describe BancoBanespa do
     @valid_attributes[:banco] = ""
     @valid_attributes[:carteira] = ""
     @valid_attributes[:moeda] = ""
-    @valid_attributes[:convenio] = ""  
+    @valid_attributes[:convenio] = ""
 
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
   end
 
-  it "should mount a valid bank invoice" do
+  it "Gerar boleto" do
     @valid_attributes[:valor] = 103.58
     @valid_attributes[:data_documento] = Date.parse("2001-08-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -98,7 +97,7 @@ describe BancoBanespa do
     boleto_novo.monta_codigo_43_digitos.should eql("0339139400000103581481302647800049520003306")
     boleto_novo.codigo_barras.should eql("03398139400000103581481302647800049520003306")
     boleto_novo.codigo_barras.linha_digitavel.should eql("03391.48132 02647.800040 95200.033066 8 13940000010358")
-    
+
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-08-14")
     @valid_attributes[:dias_vencimento] = 5
@@ -113,21 +112,21 @@ describe BancoBanespa do
     boleto_novo.codigo_barras.linha_digitavel.should eql("03394.00137 01216.812345 56700.033618 8 43340000295295")
   end
 
-  it "should mount a valid campo_livre_com_dv1_e_dv2" do
+  it "Montar campo_livre_com_dv1_e_dv2" do
     @valid_attributes[:convenio] = "40013012168"
     @valid_attributes[:numero_documento] = "7469108"
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
     boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216874691080003384")
-    
+
     @valid_attributes[:convenio] = "40013012168"
     @valid_attributes[:numero_documento] = "1234567"
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
     boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216812345670003361")
   end
-  
-  it "should mount a valid nosso_numero and nosso_numero_dv" do
+
+  it "Montar nosso_numero e nosso_numero_dv" do
     @valid_attributes[:numero_documento] = "0403005"
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
@@ -165,13 +164,13 @@ describe BancoBanespa do
     boleto_novo.nosso_numero_boleto.should eql("123 7469108 3")
   end
 
-  it "should mount a valid agencia_conta_dv" do
+  it "Montar agencia_conta_dv" do
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
     boleto_novo.agencia_conta_boleto.should eql("000 12 38798 9")
   end
-  
-  it "should test outputs" do
+
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-08-14")
     @valid_attributes[:dias_vencimento] = 5
@@ -192,4 +191,4 @@ describe BancoBanespa do
     end
   end
 
-end 
+end

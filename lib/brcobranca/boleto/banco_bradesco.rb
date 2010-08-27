@@ -10,7 +10,7 @@ class BancoBradesco < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-   "#{self.carteira}/#{self.numero_documento.zeros_esquerda(:tamanho => 11)}-#{self.nosso_numero_dv}"
+   "#{self.carteira}/#{self.numero_documento.to_s.rjust(11,'0')}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
@@ -30,13 +30,13 @@ class BancoBradesco < Brcobranca::Boleto::Base
   #   44 a 44 1 Zero
 
   def monta_codigo_43_digitos
-    banco = self.banco.zeros_esquerda(:tamanho => 3)
+    banco = self.banco.to_s.rjust(3,'0')
     fator = self.data_vencimento.fator_vencimento
-    valor_documento = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
-    agencia = self.agencia.zeros_esquerda(:tamanho => 4)
-    carteira = self.carteira.zeros_esquerda(:tamanho => 2)
-    numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 11)
-    conta = self.conta_corrente.zeros_esquerda(:tamanho => 7)
+    valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+    agencia = self.agencia.to_s.rjust(4,'0')
+    carteira = self.carteira.to_s.rjust(2,'0')
+    numero_documento = self.numero_documento.to_s.rjust(11,'0')
+    conta = self.conta_corrente.to_s.rjust(7,'0')
 
     numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{carteira}#{numero_documento}#{conta}0"
     numero.size == 43 ? numero : nil

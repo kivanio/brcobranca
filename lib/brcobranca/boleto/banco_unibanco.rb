@@ -16,7 +16,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-   "#{self.numero_documento.zeros_esquerda(:tamanho => 14)}-#{self.nosso_numero_dv}"
+   "#{self.numero_documento.to_s.rjust(14,'0')}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
@@ -27,10 +27,10 @@ class BancoUnibanco < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    banco = self.banco.zeros_esquerda(:tamanho => 3)
+    banco = self.banco.to_s.rjust(3,'0')
     fator = self.data_vencimento.fator_vencimento
-    valor_documento = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
-    carteira = self.carteira.zeros_esquerda(:tamanho => 1)
+    valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+    carteira = self.carteira.to_s.rjust(1,'0')
 
     case carteira.to_i
     when 5
@@ -48,8 +48,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 30 a 43 14  Número de referência do cliente
       # 44  1 Dígito verificador
 
-      convenio = self.convenio.zeros_esquerda(:tamanho => 6)
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 14)
+      convenio = self.convenio.to_s.rjust(6,'0')
+      numero_documento = self.numero_documento.to_s.rjust(14,'0')
       codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     when 4
@@ -68,8 +68,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       #      44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
 
       data = self.data_vencimento.strftime('%y%m%d')
-      agencia = self.agencia.zeros_esquerda(:tamanho => 4)
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 11)
+      agencia = self.agencia.to_s.rjust(4,'0')
+      numero_documento = self.numero_documento.to_s.rjust(11,'0')
       codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}0#{carteira}#{data}#{agencia}#{self.agencia_dv}#{numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : nil
     else

@@ -39,21 +39,6 @@ module Brcobranca
       self.gsub(/\D/,'')
     end
 
-    # Completa zeros a esquerda.
-    #  Ex. numero="123" :tamanho=>3 | numero="123"
-    #  Ex. numero="123" :tamanho=>4 | numero="0123"
-    #  Ex. numero="123" :tamanho=>5 | numero="00123"
-    def zeros_esquerda(options={})
-      valor_inicial = self.kind_of?(String) ? self : self.to_s
-      return valor_inicial if (valor_inicial !~ /\S/)
-      digitos = options[:tamanho] || valor_inicial.size
-
-      diferenca = (digitos - valor_inicial.size)
-
-      return valor_inicial if (diferenca <= 0)
-      return (("0" * diferenca) + valor_inicial )
-    end
-
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
     # Retorna + nil + para Codigo de Barras em branco,
     # Codigo de Barras com tamanho diferente de 44 dígitos e
@@ -104,7 +89,7 @@ module Brcobranca
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
       valor_inicial = self.kind_of?(String) ? self : self.to_s
-      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
+      raise ArgumentError, "Somente números ou valor maior que zero" if !valor_inicial.numeric? or valor_inicial.to_i.zero?
 
       total = 0
       multiplicador = 2
@@ -251,7 +236,7 @@ module Brcobranca
       ultima_data = Date.parse("#{self.year - 1}-12-31")
       ultimo_digito_ano = self.to_s[3..3]
       dias = (self - ultima_data)
-      (dias.to_i.to_s + ultimo_digito_ano).zeros_esquerda(:tamanho => 4)
+      (dias.to_i.to_s + ultimo_digito_ano).rjust(4,'0')
     end
   end
 end

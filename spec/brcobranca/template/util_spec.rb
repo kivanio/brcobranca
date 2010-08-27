@@ -4,7 +4,7 @@ module Brcobranca
   module Boleto
     module Template
       describe Util do
-        it "should get correct file" do
+        it "Busca logotipo do banco" do
           boleto_novo = BancoBanespa.new
           File.exist?(boleto_novo.monta_logo).should be_true
           File.stat(boleto_novo.monta_logo).zero?.should be_false

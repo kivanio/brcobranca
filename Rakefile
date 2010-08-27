@@ -10,15 +10,11 @@ begin
     gem.email = "kivanio@gmail.com"
     gem.homepage = "http://github.com/kivanio/brcobranca"
     gem.authors = ["Kivanio Barbosa"]
-    # gem.extra_rdoc_files = ["History.txt"]
-    gem.rdoc_options = ["--main", "README.rdoc"]
-    gem.rubyforge_project = %q{brcobranca}
     gem.add_runtime_dependency("rghost", ">= 0.8.7")
     gem.add_runtime_dependency("rghost_barcode", ">= 0.8")
     gem.add_runtime_dependency("parseline", ">= 1.0.3")
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "cucumber", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_development_dependency "yard", ">= 0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -66,12 +62,11 @@ end
 
 task :default => :spec
 
-require 'rake/rdoctask'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "brcobranca #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+begin
+  require 'yard'
+  YARD::Rake::YardocTask.new
+rescue LoadError
+  task :yardoc do
+    abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
+  end
 end

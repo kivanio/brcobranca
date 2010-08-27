@@ -20,9 +20,9 @@ module Brcobranca
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
-      # <b>REQUERIDO</b>: Número da agencia
+      # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
       attr_accessor :agencia
-      # <b>REQUERIDO</b>: Número da conta corrente
+      # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente

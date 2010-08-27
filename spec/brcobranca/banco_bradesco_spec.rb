@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe BancoBradesco do  
+describe BancoBradesco do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -22,7 +22,7 @@ describe BancoBradesco do
     }
   end
 
-  it "should create a new default instance" do
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoBradesco.new
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
@@ -40,7 +40,7 @@ describe BancoBradesco do
     boleto_novo.should be_instance_of(BancoBradesco)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
@@ -66,7 +66,7 @@ describe BancoBradesco do
     boleto_novo.should be_instance_of(BancoBradesco)
   end
 
-  it "should mount codigo de barras para carteira numero 06" do
+  it "Montar código de barras para carteira número 06" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0
@@ -77,10 +77,10 @@ describe BancoBradesco do
     boleto_novo.should be_instance_of(BancoBradesco)
     boleto_novo.monta_codigo_43_digitos.should eql("2379422300002952951172060007589645204030050")
     boleto_novo.codigo_barras.should eql("23795422300002952951172060007589645204030050")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("23791.17209 60007.589645 52040.300502 5 42230000295295")    
+    boleto_novo.codigo_barras.linha_digitavel.should eql("23791.17209 60007.589645 52040.300502 5 42230000295295")
   end
 
-  it "should mount codigo de barras para carteira numero 03" do
+  it "Montar código de barras para carteira número 03" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:dias_vencimento] = 1
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
@@ -96,7 +96,7 @@ describe BancoBradesco do
   end
 
   # TODO -  should give exception
-  it "should return nil when attributes are nil" do
+  it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -115,7 +115,7 @@ describe BancoBradesco do
     boleto_novo.codigo_barras.should be_nil
   end
 
-  it "should mount nosso_numero_boleto" do
+  it "Montar nosso_numero_boleto" do
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
     boleto_novo.numero_documento = "4042"
@@ -144,7 +144,7 @@ describe BancoBradesco do
     boleto_novo.nosso_numero_dv.should eql(6)
   end
 
-  it "should mount agencia_conta_boleto" do
+  it "Montar agencia_conta_boleto" do
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
     boleto_novo.agencia_conta_boleto.should eql("4042-8 / 61900-0")
@@ -154,8 +154,8 @@ describe BancoBradesco do
     boleto_novo.conta_corrente = "1448"
     boleto_novo.agencia_conta_boleto.should eql("0548-7 / 1448-6")
   end
-  
-  it "should test outputs" do
+
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0

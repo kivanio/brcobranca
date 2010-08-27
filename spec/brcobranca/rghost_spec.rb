@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper.rb'
 require 'tempfile'
 
-describe "RGhost test" do
+describe "RGhost" do
 
   before(:each) do
     @valid_attributes = {
@@ -25,12 +25,12 @@ describe "RGhost test" do
     }
   end
 
-  it "should test gs presence" do
+  it "Testar se RGhost está instalado " do
     RGhost::Config.config_platform
     File.exist?(RGhost::Config::GS[:path]).should be_true
     File.executable?(RGhost::Config::GS[:path]).should be_true
     s=`#{RGhost::Config::GS[:path]} -v`
     s.should =~ /^GPL Ghostscript 8\.[6-9]/
   end
-  
+
 end

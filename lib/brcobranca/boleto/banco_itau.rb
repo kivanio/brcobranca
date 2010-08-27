@@ -19,7 +19,7 @@ class BancoItau < Brcobranca::Boleto::Base
     if %w(126 131 146 150 168).include?(self.carteira)
       "#{self.carteira}#{self.numero_documento}".modulo10
     else
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 8)
+      numero_documento = self.numero_documento.to_s.rjust(8,'0')
       "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{numero_documento}".modulo10
     end
   end
@@ -44,10 +44,10 @@ class BancoItau < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    valor_documento_formatado = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
+    valor_documento_formatado = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     fator_vencimento = self.data_vencimento.fator_vencimento
-    numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 8)
-    return nil if numero_documento.size != 8
+    numero_documento = self.numero_documento.to_s.rjust(8,'0')
+    return nil if numero_documento.to_i.zero?
 
     # Monta a String baseado no tipo de carteira
     case self.carteira.to_i
@@ -82,10 +82,10 @@ class BancoItau < Brcobranca::Boleto::Base
       # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
-      seu_numero = self.seu_numero.zeros_esquerda(:tamanho => 7)
-      return nil if seu_numero.size != 7
-      convenio = self.convenio.zeros_esquerda(:tamanho => 5)
-      return nil if convenio.size != 5
+      seu_numero = self.seu_numero.to_s.rjust(7,'0')
+      return nil if seu_numero.to_i.zero?
+      convenio = self.convenio.to_s.rjust(5,'0')
+      return nil if convenio.to_i.zero?
       dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{convenio}".modulo10
 
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"

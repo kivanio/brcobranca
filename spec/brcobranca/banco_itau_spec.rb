@@ -21,8 +21,8 @@ describe BancoItau do
       :numero_documento => "12345678"
     }
   end
-  
-  it "should create a new default instance" do
+
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoItau.new
     boleto_novo.banco.should eql("341")
     boleto_novo.especie_documento.should eql("DM")
@@ -40,7 +40,7 @@ describe BancoItau do
     boleto_novo.should be_instance_of(BancoItau)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.banco.should eql("341")
     boleto_novo.especie_documento.should eql("DM")
@@ -65,15 +65,15 @@ describe BancoItau do
     boleto_novo.carteira.should eql("175")
     boleto_novo.should be_instance_of(BancoItau)
   end
-  
-  it "should mount a valid bank invoice" do
+
+  it "Gerar boleto" do
     @valid_attributes[:data_documento] = Date.parse("2009/08/13")
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.monta_codigo_43_digitos.should eql("3419432900000000001751234567840810536789000")
     boleto_novo.codigo_barras.should eql("34191432900000000001751234567840810536789000")
     boleto_novo.codigo_barras.linha_digitavel.should eql("34191.75124 34567.840813 05367.890000 1 43290000000000")
-    
+
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:numero_documento] = "258281"
     @valid_attributes[:data_documento] = Date.parse("2008/02/01")
@@ -116,7 +116,7 @@ describe BancoItau do
     boleto_novo.monta_codigo_43_digitos.should eql("3419252500000135001960025828101234561234550")
     boleto_novo.codigo_barras.should eql("34192252500000135001960025828101234561234550")
     boleto_novo.codigo_barras.linha_digitavel.should eql("34191.96005 25828.101235 45612.345509 2 25250000013500")
-    
+
     @valid_attributes[:numero_documento] = "258281"
     @valid_attributes[:data_documento] = Date.parse("2004/09/04")
     @valid_attributes[:carteira] = 196
@@ -129,28 +129,28 @@ describe BancoItau do
     boleto_novo.codigo_barras.should eql("34192252500000135001960025828101234560123440")
     boleto_novo.codigo_barras.linha_digitavel.should eql("34191.96005 25828.101235 45601.234409 2 25250000013500")
   end
-  
-  it "should mount a valid agencia_conta_corrente_dv" do
+
+  it "Montar agencia_conta_corrente_dv" do
     @valid_attributes[:conta_corrente] = "15255"
     @valid_attributes[:agencia] = "0607"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(0)
     boleto_novo.agencia_conta_boleto.should eql("0607 / 15255-0")
-    
+
     @valid_attributes[:conta_corrente] = "85547"
     @valid_attributes[:agencia] = "1547"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(6)
     boleto_novo.agencia_conta_boleto.should eql("1547 / 85547-6")
-    
+
     @valid_attributes[:conta_corrente] = "10207"
     @valid_attributes[:agencia] = "1547"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.agencia_conta_corrente_dv.should eql(7)
-    
+
     @valid_attributes[:conta_corrente] = "53678"
     @valid_attributes[:agencia] = "0811"
     boleto_novo = BancoItau.new(@valid_attributes)
@@ -158,8 +158,8 @@ describe BancoItau do
     boleto_novo.agencia_conta_corrente_dv.should eql(8)
     boleto_novo.agencia_conta_boleto.should eql("0811 / 53678-8")
   end
-  
-  it "should mount a valid nosso_numero_dv" do
+
+  it "Montar nosso_numero_dv" do
     @valid_attributes[:numero_documento] = "00015448"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
@@ -169,24 +169,24 @@ describe BancoItau do
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.nosso_numero_dv.should eql(6)
-    
+
     @valid_attributes[:numero_documento] = "12345678"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.nosso_numero_dv.should eql(4)
-    
+
     @valid_attributes[:numero_documento] = "34230"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.nosso_numero_dv.should eql(5)
-    
+
     @valid_attributes[:numero_documento] = "258281"
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
     boleto_novo.nosso_numero_dv.should eql(7)
   end
-  
-  it "should test outputs" do
+
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:data_documento] = Date.parse("2009/08/13")
     boleto_novo = BancoItau.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoItau)
@@ -201,5 +201,5 @@ describe BancoItau do
       File.exist?(tmp_file.path).should be_false
     end
   end
-  
+
 end

@@ -25,7 +25,7 @@ module Brcobranca #:nodoc:[all]
         }
       end
 
-      it "should create a new default instance" do
+      it "Criar nova instancia com atributos padrões" do
         boleto_novo = Brcobranca::Boleto::Base.new
         boleto_novo.especie_documento.should eql("DM")
         boleto_novo.especie.should eql("R$")
@@ -41,7 +41,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
       end
 
-      it "should create a new instance given valid attributes" do
+      it "Criar nova instancia com atributos válidos" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.banco.should eql("001")
         boleto_novo.especie_documento.should eql("DM")
@@ -66,7 +66,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
       end
 
-      it "should calculate bando_dv" do
+      it "Calcula bando_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.banco = "85068014982"
         boleto_novo.banco_dv.should eql(9)
@@ -94,7 +94,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.banco_dv.should eql(6)
       end
 
-      it "should calculate agencia_dv" do
+      it "Calcula agencia_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.agencia = "85068014982"
         boleto_novo.agencia_dv.should eql(9)
@@ -122,7 +122,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.agencia_dv.should eql(6)
       end
 
-      it "should calculate conta_corrente_dv" do
+      it "Calcula conta_corrente_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.conta_corrente = "85068014982"
         boleto_novo.conta_corrente_dv.should eql(9)
@@ -150,7 +150,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.conta_corrente_dv.should eql(6)
       end
 
-      it "should calculate nosso_numero_dv" do
+      it "Calcula nosso_numero_dv" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.numero_documento = "85068014982"
         boleto_novo.nosso_numero.should eql("85068014982")
@@ -179,7 +179,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.nosso_numero_dv.should eql(6)
       end
 
-      it "should return document value in float" do
+      it "Calcula o valor do documento" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.quantidade = 1
         boleto_novo.valor = 1
@@ -201,7 +201,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.valor_documento.should eql(0)
       end
 
-      it "should return data_vencimento" do
+      it "Calcula data_vencimento" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.data_documento = Date.parse "2008-02-01"
         boleto_novo.dias_vencimento = 1
@@ -220,14 +220,14 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.data_vencimento.should be_nil
       end
 
-      it "should give a mensage" do
+      it "Mostrar aviso sobre sobrecarga de métodos padrões" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.monta_codigo_43_digitos.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
         boleto_novo.nosso_numero_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
         boleto_novo.agencia_conta_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      it "should validade module's inclusion" do
+      it "Incluir módulos de template" do
         Brcobranca::Config::OPCOES[:gerador] = 'rghost'
         boleto_novo = Brcobranca::Boleto::Base.new
         boleto_novo.class.included_modules.include?(RGhost).should be_true

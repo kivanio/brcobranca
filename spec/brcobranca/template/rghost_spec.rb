@@ -27,7 +27,7 @@ module Brcobranca
           }
         end
 
-        it "should genarate a banck invoice" do
+        it "Gerar boleto nos formatos válidos" do
           @valid_attributes[:valor] = 135.00
           @valid_attributes[:data_documento] = Date.parse("2008-02-01")
           @valid_attributes[:dias_vencimento] = 2
@@ -39,25 +39,25 @@ module Brcobranca
           boleto_novo.codigo_barras.should eql("00193377100000135000000001238798777770016818")
           boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 3 37710000013500")
           boleto_novo.conta_corrente_dv.should eql(0)
-          # 
-          # %w| pdf jpg tif png ps |.each do |format|
-          #   file_body=boleto_novo.to(format.to_sym)
-          #   tmp_file=Tempfile.new("foobar." << format)
-          #   tmp_file.puts file_body
-          #   tmp_file.close
-          #   File.exist?(tmp_file.path).should be_true
-          #   File.stat(tmp_file.path).zero?.should be_false
-          #   File.delete(tmp_file.path).should eql(1)
-          #   File.exist?(tmp_file.path).should be_false
-          # end
-          # file_body=boleto_novo.to
-          # tmp_file=Tempfile.new("foobar.")
-          # tmp_file.puts file_body
-          # tmp_file.close
-          # File.exist?(tmp_file.path).should be_true
-          # File.stat(tmp_file.path).zero?.should be_false
-          # File.delete(tmp_file.path).should eql(1)
-          # File.exist?(tmp_file.path).should be_false
+
+          %w| pdf jpg tif png ps |.each do |format|
+            file_body=boleto_novo.to(format.to_sym)
+            tmp_file=Tempfile.new("foobar." << format)
+            tmp_file.puts file_body
+            tmp_file.close
+            File.exist?(tmp_file.path).should be_true
+            File.stat(tmp_file.path).zero?.should be_false
+            File.delete(tmp_file.path).should eql(1)
+            File.exist?(tmp_file.path).should be_false
+          end
+          file_body=boleto_novo.to
+          tmp_file=Tempfile.new("foobar.")
+          tmp_file.puts file_body
+          tmp_file.close
+          File.exist?(tmp_file.path).should be_true
+          File.stat(tmp_file.path).zero?.should be_false
+          File.delete(tmp_file.path).should eql(1)
+          File.exist?(tmp_file.path).should be_false
         end
       end
     end

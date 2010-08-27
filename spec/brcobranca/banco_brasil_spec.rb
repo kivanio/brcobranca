@@ -24,7 +24,7 @@ describe BancoBrasil do #:nodoc:[all]
     }
   end
 
-  it "should create a new default instance" do
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoBrasil.new
     boleto_novo.banco.should eql("001")
     boleto_novo.especie_documento.should eql("DM")
@@ -43,7 +43,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.should be_instance_of(BancoBrasil)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.banco.should eql("001")
     boleto_novo.especie_documento.should eql("DM")
@@ -70,7 +70,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.should be_instance_of(BancoBrasil)
   end
 
-  it "should mount a valid invoice para convenio de 8 digitos e nosso numero de 9" do
+  it "Montar código de barras para convenio de 8 digitos e nosso número de 9" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -93,7 +93,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.nosso_numero_dv.should eql("X")
   end
 
-  it "should mount a valid invoice para convenio de 7 digitos e nosso numero de 10" do
+  it "Montar código de barras para convenio de 7 digitos e nosso numero de 10" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 2
@@ -131,7 +131,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.conta_corrente_dv.should eql(0)
   end
 
-  it "should mount a valid invoice para convenio de 6 digitos e nosso numero de 5" do
+  it "Montar código de barras para convenio de 6 digitos e nosso numero de 5" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -142,10 +142,10 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.conta_corrente_dv.should eql(0)
     boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135001238790123440420006190018")
     boleto_novo.codigo_barras.should eql("00192376900000135001238790123440420006190018")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90123.440423 00061.900189 2 37690000013500")  
+    boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90123.440423 00061.900189 2 37690000013500")
   end
 
-  it "should mount a valid invoice para convenio de 6 digitos, nosso numero de 17 e carteira 16" do  
+  it "Montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 16" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -161,7 +161,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90000.000126 34567.899215 9 37690000013500")
   end
 
-  it "should mount a valid invoice para convenio de 6 digitos, nosso numero de 17 e carteira 18" do
+  it "Montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 18" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -177,7 +177,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90000.000126 34567.899215 9 37690000013500")
   end
 
-  it "should mount raise error para convenio de 6 digitos, nosso numero de 17 e carteira 17" do
+  it "Não montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 17" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -192,7 +192,7 @@ describe BancoBrasil do #:nodoc:[all]
     lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error("Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17")
   end
 
-  it "should mount a valid invoice para convenio de 4 digitos e nosso numero de 7" do
+  it "Montar código de barras para convenio de 4 digitos e nosso numero de 7" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -208,7 +208,7 @@ describe BancoBrasil do #:nodoc:[all]
   end
 
   # TODO -  should give exception
-  it "should return nil when attributes are nil" do
+  it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
@@ -216,15 +216,15 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:banco] = ""
     @valid_attributes[:carteira] = ""
     @valid_attributes[:moeda] = ""
-    @valid_attributes[:convenio] = ""  
+    @valid_attributes[:convenio] = ""
 
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
   end
 
-  it "should calculate bando_dv" do
+  it "Calcular bando_dv" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.banco = "85068014982"
     boleto_novo.banco_dv.should eql(9)
@@ -252,7 +252,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.banco_dv.should eql(6)
   end
 
-  it "should calculate agencia_dv" do
+  it "Calcular agencia_dv" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.agencia = "85068014982"
     boleto_novo.agencia_dv.should eql(9)
@@ -280,7 +280,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.agencia_dv.should eql(6)
   end
 
-  it "should mount nosso_numero_boleto" do
+  it "Montar nosso_numero_boleto" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.numero_documento = "85068014982"
     boleto_novo.nosso_numero_boleto.should eql("1238798985068014982-6")
@@ -320,7 +320,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.nosso_numero_dv.should eql(3)
   end
 
-  it "should mount agencia_conta_boleto" do
+  it "Montar agencia_conta_boleto" do
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.agencia_conta_boleto.should eql("4042-8 / 61900-0")
@@ -330,8 +330,8 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.conta_corrente = "1448"
     boleto_novo.agencia_conta_boleto.should eql("0548-7 / 1448-6")
   end
-  
-  it "should test outputs" do
+
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 2

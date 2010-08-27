@@ -22,7 +22,7 @@ describe BancoUnibanco do
     }
   end
 
-  it "should create a new default instance" do
+  it "Criar nova instancia com atributos padrões" do
     boleto_novo = BancoUnibanco.new
     boleto_novo.banco.should eql("409")
     boleto_novo.especie_documento.should eql("DM")
@@ -40,7 +40,7 @@ describe BancoUnibanco do
     boleto_novo.should be_instance_of(BancoUnibanco)
   end
 
-  it "should create a new instance given valid attributes" do
+  it "Criar nova instancia com atributos válidos" do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.banco.should eql("409")
     boleto_novo.especie_documento.should eql("DM")
@@ -66,7 +66,7 @@ describe BancoUnibanco do
     boleto_novo.should be_instance_of(BancoUnibanco)
   end
 
-  it "should mount a valid bank invoice para carteira registrada" do
+  it "Gerar boleto para carteira registrada" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0
@@ -80,10 +80,10 @@ describe BancoUnibanco do
     boleto_novo.nosso_numero_dv.should eql(5)
     boleto_novo.monta_codigo_43_digitos.should eql("4099422300002952950409043001236018030299015")
     boleto_novo.codigo_barras.should eql("40997422300002952950409043001236018030299015")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("40990.40901 43001.236017 80302.990157 7 42230000295295")  
+    boleto_novo.codigo_barras.linha_digitavel.should eql("40990.40901 43001.236017 80302.990157 7 42230000295295")
   end
 
-  it "should mount a valid bank invoice para carteira sem registro" do
+  it "Gerar boleto para carteira sem registro" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0
@@ -100,7 +100,7 @@ describe BancoUnibanco do
     boleto_novo.codigo_barras.linha_digitavel.should eql("40995.20316 67100.000016 80302.990157 5 42230000295295")
   end
 
-  it "should NOT mount a valid bank invoice" do
+  it "Não permitir gerar boleto com atributos inválido" do
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
     @valid_attributes[:dias_vencimento] = 0
@@ -111,12 +111,12 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    
+
     boleto_novo.monta_codigo_43_digitos.should be_nil
     boleto_novo.codigo_barras.should be_nil
   end
-  
-  it "should mount nosso_numero_boleto" do
+
+  it "Montar nosso_numero_boleto" do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     boleto_novo.numero_documento = "85068014982"
@@ -156,8 +156,8 @@ describe BancoUnibanco do
     boleto_novo.nosso_numero_boleto.should eql("00000000000719-6")
     boleto_novo.nosso_numero_dv.should eql(6)
   end
-  
-  it "should mount agencia_conta_boleto" do
+
+  it "Montar agencia_conta_boleto" do
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
     boleto_novo = BancoUnibanco.new(@valid_attributes)
@@ -167,8 +167,8 @@ describe BancoUnibanco do
     boleto_novo.conta_corrente = "1448"
     boleto_novo.agencia_conta_boleto.should eql("0548 / 1448-6")
   end
-  
-  it "should test outputs" do
+
+  it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0

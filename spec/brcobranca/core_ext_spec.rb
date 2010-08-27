@@ -2,22 +2,22 @@ require File.dirname(__FILE__) + '/../spec_helper.rb'
 
 module Brcobranca
   describe Formatacao do
-    it "should format CPF" do
+    it "Formata o CPF" do
       98789298790.to_br_cpf.should eql("987.892.987-90")
       "98789298790".to_br_cpf.should eql("987.892.987-90")
     end
 
-    it "should format CEP" do
+    it "Formata o CEP" do
       85253100.to_br_cep.should eql("85253-100")
       "85253100".to_br_cep.should eql("85253-100")
     end
 
-    it "should format CNPJ" do
+    it "Formata o CNPJ" do
       88394510000103.to_br_cnpj.should eql("88.394.510/0001-03")
       "88394510000103".to_br_cnpj.should eql("88.394.510/0001-03")
     end
 
-    it "should format documents based in your lenght" do
+    it "Formata números automaticamente de acordo com o número de caracteres" do
       98789298790.formata_documento.should eql("987.892.987-90")
       "98789298790".formata_documento.should eql("987.892.987-90")
       85253100.formata_documento.should eql("85253-100")
@@ -28,29 +28,7 @@ module Brcobranca
       "8839451000010388394510000103".formata_documento.should eql("8839451000010388394510000103")
     end
 
-    it "should fill with zeros at left until lenght seted" do
-      "123".zeros_esquerda.should eql("123")
-      "123".zeros_esquerda(:tamanho => 0).should eql("123")
-      "123".zeros_esquerda(:tamanho => 1).should eql("123")
-      "123".zeros_esquerda(:tamanho => 2).should eql("123")
-      "123".zeros_esquerda(:tamanho => 3).should eql("123")
-      "123".zeros_esquerda(:tamanho => 4).should eql("0123")
-      "123".zeros_esquerda(:tamanho => 5).should eql("00123")
-      "123".zeros_esquerda(:tamanho => 10).should eql("0000000123")
-      "123".zeros_esquerda(:tamanho => 5).should be_a_kind_of(String)
-
-      123.zeros_esquerda.should eql("123")
-      123.zeros_esquerda(:tamanho => 0).should eql("123")
-      123.zeros_esquerda(:tamanho => 1).should eql("123")
-      123.zeros_esquerda(:tamanho => 2).should eql("123")
-      123.zeros_esquerda(:tamanho => 3).should eql("123")
-      123.zeros_esquerda(:tamanho => 4).should eql("0123")
-      123.zeros_esquerda(:tamanho => 5).should eql("00123")
-      123.zeros_esquerda(:tamanho => 10).should eql("0000000123")
-      123.zeros_esquerda(:tamanho => 5).should be_a_kind_of(String)
-    end
-
-    it "should mount linha digitavel" do
+    it "Monta linha digitável" do
       "00192376900000135000000001238798777770016818".linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 2 37690000013500")
       "00192376900000135000000001238798777770016818".linha_digitavel.should be_a_kind_of(String)
       lambda { "".linha_digitavel }.should raise_error(ArgumentError)
@@ -63,9 +41,11 @@ module Brcobranca
   end
 
   describe Calculo do
-    it "should calculate mod10" do
+    it "Calcula módulo 10" do
       lambda { "".modulo10 }.should raise_error(ArgumentError)
       lambda { " ".modulo10 }.should raise_error(ArgumentError)
+      lambda { 0.modulo10 }.should raise_error(ArgumentError)
+      lambda { "0".modulo10 }.should raise_error(ArgumentError)
       "001905009".modulo10.should eql(5)
       "4014481606".modulo10.should eql(9)
       "0680935031".modulo10.should eql(4)
@@ -75,7 +55,6 @@ module Brcobranca
       "7123457000".modulo10.should eql(1)
       "00571234511012345678".modulo10.should eql(8)
       "001905009".modulo10.should be_a_kind_of(Fixnum)
-      0.modulo10.should eql(0)
       1905009.modulo10.should eql(5)
       4014481606.modulo10.should eql(9)
       680935031.modulo10.should eql(4)
@@ -83,14 +62,14 @@ module Brcobranca
       1905009.modulo10.should be_a_kind_of(Fixnum)
     end
 
-    it "should calculate mo10_banespa" do
+    it "Calcula módulo 10 para o banespa" do
       "4007469108".modulo_10_banespa.should eql(1)
       4007469108.modulo_10_banespa.should eql(1)
       "1237469108".modulo_10_banespa.should eql(3)
       1237469108.modulo_10_banespa.should eql(3)
     end
 
-    it "should test multiplicador" do
+    it "Multiplicador" do
       "85068014982".multiplicador([2,3,4,5,6,7,8,9]).should eql(255)
       "05009401448".multiplicador([2,3,4,5,6,7,8,9]).should eql(164)
       "12387987777700168".multiplicador([2,3,4,5,6,7,8,9]).should eql(460)
@@ -106,7 +85,7 @@ module Brcobranca
       lambda { "2582fd81".multiplicador([2,3,4,5,6,7,8,9]) }.should raise_error(ArgumentError)
     end
 
-    it "should calculate mo11 - 9to2" do
+    it "Calcula módulo 11 de 9 para 2" do
       "85068014982".modulo11_9to2.should eql(9)
       "05009401448".modulo11_9to2.should eql(1)
       "12387987777700168".modulo11_9to2.should eql(2)
@@ -138,7 +117,7 @@ module Brcobranca
       lambda { "2582fd81".modulo11_9to2 }.should raise_error(ArgumentError)
     end
 
-    it "should calculate mod11 - 9to2, X instead of 10" do
+    it "Calcula módulo 11 de 9 para 2, trocando resto 10 por X" do
       "85068014982".modulo11_9to2_10_como_x.should eql(9)
       "05009401448".modulo11_9to2_10_como_x.should eql(1)
       "12387987777700168".modulo11_9to2_10_como_x.should eql(2)
@@ -155,7 +134,7 @@ module Brcobranca
       lambda { "2582fd81".modulo11_9to2_10_como_x }.should raise_error(ArgumentError)
     end
 
-    it "should calculate mod11 - 2to9" do
+    it "Calcula módulo 11 de 2 para 9" do
       "0019373700000001000500940144816060680935031".modulo11_2to9.should eql(3)
       "0019373700000001000500940144816060680935031".modulo11_2to9.should be_a_kind_of(Fixnum)
       "3419166700000123451101234567880057123457000".modulo11_2to9.should eql(6)
@@ -164,7 +143,7 @@ module Brcobranca
       lambda { "2582fd81".modulo11_2to9 }.should raise_error(ArgumentError)
     end
 
-    it "should calculate digit's sum side by side" do
+    it "Calcula a soma dos digitos de um número com mais de 1 algarismo" do
       111.soma_digitos.should eql(3)
       8.soma_digitos.should eql(8)
       "111".soma_digitos.should eql(3)
@@ -175,7 +154,7 @@ module Brcobranca
   end
 
   describe Validacao do
-    it "should return true when value is a currency" do
+    it "Testa se valor é do tipo moeda" do
       1234.03.to_s.moeda?.should be_true
       +1234.03.to_s.moeda?.should be_true
       -1234.03.to_s.moeda?.should be_true
@@ -200,9 +179,6 @@ module Brcobranca
       "-1.234.03".moeda?.should be_true
       "-1,234,03".moeda?.should be_true
       "-12.340,03".moeda?.should be_true
-    end
-
-    it "should return false when value is NOT a currency" do
       123403.to_s.moeda?.should be_false
       -123403.to_s.moeda?.should be_false
       +123403.to_s.moeda?.should be_false
@@ -215,6 +191,7 @@ module Brcobranca
       "1234".moeda?.should be_false
       "23[;)]ddf".moeda?.should be_false
     end
+
   end
 
   describe Limpeza do

@@ -26,43 +26,40 @@ class BancoReal < Brcobranca::Boleto::Base
   #  CODIGO DA AGENCIA: 4 DIGITOS
   #  NUMERO DA CONTA : 7 DIGITOS
   def agencia_conta_corrente_nosso_numero_dv
+    #agencia é 4 digitos
+    agencia = self.agencia.to_s.rjust(4,'0')
+    #conta é 7 digitos
+    conta = self.conta_corrente.to_s.rjust(7,'0')
+
     case self.carteira.to_i
     when 57
-      #agencia é 4 digitos
-      agencia = self.agencia.zeros_esquerda(:tamanho => 4)
-      #conta é 7 digitos
-      conta = self.conta_corrente.zeros_esquerda(:tamanho => 7)
-      #nosso número com maximo de 13 digitos
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 13)
+      #nosso número com maximo de 15 digitos
+      numero_documento = self.numero_documento.to_s.rjust(15,'0')
       "#{numero_documento}#{agencia}#{conta}".modulo10
     else
-      #agencia é 4 digitos
-      agencia = self.agencia.zeros_esquerda(:tamanho => 4)
-      #conta é 7 digitos
-      conta = self.conta_corrente.zeros_esquerda(:tamanho => 7)
-      #nosso número com maximo de 13 digitos
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 7)
+      #nosso número com maximo de 7 digitos
+      numero_documento = self.numero_documento.to_s.rjust(7,'0')
       "#{numero_documento}#{agencia}#{conta}".modulo10
     end
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    banco = self.banco.zeros_esquerda(:tamanho => 3)
-    valor_documento = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
-    conta = self.conta_corrente.zeros_esquerda(:tamanho => 7)
-    agencia = self.agencia.zeros_esquerda(:tamanho => 4)
+    banco = self.banco.to_s.rjust(3,'0')
+    valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+    conta = self.conta_corrente.to_s.rjust(7,'0')
+    agencia = self.agencia.to_s.rjust(4,'0')
     fator = self.data_vencimento.fator_vencimento
     # Montagem é baseada no tipo de carteira, com registro e sem registro
     case self.carteira.to_i
       # Carteira sem registro
     when 57
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 13)
+      numero_documento = self.numero_documento.to_s.rjust(13,'0')
       codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
       codigo.size == 43 ? codigo : nil
     else
       # TODO verificar com o banco, pois não consta na documentação
-      numero_documento = self.numero_documento.zeros_esquerda(:tamanho => 7)
+      numero_documento = self.numero_documento.to_s.rjust(7,'0')
       codigo = "#{banco}#{self.moeda}#{fator}#{valor_documento}000000#{agencia}#{conta}#{self.agencia_conta_corrente_nosso_numero_dv}#{numero_documento}"
       codigo.size == 43 ? codigo : nil
     end

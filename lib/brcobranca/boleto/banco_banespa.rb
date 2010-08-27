@@ -9,12 +9,12 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Número sequencial utilizado para distinguir os boletos na agência
   def nosso_numero
-    "#{self.agencia.zeros_esquerda(:tamanho => 3)}#{self.numero_documento.zeros_esquerda(:tamanho => 7)}"
+    "#{self.agencia.to_s.rjust(3,'0')}#{self.numero_documento.to_s.rjust(7,'0')}"
   end
 
   # Retorna dígito verificador do nosso número calculado como contas na documentação
   def nosso_numero_dv
-    self.nosso_numero.zeros_esquerda(:tamanho => 10).modulo_10_banespa
+    self.nosso_numero.to_s.rjust(10,'0').modulo_10_banespa
   end
 
   # Retorna nosso numero pronto para exibir no boleto
@@ -23,15 +23,15 @@ class BancoBanespa < Brcobranca::Boleto::Base
   end
 
   def agencia_conta_boleto
-    convenio = self.convenio.zeros_esquerda(:tamanho => 11)
+    convenio = self.convenio.to_s.rjust(11,'0')
     "#{convenio[0..2]} #{convenio[3..4]} #{convenio[5..9]} #{convenio[10..10]}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    banco = self.banco.zeros_esquerda(:tamanho => 3)
-    fator = self.data_vencimento.fator_vencimento.zeros_esquerda(:tamanho => 4)
-    valor_documento = self.valor_documento.limpa_valor_moeda.zeros_esquerda(:tamanho => 10)
+    banco = self.banco.to_s.rjust(3,'0')
+    fator = self.data_vencimento.fator_vencimento.to_s.rjust(4,'0')
+    valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     numero = "#{banco}#{self.moeda}#{fator}#{valor_documento}#{self.campo_livre_com_dv1_e_dv2}"
     numero.size == 43 ? numero : nil
   end
@@ -44,10 +44,10 @@ class BancoBanespa < Brcobranca::Boleto::Base
   #    Dígito verificador 1                                                                         PIC  9  (001)
   #    Dígito verificador 2                                                                         PIC  9  (001)
   def campo_livre
-    "#{self.convenio.zeros_esquerda(:tamanho => 11)}#{self.numero_documento.zeros_esquerda(:tamanho => 7)}00#{self.banco.zeros_esquerda(:tamanho => 3)}"
+    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento.to_s.rjust(7,'0')}00#{self.banco.to_s.rjust(3,'0')}"
   end
 
-  #campo livre com os digitos verificadores como conta na documentação do banco
+  #campo livre com os digitos verificadores como consta na documentação do banco
   def campo_livre_com_dv1_e_dv2
     dv1 = self.campo_livre.modulo10 #dv 1 inicial
     dv2 = nil
