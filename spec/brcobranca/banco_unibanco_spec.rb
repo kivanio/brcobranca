@@ -111,8 +111,8 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    boleto_novo.monta_codigo_43_digitos.should be_nil
-    boleto_novo.codigo_barras.should be_nil
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(RuntimeError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(RuntimeError)
   end
 
   it "Montar nosso_numero_boleto" do

@@ -62,7 +62,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{self.numero_documento}#{dias_julianos}2"
       numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
-      raise "Tipo de carteira não implementado"
+      raise RuntimeError, "Tipo de carteira não implementado"
     end
   end
 

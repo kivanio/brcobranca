@@ -86,9 +86,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
       seu_numero = self.seu_numero.to_s.rjust(7,'0')
-      return nil if seu_numero.to_i.zero?
       convenio = self.convenio.to_s.rjust(5,'0')
-      return nil if convenio.to_i.zero?
       dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{convenio}".modulo10
 
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"

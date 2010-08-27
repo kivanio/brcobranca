@@ -39,7 +39,7 @@ module Brcobranca
     end
 
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
-    # Retorna + nil + para Codigo de Barras em branco,
+    # Retorna + ArgumentError + para Codigo de Barras em branco,
     # Codigo de Barras com tamanho diferente de 44 dígitos e
     # Codigo de Barras que não tenham somente caracteres numéricos.
     #   A linha digitável será composta por cinco campos:
