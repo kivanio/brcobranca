@@ -51,7 +51,6 @@ class BancoHsbc < Brcobranca::Boleto::Base
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
     valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
-    convenio = self.convenio.to_s
     conta = self.conta_corrente.to_s.rjust(7,'0')
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento

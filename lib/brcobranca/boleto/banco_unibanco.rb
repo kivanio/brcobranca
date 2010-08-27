@@ -9,6 +9,10 @@ class BancoUnibanco < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  def convenio
+    @convenio.to_s.rjust(6,'0')
+  end
+
   # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
   def numero_documento
     case self.carteira.to_i
@@ -55,8 +59,7 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 30 a 43 14  Número de referência do cliente
       # 44  1 Dígito verificador
 
-      convenio = self.convenio.to_s.rjust(6,'0')
-      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
+      codigo = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     when 4
       # Cobrança com registro (CÓDIGO DE BARRAS)

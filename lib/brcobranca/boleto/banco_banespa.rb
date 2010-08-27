@@ -12,6 +12,10 @@ class BancoBanespa < Brcobranca::Boleto::Base
     @agencia.to_s.rjust(3,'0')
   end
 
+  def convenio
+    @convenio.to_s.rjust(11,'0')
+  end
+
   # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
   def numero_documento
     @numero_documento.to_s.rjust(7,'0')
@@ -19,12 +23,12 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Número sequencial utilizado para distinguir os boletos na agência.
   def nosso_numero
-    "#{self.agencia}#{self.numero_documento}"
+    "#{self.agencia}#{self.numero_documento}".rjust(10,'0')
   end
 
   # Retorna dígito verificador do nosso número calculado como contas na documentação.
   def nosso_numero_dv
-    self.nosso_numero.to_s.rjust(10,'0').modulo_10_banespa
+    self.nosso_numero.modulo_10_banespa
   end
 
   # Retorna nosso numero pronto para exibir no boleto.
@@ -33,8 +37,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
   end
 
   def agencia_conta_boleto
-    convenio = self.convenio.to_s.rjust(11,'0')
-    "#{convenio[0..2]} #{convenio[3..4]} #{convenio[5..9]} #{convenio[10..10]}"
+    "#{self.convenio[0..2]} #{self.convenio[3..4]} #{self.convenio[5..9]} #{self.convenio[10..10]}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
@@ -53,7 +56,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
   #    Dígito verificador 1                                                                         PIC  9  (001)
   #    Dígito verificador 2                                                                         PIC  9  (001)
   def campo_livre
-    "#{self.convenio.to_s.rjust(11,'0')}#{self.numero_documento}00#{self.banco}"
+    "#{self.convenio}#{self.numero_documento}00#{self.banco}"
   end
 
   #campo livre com os digitos verificadores como consta na documentação do banco.

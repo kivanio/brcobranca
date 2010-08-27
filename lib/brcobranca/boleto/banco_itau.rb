@@ -10,6 +10,10 @@ class BancoItau < Brcobranca::Boleto::Base
     super(campos)
   end
 
+  def convenio
+    @convenio.to_s.rjust(5,'0')
+  end
+
   # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
   def numero_documento
     raise ArgumentError, "numero_documento pode ser de no máximo 8 caracteres." if @numero_documento.to_s.size > 8
@@ -86,11 +90,10 @@ class BancoItau < Brcobranca::Boleto::Base
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
       seu_numero = self.seu_numero.to_s.rjust(7,'0')
-      convenio = self.convenio.to_s.rjust(5,'0')
-      dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{convenio}".modulo10
+      dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{self.convenio}".modulo10
 
       codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
-      codigo << "#{self.numero_documento}#{seu_numero}#{convenio}#{dv}0"
+      codigo << "#{self.numero_documento}#{seu_numero}#{self.convenio}#{dv}0"
       codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else

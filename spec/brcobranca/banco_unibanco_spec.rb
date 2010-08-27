@@ -60,7 +60,7 @@ describe BancoUnibanco do
     boleto_novo.sacado_documento.should eql("12345678900")
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
-    boleto_novo.convenio.should eql(12387989)
+    boleto_novo.convenio.should eql("12387989")
     boleto_novo.numero_documento.should eql("00000777700168")
     boleto_novo.carteira.should eql("5")
     boleto_novo.should be_instance_of(BancoUnibanco)
