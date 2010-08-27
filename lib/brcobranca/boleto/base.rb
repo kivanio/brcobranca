@@ -129,6 +129,11 @@ module Brcobranca
         self.quantidade.to_f * self.valor.to_f
       end
 
+      # Retorna o valor total do documento formatado, sem milhar, centena e com zeros a esquerda
+      def valor_documento_formatado
+        self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+      end
+
       # Retorna data de vencimento baseado na <b>data_documento + dias_vencimento</b> ou <b>false</b> caso não consiga efetuar o cálculo.
       def data_vencimento
         raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento

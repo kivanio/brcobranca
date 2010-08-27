@@ -53,7 +53,6 @@ class BancoItau < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    valor_documento_formatado = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     fator_vencimento = self.data_vencimento.fator_vencimento
 
     # Monta a String baseado no tipo de carteira
@@ -72,7 +71,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 36 a 40 05 9(05) N.º da Conta Corrente
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
-      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
+      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
@@ -92,7 +91,7 @@ class BancoItau < Brcobranca::Boleto::Base
       seu_numero = self.seu_numero.to_s.rjust(7,'0')
       dv = "#{self.carteira}#{numero_documento}#{seu_numero}#{self.convenio}".modulo10
 
-      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
+      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{seu_numero}#{self.convenio}#{dv}0"
       codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
@@ -110,7 +109,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 36 a 40 05 9(05) N.º da Conta Corrente
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
-      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{valor_documento_formatado}#{self.carteira}"
+      codigo = "#{self.banco}#{self.moeda}#{fator_vencimento}#{self.valor_documento_formatado}#{self.carteira}"
       codigo << "#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
       codigo
       codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")

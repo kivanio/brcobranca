@@ -50,7 +50,6 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    valor_documento = self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
     conta = self.conta_corrente.to_s.rjust(7,'0')
 
     # Montagem é baseada no tipo de carteira e na presença da data de vencimento
@@ -58,7 +57,7 @@ class BancoHsbc < Brcobranca::Boleto::Base
       fator = self.data_vencimento.fator_vencimento
       dias_julianos = self.data_vencimento.to_juliano
       self.codigo_servico = 4
-      numero = "#{self.banco}#{self.moeda}#{fator}#{valor_documento}#{conta}#{self.numero_documento}#{dias_julianos}2"
+      numero = "#{self.banco}#{self.moeda}#{fator}#{self.valor_documento_formatado}#{conta}#{self.numero_documento}#{dias_julianos}2"
       numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
     else
       raise RuntimeError, "Tipo de carteira não implementado"
