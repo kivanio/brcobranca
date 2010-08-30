@@ -36,31 +36,6 @@ end
 
 task :spec => :check_dependencies
 
-begin
-  require 'reek/adapters/rake_task'
-  Reek::RakeTask.new do |t|
-    t.fail_on_error = true
-    t.verbose = false
-    t.source_files = 'lib/**/*.rb'
-  end
-rescue LoadError
-  task :reek do
-    abort "Reek is not available. In order to run reek, you must: sudo gem install reek"
-  end
-end
-
-begin
-  require 'roodi'
-  require 'roodi_task'
-  RoodiTask.new do |t|
-    t.verbose = false
-  end
-rescue LoadError
-  task :roodi do
-    abort "Roodi is not available. In order to run roodi, you must: sudo gem install roodi"
-  end
-end
-
 task :default => :spec
 
 begin
@@ -70,4 +45,27 @@ rescue LoadError
   task :yardoc do
     abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
   end
+end
+
+begin
+  gem 'metric_fu'
+  require 'metric_fu'
+  MetricFu::Configuration.run do |config|
+    #define which metrics you want to use
+    config.metrics  = [:churn, :saikuro, :flay, :flog, :reek, :roodi, :rcov]
+    config.graphs   = [:flay, :reek]
+    config.flay     = { :dirs_to_flay => ['lib'], :minimum_score => 20, :filetypes => ['rb'] }
+    config.flog     = { :dirs_to_flog => ['lib'] }
+    config.reek     = { :dirs_to_reek => ['lib'] }
+    config.roodi    = { :dirs_to_roodi => ['lib'] }
+    config.saikuro  = { :output_directory => 'scratch_directory/saikuro', :input_directory => ['lib'],
+                        :cyclo => "", :filter_cyclo => "0", :warn_cyclo => "5", :error_cyclo => "7",
+                        :formater => "text"} #this needs to be set to "text"
+    config.churn    = { :start_date => "3 year ago", :minimum_churn_count => 10}
+    config.rcov     = { :test_files => ['spec/**/*_spec.rb'],
+                        :rcov_opts => ["--sort coverage", "--no-html", "--text-coverage",
+                                       "--no-color", "--profile", "--rails",
+                                       "--exclude /gems/,/Library/,spec,features,script"]}
+  end
+rescue LoadError
 end
