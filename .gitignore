@@ -17,6 +17,8 @@ tmtags
 coverage
 rdoc
 pkg
+scratch_directory
+tmp
 
 ## PROJECT::SPECIFIC
 config
