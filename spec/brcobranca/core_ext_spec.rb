@@ -44,8 +44,8 @@ module Brcobranca
     it "Calcula módulo 10" do
       lambda { "".modulo10 }.should raise_error(ArgumentError)
       lambda { " ".modulo10 }.should raise_error(ArgumentError)
-      lambda { 0.modulo10 }.should raise_error(ArgumentError)
-      lambda { "0".modulo10 }.should raise_error(ArgumentError)
+      0.modulo10.should eql(0)
+      "0".modulo10.should eql(0)
       "001905009".modulo10.should eql(5)
       "4014481606".modulo10.should eql(9)
       "0680935031".modulo10.should eql(4)
@@ -148,82 +148,16 @@ module Brcobranca
       8.soma_digitos.should eql(8)
       "111".soma_digitos.should eql(3)
       "8".soma_digitos.should eql(8)
+      0.soma_digitos.should eql(0)
       111.soma_digitos.should be_a_kind_of(Fixnum)
       "111".soma_digitos.should be_a_kind_of(Fixnum)
     end
   end
 
-  describe Validacao do
-    it "Testa se valor é do tipo moeda" do
-      1234.03.to_s.moeda?.should be_true
-      +1234.03.to_s.moeda?.should be_true
-      -1234.03.to_s.moeda?.should be_true
-      1234.03.moeda?.should be_true
-      +1234.03.moeda?.should be_true
-      -1234.03.moeda?.should be_true
-      "1234.03".moeda?.should be_true
-      "1234,03".moeda?.should be_true
-      "1,234.03".moeda?.should be_true
-      "1.234.03".moeda?.should be_true
-      "1,234,03".moeda?.should be_true
-      "12.340,03".moeda?.should be_true
-      "+1234.03".moeda?.should be_true
-      "+1234,03".moeda?.should be_true
-      "+1,234.03".moeda?.should be_true
-      "+1.234.03".moeda?.should be_true
-      "+1,234,03".moeda?.should be_true
-      "+12.340,03".moeda?.should be_true
-      "-1234.03".moeda?.should be_true
-      "-1234,03".moeda?.should be_true
-      "-1,234.03".moeda?.should be_true
-      "-1.234.03".moeda?.should be_true
-      "-1,234,03".moeda?.should be_true
-      "-12.340,03".moeda?.should be_true
-      123403.to_s.moeda?.should be_false
-      -123403.to_s.moeda?.should be_false
-      +123403.to_s.moeda?.should be_false
-      123403.moeda?.should be_false
-      -123403.moeda?.should be_false
-      +123403.moeda?.should be_false
-      "1234ab".moeda?.should be_false
-      "ab1213".moeda?.should be_false
-      "ffab".moeda?.should be_false
-      "1234".moeda?.should be_false
-      "23[;)]ddf".moeda?.should be_false
-    end
-
-  end
-
   describe Limpeza do
     it "should return just numbers when value is a currency" do
       1234.03.limpa_valor_moeda.should == "123403"
-      +1234.03.limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      -1234.03.limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "1234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "1234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "1,234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "1.234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "1,234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "12.340,03".limpa_valor_moeda.limpa_valor_moeda.should == "1234003"
-      "+1234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "+1234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "+1,234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "+1.234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "+1,234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "+12.340,03".limpa_valor_moeda.limpa_valor_moeda.should == "1234003"
-      "-1234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "-1234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "-1,234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "-1.234.03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "-1,234,03".limpa_valor_moeda.limpa_valor_moeda.should == "123403"
-      "-12.340,03".limpa_valor_moeda.limpa_valor_moeda.should == "1234003"
-    end
-
-    it "should NOT modify value when it is NOT a currency" do
-      "1234ab".limpa_valor_moeda.limpa_valor_moeda.should == "1234ab"
-      "ab1213".limpa_valor_moeda.limpa_valor_moeda.should == "ab1213"
-      "ffab".limpa_valor_moeda.limpa_valor_moeda.should == "ffab"
-      "1234".limpa_valor_moeda.limpa_valor_moeda.should == "1234"
+      1234.3.limpa_valor_moeda.should == "123430"
     end
   end
 

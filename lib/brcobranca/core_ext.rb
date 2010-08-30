@@ -27,15 +27,9 @@ module Brcobranca
       end
     end
 
-    # Remove caracteres que não sejam numéricos do tipo MOEDA
-    def limpa_valor_moeda
-      return self unless self.moeda?
-      self.somente_numeros
-    end
-
     # Remove caracteres que não sejam numéricos
     def somente_numeros
-      self.gsub(/\D/,'')
+      self.to_s.gsub(/\D/,'')
     end
 
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
@@ -59,27 +53,16 @@ module Brcobranca
     #   Entre cada campo deverá haver espaço equivalente a 2 (duas) posições, sendo a 1ª
     #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
     def linha_digitavel
-      valor_inicial = self.to_s
-      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
-      raise ArgumentError, "Precisa conter 44 caracteres e você passou um valor com #{valor_inicial.size} caracteres" if valor_inicial.size != 44
+      valor_inicial = self.somente_numeros
+      raise ArgumentError, "Precisa conter 44 caracteres numéricos e você passou um valor com #{valor_inicial.size} caracteres" if valor_inicial.size != 44
 
-      dv_1 = ("#{valor_inicial[0..3]}#{valor_inicial[19..23]}").modulo10
-      campo_1_dv = "#{valor_inicial[0..3]}#{valor_inicial[19..23]}#{dv_1}"
-      campo_linha_1 = "#{campo_1_dv[0..4]}.#{campo_1_dv[5..9]}"
-
-      dv_2 = "#{valor_inicial[24..33]}".modulo10
-      campo_2_dv = "#{valor_inicial[24..33]}#{dv_2}"
-      campo_linha_2 = "#{campo_2_dv[0..4]}.#{campo_2_dv[5..10]}"
-
-      dv_3 = "#{valor_inicial[34..43]}".modulo10
-      campo_3_dv = "#{valor_inicial[34..43]}#{dv_3}"
-      campo_linha_3 = "#{campo_3_dv[0..4]}.#{campo_3_dv[5..10]}"
-
-      campo_linha_4 = "#{valor_inicial[4..4]}"
-
-      campo_linha_5 = "#{valor_inicial[5..18]}"
-
-      "#{campo_linha_1} #{campo_linha_2} #{campo_linha_3} #{campo_linha_4} #{campo_linha_5}"
+      linha = "#{valor_inicial[0..3]}#{valor_inicial[19..23]}"
+      linha << linha.modulo10.to_s
+      linha << "#{valor_inicial[24..33]}#{valor_inicial[24..33].modulo10}"
+      linha << "#{valor_inicial[34..43]}#{valor_inicial[34..43].modulo10}"
+      linha << "#{valor_inicial[4..4]}"
+      linha << "#{valor_inicial[5..18]}"
+      linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
     end
   end
 
@@ -87,19 +70,32 @@ module Brcobranca
   module Calculo
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
-      valor_inicial = self.to_s
-      raise ArgumentError, "Somente números ou valor maior que zero" if !valor_inicial.numeric? or valor_inicial.to_i.zero?
+      raise ArgumentError, "Número inválido" unless self.is_number?
 
       total = 0
       multiplicador = 2
 
-      valor_inicial.split(//).reverse!.each do |caracter|
+      self.to_s.split(//).reverse!.each do |caracter|
         total += (caracter.to_i * multiplicador).soma_digitos
         multiplicador = multiplicador == 2 ? 1 : 2
       end
 
       valor = (10 - (total % 10))
       valor == 10 ? 0 : valor
+    end
+
+    def modulo_10_banespa
+      raise ArgumentError, "Número inválido" unless self.is_number?
+
+      fatores = [7,3,1,9,7,3,1,9,7,3]
+      total = 0
+      posicao = 0
+      self.to_s.split(//).each do |digito|
+        total += (digito.to_i * fatores[posicao]).to_s.split(//)[-1].to_i
+        posicao = (posicao < (fatores.size - 1)) ? (posicao + 1) : 0
+      end
+      dv = 10 - total.to_s.split(//)[-1].to_i
+      dv == 10 ? 0 : dv
     end
 
     # Método padrão para cálculo de módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN.
@@ -123,21 +119,6 @@ module Brcobranca
       return [0,10,11].include?(valor) ? 1 : valor
     end
 
-    def modulo_10_banespa
-      valor_inicial = self.to_s
-      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
-
-      fatores = [7,3,1,9,7,3,1,9,7,3]
-      total = 0
-      posicao = 0
-      valor_inicial.split(//).each do |digito|
-        total += (digito.to_i * fatores[posicao]).to_s.split(//)[-1].to_i
-        posicao = (posicao < (fatores.size - 1)) ? (posicao + 1) : 0
-      end
-      dv = 10 - total.to_s.split(//)[-1].to_i
-      dv == 10 ? 0 : dv
-    end
-
     # Retorna o dígito verificador de <b>modulo 11(9-2)</b> trocando retorno <b>10 por X</b>.
     #  Usado por alguns bancos.
     def modulo11_9to2_10_como_x
@@ -152,32 +133,34 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
+    # Retorna true se a String só conter caracteres numéricos.
+    def is_number?
+      self.to_s.empty? ? false : (self.to_s =~ (/\D/)).nil?
+    end
+
     # Soma números inteiros positivos com 2 dígitos ou mais
     # Retorna <b>0(zero)</b> caso seja impossível.
     #  Ex. 1 = 1
     #  Ex. 11 = (1+1) = 2
     #  Ex. 13 = (1+3) = 4
     def soma_digitos
-      valor_inicial = self.to_i
-      return 0 if valor_inicial == 0
-      return valor_inicial if valor_inicial <= 9
-
-      valor_inicial = valor_inicial.to_s
-      total = 0
-
-      0.upto(valor_inicial.size-1) {|digito| total += valor_inicial[digito,1].to_i }
-
-      return total
+      case self.to_i
+      when (0..9)
+        self.to_i
+      else
+        total = 0
+        0.upto(self.to_s.size-1) {|digito| total += self.to_s[digito,1].to_i }
+        total
+      end
     end
 
     def multiplicador(fatores)
-      valor_inicial = self.to_s
-      raise ArgumentError, "Somente números" unless valor_inicial.numeric?
+      raise ArgumentError, "Número inválido" unless self.is_number?
 
       total = 0
       multiplicador_posicao = 0
 
-      valor_inicial.split(//).reverse!.each do |caracter|
+      self.to_s.split(//).reverse!.each do |caracter|
         total += (caracter.to_i * fatores[multiplicador_posicao])
         multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
       end
@@ -185,23 +168,12 @@ module Brcobranca
     end
   end
 
-  # Métodos auxiliares de verificação e validação.
-  module Validacao
-    # Verifica se o valor é moeda.
-    #  Ex. +1.232.33
-    #  Ex. -1.232.33
-    #  Ex. 1.232.33
-    def moeda?
-      (self.to_s =~ /^(\+|-)?\d+((\.|,)\d{3}*)*((\.|,)\d{2}*)$/) ? true : false
-    end
-  end
-
   # Métodos auxiliares de limpeza.
   module Limpeza
     # Retorna uma String contendo exatamente o valor FLOAT
     def limpa_valor_moeda
-      valor_inicial = self.to_s
-      (valor_inicial + ("0" * (2 - valor_inicial.split(/\./).last.size ))).somente_numeros
+      inicio, fim = self.to_s.split(/\./)
+      (inicio + fim.ljust(2,'0'))
     end
   end
 
@@ -241,10 +213,6 @@ end
 
 [ String, Numeric ].each do |klass|
   klass.class_eval { include Brcobranca::Formatacao }
-end
-
-[ String, Numeric ].each do |klass|
-  klass.class_eval { include Brcobranca::Validacao }
 end
 
 [ String, Numeric ].each do |klass|
