@@ -19,6 +19,7 @@ rdoc
 pkg
 scratch_directory
 tmp
+.yardoc
 
 ## PROJECT::SPECIFIC
 config
