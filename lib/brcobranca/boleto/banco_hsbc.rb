@@ -3,9 +3,8 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
   def initialize(campos={})
-    padrao={:carteira => "CNR", :banco => "399"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "CNR", :banco => "399"}.merge!(campos)
+    super
   end
 
   # Número seqüencial de 13 dígitos utilizado para identificar o boleto.

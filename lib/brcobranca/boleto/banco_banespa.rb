@@ -2,9 +2,8 @@
 class BancoBanespa < Brcobranca::Boleto::Base
 
   def initialize(campos={})
-    padrao = {:carteira => "COB", :banco => "033"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "COB", :banco => "033"}.merge!(campos)
+    super
   end
 
   # Retorna código da agencia formatado com zeros a esquerda.
@@ -24,7 +23,7 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Número sequencial utilizado para distinguir os boletos na agência.
   def nosso_numero
-    "#{self.agencia}#{self.numero_documento}".rjust(10,'0')
+    "#{self.agencia}#{self.numero_documento}"
   end
 
   # Retorna dígito verificador do nosso número calculado como contas na documentação.
@@ -34,11 +33,11 @@ class BancoBanespa < Brcobranca::Boleto::Base
 
   # Retorna nosso numero pronto para exibir no boleto.
   def nosso_numero_boleto
-    "#{self.nosso_numero[0..2]} #{self.nosso_numero[3..9]} #{self.nosso_numero_dv}"
+    "#{self.nosso_numero.gsub(/^(.{3})(.{7})$/,'\1 \2')} #{self.nosso_numero_dv}"
   end
 
   def agencia_conta_boleto
-    "#{self.convenio[0..2]} #{self.convenio[3..4]} #{self.convenio[5..9]} #{self.convenio[10..10]}"
+    self.convenio.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.

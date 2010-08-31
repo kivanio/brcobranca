@@ -113,14 +113,27 @@ describe BancoReal do
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = ""
+    @valid_attributes[:carteira] = 57
+    @valid_attributes[:conta_corrente] = ""
+    @valid_attributes[:agencia] = ""
+    boleto_novo = BancoReal.new(@valid_attributes)
+    boleto_novo.should be_instance_of(BancoReal)
+    boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
+    # lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    # lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+
+    @valid_attributes[:valor] = 0
+    @valid_attributes[:data_documento] = Date.parse("2004-09-03")
+    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:numero_documento] = ""
     @valid_attributes[:carteira] = ""
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
-    lambda { boleto_novo.agencia_conta_corrente_nosso_numero_dv }.should raise_error(ArgumentError)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
-    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
+    # lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    # lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
   end
 
   it "Gerar boleto nos formatos válidos" do

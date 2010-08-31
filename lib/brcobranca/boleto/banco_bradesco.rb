@@ -2,9 +2,8 @@
 class BancoBradesco < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoBradesco
   def initialize(campos={})
-    padrao={:carteira => "06", :banco => "237"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "06", :banco => "237"}.merge!(campos)
+    super
   end
 
   # Retorna Carteira utilizada formatada com 2 dígitos

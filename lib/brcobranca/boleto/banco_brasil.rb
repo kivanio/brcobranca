@@ -3,9 +3,8 @@ class BancoBrasil < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
   def initialize(campos={})
-    padrao={:carteira => "18", :banco => "001", :codigo_servico => false}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "18", :banco => "001", :codigo_servico => false}.merge!(campos)
+    super
   end
 
   # Retorna Carteira utilizada formatada com 2 dígitos

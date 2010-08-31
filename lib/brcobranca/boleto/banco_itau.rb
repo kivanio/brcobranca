@@ -5,9 +5,8 @@ class BancoItau < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
   def initialize(campos={})
-    padrao={:carteira => "175", :banco => "341"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "175", :banco => "341"}.merge!(campos)
+    super
   end
 
   # Número do convênio/contrato do cliente junto ao banco emissor formatado com 5 dígitos

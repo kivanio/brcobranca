@@ -4,9 +4,8 @@ class BancoUnibanco < Brcobranca::Boleto::Base
   #  Com Registro 4
   #  Sem Registro 5
   def initialize(campos={})
-    padrao={:carteira => "5", :banco => "409"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "5", :banco => "409"}.merge!(campos)
+    super
   end
 
   # Número do convênio/contrato do cliente junto ao banco emissor formatado com 6 dígitos

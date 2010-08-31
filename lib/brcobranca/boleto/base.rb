@@ -2,6 +2,7 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
+
       # <b>REQUERIDO</b>: Codigo do banco emissor (3 dígitos sempre)
       attr_writer :banco
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor

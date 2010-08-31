@@ -2,9 +2,8 @@
 class BancoReal < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoReal
   def initialize(campos={})
-    padrao={:carteira => "57", :banco => "356"}
-    campos = padrao.merge!(campos)
-    super(campos)
+    campos = {:carteira => "57", :banco => "356"}.merge!(campos)
+    super
   end
 
   # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
@@ -40,8 +39,7 @@ class BancoReal < Brcobranca::Boleto::Base
   #  CODIGO DA AGENCIA: 4 DIGITOS
   #  NUMERO DA CONTA : 7 DIGITOS
   def agencia_conta_corrente_nosso_numero_dv
-    dv = "#{self.numero_documento}#{self.agencia}#{self.conta_corrente}".modulo10
-    dv
+    "#{self.numero_documento}#{self.agencia}#{self.conta_corrente}".modulo10
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
