@@ -78,7 +78,7 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = "1122334"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.monta_codigo_43_digitos.should eql("3999420100002952951122334000001234567809892")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1122334000001234567809892")
     boleto_novo.codigo_barras.should eql("39998420100002952951122334000001234567809892")
     boleto_novo.codigo_barras.linha_digitavel.should eql("39991.12232 34000.001239 45678.098927 8 42010000295295")
 
@@ -90,7 +90,7 @@ describe BancoHsbc do
     @valid_attributes[:agencia] = "1234"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    boleto_novo.monta_codigo_43_digitos.should eql("3999252300000934230016324000000777889924742")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0016324000000777889924742")
     boleto_novo.codigo_barras.should eql("39993252300000934230016324000000777889924742")
     boleto_novo.codigo_barras.linha_digitavel.should eql("39990.01633 24000.000778 78899.247429 3 25230000093423")
   end
@@ -104,7 +104,7 @@ describe BancoHsbc do
     @valid_attributes[:agencia] = ""
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
 
@@ -117,7 +117,6 @@ describe BancoHsbc do
     @valid_attributes[:carteira] = "OUTRA"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
   end

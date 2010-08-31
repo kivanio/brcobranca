@@ -84,32 +84,26 @@ class BancoBrasil < Brcobranca::Boleto::Base
   end
 
   # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
-  def monta_codigo_43_digitos
-    if self.valid?
-      # A montagem é feita baseada na quantidade de dígitos do convênio.
-      case self.convenio.to_s.size
-      when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
-      when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
-      when 6 # Convenio de 6 dígitos
-        if self.codigo_servico == false
-          # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-          numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
-        else
-          # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
-          raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira_formatado}" unless (["16","18"].include?(self.carteira_formatado))
-          numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}21"
-        end
-      when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
+  def codigo_barras_segunda_parte
+    # A montagem é feita baseada na quantidade de dígitos do convênio.
+    case self.convenio.to_s.size
+    when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
+      "000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
+    when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
+      "000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
+    when 6 # Convenio de 6 dígitos
+      if self.codigo_servico == false
+        # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
+        "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
       else
-        raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
+        # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
+        raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira_formatado}" unless (["16","18"].include?(self.carteira_formatado))
+        "#{self.convenio}#{self.numero_documento_formatado}21"
       end
-
-      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
+      "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
     else
-      raise ArgumentError, self.errors.full_messages
+      raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
     end
   end
 

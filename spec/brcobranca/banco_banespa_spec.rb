@@ -82,7 +82,7 @@ describe BancoBanespa do
 
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    # lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(5)
   end
@@ -97,7 +97,7 @@ describe BancoBanespa do
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
     boleto_novo.conta_corrente_dv.should eql(2)
-    boleto_novo.monta_codigo_43_digitos.should eql("0339139400000103581481302647800049520003306")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1481302647800049520003306")
     boleto_novo.codigo_barras.should eql("03398139400000103581481302647800049520003306")
     boleto_novo.codigo_barras.linha_digitavel.should eql("03391.48132 02647.800040 95200.033066 8 13940000010358")
 
@@ -110,7 +110,7 @@ describe BancoBanespa do
     boleto_novo = BancoBanespa.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBanespa)
     boleto_novo.conta_corrente_dv.should eql(2)
-    boleto_novo.monta_codigo_43_digitos.should eql("0339433400002952954001301216812345670003361")
+    boleto_novo.codigo_barras_segunda_parte.should eql("4001301216812345670003361")
     boleto_novo.codigo_barras.should eql("03398433400002952954001301216812345670003361")
     boleto_novo.codigo_barras.linha_digitavel.should eql("03394.00137 01216.812345 56700.033618 8 43340000295295")
   end

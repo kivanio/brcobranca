@@ -80,7 +80,7 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     boleto_novo.nosso_numero_dv.should eql(5)
-    boleto_novo.monta_codigo_43_digitos.should eql("4099422300002952950409043001236018030299015")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0409043001236018030299015")
     boleto_novo.codigo_barras.should eql("40997422300002952950409043001236018030299015")
     boleto_novo.codigo_barras.linha_digitavel.should eql("40990.40901 43001.236017 80302.990157 7 42230000295295")
   end
@@ -97,7 +97,7 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     boleto_novo.nosso_numero_dv.should eql(5)
-    boleto_novo.monta_codigo_43_digitos.should eql("4099422300002952955203167100000018030299015")
+    boleto_novo.codigo_barras_segunda_parte.should eql("5203167100000018030299015")
     boleto_novo.codigo_barras.should eql("40995422300002952955203167100000018030299015")
     boleto_novo.codigo_barras.linha_digitavel.should eql("40995.20316 67100.000016 80302.990157 5 42230000295295")
   end
@@ -113,7 +113,6 @@ describe BancoUnibanco do
     boleto_novo = BancoUnibanco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoUnibanco)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
   end

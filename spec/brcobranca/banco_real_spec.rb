@@ -77,7 +77,7 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(8)
-    boleto_novo.monta_codigo_43_digitos.should eql("3569376900000135000000004042006190087701684")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000004042006190087701684")
     boleto_novo.codigo_barras.should eql("35691376900000135000000004042006190087701684")
     boleto_novo.codigo_barras.linha_digitavel.should eql("35690.00007 04042.006199 00877.016840 1 37690000013500")
   end
@@ -91,7 +91,7 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(3)
-    boleto_novo.monta_codigo_43_digitos.should eql("3569377000000135004042006190030000777700168")
+    boleto_novo.codigo_barras_segunda_parte.should eql("4042006190030000777700168")
     boleto_novo.codigo_barras.should eql("35692377000000135004042006190030000777700168")
     boleto_novo.codigo_barras.linha_digitavel.should eql("35694.04209 06190.030004 07777.001681 2 37700000013500")
 
@@ -105,7 +105,7 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(9)
-    boleto_novo.monta_codigo_43_digitos.should eql("3569252300000934231018001632490000000005020")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1018001632490000000005020")
     boleto_novo.codigo_barras.should eql("35697252300000934231018001632490000000005020")
     boleto_novo.codigo_barras.linha_digitavel.should eql("35691.01805 01632.490007 00000.050203 7 25230000093423")
   end
@@ -121,7 +121,6 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
 
@@ -135,7 +134,6 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
   end

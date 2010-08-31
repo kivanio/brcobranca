@@ -76,7 +76,7 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:dias_vencimento] = 0
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135000000001238798977770016818")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798977770016818")
     boleto_novo.codigo_barras.should eql("00193376900000135000000001238798977770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798977 77700.168188 3 37690000013500")
     boleto_novo.conta_corrente_dv.should eql(0)
@@ -86,7 +86,7 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "7700168"
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019377000000135000000001238798900770016818")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798900770016818")
     boleto_novo.codigo_barras.should eql("00193377000000135000000001238798900770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798902 07700.168185 3 37700000013500")
     boleto_novo.conta_corrente_dv.should eql(0)
@@ -101,7 +101,7 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "7777700168"
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019377100000135000000001238798777770016818")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00193377100000135000000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 3 37710000013500")
     boleto_novo.conta_corrente_dv.should eql(0)
@@ -113,7 +113,7 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "7777700168"
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019377100000723560000001238798777770016818")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00195377100000723560000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 5 37710000072356")
     boleto_novo.conta_corrente_dv.should eql(0)
@@ -125,7 +125,7 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "7777700168"
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000723560000001238798777770016818")
+    boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00194376900000723560000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 4 37690000072356")
     boleto_novo.conta_corrente_dv.should eql(0)
@@ -140,7 +140,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135001238790123440420006190018")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1238790123440420006190018")
     boleto_novo.codigo_barras.should eql("00192376900000135001238790123440420006190018")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90123.440423 00061.900189 2 37690000013500")
   end
@@ -156,7 +156,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135001238790000000123456789921")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1238790000000123456789921")
     boleto_novo.codigo_barras.should eql("00199376900000135001238790000000123456789921")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90000.000126 34567.899215 9 37690000013500")
   end
@@ -172,7 +172,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135001238790000000123456789921")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1238790000000123456789921")
     boleto_novo.codigo_barras.should eql("00199376900000135001238790000000123456789921")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23876 90000.000126 34567.899215 9 37690000013500")
   end
@@ -188,8 +188,8 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.conta_corrente_dv.should eql(0)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(RuntimeError)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error("Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17")
+    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(RuntimeError)
+    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error("Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17")
   end
 
   it "Montar código de barras para convenio de 4 digitos e nosso numero de 7" do
@@ -202,7 +202,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
     boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.monta_codigo_43_digitos.should eql("0019376900000135001238012345640420006190018")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1238012345640420006190018")
     boleto_novo.codigo_barras.should eql("00191376900000135001238012345640420006190018")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00191.23801 12345.640424 00061.900189 1 37690000013500")
   end
@@ -218,7 +218,7 @@ describe BancoBrasil do #:nodoc:[all]
 
     boleto_novo = BancoBrasil.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBrasil)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(2)
   end

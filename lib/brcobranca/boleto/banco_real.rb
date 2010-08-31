@@ -48,21 +48,15 @@ class BancoReal < Brcobranca::Boleto::Base
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
-  def monta_codigo_43_digitos
-    if self.valid?
-      # Montagem é baseada no tipo de carteira, com registro e sem registro
-      case self.carteira.to_i
-        # Carteira sem registro
-      when 57
-        codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
-        codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
-      else
-        # TODO verificar com o banco, pois não consta na documentação
-        codigo = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
-        codigo.size == 43 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
-      end
+  def codigo_barras_segunda_parte
+    # Montagem é baseada no tipo de carteira, com registro e sem registro
+    case self.carteira.to_i
+      # Carteira sem registro
+    when 57
+      "#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
     else
-      raise ArgumentError, self.errors.full_messages
+      # TODO verificar com o banco, pois não consta na documentação
+      "000000#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
     end
   end
 end

@@ -156,17 +156,26 @@ module Brcobranca
       #   20 a 44   25      Campo Livre
       #   As posições do campo livre ficam a critério de cada Banco arrecadador.
       def codigo_barras
-        codigo = monta_codigo_43_digitos
-        return unless codigo
-        return if codigo.size != 43
-        codigo_dv = codigo.modulo11_2to9
+        if self.valid?
+          codigo = codigo_barras_primeira_parte
+          codigo << codigo_barras_segunda_parte
+          codigo_dv = codigo.modulo11_2to9
 
-        "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
+          codigo = "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
+          codigo.size == 44 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+        else
+          raise ArgumentError, self.errors.full_messages
+        end
       end
 
-      # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
-      #  Este metodo precisa ser reescrito para cada classe de boleto a ser criada.
-      def monta_codigo_43_digitos
+      # Responsável por montar a primeira parte do código de barras, que é a mesma para todos banco.
+      def codigo_barras_primeira_parte
+        "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}"
+      end
+
+      # Responsável por montar a segunda parte do código de barras, que é específico para cada banco.
+      #  Este método precisa ser reescrito para cada classe de boleto a ser criada.
+      def codigo_barras_segunda_parte
         "Sobreescreva este método na classe referente ao banco que você esta criando"
       end
 

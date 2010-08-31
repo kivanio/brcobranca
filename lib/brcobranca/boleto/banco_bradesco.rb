@@ -42,12 +42,7 @@ class BancoBradesco < Brcobranca::Boleto::Base
   #   37 a 43 7 Conta do Cedente (Sem o digito verificador, completar com zeros a esquerda quando necessário)
   #   44 a 44 1 Zero
 
-  def monta_codigo_43_digitos
-    if self.valid?
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia_formatado}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
-      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
-    else
-      raise ArgumentError, self.errors.full_messages
-    end
+  def codigo_barras_segunda_parte
+    "#{self.agencia_formatado}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
   end
 end

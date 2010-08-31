@@ -166,7 +166,7 @@ module Brcobranca #:nodoc:[all]
 
       it "Mostrar aviso sobre sobrecarga de métodos padrões" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-        boleto_novo.monta_codigo_43_digitos.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
+        boleto_novo.codigo_barras_segunda_parte.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
         boleto_novo.nosso_numero_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
         boleto_novo.agencia_conta_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
       end

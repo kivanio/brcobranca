@@ -78,7 +78,7 @@ describe BancoBradesco do
     @valid_attributes[:agencia] = "1172"
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
-    boleto_novo.monta_codigo_43_digitos.should eql("2379422300002952951172060007589645204030050")
+    boleto_novo.codigo_barras_segunda_parte.should eql("1172060007589645204030050")
     boleto_novo.codigo_barras.should eql("23795422300002952951172060007589645204030050")
     boleto_novo.codigo_barras.linha_digitavel.should eql("23791.17209 60007.589645 52040.300502 5 42230000295295")
   end
@@ -93,7 +93,7 @@ describe BancoBradesco do
     @valid_attributes[:carteira] = "03"
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
-    boleto_novo.monta_codigo_43_digitos.should eql("2379377000000135004042030077770016800619000")
+    boleto_novo.codigo_barras_segunda_parte.should eql("4042030077770016800619000")
     boleto_novo.codigo_barras.should eql("23791377000000135004042030077770016800619000")
     boleto_novo.codigo_barras.linha_digitavel.should eql("23794.04201 30077.770011 68006.190000 1 37700000013500")
   end
@@ -112,7 +112,6 @@ describe BancoBradesco do
 
     boleto_novo = BancoBradesco.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoBradesco)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
     boleto_novo.errors.count.should eql(6)
   end
