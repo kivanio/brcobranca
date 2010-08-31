@@ -1,7 +1,9 @@
-# Banco HSBC
-class BancoHsbc < Brcobranca::Boleto::Base
+class BancoHsbc < Brcobranca::Boleto::Base # Banco HSBC
 
-  # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
+  validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
+
+  # Nova instancia do BancoHsbc
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "CNR"}.merge!(campos)
     super
@@ -58,8 +60,6 @@ class BancoHsbc < Brcobranca::Boleto::Base
     if self.carteira == "CNR"
       dias_julianos = self.data_vencimento.to_juliano
       "#{self.conta_corrente_formatado}#{self.numero_documento_formatado}#{dias_julianos}2"
-    else
-      raise RuntimeError, "Tipo de carteira não implementado"
     end
   end
 

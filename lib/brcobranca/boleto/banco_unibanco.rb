@@ -1,8 +1,11 @@
-# Banco UNIBANCO
-class BancoUnibanco < Brcobranca::Boleto::Base
-  # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoUnibanco
+class BancoUnibanco < Brcobranca::Boleto::Base # Banco UNIBANCO
+
   #  Com Registro 4
   #  Sem Registro 5
+  validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
+
+  # Nova instancia do BancoUnibanco
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "5"}.merge!(campos)
     super
@@ -76,8 +79,6 @@ class BancoUnibanco < Brcobranca::Boleto::Base
       # 44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
       data = self.data_vencimento.strftime('%y%m%d')
       "0#{self.carteira}#{data}#{self.agencia_formatado}#{self.agencia_dv}#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
-    else
-      raise RuntimeError, "Tipo de carteira não implementado"
     end
   end
 end

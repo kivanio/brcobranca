@@ -118,7 +118,7 @@ describe BancoHsbc do
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
-    boleto_novo.errors.count.should eql(6)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Montar nosso número" do

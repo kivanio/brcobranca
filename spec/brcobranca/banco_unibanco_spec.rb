@@ -114,7 +114,7 @@ describe BancoUnibanco do
     boleto_novo.should be_instance_of(BancoUnibanco)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
-    boleto_novo.errors.count.should eql(6)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Montar nosso_numero_boleto" do

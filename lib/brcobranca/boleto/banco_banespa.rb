@@ -1,6 +1,7 @@
-# Banco BANESPA
-class BancoBanespa < Brcobranca::Boleto::Base
+class BancoBanespa < Brcobranca::Boleto::Base # Banco BANESPA
 
+  # Nova instancia do BancoBanespa
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "COB"}.merge!(campos)
     super

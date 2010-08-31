@@ -1,3 +1,4 @@
+# @author Kivanio Barbosa
 module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
@@ -67,7 +68,8 @@ module Brcobranca
       validates_presence_of :agencia, :conta_corrente, :numero_documento, :message => "não pode estar em branco."
       validates_numericality_of :agencia, :conta_corrente, :numero_documento, :message => "não é um número."
 
-      # Responsável por definir dados iniciais quando se cria uma nova intância da classe Base.
+      # Nova instancia da classe Base
+      # @param [Hash] campos usados na criação do boleto.
       def initialize(campos={})
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
@@ -145,16 +147,19 @@ module Brcobranca
         @conta_corrente.to_s.rjust(7,'0')
       end
 
-      # Retorna uma String com 44 caracteres representando o codigo de barras do boleto
-      #   O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
+      # Codigo de barras do boleto
+      #
+      #   O codigo de barra para cobrança contém 44 posições dispostas da seguinte forma:
       #   Posição Tamanho Conteúdo
       #   01 a 03   3       Identificação do Banco
       #   04 a 04   1       Código da Moeda (Real = 9, Outras=0)
       #   05 a 05   1       Dígito verificador do Código de Barras
       #   06 a 09   4       Fator de Vencimento (Vide Nota)
       #   10 a 19   10      Valor
-      #   20 a 44   25      Campo Livre
-      #   As posições do campo livre ficam a critério de cada Banco arrecadador.
+      #   20 a 44   25      Campo Livre - As posições do campo livre ficam a critério de cada Banco arrecadador.
+      #
+      # @raise [ArgumentError] caso o número de dígitos não seja igual a 44.
+      # @return [String] código de barras formado por 44 dígitos.
       def codigo_barras
         if self.valid?
           codigo = codigo_barras_primeira_parte

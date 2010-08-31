@@ -1,6 +1,7 @@
-# Banco REAL
-class BancoReal < Brcobranca::Boleto::Base
-  # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoReal
+class BancoReal < Brcobranca::Boleto::Base # Banco REAL
+
+  ## Nova instancia do BancoReal
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "57"}.merge!(campos)
     super

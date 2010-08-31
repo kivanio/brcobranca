@@ -7,6 +7,9 @@ module Brcobranca
     end
 
     # Formata como CEP
+    # @example Formata uma string ou number como CEP.
+    #   "85253100".to_br_cep #=> "85253-100"
+    #   85253100.to_br_cep #=> "85253-100"
     def to_br_cep
       self.to_s.gsub(/^(.{5})(.{3})$/,'\1-\2')
     end
@@ -154,6 +157,7 @@ module Brcobranca
       end
     end
 
+    # @option fatores [Array] Número a serem usados na multiplicação
     def multiplicador(fatores)
       raise ArgumentError, "Número inválido" unless self.is_number?
 

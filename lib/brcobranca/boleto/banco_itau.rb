@@ -1,9 +1,10 @@
-# Banco Itaú
-class BancoItau < Brcobranca::Boleto::Base
+class BancoItau < Brcobranca::Boleto::Base # Banco Itaú
+
   # Usado somente em carteiras especiais com registro para complementar o número do cocumento
   attr_writer :seu_numero
 
-  # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoItau
+  # Nova instancia do BancoItau
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "175"}.merge!(campos)
     super
@@ -70,23 +71,6 @@ class BancoItau < Brcobranca::Boleto::Base
   def codigo_barras_segunda_parte
     # Monta a String baseado no tipo de carteira
     case self.carteira.to_i
-    when 126, 131, 146, 150, 168
-      # CARTEIRAS 126 131 146 150 168
-      # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
-      # 04 a 04 01 9(01) Código da Moeda = '9'
-      # 05 a 05 01 9(01) DAC código de Barras MOD 11-2a9
-      # 06 a 09 04 9(04) Fator de Vencimento
-      # 10 a 19 10 9(08)V(2) Valor
-      # 20 a 22 03 9(03) Carteira
-      # 23 a 30 08 9(08) Nosso Número
-      # 31 a 31 01 9(01) DAC [Carteira/Nosso Número] MOD 10
-      # 32 a 35 04 9(04) N.º da Agência cedente
-      # 36 a 40 05 9(05) N.º da Conta Corrente
-      # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
-      # 42 a 44 03 9(03) Zeros
-      codigo = "#{self.carteira}"
-      codigo << "#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
-      codigo
     when 198, 106, 107, 122, 142, 143, 195, 196
       # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
       # 01 a 03 03 9(3) Código do Banco na Câmara de Compensação = ‘341’
@@ -101,9 +85,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
       # 44 a 44 01 9(1) Zero
       dv = "#{self.carteira}#{numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio_formatado}".modulo10
-      codigo = "#{self.carteira}"
-      codigo << "#{self.numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio_formatado}#{dv}0"
-      codigo
+      "#{self.carteira}#{self.numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio_formatado}#{dv}0"
     else
       # DEMAIS CARTEIRAS
       # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
@@ -118,9 +100,7 @@ class BancoItau < Brcobranca::Boleto::Base
       # 36 a 40 05 9(05) N.º da Conta Corrente
       # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
       # 42 a 44 03 9(03) Zeros
-      codigo = "#{self.carteira}"
-      codigo << "#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
-      codigo
+      "#{self.carteira}#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
     end
   end
 

@@ -1,6 +1,7 @@
-# Banco BRADESCO
-class BancoBradesco < Brcobranca::Boleto::Base
-  # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoBradesco
+class BancoBradesco < Brcobranca::Boleto::Base # Banco BRADESCO
+
+  # Nova instancia do BancoBradesco
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "06"}.merge!(campos)
     super

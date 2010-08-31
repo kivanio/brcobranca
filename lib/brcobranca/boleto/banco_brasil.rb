@@ -1,7 +1,7 @@
-# Banco do Brasil
-class BancoBrasil < Brcobranca::Boleto::Base
+class BancoBrasil < Brcobranca::Boleto::Base # Banco do Brasil
 
-  # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
+  # Nova instancia do BancoBrasil
+  # @param (see Brcobranca::Boleto::Base#initialize)
   def initialize(campos={})
     campos = {:carteira => "18", :codigo_servico => false}.merge!(campos)
     super

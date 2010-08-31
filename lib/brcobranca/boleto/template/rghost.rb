@@ -22,18 +22,15 @@ module Brcobranca
         include RGhost unless self.include?(RGhost)
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
-        #  Veja mais formatos na documentação do rghost: http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats
-        # TODO - Usar define_method para criar um metodo em tempo real to_{pdf,jpg}
+        # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
         def to(formato=Brcobranca::Config::OPCOES[:tipo])
           modelo_generico(:tipo => formato)
         end
 
         # Responsável por setar os valores necessários no template genérico
         # Retorna um stream pronto para gravaçào
-        #
         # O tipo do arquivo gerado pode ser modificado incluindo a configuração a baixo dentro da sua aplicação:
         #  Brcobranca::Config::OPCOES[:tipo] = 'pdf'
-        #
         # Ou pode ser passado como paramentro:
         #  :tipo => 'pdf'
         def modelo_generico(options={})
