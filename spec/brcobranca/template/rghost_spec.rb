@@ -9,7 +9,6 @@ module Brcobranca
           @valid_attributes = {
             :especie_documento => "DM",
             :moeda => "9",
-            :banco => "001",
             :data_documento => Date.today,
             :dias_vencimento => 1,
             :aceite => "S",

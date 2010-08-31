@@ -8,6 +8,14 @@ rescue LoadError
   require 'date'
 end
 
+begin
+  require 'active_model'
+rescue LoadError
+  require 'rubygems' unless ENV['NO_RUBYGEMS']
+  gem 'active_model'
+  require 'active_model'
+end
+
 %w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
 
 %w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco banco_banespa).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }

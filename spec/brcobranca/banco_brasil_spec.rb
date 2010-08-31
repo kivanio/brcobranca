@@ -6,7 +6,6 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes = {
       :especie_documento => "DM",
       :moeda => "9",
-      :banco => "001",
       :data_documento => Date.today,
       :dias_vencimento => 1,
       :aceite => "S",
@@ -61,7 +60,8 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("00061900")
+    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente_formatado.should eql("00061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
     boleto_novo.numero_documento.should eql("777700168")
@@ -212,7 +212,6 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:banco] = ""
     @valid_attributes[:carteira] = ""
     @valid_attributes[:moeda] = ""
     @valid_attributes[:convenio] = ""
@@ -221,34 +220,7 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.should be_instance_of(BancoBrasil)
     lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
-  end
-
-  it "Calcular bando_dv" do
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.banco = "85068014982"
-    boleto_novo.banco_dv.should eql(9)
-    boleto_novo.banco = "05009401448"
-    boleto_novo.banco_dv.should eql(1)
-    boleto_novo.banco = "12387987777700168"
-    boleto_novo.banco_dv.should eql(2)
-    boleto_novo.banco = "4042"
-    boleto_novo.banco_dv.should eql(8)
-    boleto_novo.banco = "61900"
-    boleto_novo.banco_dv.should eql(0)
-    boleto_novo.banco = "0719"
-    boleto_novo.banco_dv.should eql(6)
-    boleto_novo.banco = 85068014982
-    boleto_novo.banco_dv.should eql(9)
-    boleto_novo.banco = 5009401448
-    boleto_novo.banco_dv.should eql(1)
-    boleto_novo.banco = 12387987777700168
-    boleto_novo.banco_dv.should eql(2)
-    boleto_novo.banco = 4042
-    boleto_novo.banco_dv.should eql(8)
-    boleto_novo.banco = 61900
-    boleto_novo.banco_dv.should eql(0)
-    boleto_novo.banco = 719
-    boleto_novo.banco_dv.should eql(6)
+    boleto_novo.errors.count.should eql(2)
   end
 
   it "Calcular agencia_dv" do

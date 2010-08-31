@@ -58,10 +58,12 @@ describe BancoReal do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("0061900")
+    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente_formatado.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("0000777700168")
+    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento_formatado.should eql("0000777700168")
     boleto_novo.carteira.should eql("57")
     boleto_novo.should be_instance_of(BancoReal)
   end
@@ -119,8 +121,9 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
-    # lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
-    # lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.errors.count.should eql(6)
 
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
@@ -132,8 +135,9 @@ describe BancoReal do
     boleto_novo = BancoReal.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoReal)
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
-    # lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
-    # lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Gerar boleto nos formatos válidos" do

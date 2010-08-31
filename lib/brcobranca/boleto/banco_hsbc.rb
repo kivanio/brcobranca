@@ -3,12 +3,17 @@ class BancoHsbc < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
   def initialize(campos={})
-    campos = {:carteira => "CNR", :banco => "399"}.merge!(campos)
+    campos = {:carteira => "CNR"}.merge!(campos)
     super
   end
 
+  # Codigo do banco emissor (3 dígitos sempre)
+  def banco
+    "399"
+  end
+
   # Número seqüencial de 13 dígitos utilizado para identificar o boleto.
-  def numero_documento
+  def numero_documento_formatado
     raise ArgumentError, "numero_documento pode ser de no máximo 13 caracteres." if @numero_documento.to_s.size > 13
     @numero_documento.to_s.rjust(13,'0')
   end
@@ -22,13 +27,13 @@ class BancoHsbc < Brcobranca::Boleto::Base
       ano = self.data_vencimento.year.to_s[2..3]
       data = "#{dia}#{mes}#{ano}"
 
-      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
+      parte_1 = "#{self.numero_documento_formatado}#{self.numero_documento_formatado.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
       soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
       numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
     else
       self.codigo_servico = "5"
-      parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
+      parte_1 = "#{self.numero_documento_formatado}#{self.numero_documento_formatado.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
       soma = parte_1.to_i + self.conta_corrente.to_i
       numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
       numero
@@ -44,18 +49,22 @@ class BancoHsbc < Brcobranca::Boleto::Base
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-    self.conta_corrente
+    self.conta_corrente_formatado
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
   def monta_codigo_43_digitos
-    # Montagem é baseada no tipo de carteira e na presença da data de vencimento
-    if self.carteira == "CNR"
-      dias_julianos = self.data_vencimento.to_juliano
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.conta_corrente}#{self.numero_documento}#{dias_julianos}2"
-      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    if self.valid?
+      # Montagem é baseada no tipo de carteira e na presença da data de vencimento
+      if self.carteira == "CNR"
+        dias_julianos = self.data_vencimento.to_juliano
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.conta_corrente_formatado}#{self.numero_documento_formatado}#{dias_julianos}2"
+        numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+      else
+        raise RuntimeError, "Tipo de carteira não implementado"
+      end
     else
-      raise RuntimeError, "Tipo de carteira não implementado"
+      raise ArgumentError, self.errors.full_messages
     end
   end
 

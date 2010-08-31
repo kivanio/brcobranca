@@ -2,28 +2,33 @@
 class BancoBanespa < Brcobranca::Boleto::Base
 
   def initialize(campos={})
-    campos = {:carteira => "COB", :banco => "033"}.merge!(campos)
+    campos = {:carteira => "COB"}.merge!(campos)
     super
   end
 
+  # Codigo do banco emissor (3 dígitos sempre)
+  def banco
+    "033"
+  end
+
   # Retorna código da agencia formatado com zeros a esquerda.
-  def agencia
+  def agencia_formatado
     @agencia.to_s.rjust(3,'0')
   end
 
   # Número do convênio/contrato do cliente junto ao banco emissor formatado com 11 dígitos
-  def convenio
+  def convenio_formatado
     @convenio.to_s.rjust(11,'0')
   end
 
   # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
-  def numero_documento
+  def numero_documento_formatado
     @numero_documento.to_s.rjust(7,'0')
   end
 
   # Número sequencial utilizado para distinguir os boletos na agência.
   def nosso_numero
-    "#{self.agencia}#{self.numero_documento}"
+    "#{self.agencia_formatado}#{self.numero_documento_formatado}"
   end
 
   # Retorna dígito verificador do nosso número calculado como contas na documentação.
@@ -37,13 +42,17 @@ class BancoBanespa < Brcobranca::Boleto::Base
   end
 
   def agencia_conta_boleto
-    self.convenio.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
+    self.convenio_formatado.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
   def monta_codigo_43_digitos
-    numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.campo_livre_com_dv1_e_dv2}"
-    numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    if self.valid?
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.campo_livre_com_dv1_e_dv2}"
+      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    else
+      raise ArgumentError, self.errors.full_messages
+    end
   end
 
   # CAMPO LIVRE
@@ -54,25 +63,18 @@ class BancoBanespa < Brcobranca::Boleto::Base
   #    Dígito verificador 1                                                                         PIC  9  (001)
   #    Dígito verificador 2                                                                         PIC  9  (001)
   def campo_livre
-    "#{self.convenio}#{self.numero_documento}00#{self.banco}"
+    "#{self.convenio_formatado}#{self.numero_documento_formatado}00#{self.banco}"
   end
 
   #campo livre com os digitos verificadores como consta na documentação do banco.
   def campo_livre_com_dv1_e_dv2
     dv1 = self.campo_livre.modulo10 #dv 1 inicial
     dv2 = nil
-    multiplicadores = [2,3,4,5,6,7]
+
     begin
       recalcular_dv2 = false
       valor_inicial = "#{self.campo_livre}#{dv1}"
-      total = 0
-      multiplicador_posicao = 0
-
-      valor_inicial.split(//).reverse!.each do |caracter|
-        multiplicador_posicao = 0 if (multiplicador_posicao == 6)
-        total += (caracter.to_i * multiplicadores[multiplicador_posicao])
-        multiplicador_posicao += 1
-      end
+      total = valor_inicial.multiplicador([2,3,4,5,6,7])
 
       case total % 11
       when 0 then

@@ -13,6 +13,7 @@ begin
     gem.add_runtime_dependency("rghost", ">= 0.8.7")
     gem.add_runtime_dependency("rghost_barcode", ">= 0.8")
     gem.add_runtime_dependency("parseline", ">= 1.0.3")
+    gem.add_runtime_dependency("activemodel", ">= 3.0.0")
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "yard", ">= 0"
   end

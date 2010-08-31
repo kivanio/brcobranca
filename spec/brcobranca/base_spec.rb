@@ -7,7 +7,6 @@ module Brcobranca #:nodoc:[all]
         @valid_attributes = {
           :especie_documento => "DM",
           :moeda => "9",
-          :banco => "001",
           :data_documento => Date.today,
           :dias_vencimento => 1,
           :aceite => "S",
@@ -39,11 +38,11 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.valor_documento.should eql(0.0)
         boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
         boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
+        boleto_novo.valid?.should be_false
       end
 
       it "Criar nova instancia com atributos válidos" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-        boleto_novo.banco.should eql("001")
         boleto_novo.especie_documento.should eql("DM")
         boleto_novo.especie.should eql("R$")
         boleto_novo.moeda.should eql("9")
@@ -59,39 +58,13 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.documento_cedente.should eql("12345678912")
         boleto_novo.sacado.should eql("Claudio Pozzebom")
         boleto_novo.sacado_documento.should eql("12345678900")
-        boleto_novo.conta_corrente.should eql("0061900")
+        boleto_novo.conta_corrente.should eql("61900")
+        boleto_novo.conta_corrente_formatado.should eql("0061900")
         boleto_novo.agencia.should eql("4042")
         boleto_novo.convenio.should eql(12387989)
         boleto_novo.numero_documento.should eql("777700168")
         boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
-      end
-
-      it "Calcula bando_dv" do
-        boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-        boleto_novo.banco = "85068014982"
-        boleto_novo.banco_dv.should eql(9)
-        boleto_novo.banco = "05009401448"
-        boleto_novo.banco_dv.should eql(1)
-        boleto_novo.banco = "12387987777700168"
-        boleto_novo.banco_dv.should eql(2)
-        boleto_novo.banco = "4042"
-        boleto_novo.banco_dv.should eql(8)
-        boleto_novo.banco = "61900"
-        boleto_novo.banco_dv.should eql(0)
-        boleto_novo.banco = "0719"
-        boleto_novo.banco_dv.should eql(6)
-        boleto_novo.banco = 85068014982
-        boleto_novo.banco_dv.should eql(9)
-        boleto_novo.banco = 5009401448
-        boleto_novo.banco_dv.should eql(1)
-        boleto_novo.banco = 12387987777700168
-        boleto_novo.banco_dv.should eql(2)
-        boleto_novo.banco = 4042
-        boleto_novo.banco_dv.should eql(8)
-        boleto_novo.banco = 61900
-        boleto_novo.banco_dv.should eql(0)
-        boleto_novo.banco = 719
-        boleto_novo.banco_dv.should eql(6)
+        boleto_novo.valid?.should be_true
       end
 
       it "Calcula agencia_dv" do
@@ -148,35 +121,6 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.conta_corrente_dv.should eql(0)
         boleto_novo.conta_corrente = 719
         boleto_novo.conta_corrente_dv.should eql(6)
-      end
-
-      it "Calcula nosso_numero_dv" do
-        boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-        boleto_novo.numero_documento = "85068014982"
-        boleto_novo.nosso_numero.should eql("85068014982")
-        boleto_novo.nosso_numero_dv.should eql(9)
-        boleto_novo.numero_documento = "05009401448"
-        boleto_novo.nosso_numero_dv.should eql(1)
-        boleto_novo.numero_documento = "12387987777700168"
-        boleto_novo.nosso_numero_dv.should eql(2)
-        boleto_novo.numero_documento = "4042"
-        boleto_novo.nosso_numero_dv.should eql(8)
-        boleto_novo.numero_documento = "61900"
-        boleto_novo.nosso_numero_dv.should eql(0)
-        boleto_novo.numero_documento = "0719"
-        boleto_novo.nosso_numero_dv.should eql(6)
-        boleto_novo.numero_documento = 85068014982
-        boleto_novo.nosso_numero_dv.should eql(9)
-        boleto_novo.numero_documento = 5009401448
-        boleto_novo.nosso_numero_dv.should eql(1)
-        boleto_novo.numero_documento = 12387987777700168
-        boleto_novo.nosso_numero_dv.should eql(2)
-        boleto_novo.numero_documento = 4042
-        boleto_novo.nosso_numero_dv.should eql(8)
-        boleto_novo.numero_documento = 61900
-        boleto_novo.nosso_numero_dv.should eql(0)
-        boleto_novo.numero_documento = 719
-        boleto_novo.nosso_numero_dv.should eql(6)
       end
 
       it "Calcula o valor do documento" do

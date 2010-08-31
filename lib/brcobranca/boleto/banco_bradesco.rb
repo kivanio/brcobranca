@@ -2,29 +2,34 @@
 class BancoBradesco < Brcobranca::Boleto::Base
   # Responsável por definir dados iniciais quando se cria uma nova intancia da classe BancoBradesco
   def initialize(campos={})
-    campos = {:carteira => "06", :banco => "237"}.merge!(campos)
+    campos = {:carteira => "06"}.merge!(campos)
     super
   end
 
+  # Codigo do banco emissor (3 dígitos sempre)
+  def banco
+    "237"
+  end
+
   # Retorna Carteira utilizada formatada com 2 dígitos
-  def carteira
+  def carteira_formatado
     raise(ArgumentError, "A carteira informada não é válida. O BRADESCO utiliza carteira com apenas 2 dígitos.") if @carteira.to_s.size > 2
     @carteira.to_s.rjust(2,'0')
   end
 
   # Número seqüencial de 11 dígitos utilizado para identificar o boleto.
-  def numero_documento
+  def numero_documento_formatado
     @numero_documento.to_s.rjust(11,'0')
   end
 
   # Campo usado apenas na exibição no boleto
   def nosso_numero_boleto
-    "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
+    "#{self.carteira_formatado}/#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
   def agencia_conta_boleto
-    "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
+    "#{self.agencia_formatado}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
   end
 
   # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -38,7 +43,11 @@ class BancoBradesco < Brcobranca::Boleto::Base
   #   44 a 44 1 Zero
 
   def monta_codigo_43_digitos
-    numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia}#{self.carteira}#{self.numero_documento}#{self.conta_corrente}0"
-    numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    if self.valid?
+      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.agencia_formatado}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
+      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    else
+      raise ArgumentError, self.errors.full_messages
+    end
   end
 end

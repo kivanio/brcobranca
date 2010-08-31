@@ -60,10 +60,12 @@ describe BancoHsbc do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("0061900")
+    boleto_novo.conta_corrente_formatado.should eql("0061900")
+    boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("0000777700168")
+    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento_formatado.should eql("0000777700168")
     boleto_novo.carteira.should eql("CNR")
     boleto_novo.should be_instance_of(BancoHsbc)
   end
@@ -94,28 +96,30 @@ describe BancoHsbc do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 934.23
+    @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = nil
     @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = "07778899"
-    @valid_attributes[:conta_corrente] = "0016324"
-    @valid_attributes[:agencia] = "1234"
+    @valid_attributes[:numero_documento] = ""
+    @valid_attributes[:conta_corrente] = ""
+    @valid_attributes[:agencia] = ""
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
     lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.errors.count.should eql(6)
 
     @valid_attributes[:valor] = 934.23
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
     @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = "07778899"
-    @valid_attributes[:conta_corrente] = "0016324"
-    @valid_attributes[:agencia] = "1234"
+    @valid_attributes[:numero_documento] = ""
+    @valid_attributes[:conta_corrente] = ""
+    @valid_attributes[:agencia] = ""
     @valid_attributes[:carteira] = "OUTRA"
     boleto_novo = BancoHsbc.new(@valid_attributes)
     boleto_novo.should be_instance_of(BancoHsbc)
-    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(RuntimeError)
-    lambda { boleto_novo.codigo_barras }.should raise_error(RuntimeError)
+    lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Montar nosso número" do

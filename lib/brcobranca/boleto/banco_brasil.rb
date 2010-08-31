@@ -3,12 +3,17 @@ class BancoBrasil < Brcobranca::Boleto::Base
 
   # Responsável por definir dados iniciais quando se cria uma nova intância da classe BancoBrasil
   def initialize(campos={})
-    campos = {:carteira => "18", :banco => "001", :codigo_servico => false}.merge!(campos)
+    campos = {:carteira => "18", :codigo_servico => false}.merge!(campos)
     super
   end
 
+  # Codigo do banco emissor (3 dígitos sempre)
+  def banco
+    "001"
+  end
+
   # Retorna Carteira utilizada formatada com 2 dígitos
-  def carteira
+  def carteira_formatado
     raise(ArgumentError, "A carteira informada não é válida. O Banco do Brasil utiliza carteira com apenas 2 dígitos.") if @carteira.to_s.size > 2
     @carteira.to_s.rjust(2,'0')
   end
@@ -24,17 +29,17 @@ class BancoBrasil < Brcobranca::Boleto::Base
   end
 
   # Retorna número da conta corrente formatado
-  def conta_corrente
+  def conta_corrente_formatado
     @conta_corrente.to_s.rjust(8,'0')
   end
 
   # Retorna digito verificador da conta corrente, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
   def conta_corrente_dv
-    self.conta_corrente.modulo11_9to2_10_como_x
+    self.conta_corrente_formatado.modulo11_9to2_10_como_x
   end
 
   # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de convênio).
-  def numero_documento
+  def numero_documento_formatado
     case @convenio.to_s.size
     when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
       raise ArgumentError, "Com convênio de 8 dígitos, somente permite-se até 9 dígitos no numero_documento. O seu está com #{@numero_documento.size} dígitos." if @numero_documento.to_s.size > 9
@@ -63,45 +68,49 @@ class BancoBrasil < Brcobranca::Boleto::Base
   # Retorna digito verificador do nosso numero, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
   # Inclui ainda o numero do convenio no calculo
   def nosso_numero_dv
-    "#{self.convenio}#{self.numero_documento}".modulo11_9to2_10_como_x
+    "#{self.convenio}#{self.numero_documento_formatado}".modulo11_9to2_10_como_x
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def nosso_numero_boleto
-    "#{self.convenio}#{self.numero_documento}-#{self.nosso_numero_dv}"
+    "#{self.convenio}#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
   end
 
   # Campo usado apenas na exibição no boleto
   #  Deverá ser sobreescrito para cada banco
   def agencia_conta_boleto
-    "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
+    "#{self.agencia_formatado}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
   end
 
   # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
   def monta_codigo_43_digitos
-    # A montagem é feita baseada na quantidade de dígitos do convênio.
-    case self.convenio.to_s.size
-    when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
-    when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
-    when 6 # Convenio de 6 dígitos
-      if self.codigo_servico == false
-        # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
+    if self.valid?
+      # A montagem é feita baseada na quantidade de dígitos do convênio.
+      case self.convenio.to_s.size
+      when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
+      when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}000000#{self.convenio}#{self.numero_documento_formatado}#{self.carteira_formatado}"
+      when 6 # Convenio de 6 dígitos
+        if self.codigo_servico == false
+          # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
+          numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
+        else
+          # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
+          raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira_formatado}" unless (["16","18"].include?(self.carteira_formatado))
+          numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}21"
+        end
+      when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
+        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
       else
-        # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
-        raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
-        numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}21"
+        raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
       end
-    when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-      numero = "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
-    else
-      raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
-    end
 
-    numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+      numero.size == 43 ? numero : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
+    else
+      raise ArgumentError, self.errors.full_messages
+    end
   end
 
 end

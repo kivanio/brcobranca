@@ -60,7 +60,7 @@ describe BancoItau do
     boleto_novo.sacado_documento.should eql("12345678900")
     boleto_novo.conta_corrente.should eql("53678")
     boleto_novo.agencia.should eql("0810")
-    boleto_novo.convenio.should eql("12387989")
+    boleto_novo.convenio.should eql(12387989)
     boleto_novo.numero_documento.should eql("12345678")
     boleto_novo.carteira.should eql("175")
     boleto_novo.should be_instance_of(BancoItau)

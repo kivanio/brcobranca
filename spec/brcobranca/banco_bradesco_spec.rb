@@ -58,11 +58,14 @@ describe BancoBradesco do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("0061900")
+    boleto_novo.conta_corrente_formatado.should eql("0061900")
+    boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("00777700168")
+    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento_formatado.should eql("00777700168")
     boleto_novo.carteira.should eql("06")
+    boleto_novo.carteira_formatado.should eql("06")
     boleto_novo.should be_instance_of(BancoBradesco)
   end
 
@@ -100,7 +103,6 @@ describe BancoBradesco do
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:banco] = ""
     @valid_attributes[:carteira] = ""
     @valid_attributes[:moeda] = ""
     @valid_attributes[:convenio] = ""
@@ -112,6 +114,7 @@ describe BancoBradesco do
     boleto_novo.should be_instance_of(BancoBradesco)
     lambda { boleto_novo.monta_codigo_43_digitos }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Montar nosso_numero_boleto" do

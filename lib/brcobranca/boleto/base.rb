@@ -2,9 +2,8 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
+      include ActiveModel::Validations
 
-      # <b>REQUERIDO</b>: Codigo do banco emissor (3 dígitos sempre)
-      attr_writer :banco
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor
       attr_accessor :convenio
       # <b>REQUERIDO</b>: Tipo de moeda utilizada (Real(R$) e igual a 9)
@@ -22,15 +21,15 @@ module Brcobranca
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
-      attr_writer :agencia
+      attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
-      attr_writer :conta_corrente
+      attr_accessor :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
-      attr_writer :numero_documento
+      attr_accessor :numero_documento
       # <b>REQUERIDO</b>: Símbolo da moeda utilizada (R$ no brasil)
       attr_accessor :especie
       # <b>REQUERIDO</b>: Tipo do documento (Geralmente DM que quer dizer Duplicata Mercantil)
@@ -64,6 +63,10 @@ module Brcobranca
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
       attr_accessor :sacado_documento
 
+      # Validações
+      validates_presence_of :agencia, :conta_corrente, :numero_documento, :message => "não pode estar em branco."
+      validates_numericality_of :agencia, :conta_corrente, :numero_documento, :message => "não é um número."
+
       # Responsável por definir dados iniciais quando se cria uma nova intância da classe Base.
       def initialize(campos={})
         padrao = {
@@ -74,13 +77,8 @@ module Brcobranca
 
         campos = padrao.merge!(campos)
         campos.each do |campo, valor|
-          instance_variable_set "@#{campo}", valor if self.respond_to?(campo)
+          send "#{campo}=", valor
         end
-      end
-
-      # Retorna código do banco formatado com zeros a esquerda.
-      def banco
-        @banco.to_s.rjust(3,'0')
       end
 
       # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
@@ -89,33 +87,23 @@ module Brcobranca
       end
 
       # Retorna código da agencia formatado com zeros a esquerda.
-      def agencia
+      def agencia_formatado
         @agencia.to_s.rjust(4,'0')
       end
 
       # Retorna dígito verificador da agência, calculado com modulo11 de 9 para 2
       def agencia_dv
-        self.agencia.modulo11_9to2
+        self.agencia_formatado.modulo11_9to2
       end
 
       # Retorna dígito verificador da conta corrente, calculado com modulo11 de 9 para 2
       def conta_corrente_dv
-        self.conta_corrente.modulo11_9to2
-      end
-
-      # Número seqüencial utilizado para identificar o boleto.
-      def numero_documento
-        @numero_documento
+        self.conta_corrente_formatado.modulo11_9to2
       end
 
       # Retorna dígito verificador do nosso número, calculado com modulo11 de 9 para 2
       def nosso_numero_dv
         self.numero_documento.modulo11_9to2
-      end
-
-      # Número sequencial utilizado para distinguir os boletos na agência
-      def nosso_numero
-        self.numero_documento
       end
 
       # Campo usado apenas na exibição no boleto
@@ -153,7 +141,7 @@ module Brcobranca
       end
 
       # Retorna número da conta corrente formatado
-      def conta_corrente
+      def conta_corrente_formatado
         @conta_corrente.to_s.rjust(7,'0')
       end
 
