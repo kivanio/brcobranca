@@ -87,8 +87,7 @@ module Brcobranca
       # Responsável por definir a logotipo usada no template genérico,
       # retorna o caminho para o <b>logotipo</b> ou <b>false</b> caso nao consiga encontrar o logotipo.
       def logotipo
-        imagem = self.class.to_s.split("::").last.downcase
-        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{imagem}.jpg")
+        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.jpg")
       end
 
       # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
@@ -186,8 +185,14 @@ module Brcobranca
 
       # Responsável por montar a segunda parte do código de barras, que é específico para cada banco.
       #  Este método precisa ser reescrito para cada classe de boleto a ser criada.
-      def codigo_barras_segunda_parte
+      def codigo_barras_segunda_parte #:nodoc:
         raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+      end
+
+      protected
+
+      def class_name
+        self.class.to_s.split("::").last.downcase
       end
 
     end

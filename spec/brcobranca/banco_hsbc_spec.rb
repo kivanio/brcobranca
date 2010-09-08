@@ -212,7 +212,7 @@ describe Brcobranca::Boleto::Hsbc do
     boleto_novo = Brcobranca::Boleto::Hsbc.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
-      file_body=boleto_novo.to(format.to_sym)
+      file_body=boleto_novo.to(:formato => format.to_sym)
       tmp_file=Tempfile.new("foobar." << format)
       tmp_file.puts file_body
       tmp_file.close

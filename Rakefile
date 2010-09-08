@@ -31,11 +31,8 @@ Spec::Rake::SpecTask.new(:spec) do |spec|
 end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
-  spec.rcov_opts = ["--sort coverage", "--exclude /gems/,/Library/"]
+  spec.libs << 'lib'
+  spec.rcov_opts = ["--sort coverage", "--exclude /gems/,/Library/,features,script"]
 end
 
 task :spec => :check_dependencies
@@ -56,20 +53,18 @@ begin
   require 'metric_fu'
   MetricFu::Configuration.run do |config|
     #define which metrics you want to use
-    config.metrics  = [:churn, :saikuro, :flay, :flog, :reek, :roodi, :rcov]
-    config.graphs   = [:flay, :reek]
+    config.metrics  = [:churn, :saikuro, :flay, :flog, :reek, :roodi]
+    config.graphs   = []
     config.flay     = { :dirs_to_flay => ['lib'], :minimum_score => 20, :filetypes => ['rb'] }
     config.flog     = { :dirs_to_flog => ['lib'] }
     config.reek     = { :dirs_to_reek => ['lib'] }
     config.roodi    = { :dirs_to_roodi => ['lib'] }
-    config.saikuro  = { :output_directory => 'scratch_directory/saikuro', :input_directory => ['lib'],
-                        :cyclo => "", :filter_cyclo => "0", :warn_cyclo => "5", :error_cyclo => "7",
-                        :formater => "text"} #this needs to be set to "text"
+    config.saikuro  = {
+      :output_directory => 'scratch_directory/saikuro', :input_directory => ['lib'],
+      :cyclo => "", :filter_cyclo => "0", :warn_cyclo => "5", :error_cyclo => "7",
+      :formater => "text"
+    }
     config.churn    = { :start_date => "3 year ago", :minimum_churn_count => 10}
-    config.rcov     = { :test_files => ['spec/**/*_spec.rb'],
-                        :rcov_opts => ["--sort coverage", "--no-html", "--text-coverage",
-                                       "--no-color", "--profile", "--rails",
-                                       "--exclude /gems/,/Library/,spec,features,script"]}
   end
 rescue LoadError
 end

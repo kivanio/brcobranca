@@ -25,8 +25,8 @@ module Brcobranca
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
-        def to(formato=Brcobranca::Config.formato)
-          modelo_generico(:tipo => formato)
+        def to(options={})
+          modelo_generico(options)
         end
 
         # Responsável por setar os valores necessários no template genérico
@@ -34,7 +34,7 @@ module Brcobranca
         # O tipo do arquivo gerado pode ser modificado incluindo a configuração a baixo dentro da sua aplicação:
         #  Brcobranca::Config::OPCOES[:tipo] = 'pdf'
         # Ou pode ser passado como paramentro:
-        #  :tipo => 'pdf'
+        #  :formato => 'pdf'
         def modelo_generico(options={})
           doc=Document.new :paper => :A4 # 210x297
 
@@ -85,62 +85,63 @@ module Brcobranca
           # LOGOTIPO do BANCO
           doc.image(self.logotipo, :x => '0.5 cm', :y => '16.8 cm', :zoom => 80)
           doc.moveto :x => '5.2 cm' , :y => '16.8 cm'
-          doc.show "#{self.banco}-#{self.banco_dv}", :tag => :grande if self.banco && self.banco_dv
+          doc.show "#{self.banco}-#{self.banco_dv}", :tag => :grande
           doc.moveto :x => '7.5 cm' , :y => '16.8 cm'
-          doc.show self.codigo_barras.linha_digitavel, :tag => :grande if self.codigo_barras && self.codigo_barras.linha_digitavel
+          doc.show self.codigo_barras.linha_digitavel, :tag => :grande
           doc.moveto :x => '0.7 cm' , :y => '16 cm'
-          doc.show self.local_pagamento if self.local_pagamento
+          doc.show self.local_pagamento
           doc.moveto :x => '16.5 cm' , :y => '16 cm'
           doc.show self.data_vencimento.to_s_br if self.data_vencimento
           doc.moveto :x => '0.7 cm' , :y => '15.2 cm'
-          doc.show self.cedente if self.cedente
+          doc.show self.cedente
           doc.moveto :x => '16.5 cm' , :y => '15.2 cm'
           doc.show self.agencia_conta_boleto
           doc.moveto :x => '0.7 cm' , :y => '14.4 cm'
           doc.show self.data_documento.to_s_br if self.data_documento
           doc.moveto :x => '4.2 cm' , :y => '14.4 cm'
-          doc.show self.numero_documento if self.numero_documento
+          doc.show self.numero_documento
           doc.moveto :x => '10 cm' , :y => '14.4 cm'
-          doc.show self.especie if self.especie
+          doc.show self.especie
           doc.moveto :x => '11.7 cm' , :y => '14.4 cm'
-          doc.show self.aceite if self.aceite
+          doc.show self.aceite
           doc.moveto :x => '13 cm' , :y => '14.4 cm'
           doc.show self.data_processamento.to_s_br if self.data_processamento
           doc.moveto :x => '16.5 cm' , :y => '14.4 cm'
           doc.show self.nosso_numero_boleto
           doc.moveto :x => '4.4 cm' , :y => '13.5 cm'
-          doc.show self.carteira if self.carteira
+          doc.show self.carteira
           doc.moveto :x => '6.4 cm' , :y => '13.5 cm'
-          doc.show self.moeda if self.moeda
+          doc.show self.moeda
           doc.moveto :x => '8 cm' , :y => '13.5 cm'
-          doc.show self.quantidade if self.quantidade
+          doc.show self.quantidade
           doc.moveto :x => '11 cm' , :y => '13.5 cm'
-          doc.show self.valor.to_currency if self.valor
+          doc.show self.valor.to_currency
           doc.moveto :x => '16.5 cm' , :y => '13.5 cm'
-          doc.show self.valor_documento.to_currency if self.valor_documento
+          doc.show self.valor_documento.to_currency
           doc.moveto :x => '0.7 cm' , :y => '12.7 cm'
-          doc.show self.instrucao1 if self.instrucao1
+          doc.show @instrucao1
           doc.moveto :x => '0.7 cm' , :y => '12.3 cm'
-          doc.show self.instrucao2 if self.instrucao2
+          doc.show @instrucao2
           doc.moveto :x => '0.7 cm' , :y => '11.9 cm'
-          doc.show self.instrucao3 if self.instrucao3
+          doc.show self.instrucao3
           doc.moveto :x => '0.7 cm' , :y => '11.5 cm'
-          doc.show self.instrucao4 if self.instrucao4
+          doc.show self.instrucao4
           doc.moveto :x => '0.7 cm' , :y => '11.1 cm'
-          doc.show self.instrucao5 if self.instrucao5
+          doc.show self.instrucao5
           doc.moveto :x => '0.7 cm' , :y => '10.7 cm'
-          doc.show self.instrucao6 if self.instrucao6
+          doc.show self.instrucao6
           doc.moveto :x => '1.2 cm' , :y => '8.8 cm'
           doc.show "#{self.sacado} - #{self.sacado_documento.formata_documento}" if self.sacado && self.sacado_documento
           doc.moveto :x => '1.2 cm' , :y => '8.4 cm'
-          doc.show "#{self.sacado_endereco}" if self.sacado_endereco
+          doc.show "#{self.sacado_endereco}"
           #FIM Segunda parte do BOLETO
 
           #Gerando codigo de barra com rghost_barcode
           doc.barcode_interleaved2of5(self.codigo_barras, :width => '10.3 cm', :height => '1.3 cm', :x => '0.7 cm', :y => '5.8 cm' ) if self.codigo_barras
 
           # Gerando stream
-          doc.render_stream(options[:tipo].to_sym, :resolution => 150)
+          formato = options[:formato] || Brcobranca.configuration.formato
+          doc.render_stream(formato.to_sym, :resolution => 150)
         end
       end
     end

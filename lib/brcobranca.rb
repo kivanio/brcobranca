@@ -31,7 +31,37 @@ module Brcobranca
     end
   end
 
-  autoload :Config,       'brcobranca/config'
+  # Configurações do Brcobranca.
+  #
+  # Para mudar as configurações padrão, você pode fazer assim:
+  # config/environments/test.rb:
+  #
+  #     Brcobranca.configure do |config|
+  #       config.formato = :gif
+  #     end
+  #
+  # Ou colocar em um arquivo na pasta initializer do rails.
+  class Configuration
+    # Somente rghost até o momento
+    attr_accessor :gerador
+    # Pode ser pdf, jpg e ps.
+    # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
+    attr_accessor :formato
+
+    def initialize #:nodoc:
+      self.gerador = :rghost
+      self.formato = :pdf
+    end
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
+
+  def self.setup
+    yield(configuration)
+  end
+
   autoload :Calculo,      'brcobranca/calculo'
   autoload :Limpeza,      'brcobranca/limpeza'
   autoload :Formatacao,   'brcobranca/formatacao'
@@ -59,7 +89,7 @@ module Brcobranca
   end
 end
 
-case Brcobranca::Config.gerador
+case Brcobranca.configuration.gerador
 when :rghost
 
   module Brcobranca::Boleto
@@ -69,5 +99,5 @@ when :rghost
   end
 
 else
-  "Configure o gerador na opção 'Brcobranca::Config.gerador' corretamente!!!"
+  "Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!"
 end
