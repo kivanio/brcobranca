@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe BancoBradesco do
+describe Brcobranca::Boleto::BancoBradesco do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -23,7 +23,7 @@ describe BancoBradesco do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = BancoBradesco.new
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -37,11 +37,11 @@ describe BancoBradesco do
     boleto_novo.valor_documento.should eql(0.0)
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("06")
-    boleto_novo.should be_instance_of(BancoBradesco)
+
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -66,7 +66,6 @@ describe BancoBradesco do
     boleto_novo.numero_documento_formatado.should eql("00777700168")
     boleto_novo.carteira.should eql("06")
     boleto_novo.carteira_formatado.should eql("06")
-    boleto_novo.should be_instance_of(BancoBradesco)
   end
 
   it "Montar código de barras para carteira número 06" do
@@ -76,8 +75,8 @@ describe BancoBradesco do
     @valid_attributes[:numero_documento] = "75896452"
     @valid_attributes[:conta_corrente] = "0403005"
     @valid_attributes[:agencia] = "1172"
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("1172060007589645204030050")
     boleto_novo.codigo_barras.should eql("23795422300002952951172060007589645204030050")
     boleto_novo.codigo_barras.linha_digitavel.should eql("23791.17209 60007.589645 52040.300502 5 42230000295295")
@@ -91,8 +90,8 @@ describe BancoBradesco do
     @valid_attributes[:conta_corrente] = "61900"
     @valid_attributes[:agencia] = "4042"
     @valid_attributes[:carteira] = "03"
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("4042030077770016800619000")
     boleto_novo.codigo_barras.should eql("23791377000000135004042030077770016800619000")
     boleto_novo.codigo_barras.linha_digitavel.should eql("23794.04201 30077.770011 68006.190000 1 37700000013500")
@@ -110,15 +109,15 @@ describe BancoBradesco do
     @valid_attributes[:agencia] = ""
     @valid_attributes[:carteira] = ""
 
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
-    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(6)
   end
 
   it "Montar nosso_numero_boleto" do
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
     boleto_novo.numero_documento = "4042"
     boleto_novo.carteira = "06"
     boleto_novo.nosso_numero_boleto.should eql("06/00000004042-8")
@@ -146,14 +145,20 @@ describe BancoBradesco do
   end
 
   it "Montar agencia_conta_boleto" do
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
     boleto_novo.agencia_conta_boleto.should eql("4042-8 / 0061900-0")
     boleto_novo.agencia = "0719"
     boleto_novo.agencia_conta_boleto.should eql("0719-6 / 0061900-0")
     boleto_novo.agencia = "0548"
     boleto_novo.conta_corrente = "1448"
     boleto_novo.agencia_conta_boleto.should eql("0548-7 / 0001448-6")
+  end
+
+  it "Busca logotipo do banco" do
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new
+    File.exist?(boleto_novo.logotipo).should be_true
+    File.stat(boleto_novo.logotipo).zero?.should be_false
   end
 
   it "Gerar boleto nos formatos válidos" do
@@ -163,8 +168,8 @@ describe BancoBradesco do
     @valid_attributes[:numero_documento] = "75896452"
     @valid_attributes[:conta_corrente] = "0403005"
     @valid_attributes[:agencia] = "1172"
-    boleto_novo = BancoBradesco.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBradesco)
+    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)
       tmp_file=Tempfile.new("foobar." << format)

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper.rb'
 
-describe BancoBrasil do #:nodoc:[all]
+describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
   before(:each) do
     @valid_attributes = {
@@ -24,7 +24,7 @@ describe BancoBrasil do #:nodoc:[all]
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = BancoBrasil.new
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new
     boleto_novo.banco.should eql("001")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -39,11 +39,11 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("18")
     boleto_novo.codigo_servico.should be_false
-    boleto_novo.should be_instance_of(BancoBrasil)
+
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = BancoBrasil.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
     boleto_novo.banco.should eql("001")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -67,15 +67,15 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.numero_documento.should eql("777700168")
     boleto_novo.carteira.should eql("18")
     boleto_novo.codigo_servico.should be_false
-    boleto_novo.should be_instance_of(BancoBrasil)
+
   end
 
   it "Montar código de barras para convenio de 8 digitos e nosso número de 9" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 0
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798977770016818")
     boleto_novo.codigo_barras.should eql("00193376900000135000000001238798977770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798977 77700.168188 3 37690000013500")
@@ -84,8 +84,8 @@ describe BancoBrasil do #:nodoc:[all]
 
     @valid_attributes[:dias_vencimento] = 1
     @valid_attributes[:numero_documento] = "7700168"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798900770016818")
     boleto_novo.codigo_barras.should eql("00193377000000135000000001238798900770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798902 07700.168185 3 37700000013500")
@@ -99,8 +99,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:dias_vencimento] = 2
     @valid_attributes[:convenio] = 1238798
     @valid_attributes[:numero_documento] = "7777700168"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00193377100000135000000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 3 37710000013500")
@@ -111,8 +111,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:dias_vencimento] = 2
     @valid_attributes[:convenio] = 1238798
     @valid_attributes[:numero_documento] = "7777700168"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00195377100000723560000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 5 37710000072356")
@@ -123,8 +123,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:convenio] = 1238798
     @valid_attributes[:numero_documento] = "7777700168"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
     boleto_novo.codigo_barras.should eql("00194376900000723560000001238798777770016818")
     boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 4 37690000072356")
@@ -137,8 +137,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:convenio] = 123879
     @valid_attributes[:numero_documento] = "1234"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.conta_corrente_dv.should eql(0)
     boleto_novo.codigo_barras_segunda_parte.should eql("1238790123440420006190018")
     boleto_novo.codigo_barras.should eql("00192376900000135001238790123440420006190018")
@@ -153,8 +153,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "1234567899"
     @valid_attributes[:carteira] = "16"
     @valid_attributes[:codigo_servico] = true
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.conta_corrente_dv.should eql(0)
     boleto_novo.codigo_barras_segunda_parte.should eql("1238790000000123456789921")
     boleto_novo.codigo_barras.should eql("00199376900000135001238790000000123456789921")
@@ -169,8 +169,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "1234567899"
     @valid_attributes[:carteira] = "18"
     @valid_attributes[:codigo_servico] = true
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.conta_corrente_dv.should eql(0)
     boleto_novo.codigo_barras_segunda_parte.should eql("1238790000000123456789921")
     boleto_novo.codigo_barras.should eql("00199376900000135001238790000000123456789921")
@@ -185,8 +185,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "1234567899"
     @valid_attributes[:carteira] = "17"
     @valid_attributes[:codigo_servico] = true
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.conta_corrente_dv.should eql(0)
     lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(RuntimeError)
     lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error("Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17")
@@ -199,8 +199,8 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:convenio] = 1238
     @valid_attributes[:numero_documento] = "123456"
     @valid_attributes[:codigo_servico] = true
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.conta_corrente_dv.should eql(0)
     boleto_novo.codigo_barras_segunda_parte.should eql("1238012345640420006190018")
     boleto_novo.codigo_barras.should eql("00191376900000135001238012345640420006190018")
@@ -216,15 +216,14 @@ describe BancoBrasil do #:nodoc:[all]
     @valid_attributes[:moeda] = ""
     @valid_attributes[:convenio] = ""
 
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
-    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
-    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(2)
   end
 
   it "Calcular agencia_dv" do
-    boleto_novo = BancoBrasil.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
     boleto_novo.agencia = "85068014982"
     boleto_novo.agencia_dv.should eql(9)
     boleto_novo.agencia = "05009401448"
@@ -252,7 +251,7 @@ describe BancoBrasil do #:nodoc:[all]
   end
 
   it "Montar nosso_numero_boleto" do
-    boleto_novo = BancoBrasil.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
     boleto_novo.numero_documento = "85068014982"
     lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
@@ -292,8 +291,8 @@ describe BancoBrasil do #:nodoc:[all]
   end
 
   it "Montar agencia_conta_boleto" do
-    boleto_novo = BancoBrasil.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoBrasil)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+
     boleto_novo.agencia_conta_boleto.should eql("4042-8 / 00061900-0")
     boleto_novo.agencia = "0719"
     boleto_novo.agencia_conta_boleto.should eql("0719-6 / 00061900-0")
@@ -302,13 +301,19 @@ describe BancoBrasil do #:nodoc:[all]
     boleto_novo.agencia_conta_boleto.should eql("0548-7 / 00001448-6")
   end
 
+  it "Busca logotipo do banco" do
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new
+    File.exist?(boleto_novo.logotipo).should be_true
+    File.stat(boleto_novo.logotipo).zero?.should be_false
+  end
+
   it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 2
     @valid_attributes[:convenio] = 1238798
     @valid_attributes[:numero_documento] = "7777700168"
-    boleto_novo = BancoBrasil.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)
       tmp_file=Tempfile.new("foobar." << format)

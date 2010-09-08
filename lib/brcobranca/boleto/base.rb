@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # @author Kivanio Barbosa
 module Brcobranca
   module Boleto
@@ -83,6 +84,13 @@ module Brcobranca
         end
       end
 
+      # Responsável por definir a logotipo usada no template genérico,
+      # retorna o caminho para o <b>logotipo</b> ou <b>false</b> caso nao consiga encontrar o logotipo.
+      def logotipo
+        imagem = self.class.to_s.split("::").last.downcase
+        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{imagem}.jpg")
+      end
+
       # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
       def banco_dv
         self.banco.modulo11_9to2
@@ -111,13 +119,13 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def nosso_numero_boleto
-        "Sobreescreva este método na classe referente ao banco que você esta criando"
+        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        "Sobreescreva este método na classe referente ao banco que você esta criando"
+        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       # Retorna o valor total do documento: <b>quantidate * valor</b> ou <b>zero(0)</b> caso não consiga efetuar o cálculo.
@@ -161,16 +169,14 @@ module Brcobranca
       # @raise [ArgumentError] caso o número de dígitos não seja igual a 44.
       # @return [String] código de barras formado por 44 dígitos.
       def codigo_barras
-        if self.valid?
-          codigo = codigo_barras_primeira_parte
-          codigo << codigo_barras_segunda_parte
-          codigo_dv = codigo.modulo11_2to9
+        raise Brcobranca::BoletoInvalido.new(self) unless self.valid?
+        codigo = codigo_barras_primeira_parte
+        codigo << codigo_barras_segunda_parte
+        codigo_dv = codigo.modulo11_2to9
 
-          codigo = "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
-          codigo.size == 44 ? codigo : raise(ArgumentError, "Não foi possível gerar um boleto válido.")
-        else
-          raise ArgumentError, self.errors.full_messages
-        end
+        codigo = "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
+        raise Brcobranca::BoletoInvalido.new(self) unless codigo.size == 44
+        codigo
       end
 
       # Responsável por montar a primeira parte do código de barras, que é a mesma para todos banco.
@@ -181,7 +187,7 @@ module Brcobranca
       # Responsável por montar a segunda parte do código de barras, que é específico para cada banco.
       #  Este método precisa ser reescrito para cada classe de boleto a ser criada.
       def codigo_barras_segunda_parte
-        "Sobreescreva este método na classe referente ao banco que você esta criando"
+        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
     end

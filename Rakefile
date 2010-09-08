@@ -14,7 +14,7 @@ begin
     gem.add_runtime_dependency("rghost_barcode", ">= 0.8")
     gem.add_runtime_dependency("parseline", ">= 1.0.3")
     gem.add_runtime_dependency("activemodel", ">= 3.0.0")
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", "= 1.3.0"
     gem.add_development_dependency "yard", ">= 0"
   end
   Jeweler::GemcutterTasks.new
@@ -30,9 +30,10 @@ end
 
 Spec::Rake::SpecTask.new(:rcov) do |spec|
   spec.libs << 'lib' << 'spec'
+  spec.spec_files = FileList['spec/**/*_spec.rb']
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rcov = true
-  spec.rcov_opts = ["--sort coverage", "--exclude /gems/,/Library/,spec"]
+  spec.rcov_opts = ["--sort coverage", "--exclude /gems/,/Library/"]
 end
 
 task :spec => :check_dependencies

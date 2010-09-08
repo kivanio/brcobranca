@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 begin
   require 'rghost'
 rescue LoadError
@@ -23,7 +25,7 @@ module Brcobranca
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
-        def to(formato=Brcobranca::Config::OPCOES[:tipo])
+        def to(formato=Brcobranca::Config.formato)
           modelo_generico(:tipo => formato)
         end
 
@@ -47,12 +49,9 @@ module Brcobranca
             tag :grande, :size => 13
           end
 
-          # Busca logo automaticamente
-          logo = monta_logo
-
           #INICIO Primeira parte do BOLETO
           # LOGOTIPO do BANCO
-          doc.image(logo, :x => '0.5 cm', :y => '23.85 cm', :zoom => 80) if logo
+          doc.image(self.logotipo, :x => '0.5 cm', :y => '23.85 cm', :zoom => 80)
           # Dados
           doc.moveto :x => '5.2 cm' , :y => '23.85 cm'
           doc.show "#{self.banco}-#{self.banco_dv}", :tag => :grande
@@ -84,7 +83,7 @@ module Brcobranca
 
           #INICIO Segunda parte do BOLETO BB
           # LOGOTIPO do BANCO
-          doc.image(logo, :x => '0.5 cm', :y => '16.8 cm', :zoom => 80) if logo
+          doc.image(self.logotipo, :x => '0.5 cm', :y => '16.8 cm', :zoom => 80)
           doc.moveto :x => '5.2 cm' , :y => '16.8 cm'
           doc.show "#{self.banco}-#{self.banco_dv}", :tag => :grande if self.banco && self.banco_dv
           doc.moveto :x => '7.5 cm' , :y => '16.8 cm'

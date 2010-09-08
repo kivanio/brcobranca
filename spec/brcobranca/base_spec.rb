@@ -37,7 +37,6 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.valor.should eql(0.0)
         boleto_novo.valor_documento.should eql(0.0)
         boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
-        boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
         boleto_novo.valid?.should be_false
       end
 
@@ -63,7 +62,6 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.agencia.should eql("4042")
         boleto_novo.convenio.should eql(12387989)
         boleto_novo.numero_documento.should eql("777700168")
-        boleto_novo.should be_instance_of(Brcobranca::Boleto::Base)
         boleto_novo.valid?.should be_true
       end
 
@@ -166,17 +164,15 @@ module Brcobranca #:nodoc:[all]
 
       it "Mostrar aviso sobre sobrecarga de métodos padrões" do
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-        boleto_novo.codigo_barras_segunda_parte.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
-        boleto_novo.nosso_numero_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
-        boleto_novo.agencia_conta_boleto.should eql("Sobreescreva este método na classe referente ao banco que você esta criando")
+        lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(Brcobranca::NaoImplementado, "Sobreescreva este método na classe referente ao banco que você esta criando")
+        lambda { boleto_novo.nosso_numero_boleto }.should raise_error(Brcobranca::NaoImplementado, "Sobreescreva este método na classe referente ao banco que você esta criando")
+        lambda { boleto_novo.agencia_conta_boleto }.should raise_error(Brcobranca::NaoImplementado, "Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       it "Incluir módulos de template" do
-        Brcobranca::Config::OPCOES[:gerador] = 'rghost'
         boleto_novo = Brcobranca::Boleto::Base.new
         boleto_novo.class.included_modules.include?(RGhost).should be_true
         boleto_novo.class.included_modules.include?(Brcobranca::Boleto::Template::Rghost).should be_true
-        boleto_novo.class.included_modules.include?(Brcobranca::Boleto::Template::Util).should be_true
       end
 
     end

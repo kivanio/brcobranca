@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe BancoHsbc do
+describe Brcobranca::Boleto::BancoHsbc do
 
   before(:each) do
     @valid_attributes = {
@@ -25,7 +25,7 @@ describe BancoHsbc do
 
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = BancoHsbc.new
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new
     boleto_novo.banco.should eql("399")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -39,11 +39,11 @@ describe BancoHsbc do
     boleto_novo.valor_documento.should eql(0.0)
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("CNR")
-    boleto_novo.should be_instance_of(BancoHsbc)
+
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = BancoHsbc.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
     boleto_novo.banco.should eql("399")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -67,7 +67,7 @@ describe BancoHsbc do
     boleto_novo.numero_documento.should eql("777700168")
     boleto_novo.numero_documento_formatado.should eql("0000777700168")
     boleto_novo.carteira.should eql("CNR")
-    boleto_novo.should be_instance_of(BancoHsbc)
+
   end
 
   it "Gerar boleto" do
@@ -76,8 +76,8 @@ describe BancoHsbc do
     @valid_attributes[:dias_vencimento] = 5
     @valid_attributes[:numero_documento] = "12345678"
     @valid_attributes[:conta_corrente] = "1122334"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("1122334000001234567809892")
     boleto_novo.codigo_barras.should eql("39998420100002952951122334000001234567809892")
     boleto_novo.codigo_barras.linha_digitavel.should eql("39991.12232 34000.001239 45678.098927 8 42010000295295")
@@ -88,8 +88,8 @@ describe BancoHsbc do
     @valid_attributes[:numero_documento] = "07778899"
     @valid_attributes[:conta_corrente] = "0016324"
     @valid_attributes[:agencia] = "1234"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.codigo_barras_segunda_parte.should eql("0016324000000777889924742")
     boleto_novo.codigo_barras.should eql("39993252300000934230016324000000777889924742")
     boleto_novo.codigo_barras.linha_digitavel.should eql("39990.01633 24000.000778 78899.247429 3 25230000093423")
@@ -102,10 +102,10 @@ describe BancoHsbc do
     @valid_attributes[:numero_documento] = ""
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
-    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(6)
 
     @valid_attributes[:valor] = 934.23
@@ -115,9 +115,9 @@ describe BancoHsbc do
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
     @valid_attributes[:carteira] = "OUTRA"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
-    lambda { boleto_novo.codigo_barras }.should raise_error(ArgumentError)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(7)
   end
 
@@ -126,39 +126,39 @@ describe BancoHsbc do
     @valid_attributes[:dias_vencimento] = 5
     @valid_attributes[:numero_documento] = "12345678"
     @valid_attributes[:conta_corrente] = "1122334"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.nosso_numero.should eql("0000012345678942")
 
     @valid_attributes[:data_documento] = Date.parse("2000-07-04")
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = "39104766"
     @valid_attributes[:conta_corrente] = "351202"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.nosso_numero.should eql("0000039104766340")
 
     @valid_attributes[:data_documento] = Date.parse("2009-04-03")
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = "39104766"
     @valid_attributes[:conta_corrente] = "351202"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.nosso_numero.should eql("0000039104766346")
 
     @valid_attributes[:data_documento] = nil
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = "39104766"
     @valid_attributes[:conta_corrente] = "351202"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     lambda { boleto_novo.nosso_numero }.should raise_error(ArgumentError)
   end
 
   it "Montar nosso_numero_boleto" do
      @valid_attributes[:data_documento] = Date.parse("2009-08-14")
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.numero_documento = "4042"
     boleto_novo.carteira = "06"
     boleto_novo.nosso_numero_boleto.should eql("0000000004042847")
@@ -186,8 +186,8 @@ describe BancoHsbc do
   end
 
   it "Montar agencia_conta_boleto" do
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     boleto_novo.agencia_conta_boleto.should eql("0061900")
     boleto_novo.agencia = "0719"
     boleto_novo.agencia_conta_boleto.should eql("0061900")
@@ -196,14 +196,20 @@ describe BancoHsbc do
     boleto_novo.agencia_conta_boleto.should eql("0001448")
   end
 
+  it "Busca logotipo do banco" do
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new
+    File.exist?(boleto_novo.logotipo).should be_true
+    File.stat(boleto_novo.logotipo).zero?.should be_false
+  end
+
   it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-03")
     @valid_attributes[:dias_vencimento] = 5
     @valid_attributes[:numero_documento] = "12345678"
     @valid_attributes[:conta_corrente] = "1122334"
-    boleto_novo = BancoHsbc.new(@valid_attributes)
-    boleto_novo.should be_instance_of(BancoHsbc)
+    boleto_novo = Brcobranca::Boleto::BancoHsbc.new(@valid_attributes)
+
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)
       tmp_file=Tempfile.new("foobar." << format)

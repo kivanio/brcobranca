@@ -1,4 +1,4 @@
-$:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+# -*- encoding: utf-8 -*-
 
 begin
   require 'date'
@@ -16,24 +16,58 @@ rescue LoadError
   require 'active_model'
 end
 
-%w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
+module Brcobranca
 
-%w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco banco_banespa).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
+  class NaoImplementado < NotImplementedError
+  end
 
-%w(util rghost).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto","template",req) }
+  #   rescue Brcobranca::BoletoInvalido => invalido
+  #   puts invalido.errors
+  class BoletoInvalido < StandardError
 
-%w(base retorno_cbr643).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","retorno",req) }
+    def initialize(boleto)
+      errors = boleto.errors.full_messages.join(', ')
+      super(errors)
+    end
+  end
 
-case Brcobranca::Config::OPCOES[:gerador]
-when 'rghost'
+  autoload :Config,       'brcobranca/config'
+  autoload :Calculo,      'brcobranca/calculo'
+  autoload :Limpeza,      'brcobranca/limpeza'
+  autoload :Formatacao,   'brcobranca/formatacao'
+  autoload :CalculoData,  'brcobranca/calculo_data'
+  autoload :Currency,     'brcobranca/currency'
+
+  module Boleto
+    autoload :Base,           'brcobranca/boleto/base'
+    autoload :BancoBrasil,    'brcobranca/boleto/banco_brasil'
+    autoload :BancoItau,      'brcobranca/boleto/banco_itau'
+    autoload :BancoHsbc,      'brcobranca/boleto/banco_hsbc'
+    autoload :BancoReal,      'brcobranca/boleto/banco_real'
+    autoload :BancoBradesco,  'brcobranca/boleto/banco_bradesco'
+    autoload :BancoUnibanco,  'brcobranca/boleto/banco_unibanco'
+    autoload :BancoBanespa,   'brcobranca/boleto/banco_banespa'
+
+    module Template
+      autoload :Rghost, 'brcobranca/boleto/template/rghost'
+    end
+  end
+
+  module Retorno
+    autoload :Base,           'brcobranca/retorno/base'
+    autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
+  end
+end
+
+case Brcobranca::Config.gerador
+when :rghost
 
   module Brcobranca::Boleto
     Base.class_eval do
       include Brcobranca::Boleto::Template::Rghost
-      include Brcobranca::Boleto::Template::Util
     end
   end
 
 else
-  "Configure o gerador na opção 'Brcobranca::Config::OPCOES[:gerador]' corretamente!!!"
+  "Configure o gerador na opção 'Brcobranca::Config.gerador' corretamente!!!"
 end

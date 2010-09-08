@@ -33,7 +33,6 @@ module Brcobranca
           @valid_attributes[:convenio] = 1238798
           @valid_attributes[:numero_documento] = "7777700168"
           boleto_novo = BancoBrasil.new(@valid_attributes)
-          boleto_novo.should be_instance_of(BancoBrasil)
           boleto_novo.codigo_barras_segunda_parte.should eql("0000001238798777770016818")
           boleto_novo.codigo_barras.should eql("00193377100000135000000001238798777770016818")
           boleto_novo.codigo_barras.linha_digitavel.should eql("00190.00009 01238.798779 77700.168188 3 37710000013500")
