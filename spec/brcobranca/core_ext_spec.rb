@@ -156,26 +156,26 @@ module Brcobranca
   end
 
   describe Limpeza do
-    it "should return just numbers when value is a currency" do
+    it "Formata Float em String" do
       1234.03.limpa_valor_moeda.should == "123403"
       1234.3.limpa_valor_moeda.should == "123430"
     end
   end
 
   describe CalculoData do
-    it "should return number of days between Date and 1997-10-07" do
+    it "Calcula o fator de vencimento" do
       (Date.parse "2008-02-01").fator_vencimento.should == "3769"
       (Date.parse "2008-02-02").fator_vencimento.should == "3770"
       (Date.parse "2008-02-06").fator_vencimento.should == "3774"
     end
 
-    it "should format Date to Brazillian format" do
+    it "Formata a data no padrão visual brasileiro" do
       (Date.parse "2008-02-01").to_s_br.should == "01/02/2008"
       (Date.parse "2008-02-02").to_s_br.should == "02/02/2008"
       (Date.parse "2008-02-06").to_s_br.should == "06/02/2008"
     end
 
-    it "should calculate julian date from a Date" do
+    it "Calcula data juliana" do
       (Date.parse "2009-02-11").to_juliano.should eql("0429")
       (Date.parse "2008-02-11").to_juliano.should eql("0428")
       (Date.parse "2009-04-08").to_juliano.should eql("0989")
