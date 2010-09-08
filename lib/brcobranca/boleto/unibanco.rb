@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
-    class BancoUnibanco < Base # Banco UNIBANCO
+    class Unibanco < Base # Banco UNIBANCO
 
       #  Com Registro 4
       #  Sem Registro 5
       validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
 
-      # Nova instancia do BancoUnibanco
+      # Nova instancia do Unibanco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
         campos = {:carteira => "5"}.merge!(campos)

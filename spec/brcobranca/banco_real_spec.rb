@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Brcobranca::Boleto::BancoReal do
+describe Brcobranca::Boleto::Real do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -24,7 +24,7 @@ describe Brcobranca::Boleto::BancoReal do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = Brcobranca::Boleto::BancoReal.new
+    boleto_novo = Brcobranca::Boleto::Real.new
     boleto_novo.banco.should eql("356")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -42,7 +42,7 @@ describe Brcobranca::Boleto::BancoReal do
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
     boleto_novo.banco.should eql("356")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -75,7 +75,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = "7701684"
     @valid_attributes[:carteira] = "56"
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(8)
     boleto_novo.codigo_barras_segunda_parte.should eql("0000004042006190087701684")
@@ -89,7 +89,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:dias_vencimento] = 1
     @valid_attributes[:numero_documento] = "777700168"
     @valid_attributes[:carteira] = "57"
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(3)
     boleto_novo.codigo_barras_segunda_parte.should eql("4042006190030000777700168")
@@ -103,7 +103,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:carteira] = "57"
     @valid_attributes[:conta_corrente] = "0016324"
     @valid_attributes[:agencia] = "1018"
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(9)
     boleto_novo.codigo_barras_segunda_parte.should eql("1018001632490000000005020")
@@ -119,7 +119,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:carteira] = 57
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
@@ -132,7 +132,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:carteira] = ""
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
@@ -140,7 +140,7 @@ describe Brcobranca::Boleto::BancoReal do
   end
 
   it "Busca logotipo do banco" do
-    boleto_novo = Brcobranca::Boleto::BancoReal.new
+    boleto_novo = Brcobranca::Boleto::Real.new
     File.exist?(boleto_novo.logotipo).should be_true
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
@@ -151,7 +151,7 @@ describe Brcobranca::Boleto::BancoReal do
     @valid_attributes[:dias_vencimento] = 0
     @valid_attributes[:numero_documento] = "7701684"
     @valid_attributes[:carteira] = "56"
-    boleto_novo = Brcobranca::Boleto::BancoReal.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)

@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Brcobranca::Boleto::BancoBradesco do
+describe Brcobranca::Boleto::Bradesco do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -24,7 +24,7 @@ describe Brcobranca::Boleto::BancoBradesco do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new
+    boleto_novo = Brcobranca::Boleto::Bradesco.new
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -42,7 +42,7 @@ describe Brcobranca::Boleto::BancoBradesco do
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
     boleto_novo.banco.should eql("237")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -76,7 +76,7 @@ describe Brcobranca::Boleto::BancoBradesco do
     @valid_attributes[:numero_documento] = "75896452"
     @valid_attributes[:conta_corrente] = "0403005"
     @valid_attributes[:agencia] = "1172"
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1172060007589645204030050")
     boleto_novo.codigo_barras.should eql("23795422300002952951172060007589645204030050")
@@ -91,7 +91,7 @@ describe Brcobranca::Boleto::BancoBradesco do
     @valid_attributes[:conta_corrente] = "61900"
     @valid_attributes[:agencia] = "4042"
     @valid_attributes[:carteira] = "03"
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("4042030077770016800619000")
     boleto_novo.codigo_barras.should eql("23791377000000135004042030077770016800619000")
@@ -110,14 +110,14 @@ describe Brcobranca::Boleto::BancoBradesco do
     @valid_attributes[:agencia] = ""
     @valid_attributes[:carteira] = ""
 
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(6)
   end
 
   it "Montar nosso_numero_boleto" do
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     boleto_novo.numero_documento = "4042"
     boleto_novo.carteira = "06"
@@ -146,7 +146,7 @@ describe Brcobranca::Boleto::BancoBradesco do
   end
 
   it "Montar agencia_conta_boleto" do
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     boleto_novo.agencia_conta_boleto.should eql("4042-8 / 0061900-0")
     boleto_novo.agencia = "0719"
@@ -157,7 +157,7 @@ describe Brcobranca::Boleto::BancoBradesco do
   end
 
   it "Busca logotipo do banco" do
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new
+    boleto_novo = Brcobranca::Boleto::Bradesco.new
     File.exist?(boleto_novo.logotipo).should be_true
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
@@ -169,7 +169,7 @@ describe Brcobranca::Boleto::BancoBradesco do
     @valid_attributes[:numero_documento] = "75896452"
     @valid_attributes[:conta_corrente] = "0403005"
     @valid_attributes[:agencia] = "1172"
-    boleto_novo = Brcobranca::Boleto::BancoBradesco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)

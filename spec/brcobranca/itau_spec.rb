@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Brcobranca::Boleto::BancoItau do
+describe Brcobranca::Boleto::Itau do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -24,7 +24,7 @@ describe Brcobranca::Boleto::BancoItau do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = Brcobranca::Boleto::BancoItau.new
+    boleto_novo = Brcobranca::Boleto::Itau.new
     boleto_novo.banco.should eql("341")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -42,7 +42,7 @@ describe Brcobranca::Boleto::BancoItau do
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
     boleto_novo.banco.should eql("341")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -69,7 +69,7 @@ describe Brcobranca::Boleto::BancoItau do
 
   it "Gerar boleto" do
     @valid_attributes[:data_documento] = Date.parse("2009/08/13")
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1751234567840810536789000")
     boleto_novo.codigo_barras.should eql("34191432900000000001751234567840810536789000")
@@ -78,7 +78,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:numero_documento] = "258281"
     @valid_attributes[:data_documento] = Date.parse("2008/02/01")
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1750025828170810536789000")
     boleto_novo.codigo_barras.should eql("34191377000000135001750025828170810536789000")
@@ -88,7 +88,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:data_documento] = Date.parse("2004/09/04")
     @valid_attributes[:carteira] = 168
     @valid_attributes[:valor] = 135.00
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1680025828120810536789000")
     boleto_novo.codigo_barras.should eql("34194252500000135001680025828120810536789000")
@@ -100,7 +100,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = "12345"
     @valid_attributes[:seu_numero] = "1234567"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1960025828112345671234550")
     boleto_novo.codigo_barras.should eql("34191252500000135001960025828112345671234550")
@@ -112,7 +112,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = "12345"
     @valid_attributes[:seu_numero] = "123456"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1960025828101234561234550")
     boleto_novo.codigo_barras.should eql("34192252500000135001960025828101234561234550")
@@ -124,7 +124,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = "1234"
     @valid_attributes[:seu_numero] = "123456"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.codigo_barras_segunda_parte.should eql("1960025828101234560123440")
     boleto_novo.codigo_barras.should eql("34192252500000135001960025828101234560123440")
@@ -142,7 +142,7 @@ describe Brcobranca::Boleto::BancoItau do
     @valid_attributes[:agencia] = "rer4"
     @valid_attributes[:conta_corrente] = ""
 
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(5)
@@ -151,27 +151,27 @@ describe Brcobranca::Boleto::BancoItau do
   it "Montar agencia_conta_corrente_dv" do
     @valid_attributes[:conta_corrente] = "15255"
     @valid_attributes[:agencia] = "0607"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_dv.should eql(0)
     boleto_novo.agencia_conta_boleto.should eql("0607 / 15255-0")
 
     @valid_attributes[:conta_corrente] = "85547"
     @valid_attributes[:agencia] = "1547"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_dv.should eql(6)
     boleto_novo.agencia_conta_boleto.should eql("1547 / 85547-6")
 
     @valid_attributes[:conta_corrente] = "10207"
     @valid_attributes[:agencia] = "1547"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_dv.should eql(7)
 
     @valid_attributes[:conta_corrente] = "53678"
     @valid_attributes[:agencia] = "0811"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.agencia_conta_corrente_dv.should eql(8)
     boleto_novo.agencia_conta_boleto.should eql("0811 / 53678-8")
@@ -179,40 +179,40 @@ describe Brcobranca::Boleto::BancoItau do
 
   it "Montar nosso_numero_dv" do
     @valid_attributes[:numero_documento] = "00015448"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(6)
 
     @valid_attributes[:numero_documento] = "15448"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(6)
 
     @valid_attributes[:numero_documento] = "12345678"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(4)
 
     @valid_attributes[:numero_documento] = "34230"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(5)
 
     @valid_attributes[:numero_documento] = "258281"
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(7)
   end
 
   it "Busca logotipo do banco" do
-    boleto_novo = Brcobranca::Boleto::BancoItau.new
+    boleto_novo = Brcobranca::Boleto::Itau.new
     File.exist?(boleto_novo.logotipo).should be_true
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
 
   it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:data_documento] = Date.parse("2009/08/13")
-    boleto_novo = Brcobranca::Boleto::BancoItau.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)

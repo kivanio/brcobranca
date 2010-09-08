@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
-    class BancoBanespa < Base # Banco BANESPA
+    class Banespa < Base # Banco BANESPA
 
-      # Nova instancia do BancoBanespa
+      # Nova instancia do Banespa
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
         campos = {:carteira => "COB"}.merge!(campos)

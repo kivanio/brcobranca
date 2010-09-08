@@ -39,14 +39,14 @@ module Brcobranca
   autoload :Currency,     'brcobranca/currency'
 
   module Boleto
-    autoload :Base,           'brcobranca/boleto/base'
-    autoload :BancoBrasil,    'brcobranca/boleto/banco_brasil'
-    autoload :BancoItau,      'brcobranca/boleto/banco_itau'
-    autoload :BancoHsbc,      'brcobranca/boleto/banco_hsbc'
-    autoload :BancoReal,      'brcobranca/boleto/banco_real'
-    autoload :BancoBradesco,  'brcobranca/boleto/banco_bradesco'
-    autoload :BancoUnibanco,  'brcobranca/boleto/banco_unibanco'
-    autoload :BancoBanespa,   'brcobranca/boleto/banco_banespa'
+    autoload :Base,         'brcobranca/boleto/base'
+    autoload :BancoBrasil,  'brcobranca/boleto/banco_brasil'
+    autoload :Itau,         'brcobranca/boleto/itau'
+    autoload :Hsbc,         'brcobranca/boleto/hsbc'
+    autoload :Real,         'brcobranca/boleto/real'
+    autoload :Bradesco,     'brcobranca/boleto/bradesco'
+    autoload :Unibanco,     'brcobranca/boleto/unibanco'
+    autoload :Banespa,      'brcobranca/boleto/banespa'
 
     module Template
       autoload :Rghost, 'brcobranca/boleto/template/rghost'

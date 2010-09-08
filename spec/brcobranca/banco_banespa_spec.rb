@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Brcobranca::Boleto::BancoBanespa do
+describe Brcobranca::Boleto::Banespa do
 
   before(:each) do
     @valid_attributes = {
@@ -25,7 +25,7 @@ describe Brcobranca::Boleto::BancoBanespa do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new
+    boleto_novo = Brcobranca::Boleto::Banespa.new
     boleto_novo.banco.should eql("033")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -43,7 +43,7 @@ describe Brcobranca::Boleto::BancoBanespa do
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
     boleto_novo.banco.should eql("033")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -81,7 +81,7 @@ describe Brcobranca::Boleto::BancoBanespa do
     @valid_attributes[:agencia] = "rer4"
     @valid_attributes[:conta_corrente] = ""
 
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
     boleto_novo.errors.count.should eql(5)
@@ -94,7 +94,7 @@ describe Brcobranca::Boleto::BancoBanespa do
     @valid_attributes[:convenio] = 14813026478
     @valid_attributes[:numero_documento] = "0004952"
     @valid_attributes[:conta_corrente] = "0403005"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.conta_corrente_dv.should eql(2)
     boleto_novo.codigo_barras_segunda_parte.should eql("1481302647800049520003306")
@@ -107,7 +107,7 @@ describe Brcobranca::Boleto::BancoBanespa do
     @valid_attributes[:convenio] = 40013012168
     @valid_attributes[:numero_documento] = "1234567"
     @valid_attributes[:conta_corrente] = "0403005"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.conta_corrente_dv.should eql(2)
     boleto_novo.codigo_barras_segunda_parte.should eql("4001301216812345670003361")
@@ -118,41 +118,41 @@ describe Brcobranca::Boleto::BancoBanespa do
   it "Montar campo_livre_com_dv1_e_dv2" do
     @valid_attributes[:convenio] = "40013012168"
     @valid_attributes[:numero_documento] = "7469108"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216874691080003384")
 
     @valid_attributes[:convenio] = "40013012168"
     @valid_attributes[:numero_documento] = "1234567"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216812345670003361")
   end
 
   it "Montar nosso_numero e nosso_numero_dv" do
     @valid_attributes[:numero_documento] = "0403005"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.nosso_numero.should eql("4000403005")
     boleto_novo.nosso_numero_dv.should eql(6)
     boleto_novo.nosso_numero_boleto.should eql("400 0403005 6")
 
     @valid_attributes[:numero_documento] = "403005"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.nosso_numero.should eql("4000403005")
     boleto_novo.nosso_numero_dv.should eql(6)
     boleto_novo.nosso_numero_boleto.should eql("400 0403005 6")
 
     @valid_attributes[:numero_documento] = "1234567"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.nosso_numero.should eql("4001234567")
     boleto_novo.nosso_numero_dv.should eql(8)
     boleto_novo.nosso_numero_boleto.should eql("400 1234567 8")
 
     @valid_attributes[:agencia] = "123"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.nosso_numero.should eql("1231234567")
     boleto_novo.nosso_numero_dv.should eql(0)
@@ -160,7 +160,7 @@ describe Brcobranca::Boleto::BancoBanespa do
 
     @valid_attributes[:agencia] = "123"
     @valid_attributes[:numero_documento] = "7469108"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.nosso_numero.should eql("1237469108")
     boleto_novo.nosso_numero_dv.should eql(3)
@@ -168,13 +168,13 @@ describe Brcobranca::Boleto::BancoBanespa do
   end
 
   it "Montar agencia_conta_dv" do
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     boleto_novo.agencia_conta_boleto.should eql("000 12 38798 9")
   end
 
   it "Busca logotipo do banco" do
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new
+    boleto_novo = Brcobranca::Boleto::Banespa.new
     File.exist?(boleto_novo.logotipo).should be_true
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
@@ -186,7 +186,7 @@ describe Brcobranca::Boleto::BancoBanespa do
     @valid_attributes[:convenio] = 40013012168
     @valid_attributes[:numero_documento] = "1234567"
     @valid_attributes[:conta_corrente] = "0403005"
-    boleto_novo = Brcobranca::Boleto::BancoBanespa.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)

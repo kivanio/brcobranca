@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
-    class BancoBradesco < Base # Banco BRADESCO
+    class Bradesco < Base # Banco BRADESCO
 
-      # Nova instancia do BancoBradesco
+      # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
         campos = {:carteira => "06"}.merge!(campos)

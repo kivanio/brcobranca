@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
-    class BancoHsbc < Base # Banco HSBC
+    class Hsbc < Base # Banco HSBC
 
       validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
 
-      # Nova instancia do BancoHsbc
+      # Nova instancia do Hsbc
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
         campos = {:carteira => "CNR"}.merge!(campos)

@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Brcobranca::Boleto::BancoUnibanco do
+describe Brcobranca::Boleto::Unibanco do
   before(:each) do
     @valid_attributes = {
       :especie_documento => "DM",
@@ -24,7 +24,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
   end
 
   it "Criar nova instancia com atributos padrões" do
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new
+    boleto_novo = Brcobranca::Boleto::Unibanco.new
     boleto_novo.banco.should eql("409")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -42,7 +42,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
   end
 
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
     boleto_novo.banco.should eql("409")
     boleto_novo.especie_documento.should eql("DM")
     boleto_novo.especie.should eql("R$")
@@ -78,7 +78,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
     @valid_attributes[:convenio] = 2031671
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(5)
     boleto_novo.codigo_barras_segunda_parte.should eql("0409043001236018030299015")
@@ -95,7 +95,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
     @valid_attributes[:convenio] = 2031671
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(5)
     boleto_novo.codigo_barras_segunda_parte.should eql("5203167100000018030299015")
@@ -111,7 +111,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
     @valid_attributes[:carteira] = ""
     @valid_attributes[:conta_corrente] = ""
     @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
@@ -119,7 +119,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
   end
 
   it "Montar nosso_numero_boleto" do
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     boleto_novo.numero_documento = "85068014982"
     boleto_novo.nosso_numero_boleto.should eql("00085068014982-9")
@@ -162,7 +162,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
   it "Montar agencia_conta_boleto" do
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     boleto_novo.agencia_conta_boleto.should eql("0123 / 0100618-5")
     boleto_novo.agencia = "0548"
@@ -171,7 +171,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
   end
 
   it "Busca logotipo do banco" do
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new
+    boleto_novo = Brcobranca::Boleto::Unibanco.new
     File.exist?(boleto_novo.logotipo).should be_true
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
@@ -185,7 +185,7 @@ describe Brcobranca::Boleto::BancoUnibanco do
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
     @valid_attributes[:convenio] = 2031671
-    boleto_novo = Brcobranca::Boleto::BancoUnibanco.new(@valid_attributes)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format.to_sym)

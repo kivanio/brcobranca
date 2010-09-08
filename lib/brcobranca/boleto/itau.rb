@@ -1,12 +1,12 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
-    class BancoItau < Base # Banco Itaú
+    class Itau < Base # Banco Itaú
 
       # Usado somente em carteiras especiais com registro para complementar o número do cocumento
       attr_writer :seu_numero
 
-      # Nova instancia do BancoItau
+      # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
         campos = {:carteira => "175"}.merge!(campos)
