@@ -308,6 +308,25 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     File.stat(boleto_novo.logotipo).zero?.should be_false
   end
 
+  it "Gerar boleto nos formatos válidos com método to_" do
+    @valid_attributes[:valor] = 135.00
+    @valid_attributes[:data_documento] = Date.parse("2008-02-01")
+    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:convenio] = 1238798
+    @valid_attributes[:numero_documento] = "7777700168"
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
+    %w| pdf jpg tif png ps |.each do |format|
+      file_body=boleto_novo.send("to_#{format}".to_sym)
+      tmp_file=Tempfile.new("foobar." << format)
+      tmp_file.puts file_body
+      tmp_file.close
+      File.exist?(tmp_file.path).should be_true
+      File.stat(tmp_file.path).zero?.should be_false
+      File.delete(tmp_file.path).should eql(1)
+      File.exist?(tmp_file.path).should be_false
+    end
+  end
+
   it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
@@ -316,7 +335,7 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     @valid_attributes[:numero_documento] = "7777700168"
     boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
     %w| pdf jpg tif png ps |.each do |format|
-      file_body=boleto_novo.to(:formato => format.to_sym)
+      file_body=boleto_novo.to(format)
       tmp_file=Tempfile.new("foobar." << format)
       tmp_file.puts file_body
       tmp_file.close

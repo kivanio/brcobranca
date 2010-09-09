@@ -48,9 +48,13 @@ module Brcobranca
     # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
     attr_accessor :formato
 
+    # Resolução em pixels do arquivo gerado
+    attr_accessor :resolucao
+
     def initialize #:nodoc:
       self.gerador = :rghost
       self.formato = :pdf
+      self.resolucao = 150
     end
   end
 

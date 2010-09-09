@@ -25,8 +25,17 @@ module Brcobranca
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
-        def to(options={})
-          modelo_generico(options)
+        def to(formato, options={})
+          modelo_generico(formato, options)
+        end
+
+        def method_missing(m, *args)
+          method = m.to_s
+          if method.start_with?("to_")
+            modelo_generico(method[3..-1], (args.first || {}))
+          else
+            super
+          end
         end
 
         # Responsável por setar os valores necessários no template genérico
@@ -35,7 +44,7 @@ module Brcobranca
         #  Brcobranca::Config::OPCOES[:tipo] = 'pdf'
         # Ou pode ser passado como paramentro:
         #  :formato => 'pdf'
-        def modelo_generico(options={})
+        def modelo_generico(formato, options={})
           doc=Document.new :paper => :A4 # 210x297
 
           template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
@@ -140,8 +149,9 @@ module Brcobranca
           doc.barcode_interleaved2of5(self.codigo_barras, :width => '10.3 cm', :height => '1.3 cm', :x => '0.7 cm', :y => '5.8 cm' ) if self.codigo_barras
 
           # Gerando stream
-          formato = options[:formato] || Brcobranca.configuration.formato
-          doc.render_stream(formato.to_sym, :resolution => 150)
+          formato ||= Brcobranca.configuration.formato
+          resolucao = options.delete(:resolucao) || Brcobranca.configuration.resolucao
+          doc.render_stream(formato.to_sym, :resolution => resolucao)
         end
       end
     end

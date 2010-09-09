@@ -172,8 +172,7 @@ module Brcobranca #:nodoc:[all]
 
       it "Incluir módulos de template" do
         boleto_novo = Brcobranca::Boleto::Base.new
-        boleto_novo.class.included_modules.include?(RGhost).should be_true
-        boleto_novo.class.included_modules.include?(Brcobranca::Boleto::Template::Rghost).should be_true
+        boleto_novo.respond_to?(:modelo_generico).should be_true
       end
 
     end
