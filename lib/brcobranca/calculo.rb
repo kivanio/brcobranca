@@ -3,6 +3,9 @@ module Brcobranca
   # métodos auxiliares de cálculos
   module Calculo
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
+    #
+    # @return [Integer]
+    # @raise  [ArgumentError]
     def modulo10
       raise ArgumentError, "Número inválido" unless self.is_number?
 
@@ -88,7 +91,11 @@ module Brcobranca
       end
     end
 
-    # @option fatores [Array] Número a serem usados na multiplicação
+    # Faz a multiplicação de um número pelos fatores passados como parâmetro.
+    #
+    # @param  [Array] fatores
+    # @return [Integer]
+    # @raise  [ArgumentError]
     def multiplicador(fatores, &block)
       raise ArgumentError, "Número inválido" unless self.is_number?
 
