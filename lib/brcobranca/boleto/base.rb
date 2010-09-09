@@ -82,6 +82,8 @@ module Brcobranca
         campos.each do |campo, valor|
           send "#{campo}=", valor
         end
+
+        template_config
       end
 
       # Responsável por definir a logotipo usada no template genérico,
@@ -196,6 +198,15 @@ module Brcobranca
 
       def class_name
         self.class.to_s.split("::").last.downcase
+      end
+
+      def template_config
+        case Brcobranca.configuration.gerador
+        when :rghost
+          extend Brcobranca::Boleto::Template::Rghost
+        else
+          raise "Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!"
+        end
       end
 
     end

@@ -88,16 +88,3 @@ module Brcobranca
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
   end
 end
-
-case Brcobranca.configuration.gerador
-when :rghost
-
-  module Brcobranca::Boleto
-    Base.class_eval do
-      include Brcobranca::Boleto::Template::Rghost
-    end
-  end
-
-else
-  "Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!"
-end
