@@ -36,8 +36,6 @@ module Brcobranca
       lambda { "00193373700".linha_digitavel }.should raise_error(ArgumentError)
       lambda { "0019337370000193373700".linha_digitavel }.should raise_error(ArgumentError)
       lambda { "00b193373700bb00193373700".linha_digitavel }.should raise_error(ArgumentError)
-      lambda { "0019337370000193373700bbb".linha_digitavel }.should raise_error(ArgumentError)
-      lambda { "0019237690000c135000c0000123f7987e7773016813".linha_digitavel }.should raise_error(ArgumentError)
     end
   end
 

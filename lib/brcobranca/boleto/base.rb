@@ -171,11 +171,14 @@ module Brcobranca
         raise Brcobranca::BoletoInvalido.new(self) unless self.valid?
         codigo = codigo_barras_primeira_parte
         codigo << codigo_barras_segunda_parte
-        codigo_dv = codigo.modulo11_2to9
 
-        codigo = "#{codigo[0..3]}#{codigo_dv}#{codigo[4..42]}"
-        raise Brcobranca::BoletoInvalido.new(self) unless codigo.size == 44
-        codigo
+        if codigo =~ /^(\d{4})(\d{39})$/
+          codigo_dv = codigo.modulo11_2to9
+          codigo = "#{$1}#{codigo_dv}#{$2}"
+          codigo
+        else
+          raise Brcobranca::BoletoInvalido.new(self)
+        end
       end
 
       # Responsável por montar a primeira parte do código de barras, que é a mesma para todos banco.

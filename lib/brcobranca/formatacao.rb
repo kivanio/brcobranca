@@ -57,16 +57,20 @@ module Brcobranca
     #   Entre cada campo deverá haver espaço equivalente a 2 (duas) posições, sendo a 1ª
     #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
     def linha_digitavel
-      valor_inicial = self.somente_numeros
-      raise ArgumentError, "Precisa conter 44 caracteres numéricos e você passou um valor com #{valor_inicial.size} caracteres" if valor_inicial.size != 44
-
-      linha = "#{valor_inicial[0..3]}#{valor_inicial[19..23]}"
-      linha << linha.modulo10.to_s
-      linha << "#{valor_inicial[24..33]}#{valor_inicial[24..33].modulo10}"
-      linha << "#{valor_inicial[34..43]}#{valor_inicial[34..43].modulo10}"
-      linha << "#{valor_inicial[4..4]}"
-      linha << "#{valor_inicial[5..18]}"
-      linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
+      if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
+        linha = $1
+        linha << $4
+        linha << linha.modulo10.to_s
+        linha << $5
+        linha << $5.modulo10.to_s
+        linha << $6
+        linha << $6.modulo10.to_s
+        linha << $2
+        linha << $3
+        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
+      else
+        raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
+      end
     end
   end
 end
