@@ -60,13 +60,11 @@ describe Brcobranca::Boleto::Banespa do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente_formatado.should eql("0061900")
-    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente.should eql("0061900")
     boleto_novo.agencia.should eql("400")
     boleto_novo.convenio.should eql("00012387989")
     boleto_novo.numero_documento.should eql("777700168")
     boleto_novo.carteira.should eql("COB")
-
   end
 
   it "Não permitir gerar boleto com atributos inválido" do

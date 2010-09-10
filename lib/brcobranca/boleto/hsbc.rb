@@ -6,6 +6,7 @@ module Brcobranca
       validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :numero_documento, :maximum => 13, :message => "deve ser menor ou igual a 13 dígitos."
+      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Hsbc
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -56,7 +57,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        self.conta_corrente_formatado
+        self.conta_corrente
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -64,7 +65,7 @@ module Brcobranca
         # Montagem é baseada no tipo de carteira e na presença da data de vencimento
         if self.carteira == "CNR"
           dias_julianos = self.data_vencimento.to_juliano
-          "#{self.conta_corrente_formatado}#{self.numero_documento}#{dias_julianos}2"
+          "#{self.conta_corrente}#{self.numero_documento}#{dias_julianos}2"
         end
       end
 

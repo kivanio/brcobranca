@@ -4,11 +4,13 @@ module Brcobranca
     class Itau < Base # Banco Itaú
 
       # Usado somente em carteiras especiais com registro para complementar o número do cocumento
-      attr_writer :seu_numero
+      attr_reader :seu_numero
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :convenio, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
       validates_length_of :numero_documento, :maximum => 8, :message => "deve ser menor ou igual a 8 dígitos."
+      validates_length_of :conta_corrente, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
+      validates_length_of :seu_numero, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -28,8 +30,8 @@ module Brcobranca
       end
 
       # Retorna número da conta corrente formatado
-      def conta_corrente_formatado
-        @conta_corrente.to_s.rjust(5,'0')
+      def conta_corrente=(valor)
+        @conta_corrente = valor.to_s.rjust(5,'0') unless valor.nil?
       end
 
       # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
@@ -38,8 +40,8 @@ module Brcobranca
       end
 
       # Retorna seu número formatado com 7 dígitos
-      def seu_numero_formatado
-        @seu_numero.to_s.rjust(7,'0')
+      def seu_numero=(valor)
+        @seu_numero = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
       # Retorna dígito verificador do nosso número, calculado com modulo10.
@@ -51,14 +53,14 @@ module Brcobranca
         if %w(126 131 146 150 168).include?(self.carteira)
           "#{self.carteira}#{self.numero_documento}".modulo10
         else
-          "#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira}#{self.numero_documento}".modulo10
+          "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{self.numero_documento}".modulo10
         end
       end
 
       # Calcula o dígito verificador para conta corrente do Itau.
       # Retorna apenas o dígito verificador da conta ou nil caso seja impossível calcular.
       def agencia_conta_corrente_dv
-        "#{self.agencia}#{self.conta_corrente_formatado}".modulo10
+        "#{self.agencia}#{self.conta_corrente}".modulo10
       end
 
       # Campo usado apenas na exibição no boleto
@@ -70,7 +72,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        "#{self.agencia} / #{self.conta_corrente_formatado}-#{self.agencia_conta_corrente_dv}"
+        "#{self.agencia} / #{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
@@ -90,8 +92,8 @@ module Brcobranca
           # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
           # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
           # 44 a 44 01 9(1) Zero
-          dv = "#{self.carteira}#{numero_documento}#{self.seu_numero_formatado}#{self.convenio}".modulo10
-          "#{self.carteira}#{self.numero_documento}#{self.seu_numero_formatado}#{self.convenio}#{dv}0"
+          dv = "#{self.carteira}#{numero_documento}#{self.seu_numero}#{self.convenio}".modulo10
+          "#{self.carteira}#{self.numero_documento}#{self.seu_numero}#{self.convenio}#{dv}0"
         else
           # DEMAIS CARTEIRAS
           # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
@@ -106,7 +108,7 @@ module Brcobranca
           # 36 a 40 05 9(05) N.º da Conta Corrente
           # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
           # 42 a 44 03 9(03) Zeros
-          "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
+          "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
         end
       end
 

@@ -5,6 +5,8 @@ module Brcobranca
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :numero_documento, :maximum => 11, :message => "deve ser menor ou igual a 11 dígitos."
+      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :carteira, :maximum => 2, :message => "deve ser menor ou igual a 2 dígitos."
 
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -19,9 +21,8 @@ module Brcobranca
       end
 
       # Retorna Carteira utilizada formatada com 2 dígitos
-      def carteira_formatado
-        raise(ArgumentError, "A carteira informada não é válida. O BRADESCO utiliza carteira com apenas 2 dígitos.") if @carteira.to_s.size > 2
-        @carteira.to_s.rjust(2,'0')
+      def carteira=(valor)
+        @carteira = valor.to_s.rjust(2,'0') unless valor.nil?
       end
 
       # Número seqüencial de 11 dígitos utilizado para identificar o boleto.
@@ -31,12 +32,12 @@ module Brcobranca
 
       # Campo usado apenas na exibição no boleto
       def nosso_numero_boleto
-        "#{self.carteira_formatado}/#{self.numero_documento}-#{self.nosso_numero_dv}"
+        "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
       # Campo usado apenas na exibição no boleto
       def agencia_conta_boleto
-        "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -50,7 +51,7 @@ module Brcobranca
       #   44 a 44 1 Zero
 
       def codigo_barras_segunda_parte
-        "#{self.agencia}#{self.carteira_formatado}#{self.numero_documento}#{self.conta_corrente_formatado}0"
+        "#{self.agencia}#{self.carteira}#{self.numero_documento}#{self.conta_corrente}0"
       end
     end
   end

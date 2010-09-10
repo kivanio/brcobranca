@@ -38,7 +38,6 @@ describe Brcobranca::Boleto::Itau do
     boleto_novo.valor_documento.should eql(0.0)
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("175")
-
   end
 
   it "Criar nova instancia com atributos válidos" do
@@ -64,7 +63,6 @@ describe Brcobranca::Boleto::Itau do
     boleto_novo.convenio.should eql("12387")
     boleto_novo.numero_documento.should eql("12345678")
     boleto_novo.carteira.should eql("175")
-
   end
 
   it "Gerar boleto" do

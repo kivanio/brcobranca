@@ -111,7 +111,7 @@ module Brcobranca
 
       # Retorna dígito verificador da conta corrente, calculado com modulo11 de 9 para 2
       def conta_corrente_dv
-        self.conta_corrente_formatado.modulo11_9to2
+        self.conta_corrente.modulo11_9to2
       end
 
       # Retorna dígito verificador do nosso número, calculado com modulo11 de 9 para 2
@@ -154,8 +154,8 @@ module Brcobranca
       end
 
       # Retorna número da conta corrente formatado
-      def conta_corrente_formatado
-        @conta_corrente.to_s.rjust(7,'0')
+      def conta_corrente=(valor)
+        @conta_corrente = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
       # Codigo de barras do boleto

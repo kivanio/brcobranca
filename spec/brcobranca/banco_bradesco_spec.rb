@@ -59,13 +59,11 @@ describe Brcobranca::Boleto::Bradesco do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente_formatado.should eql("0061900")
-    boleto_novo.conta_corrente.should eql("61900")
+    boleto_novo.conta_corrente.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
     boleto_novo.numero_documento.should eql("00777700168")
     boleto_novo.carteira.should eql("06")
-    boleto_novo.carteira_formatado.should eql("06")
   end
 
   it "Montar código de barras para carteira número 06" do

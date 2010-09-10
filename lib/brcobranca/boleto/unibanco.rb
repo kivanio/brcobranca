@@ -8,6 +8,7 @@ module Brcobranca
       validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       validates_each :numero_documento do |record, attr, value|
         record.errors.add attr, 'deve ser menor ou igual a 14 dígitos.' if (value.to_s.size > 14) && (record.carteira.to_i == 5)
@@ -54,7 +55,7 @@ module Brcobranca
 
       # Campo usado apenas na exibição no boleto
       def agencia_conta_boleto
-        "#{self.agencia} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
