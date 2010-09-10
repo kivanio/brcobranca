@@ -123,7 +123,7 @@ describe Brcobranca::Boleto::Real do
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(6)
+    boleto_novo.errors.count.should eql(4)
 
     @valid_attributes[:valor] = 0
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
@@ -136,7 +136,7 @@ describe Brcobranca::Boleto::Real do
 
     boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(6)
+    boleto_novo.errors.count.should eql(4)
   end
 
   it "Busca logotipo do banco" do

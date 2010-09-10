@@ -6,6 +6,7 @@ module Brcobranca
       #  Com Registro 4
       #  Sem Registro 5
       validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
 
       # Nova instancia do Unibanco
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -47,7 +48,7 @@ module Brcobranca
 
       # Campo usado apenas na exibição no boleto
       def agencia_conta_boleto
-        "#{self.agencia_formatado} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -81,7 +82,7 @@ module Brcobranca
           # 33 a 43  11  “Nosso Número” (NNNNNNNNNNN)
           # 44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
           data = self.data_vencimento.strftime('%y%m%d')
-          "0#{self.carteira}#{data}#{self.agencia_formatado}#{self.agencia_dv}#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
+          "0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
         end
       end
     end

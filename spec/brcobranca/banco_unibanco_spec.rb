@@ -115,7 +115,7 @@ describe Brcobranca::Boleto::Unibanco do
 
     lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(7)
+    boleto_novo.errors.count.should eql(5)
   end
 
   it "Montar nosso_numero_boleto" do

@@ -6,6 +6,8 @@ module Brcobranca
       # Usado somente em carteiras especiais com registro para complementar o número do cocumento
       attr_writer :seu_numero
 
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -48,14 +50,14 @@ module Brcobranca
         if %w(126 131 146 150 168).include?(self.carteira)
           "#{self.carteira}#{self.numero_documento_formatado}".modulo10
         else
-          "#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira}#{self.numero_documento_formatado}".modulo10
+          "#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira}#{self.numero_documento_formatado}".modulo10
         end
       end
 
       # Calcula o dígito verificador para conta corrente do Itau.
       # Retorna apenas o dígito verificador da conta ou nil caso seja impossível calcular.
       def agencia_conta_corrente_dv
-        "#{self.agencia_formatado}#{self.conta_corrente_formatado}".modulo10
+        "#{self.agencia}#{self.conta_corrente_formatado}".modulo10
       end
 
       # Campo usado apenas na exibição no boleto
@@ -67,7 +69,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        "#{self.agencia_formatado} / #{self.conta_corrente_formatado}-#{self.agencia_conta_corrente_dv}"
+        "#{self.agencia} / #{self.conta_corrente_formatado}-#{self.agencia_conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
@@ -103,7 +105,7 @@ module Brcobranca
           # 36 a 40 05 9(05) N.º da Conta Corrente
           # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
           # 42 a 44 03 9(03) Zeros
-          "#{self.carteira}#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
+          "#{self.carteira}#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
         end
       end
 

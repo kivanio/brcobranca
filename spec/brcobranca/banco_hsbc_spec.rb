@@ -107,7 +107,7 @@ describe Brcobranca::Boleto::Hsbc do
 
     lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(6)
+    boleto_novo.errors.count.should eql(4)
 
     @valid_attributes[:valor] = 934.23
     @valid_attributes[:data_documento] = Date.parse("2004-09-03")
@@ -119,7 +119,7 @@ describe Brcobranca::Boleto::Hsbc do
     boleto_novo = Brcobranca::Boleto::Hsbc.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(7)
+    boleto_novo.errors.count.should eql(5)
   end
 
   it "Montar nosso número" do

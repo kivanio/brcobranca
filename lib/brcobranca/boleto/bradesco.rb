@@ -3,6 +3,8 @@ module Brcobranca
   module Boleto
     class Bradesco < Base # Banco BRADESCO
 
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -33,7 +35,7 @@ module Brcobranca
 
       # Campo usado apenas na exibição no boleto
       def agencia_conta_boleto
-        "#{self.agencia_formatado}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -47,7 +49,7 @@ module Brcobranca
       #   44 a 44 1 Zero
 
       def codigo_barras_segunda_parte
-        "#{self.agencia_formatado}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
+        "#{self.agencia}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
       end
     end
   end

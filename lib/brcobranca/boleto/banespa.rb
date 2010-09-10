@@ -3,6 +3,8 @@ module Brcobranca
   module Boleto
     class Banespa < Base # Banco BANESPA
 
+      validates_length_of :agencia, :maximum => 3, :message => "deve ser menor do que 3 dígitos."
+
       # Nova instancia do Banespa
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -16,8 +18,8 @@ module Brcobranca
       end
 
       # Retorna código da agencia formatado com zeros a esquerda.
-      def agencia_formatado
-        @agencia.to_s.rjust(3,'0')
+      def agencia=(valor)
+        @agencia = valor.to_s.rjust(3,'0') unless valor.nil?
       end
 
       # Número do convênio/contrato do cliente junto ao banco emissor formatado com 11 dígitos
@@ -32,7 +34,7 @@ module Brcobranca
 
       # Número sequencial utilizado para distinguir os boletos na agência.
       def nosso_numero
-        "#{self.agencia_formatado}#{self.numero_documento_formatado}"
+        "#{self.agencia}#{self.numero_documento_formatado}"
       end
 
       # Retorna dígito verificador do nosso número calculado como contas na documentação.

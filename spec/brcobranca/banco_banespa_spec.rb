@@ -84,7 +84,7 @@ describe Brcobranca::Boleto::Banespa do
     boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(5)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Gerar boleto" do
@@ -95,7 +95,6 @@ describe Brcobranca::Boleto::Banespa do
     @valid_attributes[:numero_documento] = "0004952"
     @valid_attributes[:conta_corrente] = "0403005"
     boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
-
     boleto_novo.conta_corrente_dv.should eql(2)
     boleto_novo.codigo_barras_segunda_parte.should eql("1481302647800049520003306")
     boleto_novo.codigo_barras.should eql("03398139400000103581481302647800049520003306")

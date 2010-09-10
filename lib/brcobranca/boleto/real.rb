@@ -3,6 +3,8 @@ module Brcobranca
   module Boleto
     class Real < Base # Banco REAL
 
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+
       ## Nova instancia do Real
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -38,7 +40,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        "#{self.agencia_formatado}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
       end
 
       # CALCULO DO DIGITO:
@@ -48,7 +50,7 @@ module Brcobranca
       #  CODIGO DA AGENCIA: 4 DIGITOS
       #  NUMERO DA CONTA : 7 DIGITOS
       def agencia_conta_corrente_nosso_numero_dv
-        "#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}".modulo10
+        "#{self.numero_documento_formatado}#{self.agencia}#{self.conta_corrente_formatado}".modulo10
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -57,10 +59,10 @@ module Brcobranca
         case self.carteira.to_i
           # Carteira sem registro
         when 57
-          "#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
+          "#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
         else
           # TODO verificar com o banco, pois não consta na documentação
-          "000000#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
+          "000000#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
         end
       end
     end

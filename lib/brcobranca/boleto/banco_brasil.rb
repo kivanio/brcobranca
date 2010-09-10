@@ -3,6 +3,8 @@ module Brcobranca
   module Boleto
     class BancoBrasil < Base # Banco do Brasil
 
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+
       # Nova instancia do BancoBrasil
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -83,7 +85,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def agencia_conta_boleto
-        "#{self.agencia_formatado}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
+        "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente_formatado}-#{self.conta_corrente_dv}"
       end
 
       # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
@@ -97,14 +99,14 @@ module Brcobranca
         when 6 # Convenio de 6 dígitos
           if self.codigo_servico == false
             # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-            "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
+            "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
           else
             # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
             raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira_formatado}" unless (["16","18"].include?(self.carteira_formatado))
             "#{self.convenio}#{self.numero_documento_formatado}21"
           end
         when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-          "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia_formatado}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
+          "#{self.convenio}#{self.numero_documento_formatado}#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira_formatado}"
         else
           raise(ArgumentError, "O número de convênio informado é inválido, deveria ser de 4,6,7 ou 8 dígitos.")
         end

@@ -4,6 +4,7 @@ module Brcobranca
     class Hsbc < Base # Banco HSBC
 
       validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
 
       # Nova instancia do Hsbc
       # @param (see Brcobranca::Boleto::Base#initialize)

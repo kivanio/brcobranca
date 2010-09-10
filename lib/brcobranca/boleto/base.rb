@@ -100,13 +100,13 @@ module Brcobranca
       end
 
       # Retorna código da agencia formatado com zeros a esquerda.
-      def agencia_formatado
-        @agencia.to_s.rjust(4,'0')
+      def agencia=(valor)
+        @agencia = valor.to_s.rjust(4,'0') unless valor.nil?
       end
 
       # Retorna dígito verificador da agência, calculado com modulo11 de 9 para 2
       def agencia_dv
-        self.agencia_formatado.modulo11_9to2
+        self.agencia.modulo11_9to2
       end
 
       # Retorna dígito verificador da conta corrente, calculado com modulo11 de 9 para 2
