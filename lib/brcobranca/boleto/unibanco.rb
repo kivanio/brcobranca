@@ -9,6 +9,11 @@ module Brcobranca
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
+      validates_each :numero_documento do |record, attr, value|
+        record.errors.add attr, 'deve ser menor ou igual a 14 dígitos.' if (value.to_s.size > 14) && (record.carteira.to_i == 5)
+        record.errors.add attr, 'deve ser menor ou igual a 11 dígitos.' if (value.to_s.size > 11) && (record.carteira.to_i == 4)
+      end
+
       # Nova instancia do Unibanco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -27,7 +32,7 @@ module Brcobranca
       end
 
       # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
-      def numero_documento_formatado
+      def numero_documento
         case self.carteira.to_i
         when 5
           @numero_documento.to_s.rjust(14,'0')
@@ -39,12 +44,12 @@ module Brcobranca
       end
 
       def nosso_numero_dv
-        self.numero_documento_formatado.modulo11_2to9
+        self.numero_documento.modulo11_2to9
       end
 
       # Campo usado apenas na exibição no boleto
       def nosso_numero_boleto
-        "#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
+        "#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
       # Campo usado apenas na exibição no boleto
@@ -68,7 +73,7 @@ module Brcobranca
           # 28 a 29 2 vago. Usar 00 (número FIXO)
           # 30 a 43 14  Número de referência do cliente
           # 44  1 Dígito verificador
-          "#{self.carteira}#{self.convenio}00#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
+          "#{self.carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
         when 4
           # Cobrança com registro (CÓDIGO DE BARRAS)
           # Posição  Tamanho Descrição
@@ -83,7 +88,7 @@ module Brcobranca
           # 33 a 43  11  “Nosso Número” (NNNNNNNNNNN)
           # 44 1 Super dígito do “Nosso Número” (calculado com o MÓDULO 11 (de 2 a 9))
           data = self.data_vencimento.strftime('%y%m%d')
-          "0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
+          "0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
         end
       end
     end

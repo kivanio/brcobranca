@@ -5,6 +5,11 @@ module Brcobranca
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
 
+      validates_each :numero_documento do |record, attr, value|
+        record.errors.add attr, 'deve ser menor ou igual a 13 dígitos.' if (value.to_s.size > 13) && (record.carteira.to_i == 57)
+        record.errors.add attr, 'deve ser menor ou igual a 7 dígitos.' if (value.to_s.size > 7) && (record.carteira.to_i != 57)
+      end
+
       ## Nova instancia do Real
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
@@ -20,13 +25,11 @@ module Brcobranca
       # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
       #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA
       #                     ATE 15 DIGITOS P/ COBRANCA SEM REGISTRO
-      def numero_documento_formatado
+      def numero_documento
         case self.carteira.to_i
         when 57
-          #nosso número com maximo de 15 digitos
           @numero_documento.to_s.rjust(13,'0')
         else
-          #nosso número com maximo de 7 digitos
           @numero_documento.to_s.rjust(7,'0')
         end
       end
@@ -34,7 +37,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def nosso_numero_boleto
-        "#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
+        "#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
       # Campo usado apenas na exibição no boleto
@@ -50,7 +53,7 @@ module Brcobranca
       #  CODIGO DA AGENCIA: 4 DIGITOS
       #  NUMERO DA CONTA : 7 DIGITOS
       def agencia_conta_corrente_nosso_numero_dv
-        "#{self.numero_documento_formatado}#{self.agencia}#{self.conta_corrente_formatado}".modulo10
+        "#{self.numero_documento}#{self.agencia}#{self.conta_corrente_formatado}".modulo10
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
@@ -59,10 +62,10 @@ module Brcobranca
         case self.carteira.to_i
           # Carteira sem registro
         when 57
-          "#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
+          "#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
         else
           # TODO verificar com o banco, pois não consta na documentação
-          "000000#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento_formatado}"
+          "000000#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
         end
       end
     end

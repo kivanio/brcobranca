@@ -63,8 +63,7 @@ describe Brcobranca::Boleto::Unibanco do
     boleto_novo.conta_corrente_formatado.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql("2031671")
-    boleto_novo.numero_documento_formatado.should eql("00000777700168")
-    boleto_novo.numero_documento.should eql("777700168")
+    boleto_novo.numero_documento.should eql("00000777700168")
     boleto_novo.carteira.should eql("5")
 
   end
@@ -90,8 +89,8 @@ describe Brcobranca::Boleto::Unibanco do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse("2009-04-30")
     @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = "1803029901"
     @valid_attributes[:carteira] = "5"
+    @valid_attributes[:numero_documento] = "1803029901"
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
     boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
@@ -103,18 +102,9 @@ describe Brcobranca::Boleto::Unibanco do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2004-09-03")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = ""
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
-
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
+    boleto_novo = Brcobranca::Boleto::Unibanco.new(:numero_documento => "18030299444444444401")
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(5)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Montar nosso_numero_boleto" do

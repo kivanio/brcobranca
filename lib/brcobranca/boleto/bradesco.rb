@@ -4,6 +4,7 @@ module Brcobranca
     class Bradesco < Base # Banco BRADESCO
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
+      validates_length_of :numero_documento, :maximum => 11, :message => "deve ser menor ou igual a 11 dígitos."
 
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -24,13 +25,13 @@ module Brcobranca
       end
 
       # Número seqüencial de 11 dígitos utilizado para identificar o boleto.
-      def numero_documento_formatado
-        @numero_documento.to_s.rjust(11,'0')
+      def numero_documento=(valor)
+        @numero_documento = valor.to_s.rjust(11,'0') unless valor.nil?
       end
 
       # Campo usado apenas na exibição no boleto
       def nosso_numero_boleto
-        "#{self.carteira_formatado}/#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
+        "#{self.carteira_formatado}/#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
       # Campo usado apenas na exibição no boleto
@@ -49,7 +50,7 @@ module Brcobranca
       #   44 a 44 1 Zero
 
       def codigo_barras_segunda_parte
-        "#{self.agencia}#{self.carteira_formatado}#{self.numero_documento_formatado}#{self.conta_corrente_formatado}0"
+        "#{self.agencia}#{self.carteira_formatado}#{self.numero_documento}#{self.conta_corrente_formatado}0"
       end
     end
   end

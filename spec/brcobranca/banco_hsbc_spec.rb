@@ -65,10 +65,8 @@ describe Brcobranca::Boleto::Hsbc do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
-    boleto_novo.numero_documento_formatado.should eql("0000777700168")
+    boleto_novo.numero_documento.should eql("0000777700168")
     boleto_novo.carteira.should eql("CNR")
-
   end
 
   it "Gerar boleto" do
@@ -97,29 +95,9 @@ describe Brcobranca::Boleto::Hsbc do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = nil
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::Hsbc.new(@valid_attributes)
-
-    lambda { boleto_novo.codigo_barras_segunda_parte }.should raise_error(ArgumentError)
+    boleto_novo = Brcobranca::Boleto::Hsbc.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(4)
-
-    @valid_attributes[:valor] = 934.23
-    @valid_attributes[:data_documento] = Date.parse("2004-09-03")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    @valid_attributes[:carteira] = "OUTRA"
-    boleto_novo = Brcobranca::Boleto::Hsbc.new(@valid_attributes)
-
-    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(5)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Montar nosso número" do

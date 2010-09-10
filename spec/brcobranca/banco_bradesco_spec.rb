@@ -63,8 +63,7 @@ describe Brcobranca::Boleto::Bradesco do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
-    boleto_novo.numero_documento_formatado.should eql("00777700168")
+    boleto_novo.numero_documento.should eql("00777700168")
     boleto_novo.carteira.should eql("06")
     boleto_novo.carteira_formatado.should eql("06")
   end
@@ -99,21 +98,9 @@ describe Brcobranca::Boleto::Bradesco do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = ""
-    @valid_attributes[:moeda] = ""
-    @valid_attributes[:convenio] = ""
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    @valid_attributes[:carteira] = ""
-
-    boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
-
+    boleto_novo = Brcobranca::Boleto::Bradesco.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(5)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Montar nosso_numero_boleto" do

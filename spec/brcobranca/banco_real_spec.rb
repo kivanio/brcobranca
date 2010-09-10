@@ -63,10 +63,8 @@ describe Brcobranca::Boleto::Real do
     boleto_novo.conta_corrente_formatado.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
-    boleto_novo.numero_documento.should eql("777700168")
-    boleto_novo.numero_documento_formatado.should eql("0000777700168")
+    boleto_novo.numero_documento.should eql("0000777700168")
     boleto_novo.carteira.should eql("57")
-
   end
 
   it "Gerar boleto para carteira registrada" do
@@ -112,31 +110,9 @@ describe Brcobranca::Boleto::Real do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2004-09-03")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = 57
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
-
-    boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
+    boleto_novo = Brcobranca::Boleto::Real.new(:numero_documento => "18030299444444444401")
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(4)
-
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2004-09-03")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = ""
-    @valid_attributes[:conta_corrente] = ""
-    @valid_attributes[:agencia] = ""
-    boleto_novo = Brcobranca::Boleto::Real.new(@valid_attributes)
-
-    boleto_novo.agencia_conta_corrente_nosso_numero_dv.should eql(0)
-    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(4)
+    boleto_novo.errors.count.should eql(6)
   end
 
   it "Busca logotipo do banco" do

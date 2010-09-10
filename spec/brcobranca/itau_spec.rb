@@ -132,20 +132,9 @@ describe Brcobranca::Boleto::Itau do
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = ""
-    @valid_attributes[:moeda] = ""
-    @valid_attributes[:convenio] = ""
-    @valid_attributes[:agencia] = "rer4"
-    @valid_attributes[:conta_corrente] = ""
-
-    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
-
+    boleto_novo = Brcobranca::Boleto::Itau.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(5)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Montar agencia_conta_corrente_dv" do

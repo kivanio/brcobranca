@@ -5,6 +5,7 @@ module Brcobranca
 
       validates_length_of :agencia, :maximum => 3, :message => "deve ser menor ou igual a 3 dígitos."
       validates_length_of :convenio, :maximum => 11, :message => "deve ser menor ou igual a 11 dígitos."
+      validates_length_of :numero_documento, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Banespa
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -29,13 +30,13 @@ module Brcobranca
       end
 
       # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
-      def numero_documento_formatado
-        @numero_documento.to_s.rjust(7,'0')
+      def numero_documento=(valor)
+        @numero_documento = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
       # Número sequencial utilizado para distinguir os boletos na agência.
       def nosso_numero
-        "#{self.agencia}#{self.numero_documento_formatado}"
+        "#{self.agencia}#{self.numero_documento}"
       end
 
       # Retorna dígito verificador do nosso número calculado como contas na documentação.
@@ -65,7 +66,7 @@ module Brcobranca
       #    Dígito verificador 1                                                                         PIC  9  (001)
       #    Dígito verificador 2                                                                         PIC  9  (001)
       def campo_livre
-        "#{self.convenio}#{self.numero_documento_formatado}00#{self.banco}"
+        "#{self.convenio}#{self.numero_documento}00#{self.banco}"
       end
 
       #campo livre com os digitos verificadores como consta na documentação do banco.

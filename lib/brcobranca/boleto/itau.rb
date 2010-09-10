@@ -8,6 +8,7 @@ module Brcobranca
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :convenio, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
+      validates_length_of :numero_documento, :maximum => 8, :message => "deve ser menor ou igual a 8 dígitos."
 
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -32,9 +33,8 @@ module Brcobranca
       end
 
       # Número seqüencial de 8 dígitos utilizado para identificar o boleto.
-      def numero_documento_formatado
-        raise ArgumentError, "numero_documento pode ser de no máximo 8 caracteres." if @numero_documento.to_s.size > 8
-        @numero_documento.to_s.rjust(8,'0')
+      def numero_documento=(valor)
+        @numero_documento = valor.to_s.rjust(8,'0') unless valor.nil?
       end
 
       # Retorna seu número formatado com 7 dígitos
@@ -49,9 +49,9 @@ module Brcobranca
       # dados "CARTEIRA/NOSSO NUMERO".
       def nosso_numero_dv
         if %w(126 131 146 150 168).include?(self.carteira)
-          "#{self.carteira}#{self.numero_documento_formatado}".modulo10
+          "#{self.carteira}#{self.numero_documento}".modulo10
         else
-          "#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira}#{self.numero_documento_formatado}".modulo10
+          "#{self.agencia}#{self.conta_corrente_formatado}#{self.carteira}#{self.numero_documento}".modulo10
         end
       end
 
@@ -64,7 +64,7 @@ module Brcobranca
       # Campo usado apenas na exibição no boleto
       #  Deverá ser sobreescrito para cada banco
       def nosso_numero_boleto
-        "#{self.carteira}/#{self.numero_documento_formatado}-#{self.nosso_numero_dv}"
+        "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
       # Campo usado apenas na exibição no boleto
@@ -90,8 +90,8 @@ module Brcobranca
           # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
           # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
           # 44 a 44 01 9(1) Zero
-          dv = "#{self.carteira}#{numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio}".modulo10
-          "#{self.carteira}#{self.numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio}#{dv}0"
+          dv = "#{self.carteira}#{numero_documento}#{self.seu_numero_formatado}#{self.convenio}".modulo10
+          "#{self.carteira}#{self.numero_documento}#{self.seu_numero_formatado}#{self.convenio}#{dv}0"
         else
           # DEMAIS CARTEIRAS
           # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
@@ -106,7 +106,7 @@ module Brcobranca
           # 36 a 40 05 9(05) N.º da Conta Corrente
           # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
           # 42 a 44 03 9(03) Zeros
-          "#{self.carteira}#{self.numero_documento_formatado}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
+          "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente_formatado}#{self.agencia_conta_corrente_dv}000"
         end
       end
 

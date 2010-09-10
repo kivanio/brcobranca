@@ -209,18 +209,9 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
-    @valid_attributes[:valor] = 0
-    @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = ""
-    @valid_attributes[:carteira] = ""
-    @valid_attributes[:moeda] = ""
-    @valid_attributes[:convenio] = ""
-
-    boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
-
+    boleto_novo = Brcobranca::Boleto::BancoBrasil.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(4)
+    boleto_novo.errors.count.should eql(7)
   end
 
   it "Calcular agencia_dv" do
@@ -253,15 +244,6 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
   it "Montar nosso_numero_boleto" do
     boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
-    boleto_novo.numero_documento = "85068014982"
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    boleto_novo.numero_documento = "05009401448"
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    boleto_novo.numero_documento = "12387987777700168"
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = "4042"
     boleto_novo.nosso_numero_boleto.should eql("12387989000004042-4")
     boleto_novo.nosso_numero_dv.should eql(4)
@@ -271,15 +253,6 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     boleto_novo.numero_documento = "0719"
     boleto_novo.nosso_numero_boleto.should eql("12387989000000719-2")
     boleto_novo.nosso_numero_dv.should eql(2)
-    boleto_novo.numero_documento = 85068014982
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    boleto_novo.numero_documento = 5009401448
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
-    boleto_novo.numero_documento = 12387987777700168
-    lambda { boleto_novo.nosso_numero_boleto }.should raise_error(ArgumentError)
-    lambda { boleto_novo.nosso_numero_dv }.should raise_error(ArgumentError)
     boleto_novo.numero_documento = 4042
     boleto_novo.nosso_numero_boleto.should eql("12387989000004042-4")
     boleto_novo.nosso_numero_dv.should eql(4)
