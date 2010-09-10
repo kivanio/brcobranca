@@ -9,7 +9,7 @@ module Brcobranca
     # @return [String] contendo 4 dígitos
     def fator_vencimento
       data_base = Date.parse "1997-10-07"
-      (self - data_base).to_i.to_s.rjust(4,'0')
+      Integer(self - data_base).to_s.rjust(4,'0')
     end
 
     # Mostra a data em formato <b>dia/mês/ano</b>
@@ -30,8 +30,8 @@ module Brcobranca
     def to_juliano
       ultima_data = Date.parse("#{self.year - 1}-12-31")
       ultimo_digito_ano = self.to_s[3..3]
-      dias = (self - ultima_data)
-      (dias.to_i.to_s + ultimo_digito_ano).rjust(4,'0')
+      dias = Integer(self - ultima_data)
+      (dias.to_s + ultimo_digito_ano).rjust(4,'0')
     end
   end
 end
