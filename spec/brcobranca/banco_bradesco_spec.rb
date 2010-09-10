@@ -113,7 +113,7 @@ describe Brcobranca::Boleto::Bradesco do
     boleto_novo = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(4)
+    boleto_novo.errors.count.should eql(5)
   end
 
   it "Montar nosso_numero_boleto" do

@@ -3,7 +3,8 @@ module Brcobranca
   module Boleto
     class Banespa < Base # Banco BANESPA
 
-      validates_length_of :agencia, :maximum => 3, :message => "deve ser menor do que 3 dígitos."
+      validates_length_of :agencia, :maximum => 3, :message => "deve ser menor ou igual a 3 dígitos."
+      validates_length_of :convenio, :maximum => 11, :message => "deve ser menor ou igual a 11 dígitos."
 
       # Nova instancia do Banespa
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -23,8 +24,8 @@ module Brcobranca
       end
 
       # Número do convênio/contrato do cliente junto ao banco emissor formatado com 11 dígitos
-      def convenio_formatado
-        @convenio.to_s.rjust(11,'0')
+      def convenio=(valor)
+        @convenio = valor.to_s.rjust(11,'0') unless valor.nil?
       end
 
       # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
@@ -48,7 +49,7 @@ module Brcobranca
       end
 
       def agencia_conta_boleto
-        self.convenio_formatado.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
+        self.convenio.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
@@ -64,7 +65,7 @@ module Brcobranca
       #    Dígito verificador 1                                                                         PIC  9  (001)
       #    Dígito verificador 2                                                                         PIC  9  (001)
       def campo_livre
-        "#{self.convenio_formatado}#{self.numero_documento_formatado}00#{self.banco}"
+        "#{self.convenio}#{self.numero_documento_formatado}00#{self.banco}"
       end
 
       #campo livre com os digitos verificadores como consta na documentação do banco.

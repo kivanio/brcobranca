@@ -3,7 +3,7 @@ module Brcobranca
   module Boleto
     class Bradesco < Base # Banco BRADESCO
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
 
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)

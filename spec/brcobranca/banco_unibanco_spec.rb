@@ -18,7 +18,7 @@ describe Brcobranca::Boleto::Unibanco do
       :sacado_documento => "12345678900",
       :agencia => "4042",
       :conta_corrente => "61900",
-      :convenio => 12387989,
+      :convenio => 2031671,
       :numero_documento => "777700168"
     }
   end
@@ -62,7 +62,7 @@ describe Brcobranca::Boleto::Unibanco do
     boleto_novo.conta_corrente.should eql("61900")
     boleto_novo.conta_corrente_formatado.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
-    boleto_novo.convenio.should eql(12387989)
+    boleto_novo.convenio.should eql("2031671")
     boleto_novo.numero_documento_formatado.should eql("00000777700168")
     boleto_novo.numero_documento.should eql("777700168")
     boleto_novo.carteira.should eql("5")
@@ -94,7 +94,6 @@ describe Brcobranca::Boleto::Unibanco do
     @valid_attributes[:carteira] = "5"
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
-    @valid_attributes[:convenio] = 2031671
     boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     boleto_novo.nosso_numero_dv.should eql(5)
@@ -184,7 +183,6 @@ describe Brcobranca::Boleto::Unibanco do
     @valid_attributes[:carteira] = "4"
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
-    @valid_attributes[:convenio] = 2031671
     boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|
@@ -207,7 +205,6 @@ describe Brcobranca::Boleto::Unibanco do
     @valid_attributes[:carteira] = "4"
     @valid_attributes[:conta_corrente] = "100618"
     @valid_attributes[:agencia] = "0123"
-    @valid_attributes[:convenio] = 2031671
     boleto_novo = Brcobranca::Boleto::Unibanco.new(@valid_attributes)
 
     %w| pdf jpg tif png ps |.each do |format|

@@ -220,7 +220,7 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     boleto_novo = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
 
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(2)
+    boleto_novo.errors.count.should eql(4)
   end
 
   it "Calcular agencia_dv" do

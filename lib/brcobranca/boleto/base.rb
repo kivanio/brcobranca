@@ -67,7 +67,7 @@ module Brcobranca
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :numero_documento, :message => "não pode estar em branco."
-      validates_numericality_of :agencia, :conta_corrente, :numero_documento, :message => "não é um número."
+      validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :message => "não é um número."
 
       # Nova instancia da classe Base
       # @param [Hash] campos usados na criação do boleto.

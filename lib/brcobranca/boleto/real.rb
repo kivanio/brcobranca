@@ -3,7 +3,7 @@ module Brcobranca
   module Boleto
     class Real < Base # Banco REAL
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
 
       ## Nova instancia do Real
       # @param (see Brcobranca::Boleto::Base#initialize)

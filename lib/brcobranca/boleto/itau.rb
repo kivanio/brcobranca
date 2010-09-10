@@ -6,7 +6,8 @@ module Brcobranca
       # Usado somente em carteiras especiais com registro para complementar o número do cocumento
       attr_writer :seu_numero
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
+      validates_length_of :convenio, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
 
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -21,8 +22,8 @@ module Brcobranca
       end
 
       # Número do convênio/contrato do cliente junto ao banco emissor formatado com 5 dígitos
-      def convenio_formatado
-        @convenio.to_s.rjust(5,'0')
+      def convenio=(valor)
+        @convenio = valor.to_s.rjust(5,'0') unless valor.nil?
       end
 
       # Retorna número da conta corrente formatado
@@ -89,8 +90,8 @@ module Brcobranca
           # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
           # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
           # 44 a 44 01 9(1) Zero
-          dv = "#{self.carteira}#{numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio_formatado}".modulo10
-          "#{self.carteira}#{self.numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio_formatado}#{dv}0"
+          dv = "#{self.carteira}#{numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio}".modulo10
+          "#{self.carteira}#{self.numero_documento_formatado}#{self.seu_numero_formatado}#{self.convenio}#{dv}0"
         else
           # DEMAIS CARTEIRAS
           # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'

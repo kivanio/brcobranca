@@ -6,7 +6,8 @@ module Brcobranca
       #  Com Registro 4
       #  Sem Registro 5
       validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
+      validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Unibanco
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -20,9 +21,9 @@ module Brcobranca
         "409"
       end
 
-      # Número do convênio/contrato do cliente junto ao banco emissor formatado com 6 dígitos
-      def convenio_formatado
-        @convenio.to_s.rjust(6,'0')
+      # Número do convênio/contrato do cliente junto ao banco emissor formatado com 7 dígitos
+      def convenio=(valor)
+        @convenio = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
       # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
@@ -67,7 +68,7 @@ module Brcobranca
           # 28 a 29 2 vago. Usar 00 (número FIXO)
           # 30 a 43 14  Número de referência do cliente
           # 44  1 Dígito verificador
-          "#{self.carteira}#{self.convenio_formatado}00#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
+          "#{self.carteira}#{self.convenio}00#{self.numero_documento_formatado}#{self.nosso_numero_dv}"
         when 4
           # Cobrança com registro (CÓDIGO DE BARRAS)
           # Posição  Tamanho Descrição

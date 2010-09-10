@@ -3,7 +3,8 @@ module Brcobranca
   module Boleto
     class BancoBrasil < Base # Banco do Brasil
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor do que 4 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
+      validates_length_of :convenio, :in => 4..8, :message => "não existente para este banco."
 
       # Nova instancia do BancoBrasil
       # @param (see Brcobranca::Boleto::Base#initialize)
