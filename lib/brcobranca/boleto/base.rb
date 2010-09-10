@@ -83,6 +83,8 @@ module Brcobranca
           send "#{campo}=", valor
         end
 
+        yield self if block_given?
+
         template_config
       end
 
