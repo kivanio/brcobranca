@@ -9,11 +9,23 @@ module Brcobranca
       validates_length_of :convenio, :in => 4..8, :message => "não existente para este banco."
 
       validates_each :numero_documento do |record, attr, value|
-        record.errors.add attr, 'deve ser menor ou igual a 9 dígitos.' if (value.to_s.size > 9) && (record.convenio.to_s.size == 8)
-        record.errors.add attr, 'deve ser menor ou igual a 10 dígitos.' if (value.to_s.size > 10) && (record.convenio.to_s.size == 7)
-        record.errors.add attr, 'deve ser menor ou igual a 7 dígitos.' if (value.to_s.size > 7) && (record.convenio.to_s.size == 4)
-        record.errors.add attr, 'deve ser menor ou igual a 5 dígitos.' if (value.to_s.size > 5) && (record.convenio.to_s.size == 6) && (!record.codigo_servico)
-        record.errors.add attr, 'deve ser menor ou igual a 17 dígitos.' if (value.to_s.size > 17) && (record.convenio.to_s.size == 6) && (record.codigo_servico)
+        valor_tamanho = value.to_s.size
+        registro_tamanho = record.convenio.to_s.size
+        quantidade = case
+        when (valor_tamanho > 9) && (registro_tamanho == 8)
+          '9'
+        when (valor_tamanho > 10) && (registro_tamanho == 7)
+          '10'
+        when (valor_tamanho > 7) && (registro_tamanho == 4)
+          '7'
+        when (valor_tamanho > 5) && (registro_tamanho == 6) && (!record.codigo_servico)
+          '5'
+        when (valor_tamanho > 17) && (registro_tamanho == 6) && (record.codigo_servico)
+          '17'
+        else
+          nil
+        end
+        record.errors.add attr, "deve ser menor ou igual a #{quantidade} dígitos." if quantidade
       end
 
       # Nova instancia do BancoBrasil
@@ -55,24 +67,25 @@ module Brcobranca
 
       # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de convênio).
       def numero_documento
-        case @convenio.to_s.size
+        quantidade = case @convenio.to_s.size
         when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-          @numero_documento.to_s.rjust(9,'0')
+          9
         when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-          @numero_documento.to_s.rjust(10,'0')
+          10
         when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-          @numero_documento.to_s.rjust(7,'0')
+          7
         when 6 # Convenio de 6 dígitos
           if self.codigo_servico == false
             # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-            @numero_documento.to_s.rjust(5,'0')
+            5
           else
             # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
-            @numero_documento.to_s.rjust(17,'0')
+            17
           end
         else
-          self
+          nil
         end
+        quantidade ? @numero_documento.to_s.rjust(quantidade,'0') : @numero_documento
       end
 
       # Retorna digito verificador do nosso numero, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
