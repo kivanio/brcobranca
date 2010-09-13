@@ -27,12 +27,8 @@ module Brcobranca
       #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA
       #                     ATE 15 DIGITOS P/ COBRANCA SEM REGISTRO
       def numero_documento
-        case self.carteira.to_i
-        when 57
-          @numero_documento.to_s.rjust(13,'0')
-        else
-          @numero_documento.to_s.rjust(7,'0')
-        end
+        quantidade = (self.carteira.to_i == 57) ? 13 : 7
+        @numero_documento.to_s.rjust(quantidade,'0')
       end
 
       # Campo usado apenas na exibição no boleto
