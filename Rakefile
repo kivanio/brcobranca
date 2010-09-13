@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-
 require 'rubygems'
 require 'rake'
 
@@ -12,6 +11,7 @@ begin
     gem.email = "kivanio@gmail.com"
     gem.homepage = "http://github.com/kivanio/brcobranca"
     gem.authors = ["Kivanio Barbosa"]
+    gem.requirements << 'GhostScript > 8.0, para gear PDF e código de Barras'
     gem.add_runtime_dependency("rghost", ">= 0.8.7")
     gem.add_runtime_dependency("rghost_barcode", ">= 0.8")
     gem.add_runtime_dependency("parseline", ">= 1.0.3")
