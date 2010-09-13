@@ -81,14 +81,16 @@ module Brcobranca
     #  Ex. 11 = (1+1) = 2
     #  Ex. 13 = (1+3) = 4
     def soma_digitos
-      case self.to_i
+      total = case self.to_i
       when (0..9)
-        self.to_i
+        self
       else
+        numero = self.to_s
         total = 0
-        0.upto(self.to_s.size-1) {|digito| total += self.to_s[digito,1].to_i }
+        0.upto(numero.size-1) {|digito| total += numero[digito,1].to_i }
         total
       end
+      total.to_i
     end
 
     # Faz a multiplicação de um número pelos fatores passados como parâmetro.
@@ -103,10 +105,11 @@ module Brcobranca
       multiplicador_posicao = 0
 
       self.to_s.split(//).reverse!.each do |caracter|
+        fator = fatores[multiplicador_posicao]
         total += if block_given?
-          yield(caracter, fatores[multiplicador_posicao])
+          yield(caracter, fator)
         else
-          (caracter.to_i * fatores[multiplicador_posicao])
+          (caracter.to_i * fator)
         end
         multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
       end
