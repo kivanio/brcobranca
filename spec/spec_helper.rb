@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
-$:.unshift(lib) unless $:.include?('lib') || $:.include?(lib)
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'brcobranca'
 require 'spec'
 require 'tempfile'

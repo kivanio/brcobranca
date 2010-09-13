@@ -1,6 +1,4 @@
 --colour
---format
-specdoc
---timeout
-20
+--format specdoc
+--timeout 20
 --diff
