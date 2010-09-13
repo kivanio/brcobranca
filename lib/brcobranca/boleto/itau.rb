@@ -76,38 +76,40 @@ module Brcobranca
       end
 
       # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
+      #
+      # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
+      # 01 a 03 03 9(3) Código do Banco na Câmara de Compensação = ‘341’
+      # 04 a 04 01 9(1) Código da Moeda = '9'
+      # 05 a 05 01 9(1) DAC do Código de Barras MOD 11-2a9
+      # 06 a 09 04 9(04) Fator de Vencimento
+      # 10 a 19 10 9(08) V(2) Valor
+      # 20 a 22 03 9(3) Carteira
+      # 23 a 30 08 9(8) Nosso Número
+      # 31 a 37 07 9(7) Seu Número (Número do Documento)
+      # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
+      # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
+      # 44 a 44 01 9(1) Zero
+      #
+      # DEMAIS CARTEIRAS
+      # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
+      # 04 a 04 01 9(01) Código da Moeda = '9'
+      # 05 a 05 01 9(01) DAC código de Barras MOD 11-2a9
+      # 06 a 09 04 9(04) Fator de Vencimento
+      # 10 a 19 10 9(08)V(2) Valor
+      # 20 a 22 03 9(03) Carteira
+      # 23 a 30 08 9(08) Nosso Número
+      # 31 a 31 01 9(01) DAC [Agência /Conta/Carteira/Nosso Número] MOD 10
+      # 32 a 35 04 9(04) N.º da Agência cedente
+      # 36 a 40 05 9(05) N.º da Conta Corrente
+      # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
+      # 42 a 44 03 9(03) Zeros
       def codigo_barras_segunda_parte
         # Monta a String baseado no tipo de carteira
         case self.carteira.to_i
         when 198, 106, 107, 122, 142, 143, 195, 196
-          # CARTEIRAS 198, 106, 107,122, 142, 143, 195 e 196
-          # 01 a 03 03 9(3) Código do Banco na Câmara de Compensação = ‘341’
-          # 04 a 04 01 9(1) Código da Moeda = '9'
-          # 05 a 05 01 9(1) DAC do Código de Barras MOD 11-2a9
-          # 06 a 09 04 9(04) Fator de Vencimento
-          # 10 a 19 10 9(08) V(2) Valor
-          # 20 a 22 03 9(3) Carteira
-          # 23 a 30 08 9(8) Nosso Número
-          # 31 a 37 07 9(7) Seu Número (Número do Documento)
-          # 38 a 42 05 9(5) Código do Cliente (fornecido pelo Banco)
-          # 43 a 43 01 9(1) DAC dos campos acima (posições 20 a 42) MOD 10
-          # 44 a 44 01 9(1) Zero
           dv = "#{self.carteira}#{numero_documento}#{self.seu_numero}#{self.convenio}".modulo10
           "#{self.carteira}#{self.numero_documento}#{self.seu_numero}#{self.convenio}#{dv}0"
         else
-          # DEMAIS CARTEIRAS
-          # 01 a 03 03 9(03) Código do Banco na Câmara de Compensação = '341'
-          # 04 a 04 01 9(01) Código da Moeda = '9'
-          # 05 a 05 01 9(01) DAC código de Barras MOD 11-2a9
-          # 06 a 09 04 9(04) Fator de Vencimento
-          # 10 a 19 10 9(08)V(2) Valor
-          # 20 a 22 03 9(03) Carteira
-          # 23 a 30 08 9(08) Nosso Número
-          # 31 a 31 01 9(01) DAC [Agência /Conta/Carteira/Nosso Número] MOD 10
-          # 32 a 35 04 9(04) N.º da Agência cedente
-          # 36 a 40 05 9(05) N.º da Conta Corrente
-          # 41 a 41 01 9(01) DAC [Agência/Conta Corrente] MOD 10
-          # 42 a 44 03 9(03) Zeros
           "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
         end
       end
