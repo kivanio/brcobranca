@@ -1,8 +1,12 @@
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Limpeza
-    # Transforma Float em String preservando o 0 a direita.
-    # @return [String] contendo exatamente o valor FLOAT
+    # Transforma Float em String preservando o zero a direita.
+    #
+    # @return [String]
+    # @example
+    #  1.9  #=> 190
+    #  1.93 #=> 193
     def limpa_valor_moeda
       inicio, fim = self.to_s.split(/\./)
       (inicio + fim.ljust(2,'0'))

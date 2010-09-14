@@ -66,11 +66,11 @@ module Brcobranca
       attr_accessor :sacado_documento
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :numero_documento, :message => "não pode estar em branco."
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
       validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :message => "não é um número."
 
       # Nova instancia da classe Base
-      # @param [Hash] campos usados na criação do boleto.
+      # @param [Hash] campos
       def initialize(campos={})
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
@@ -88,89 +88,99 @@ module Brcobranca
         template_config
       end
 
-      # Responsável por definir a logotipo usada no template genérico,
-      # retorna o caminho para o <b>logotipo</b> ou <b>false</b> caso nao consiga encontrar o logotipo.
+      # Logotipo do banco
+      # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
         File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.jpg")
       end
 
-      # Retorna dígito verificador do banco, calculado com modulo11 de 9 para 2
+      # Dígito verificador do banco
+      # @return [Integer] 1 caracteres numéricos.
       def banco_dv
         self.banco.modulo11_9to2
       end
 
-      # Retorna código da agencia formatado com zeros a esquerda.
+      # Código da agencia
+      # @return [String] 4 caracteres numéricos.
       def agencia=(valor)
         @agencia = valor.to_s.rjust(4,'0') unless valor.nil?
       end
 
-      # Retorna dígito verificador da agência, calculado com modulo11 de 9 para 2
+      # Dígito verificador da agência
+      # @return [Integer] 1 caracteres numéricos.
       def agencia_dv
         self.agencia.modulo11_9to2
       end
 
-      # Retorna dígito verificador da conta corrente, calculado com modulo11 de 9 para 2
+      # Dígito verificador da conta corrente
+      # @return [Integer] 1 caracteres numéricos.
       def conta_corrente_dv
         self.conta_corrente.modulo11_9to2
       end
 
-      # Retorna dígito verificador do nosso número, calculado com modulo11 de 9 para 2
+      # Dígito verificador do nosso número
+      # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
         self.numero_documento.modulo11_9to2
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # @abstract Deverá ser sobreescrito para cada banco.
       def nosso_numero_boleto
         raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # @abstract Deverá ser sobreescrito para cada banco.
       def agencia_conta_boleto
         raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      # Retorna o valor total do documento: <b>quantidate * valor</b> ou <b>zero(0)</b> caso não consiga efetuar o cálculo.
+      # Valor total do documento: <b>quantidate * valor</b>
+      # @return [Float]
       def valor_documento
         self.quantidade.to_f * self.valor.to_f
       end
 
-      # Retorna o valor total do documento formatado, sem milhar, centena e com zeros a esquerda
+      # Valor total do documento
+      # @return [String] 10 caracteres numéricos.
       def valor_documento_formatado
-        self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+        @valor_documento.limpa_valor_moeda.to_s.rjust(10,'0') unless @valor_documento.nil?
       end
 
-      # Retorna data de vencimento baseado na <b>data_documento + dias_vencimento</b> ou <b>false</b> caso não consiga efetuar o cálculo.
+      # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
+      #
+      # @return [Date]
+      # @raise [ArgumentError] Caso {#data_documento} esteja em branco.
       def data_vencimento
         raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento
         return self.data_documento unless self.dias_vencimento
         (self.data_documento + self.dias_vencimento.to_i)
       end
 
-      # Retorna o fator de vencimento calculado com base na data de vencimento
+      # Fator de vencimento calculado com base na data de vencimento do boleto.
+      # @return [String] 4 caracteres numéricos.
       def fator_vencimento
         self.data_vencimento.fator_vencimento
       end
 
-      # Retorna número da conta corrente formatado
+      # Número da conta corrente
+      # @return [String] 7 caracteres numéricos.
       def conta_corrente=(valor)
         @conta_corrente = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
       # Codigo de barras do boleto
       #
-      #   O codigo de barra para cobrança contém 44 posições dispostas da seguinte forma:
-      #   Posição Tamanho Conteúdo
-      #   01 a 03   3       Identificação do Banco
-      #   04 a 04   1       Código da Moeda (Real = 9, Outras=0)
-      #   05 a 05   1       Dígito verificador do Código de Barras
-      #   06 a 09   4       Fator de Vencimento (Vide Nota)
-      #   10 a 19   10      Valor
-      #   20 a 44   25      Campo Livre - As posições do campo livre ficam a critério de cada Banco arrecadador.
+      # O codigo de barra para cobrança contém 44 posições dispostas da seguinte forma:<br/>
+      # Posição |Tamanho |Conteúdo<br/>
+      # 01 a 03 | 3  | Identificação do Banco<br/>
+      # 04 a 04 | 1  | Código da Moeda (Real = 9, Outras=0)<br/>
+      # 05 a 05 | 1  |  Dígito verificador do Código de Barras<br/>
+      # 06 a 09 | 4  | Fator de Vencimento (Vide Nota)<br/>
+      # 10 a 19 | 10 |  Valor<br/>
+      # 20 a 44 | 25 |  Campo Livre - As posições do campo livre ficam a critério de cada Banco arrecadador.<br/>
       #
-      # @raise [ArgumentError] caso o número de dígitos não seja igual a 44.
-      # @return [String] código de barras formado por 44 dígitos.
+      # @raise [Brcobranca::BoletoInvalido] Caso as informações fornecidas não sejam suficientes ou sejam inválidas.
+      # @return [String] código de barras formado por 44 caracteres numéricos.
       def codigo_barras
         raise Brcobranca::BoletoInvalido.new(self) unless self.valid?
         codigo = codigo_barras_primeira_parte
@@ -185,29 +195,36 @@ module Brcobranca
         end
       end
 
-      # Responsável por montar a primeira parte do código de barras, que é a mesma para todos banco.
+      # Monta a primeira parte do código de barras, que é a mesma para todos banco.
+      # @return [String] 18 caracteres numéricos.
       def codigo_barras_primeira_parte
         "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}"
       end
 
-      # Responsável por montar a segunda parte do código de barras, que é específico para cada banco.
-      #  Este método precisa ser reescrito para cada classe de boleto a ser criada.
-      def codigo_barras_segunda_parte #:nodoc:
+      # Monta a segunda parte do código de barras, que é específico para cada banco.
+      #
+      # @abstract Deverá ser sobreescrito para cada banco.
+      def codigo_barras_segunda_parte
         raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       protected
 
+      # Nome da classe do boleto
+      # @return [String]
       def class_name
         self.class.to_s.split("::").last.downcase
       end
 
+      # Configura gerador de arquivo de boleto e código de barras.
+      #
+      # @raise  [Brcobranca::NaoImplementado] Caso não seja suportado pelo Brcobranca.
       def template_config
         case Brcobranca.configuration.gerador
         when :rghost
           extend Brcobranca::Boleto::Template::Rghost
         else
-          raise "Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!"
+          raise NaoImplementado.new("Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!")
         end
       end
 

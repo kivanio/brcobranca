@@ -1,14 +1,21 @@
 # -*- encoding: utf-8 -*-
+# @author Kivanio Barbosa
 module Brcobranca
   # Métodos auxiliares de formatação
   module Formatacao
     # Formata como CPF
+    #
+    # @return [String]
+    # @example
+    #  "12345678901".to_br_cpf #=> 123.456.789-01
     def to_br_cpf
       self.to_s.gsub(/^(.{3})(.{3})(.{3})(.{2})$/,'\1.\2.\3-\4')
     end
 
     # Formata como CEP
-    # @example Formata uma string ou number como CEP.
+    #
+    # @return [String]
+    # @example
     #   "85253100".to_br_cep #=> "85253-100"
     #   85253100.to_br_cep #=> "85253-100"
     def to_br_cep
@@ -16,11 +23,22 @@ module Brcobranca
     end
 
     # Formata como CNPJ
+    #
+    # @return [String]
+    # @example
+    #  "12345678000901".to_br_cnpj #=> 12.345.678/0009-01
     def to_br_cnpj
       self.to_s.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/,'\1.\2.\3/\4-\5')
     end
 
-    # Gera formatação automatica do documento baseado no tamanho do campo.
+    # Gera formatação automática do documento baseado no tamanho do campo.
+    #
+    # @return [String] Retorna a mesma caso não encontre o formato adequado.
+    # @example
+    #  "12345678000901".formata_documento #=> 12.345.678/0009-01
+    #  "85253100".formata_documento #=> "85253-100"
+    #  "12345678901".formata_documento #=> 123.456.789-01
+    #  "12345".formata_documento #=> 12345
     def formata_documento
       case self.to_s.size
       when 8 then self.to_br_cep
@@ -31,31 +49,35 @@ module Brcobranca
       end
     end
 
-    # Remove caracteres que não sejam numéricos
+    # Remove caracteres que não sejam numéricos.
+    #
+    # @return [String]
+    # @example
+    #   1a23e45+".somente_numeros #=> 12345
     def somente_numeros
       self.to_s.gsub(/\D/,'')
     end
 
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
-    # Retorna + ArgumentError + para Codigo de Barras em branco,
-    # Codigo de Barras com tamanho diferente de 44 dígitos e
-    # Codigo de Barras que não tenham somente caracteres numéricos.
-    #   A linha digitável será composta por cinco campos:
-    #   1º campo
-    #   Composto pelo código de Banco, código da moeda, as cinco primeiras posições do campo livre
-    #   e o dígito verificador deste campo;
-    #   2º campo
-    #   Composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo;
-    #   3º campo
-    #   Composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo;
-    #   4º campo
-    #   Composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de
-    #   barras;
-    #   5º campo
-    #   Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com
-    #   10(dez) caracteres, sem separadores e sem edição.
-    #   Entre cada campo deverá haver espaço equivalente a 2 (duas) posições, sendo a 1ª
-    #   interpretada por um ponto (.) e a 2ª por um espaço em branco.
+    #
+    # A linha digitável será composta por cinco campos:<br/>
+    # <b>1º campo</b>: <br/>
+    # Composto pelo código de Banco, código da moeda, as cinco primeiras posições do campo livre
+    # e o dígito verificador deste campo.<br/>
+    # <b>2º campo</b>: <br/>
+    # Composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo.<br/>
+    # <b>3º campo</b>: <br/>
+    # Composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo.<br/>
+    # <b>4º campo</b>: <br/>
+    # Composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de barras.<br/>
+    # <b>5º campo</b>: <br/>
+    # Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com
+    # 10(dez) caracteres, sem separadores e sem edição.<br/>
+    #
+    # @return [String]
+    # @raise  [ArgumentError] Caso não seja um número de 44 dígitos.
+    # @example
+    #  "00192376900000135000000001238798777770016818".linha_digitavel #=> "00190.00009 01238.798779 77700.168188 2 37690000013500"
     def linha_digitavel
       if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
         linha = $1

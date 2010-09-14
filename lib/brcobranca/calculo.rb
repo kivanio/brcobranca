@@ -1,11 +1,12 @@
 # -*- encoding: utf-8 -*-
+# @author Kivanio Barbosa
 module Brcobranca
-  # métodos auxiliares de cálculos
+  # Métodos auxiliares de cálculos
   module Calculo
-    # Método padrão para cálculo de módulo 10 segundo a BACEN.
+    # Calcula módulo 10 segundo a BACEN.
     #
     # @return [Integer]
-    # @raise  [ArgumentError]
+    # @raise  [ArgumentError] Caso não seja um número inteiro.
     def modulo10
       raise ArgumentError, "Número inválido" unless self.is_number?
 
@@ -21,6 +22,10 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
+    # Calcula módulo 10 do Banespa.
+    #
+    # @return [Integer]
+    # @raise  [ArgumentError] Caso não seja um número inteiro.
     def modulo_10_banespa
       raise ArgumentError, "Número inválido" unless self.is_number?
 
@@ -35,20 +40,18 @@ module Brcobranca
       dv == 10 ? 0 : dv
     end
 
-    # Método padrão para cálculo de módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN.
-    # Usado no DV do Nosso Numero, Agência e Cedente.
-    #  Retorna + nil + para todos os parametros que nao forem String
-    #  Retorna + nil + para String em branco
+    # Calcula módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN.
+    #
+    # @return [Integer]
     def modulo11_9to2
       total = self.multiplicador([9,8,7,6,5,4,3,2])
 
       return (total % 11 )
     end
 
-    # Método padrão para cálculo de módulo 11 com multiplicaroes de 2 a 9 segundo a BACEN.
-    # Usado no DV do Código de Barras.
-    #  Retorna + nil + para todos os parametros que não forem String
-    #  Retorna + nil + para String em branco
+    # Calcula módulo 11 com multiplicaroes de 2 a 9 segundo a BACEN.
+    #
+    # @return [Integer]
     def modulo11_2to9
       total = self.multiplicador([2,3,4,5,6,7,8,9])
 
@@ -56,30 +59,36 @@ module Brcobranca
       return [0,10,11].include?(valor) ? 1 : valor
     end
 
-    # Retorna o dígito verificador de <b>modulo 11(9-2)</b> trocando retorno <b>10 por X</b>.
-    #  Usado por alguns bancos.
+    # Calcula módulo 11 com multiplicaroes de 9 a 2 trocando retorno <b>10 por X</b>.
+    #
+    # @return [Integer, String] Caso resultado for 10, retorna X.
     def modulo11_9to2_10_como_x
       valor = self.modulo11_9to2
       valor == 10 ? "X" : valor
     end
 
-    # Retorna o dígito verificador de <b>modulo 11(9-2)</b> trocando retorno <b>10 por 0</b>.
-    #  Usado por alguns bancos.
+    # Calcula módulo 11 com multiplicaroes de 9 a 2 trocando retorno <b>10 por 0</b>.
+    #
+    # @return [Integer]
     def modulo11_9to2_10_como_zero
       valor = self.modulo11_9to2
       valor == 10 ? 0 : valor
     end
 
-    # Retorna true se a String só conter caracteres numéricos.
+    # Verifica se String só contem caracteres numéricos.
+    #
+    # @return [Boolean]
     def is_number?
       self.to_s.empty? ? false : (self.to_s =~ (/\D/)).nil?
     end
 
-    # Soma números inteiros positivos com 2 dígitos ou mais
-    # Retorna <b>0(zero)</b> caso seja impossível.
-    #  Ex. 1 = 1
-    #  Ex. 11 = (1+1) = 2
-    #  Ex. 13 = (1+3) = 4
+    # Soma dígitos de números inteiros positivos com 2 dígitos ou mais.
+    #
+    # @return [Integer]
+    # @example
+    #  1 #=> 1
+    #  11 (1+1) #=> 2
+    #  13 (1+3) #=> 4
     def soma_digitos
       total = case self.to_i
       when (0..9)
@@ -95,9 +104,9 @@ module Brcobranca
 
     # Faz a multiplicação de um número pelos fatores passados como parâmetro.
     #
-    # @param  [Array] fatores
+    # @param  [Array]
     # @return [Integer]
-    # @raise  [ArgumentError]
+    # @raise  [ArgumentError] Caso não seja um número inteiro.
     def multiplicador(fatores, &block)
       raise ArgumentError, "Número inválido" unless self.is_number?
 

@@ -16,11 +16,15 @@ rescue LoadError
   require 'active_model'
 end
 
-module Brcobranca
 
+module Brcobranca
+  # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
   class NaoImplementado < NotImplementedError
   end
 
+  # Exception lançada quando os dados informados para o boleto estão inválidos.
+  #
+  # Você pode usar assim na sua aplicação:
   #   rescue Brcobranca::BoletoInvalido => invalido
   #   puts invalido.errors
   class BoletoInvalido < StandardError
@@ -42,26 +46,34 @@ module Brcobranca
   #
   # Ou colocar em um arquivo na pasta initializer do rails.
   class Configuration
-    # Somente rghost até o momento
+    # Gerador de arquivo de boleto.
+    # @return [Symbol]
+    # @param  [Symbol] (Padrão: :rghost)
     attr_accessor :gerador
-    # Pode ser pdf, jpg e ps.
+    # Formato do arquivo de boleto a ser gerado.
+    # @return [Symbol]
+    # @param  [Symbol] (Padrão: :pdf)
     # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
     attr_accessor :formato
 
-    # Resolução em pixels do arquivo gerado
+    # Resolução em pixels do arquivo gerado.
+    # @return [Integer]
+    # @param  [Integer] (Padrão: 150)
     attr_accessor :resolucao
 
-    def initialize #:nodoc:
+    def initialize
       self.gerador = :rghost
       self.formato = :pdf
       self.resolucao = 150
     end
   end
 
+  # Atribui os valores customizados para as configurações.
   def self.configuration
     @configuration ||= Configuration.new
   end
 
+  # Bloco para realizar configurações customizadas.
   def self.setup
     yield(configuration)
   end

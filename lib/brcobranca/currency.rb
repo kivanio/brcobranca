@@ -1,6 +1,7 @@
+# @author Fernando Vieira do http://simplesideias.com.br
 module Brcobranca #:nodoc:[all]
   module Currency #:nodoc:[all]
-    # Implementação feita por Nando Vieira do http://simplesideias.com.br
+    # Implementação feita por Fernando Vieira do http://simplesideias.com.br
     # post http://simplesideias.com.br/usando-number_to_currency-em-modelos-no-rails
     BRL = {:delimiter => ".", :separator => ",", :unit => "R$", :precision => 2, :position => "before"}
     USD = {:delimiter => ',', :separator => ".", :unit => "US$", :precision => 2, :position => "before"}

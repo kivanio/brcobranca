@@ -24,11 +24,20 @@ module Brcobranca
         include RGhost unless self.include?(RGhost)
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
+        #
+        # @return [Stream]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
+        # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
         def to(formato, options={})
           modelo_generico(formato, options)
         end
 
+        #  Cria o métodos dinâmicos (to_pdf, to_gif e etc) com todos os fomátos válidos.
+        #
+        # @return [Stream]
+        # @see Rghost#modelo_generico Recebe os mesmos parâmetros do Rghost#modelo_generico.
+        # @example
+        #  @boleto.to_pdf #=> boleto gerado no formato pdf
         def method_missing(m, *args)
           method = m.to_s
           if method.start_with?("to_")
@@ -38,12 +47,12 @@ module Brcobranca
           end
         end
 
-        # Responsável por setar os valores necessários no template genérico
-        # Retorna um stream pronto para gravaçào
-        # O tipo do arquivo gerado pode ser modificado incluindo a configuração a baixo dentro da sua aplicação:
-        #  Brcobranca::Config::OPCOES[:tipo] = 'pdf'
-        # Ou pode ser passado como paramentro:
-        #  :formato => 'pdf'
+        # Retorna um stream pronto para gravaçào em arquivo.
+        #
+        # @return [Stream]
+        # @param [Symbol] formato Tipo de formato que será gerado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc].
+        # @param [Hash] options opção para a criação do boleto.
+        # @option options [String] :resolucao Resolução em pixels.
         def modelo_generico(formato, options={})
           doc=Document.new :paper => :A4 # 210x297
 

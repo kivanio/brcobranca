@@ -18,7 +18,7 @@ module Brcobranca
       "88394510000103".to_br_cnpj.should eql("88.394.510/0001-03")
     end
 
-    it "Formata números automaticamente de acordo com o número de caracteres" do
+    it "Formata números automáticamente de acordo com o número de caracteres" do
       98789298790.formata_documento.should eql("987.892.987-90")
       "98789298790".formata_documento.should eql("987.892.987-90")
       85253100.formata_documento.should eql("85253-100")
