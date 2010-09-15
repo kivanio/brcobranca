@@ -164,6 +164,21 @@ describe Brcobranca::Boleto::Itau do
     boleto_novo.agencia_conta_boleto.should eql("0811 / 53678-8")
   end
 
+  it "Montar nosso_numero_boleto" do
+    @valid_attributes[:conta_corrente] = "15255"
+    @valid_attributes[:agencia] = "0607"
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
+
+    boleto_novo.nosso_numero_boleto.should eql("175/12345678-4")
+
+    @valid_attributes[:conta_corrente] = "15255"
+    @valid_attributes[:agencia] = "0607"
+    @valid_attributes[:carteira] = "143"
+    boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
+
+    boleto_novo.nosso_numero_boleto.should eql("143/12345678-2")
+  end
+
   it "Montar nosso_numero_dv" do
     @valid_attributes[:numero_documento] = "00015448"
     boleto_novo = Brcobranca::Boleto::Itau.new(@valid_attributes)
