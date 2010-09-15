@@ -1,4 +1,10 @@
 # -*- encoding: utf-8 -*-
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+require 'brcobranca/calculo'
+require 'brcobranca/limpeza'
+require 'brcobranca/formatacao'
+require 'brcobranca/calculo_data'
+require 'brcobranca/currency'
 
 begin
   require 'date'
@@ -77,12 +83,6 @@ module Brcobranca
   def self.setup
     yield(configuration)
   end
-
-  autoload :Calculo,      'brcobranca/calculo'
-  autoload :Limpeza,      'brcobranca/limpeza'
-  autoload :Formatacao,   'brcobranca/formatacao'
-  autoload :CalculoData,  'brcobranca/calculo_data'
-  autoload :Currency,     'brcobranca/currency'
 
   module Boleto
     autoload :Base,         'brcobranca/boleto/base'
