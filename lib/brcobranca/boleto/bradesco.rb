@@ -16,40 +16,51 @@ module Brcobranca
       end
 
       # Codigo do banco emissor (3 dígitos sempre)
+      #
+      # @return [String] 3 caracteres numéricos.
       def banco
         "237"
       end
 
-      # Retorna Carteira utilizada formatada com 2 dígitos
+      # Carteira
+      #
+      # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
         @carteira = valor.to_s.rjust(2,'0') unless valor.nil?
       end
 
-      # Número seqüencial de 11 dígitos utilizado para identificar o boleto.
+      # Número seqüencial utilizado para identificar o boleto.
+       # @return [String] 11 caracteres numéricos.
       def numero_documento=(valor)
         @numero_documento = valor.to_s.rjust(11,'0') unless valor.nil?
       end
 
-      # Campo usado apenas na exibição no boleto
+      # Nosso número para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero_boleto #=> ""06/00000004042-8"
       def nosso_numero_boleto
         "#{self.carteira}/#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
-      # Campo usado apenas na exibição no boleto
+      # Agência + conta corrente do cliente para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.agencia_conta_boleto #=> "0548-7 / 00001448-6"
       def agencia_conta_boleto
         "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
       end
 
-      # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
-      #   As posições do campo livre ficam a critério de cada Banco arrecadador, sendo que o
-      #   padrão do Bradesco é:
-      #   Posição Tamanho Conteúdo
-      #   20 a 23 4 Agência Cedente (Sem o digito verificador, completar com zeros a esquerda quando  necessário)
-      #   24 a 25 2 Carteira
-      #   26 a 36 11 Número do Nosso Número(Sem o digito verificador)
-      #   37 a 43 7 Conta do Cedente (Sem o digito verificador, completar com zeros a esquerda quando necessário)
-      #   44 a 44 1 Zero
-
+      # Segunda parte do código de barras.
+      #
+      # Posição | Tamanho | Conteúdo<br/>
+      # 20 a 23 | 4 |  Agência Cedente (Sem o digito verificador, completar com zeros a esquerda quando  necessário)<br/>
+      # 24 a 25 | 2 |  Carteira<br/>
+      # 26 a 36 | 11 |  Número do Nosso Número(Sem o digito verificador)<br/>
+      # 37 a 43 | 7 |  Conta do Cedente (Sem o digito verificador, completar com zeros a esquerda quando necessário)<br/>
+      # 44 a 44 | 1 |  Zero<br/>
+      #
+      # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         "#{self.agencia}#{self.carteira}#{self.numero_documento}#{self.conta_corrente}0"
       end
