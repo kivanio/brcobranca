@@ -1,7 +1,6 @@
 module Brcobranca
   module Retorno
-    class Base
-      # Agência com DV, posições 17 à 21
+    class Base # Classe base para retornos bancários
       attr_accessor :agencia_com_dv
       attr_accessor :cedente_com_dv
       attr_accessor :convenio

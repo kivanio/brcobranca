@@ -35,6 +35,7 @@ module Brcobranca
   #   puts invalido.errors
   class BoletoInvalido < StandardError
 
+    # Atribui o objeto boleto e pega seus erros de validação
     def initialize(boleto)
       errors = boleto.errors.full_messages.join(', ')
       super(errors)
@@ -67,6 +68,7 @@ module Brcobranca
     # @param  [Integer] (Padrão: 150)
     attr_accessor :resolucao
 
+    # Atribui valores padrões de configuração
     def initialize
       self.gerador = :rghost
       self.formato = :pdf
@@ -84,6 +86,7 @@ module Brcobranca
     yield(configuration)
   end
 
+  # Módulo para classes de boletos
   module Boleto
     autoload :Base,         'brcobranca/boleto/base'
     autoload :BancoBrasil,  'brcobranca/boleto/banco_brasil'
@@ -94,11 +97,13 @@ module Brcobranca
     autoload :Unibanco,     'brcobranca/boleto/unibanco'
     autoload :Banespa,      'brcobranca/boleto/banespa'
 
+    # Módulos para classes de template
     module Template
       autoload :Rghost, 'brcobranca/boleto/template/rghost'
     end
   end
 
+  # Módulos para classes de retorno bancário
   module Retorno
     autoload :Base,           'brcobranca/retorno/base'
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'

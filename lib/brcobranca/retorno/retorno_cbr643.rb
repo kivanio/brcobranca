@@ -3,8 +3,7 @@ module Brcobranca
   module Retorno
     # Formato de Retorno CNAB 643
     class RetornoCbr643 < Base
-      # Extendendo parseline
-      extend ParseLine::FixedWidth
+      extend ParseLine::FixedWidth # Extendendo parseline
 
       fixed_width_layout do |parse|
         parse.field :agencia_com_dv,17..21
