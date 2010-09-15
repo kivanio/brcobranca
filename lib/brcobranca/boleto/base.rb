@@ -140,12 +140,6 @@ module Brcobranca
         self.quantidade.to_f * self.valor.to_f
       end
 
-      # Valor total do documento
-      # @return [String] 10 caracteres numéricos.
-      def valor_documento_formatado
-        @valor_documento.limpa_valor_moeda.to_s.rjust(10,'0') unless @valor_documento.nil?
-      end
-
       # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
       #
       # @return [Date]
@@ -183,9 +177,8 @@ module Brcobranca
       # @return [String] código de barras formado por 44 caracteres numéricos.
       def codigo_barras
         raise Brcobranca::BoletoInvalido.new(self) unless self.valid?
-        codigo = codigo_barras_primeira_parte
-        codigo << codigo_barras_segunda_parte
-
+        codigo = codigo_barras_primeira_parte #18 digitos
+        codigo << codigo_barras_segunda_parte #25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
           codigo_dv = codigo.modulo11_2to9
           codigo = "#{$1}#{codigo_dv}#{$2}"
@@ -195,12 +188,6 @@ module Brcobranca
         end
       end
 
-      # Monta a primeira parte do código de barras, que é a mesma para todos banco.
-      # @return [String] 18 caracteres numéricos.
-      def codigo_barras_primeira_parte
-        "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{self.valor_documento_formatado}"
-      end
-
       # Monta a segunda parte do código de barras, que é específico para cada banco.
       #
       # @abstract Deverá ser sobreescrito para cada banco.
@@ -208,13 +195,7 @@ module Brcobranca
         raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      protected
-
-      # Nome da classe do boleto
-      # @return [String]
-      def class_name
-        self.class.to_s.split("::").last.downcase
-      end
+      private
 
       # Configura gerador de arquivo de boleto e código de barras.
       #
@@ -226,6 +207,24 @@ module Brcobranca
         else
           raise NaoImplementado.new("Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!")
         end
+      end
+
+      # Monta a primeira parte do código de barras, que é a mesma para todos banco.
+      # @return [String] 18 caracteres numéricos.
+      def codigo_barras_primeira_parte
+        "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{valor_documento_formatado}"
+      end
+
+      # Valor total do documento
+      # @return [String] 10 caracteres numéricos.
+      def valor_documento_formatado
+        self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+      end
+
+      # Nome da classe do boleto
+      # @return [String]
+      def class_name
+        self.class.to_s.split("::").last.downcase
       end
 
     end
