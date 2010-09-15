@@ -126,12 +126,12 @@ module Brcobranca
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def nosso_numero_boleto
-        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def agencia_conta_boleto
-        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       # Valor total do documento: <b>quantidate * valor</b>
@@ -192,7 +192,7 @@ module Brcobranca
       #
       # @abstract Deverá ser sobreescrito para cada banco.
       def codigo_barras_segunda_parte
-        raise NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
       private
@@ -205,7 +205,7 @@ module Brcobranca
         when :rghost
           extend Brcobranca::Boleto::Template::Rghost
         else
-          raise NaoImplementado.new("Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!")
+          raise Brcobranca::NaoImplementado.new("Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!")
         end
       end
 
