@@ -21,7 +21,7 @@ module Brcobranca
         "033"
       end
 
-      # Código da agencia
+      # Código da agência
       # @return [String] 3 caracteres numéricos.
       def agencia=(valor)
         @agencia = valor.to_s.rjust(3,'0') unless valor.nil?

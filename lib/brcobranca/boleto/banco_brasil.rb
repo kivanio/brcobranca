@@ -36,94 +36,122 @@ module Brcobranca
       end
 
       # Codigo do banco emissor (3 dígitos sempre)
+      #
+      # @return [String] 3 caracteres numéricos.
       def banco
         "001"
       end
 
-      # Retorna Carteira utilizada formatada com 2 dígitos
+      # Carteira
+      #
+      # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
         @carteira = valor.to_s.rjust(2,'0') unless valor.nil?
       end
 
-      # Retorna digito verificador do banco, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
+      # Dígito verificador do banco
+      #
+      # @return [String] 1 caracteres numéricos.
       def banco_dv
         self.banco.modulo11_9to2_10_como_x
       end
 
-      # Retorna digito verificador da agencia, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
+      # Retorna dígito verificador da agência
+      #
+      # @return [String] 1 caracteres numéricos.
       def agencia_dv
         self.agencia.modulo11_9to2_10_como_x
       end
 
-      # Retorna número da conta corrente formatado
+      # Conta corrente
+      # @return [String] 8 caracteres numéricos.
       def conta_corrente=(valor)
         @conta_corrente = valor.to_s.rjust(8,'0') unless valor.nil?
       end
 
-      # Retorna digito verificador da conta corrente, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
+      # Dígito verificador da conta corrente
+      # @return [String] 1 caracteres numéricos.
       def conta_corrente_dv
         self.conta_corrente.modulo11_9to2_10_como_x
       end
 
-      # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de convênio).
+      # Número seqüencial utilizado para identificar o boleto.
+      # (Número de dígitos depende do tipo de convênio).
+      # @raise  [Brcobranca::NaoImplementado] Caso o tipo de convênio não seja suportado pelo Brcobranca.
+      #
+      # @overload numero_documento
+      #   Nosso Número de 17 dígitos com Convenio de 8 dígitos.
+      #   @return [String] 9 caracteres numéricos.
+      # @overload numero_documento
+      #   Nosso Número de 17 dígitos com Convenio de 7 dígitos.
+      #   @return [String] 10 caracteres numéricos.
+      # @overload numero_documento
+      #   Nosso Número de 7 dígitos com Convenio de 4 dígitos.
+      #   @return [String] 4 caracteres numéricos.
+      # @overload numero_documento
+      #   Nosso Número de 11 dígitos com Convenio de 6 dígitos e {#codigo_servico} false.
+      #   @return [String] 5 caracteres numéricos.
+      # @overload numero_documento
+      #   Nosso Número de 17 dígitos com Convenio de 6 dígitos e {#codigo_servico} true. (carteira 16 e 18)
+      #   @return [String] 17 caracteres numéricos.
       def numero_documento
         quantidade = case @convenio.to_s.size
-        when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
+        when 8
           9
-        when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
+        when 7
           10
-        when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
+        when 4
           7
-        when 6 # Convenio de 6 dígitos
-          if self.codigo_servico == false
-            # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
-            5
-          else
-            # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
-            17
-          end
+        when 6
+          self.codigo_servico ? 17 : 5
         else
-          nil
+          raise Brcobranca::NaoImplementado.new("Tipo de convênio não implementado.")
         end
         quantidade ? @numero_documento.to_s.rjust(quantidade,'0') : @numero_documento
       end
 
-      # Retorna digito verificador do nosso numero, calculado com modulo11 de 9 para 2, porem em caso de resultado ser 10, usa-se 'X'
-      # Inclui ainda o numero do convenio no calculo
+      # Dígito verificador do nosso número.
+      # @return [String] 1 caracteres numéricos.
+      # @see BancoBrasil#numero_documento
       def nosso_numero_dv
         "#{self.convenio}#{self.numero_documento}".modulo11_9to2_10_como_x
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # Nosso número para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero_boleto #=> "12387989000004042-4"
       def nosso_numero_boleto
         "#{self.convenio}#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # Agência + conta corrente do cliente para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.agencia_conta_boleto #=> "0548-7 / 00001448-6"
       def agencia_conta_boleto
         "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
       end
 
-      # Responsavel por montar uma String com 43 caracteres que será usado na criacao do codigo de barras
+      # Segunda parte do código de barras.
+      # A montagem é feita baseada na quantidade de dígitos do convênio.
+      # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        # A montagem é feita baseada na quantidade de dígitos do convênio.
         case self.convenio.to_s.size
-        when 8 # Nosso Numero de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
+        when 8 # Nosso Número de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
           "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
-        when 7 # Nosso Numero de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
+        when 7 # Nosso Número de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
           "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
         when 6 # Convenio de 6 dígitos
           if self.codigo_servico == false
-            # Nosso Numero de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 digitos
+            # Nosso Número de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 dígitos
             "#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
           else
-            # Nosso Numero de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
+            # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
             raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
             "#{self.convenio}#{self.numero_documento}21"
           end
-        when 4 # Nosso Numero de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
+        when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
           "#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
         end
       end
