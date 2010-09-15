@@ -1,10 +1,11 @@
 = brcobranca
 
-* http://brcobranca.rubyforge.org
+* http://rubygems.org/gems/brcobranca
 
 == EXEMPLO
 
 * http://www.boletorails.com.br
+* http://github.com/kivanio/brcobranca_exemplo
 
 == DESCRIÇÃO
 
@@ -37,7 +38,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 == Esta perdido?
 
-Veja a documentação em http://brcobranca.rubyforge.org/rdoc
+Veja a documentação da versão atual em http://rubydoc.info/gems/brcobranca e da versão de desenvolvimeto em http://rubydoc.info/github/kivanio/brcobranca/master/frames
 
 == REQUISITOS
 
