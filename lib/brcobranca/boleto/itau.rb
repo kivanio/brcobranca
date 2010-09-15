@@ -54,12 +54,12 @@ module Brcobranca
       #
       # Para a grande maioria das carteiras, são considerados para a obtenção do DAC/DV, os dados
       # "AGENCIA(sem DAC/DV)/CONTA(sem DAC/DV)/CARTEIRA/NOSSO NUMERO", calculado pelo criterio do Modulo 10.<br/>
-      # A excecao, estão as carteiras 126, 131, 146, 150 e 168 cuja obtenção esta baseada apenas nos
+      # A excecao, estão as carteiras 112, 126, 131, 146, 150 e 168 cuja obtenção esta baseada apenas nos
       # dados "CARTEIRA/NOSSO NUMERO".
       #
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        if %w(126 131 146 150 168).include?(self.carteira)
+        if %w(112 126 131 146 150 168).include?(self.carteira)
           "#{self.carteira}#{self.numero_documento}".modulo10
         else
           "#{self.agencia}#{self.conta_corrente}#{self.carteira}#{self.numero_documento}".modulo10
