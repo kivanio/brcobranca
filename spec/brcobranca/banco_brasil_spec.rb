@@ -209,8 +209,8 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = Brcobranca::Boleto::BancoBrasil.new
-    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(8)
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::NaoImplementado)
+    boleto_novo.errors.count.should eql(2)
   end
 
   it "Calcular agencia_dv" do
