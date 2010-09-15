@@ -23,41 +23,45 @@ module Brcobranca
         "356"
       end
 
-      # Número seqüencial utilizado para identificar o boleto (Número de dígitos depende do tipo de carteira).
-      #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA
-      #                     ATE 15 DIGITOS P/ COBRANCA SEM REGISTRO
+      # Número seqüencial utilizado para identificar o boleto.
+      #
+      # NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA e ATE 13 DIGITOS P/ COBRANCA SEM REGISTRO
+      #
+      # @return [String] 7 ou 13 caracteres numéricos.
       def numero_documento
         quantidade = (self.carteira.to_i == 57) ? 13 : 7
         @numero_documento.to_s.rjust(quantidade,'0')
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # Nosso número para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero_boleto #=> "4000403005-6"
       def nosso_numero_boleto
         "#{self.numero_documento}-#{self.nosso_numero_dv}"
       end
 
-      # Campo usado apenas na exibição no boleto
-      #  Deverá ser sobreescrito para cada banco
+      # Número do convênio/contrato do cliente para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.agencia_conta_boleto #=> "0548-7 / 0001448-6"
       def agencia_conta_boleto
         "#{self.agencia}-#{self.agencia_dv} / #{self.conta_corrente}-#{self.conta_corrente_dv}"
       end
 
-      # CALCULO DO DIGITO:
-      #  APLICA-SE OS PESOS 2,1,2,1,.... AOS ALGARISMOS DO NUMERO COMPOSTO POR:
-      #  NUMERO DO BANCO : COM 7 DIGITOS P/ COBRANCA REGISTRADA
-      #                     ATE 15 DIGITOS P/ COBRANCA SEM REGISTRO
-      #  CODIGO DA AGENCIA: 4 DIGITOS
-      #  NUMERO DA CONTA : 7 DIGITOS
+      # Dígito verificador do nosso número.
+      # @return [String] 1 caracteres numéricos.
       def agencia_conta_corrente_nosso_numero_dv
         "#{self.numero_documento}#{self.agencia}#{self.conta_corrente}".modulo10
       end
 
-      # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras
+      # Segunda parte do código de barras.
+      #
+      # Montagem é baseada no tipo de carteira, com registro e sem registro(57)
+      #
+      # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        # Montagem é baseada no tipo de carteira, com registro e sem registro
         case self.carteira.to_i
-          # Carteira sem registro
         when 57
           "#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
         else
