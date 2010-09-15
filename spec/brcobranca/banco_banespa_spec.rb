@@ -5,14 +5,6 @@ describe Brcobranca::Boleto::Banespa do
 
   before(:each) do
     @valid_attributes = {
-      :especie_documento => "DM",
-      :moeda => "9",
-      :data_documento => Date.today,
-      :dias_vencimento => 1,
-      :aceite => "S",
-      :quantidade => 1,
-      :valor => 0.0,
-      :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO",
       :cedente => "Kivanio Barbosa",
       :documento_cedente => "12345678912",
       :sacado => "Claudio Pozzebom",
@@ -98,20 +90,6 @@ describe Brcobranca::Boleto::Banespa do
     boleto_novo.codigo_barras_segunda_parte.should eql("4001301216812345670003361")
     boleto_novo.codigo_barras.should eql("03398433400002952954001301216812345670003361")
     boleto_novo.codigo_barras.linha_digitavel.should eql("03394.00137 01216.812345 56700.033618 8 43340000295295")
-  end
-
-  it "Montar campo_livre_com_dv1_e_dv2" do
-    @valid_attributes[:convenio] = "40013012168"
-    @valid_attributes[:numero_documento] = "7469108"
-    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
-
-    boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216874691080003384")
-
-    @valid_attributes[:convenio] = "40013012168"
-    @valid_attributes[:numero_documento] = "1234567"
-    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
-
-    boleto_novo.campo_livre_com_dv1_e_dv2.should eql("4001301216812345670003361")
   end
 
   it "Montar nosso_numero e nosso_numero_dv" do

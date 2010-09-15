@@ -15,68 +15,75 @@ module Brcobranca
       end
 
       # Codigo do banco emissor (3 dígitos sempre)
+      #
+      # @return [String] 3 caracteres numéricos.
       def banco
         "033"
       end
 
-      # Retorna código da agencia formatado com zeros a esquerda.
+      # Código da agencia
+      # @return [String] 3 caracteres numéricos.
       def agencia=(valor)
         @agencia = valor.to_s.rjust(3,'0') unless valor.nil?
       end
 
-      # Número do convênio/contrato do cliente junto ao banco emissor formatado com 11 dígitos
+      # Número do convênio/contrato do cliente junto ao banco.
+      # @return [String] 11 caracteres numéricos.
       def convenio=(valor)
         @convenio = valor.to_s.rjust(11,'0') unless valor.nil?
       end
 
-      # Número seqüencial de 7 dígitos utilizado para identificar o boleto.
+      # Número seqüencial utilizado para identificar o boleto.
+      # @return [String] 7 caracteres numéricos.
       def numero_documento=(valor)
         @numero_documento = valor.to_s.rjust(7,'0') unless valor.nil?
       end
 
-      # Número sequencial utilizado para distinguir os boletos na agência.
+      # Agência + Número sequencial.
+      # @return [String] 10 caracteres numéricos.
       def nosso_numero
         "#{self.agencia}#{self.numero_documento}"
       end
 
-      # Retorna dígito verificador do nosso número calculado como contas na documentação.
+      # Dígito verificador do nosso número.
+      # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
         self.nosso_numero.modulo_10_banespa
       end
 
-      # Retorna nosso numero pronto para exibir no boleto.
+      # Nosso número para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero_boleto #=> "400 0403005 6"
       def nosso_numero_boleto
         "#{self.nosso_numero.gsub(/^(.{3})(.{7})$/,'\1 \2')} #{self.nosso_numero_dv}"
       end
 
+      # Número do convênio/contrato do cliente para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.agencia_conta_boleto #=> "000 12 38798 9"
       def agencia_conta_boleto
         self.convenio.gsub(/^(.{3})(.{2})(.{5})(.{1})$/,'\1 \2 \3 \4')
       end
 
-      # Responsável por montar uma String com 43 caracteres que será usado na criação do código de barras.
+      # Segunda parte do código de barras.
+      #
+      # Código do cedente                           |  (011)<br/>
+      # Nosso número                                |  (007)<br/>
+      # Filler                                      |  (002) = 00<br/>
+      # Código do banco cedente                     |  (003) = 033<br/>
+      # Dígito verificador 1                        |  (001)<br/>
+      # Dígito verificador 2                        |  (001)<br/>
+      #
+      # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        self.campo_livre_com_dv1_e_dv2
-      end
-
-      # CAMPO LIVRE
-      #    Código do cedente                                                                            PIC  9  (011)
-      #    Nosso número                                                                                 PIC  9  (007)
-      #    Filler                                                                                       PIC  9  (002)   = 00
-      #    Código do banco cedente                                                                      PIC  9  (003)   = 033
-      #    Dígito verificador 1                                                                         PIC  9  (001)
-      #    Dígito verificador 2                                                                         PIC  9  (001)
-      def campo_livre
-        "#{self.convenio}#{self.numero_documento}00#{self.banco}"
-      end
-
-      #campo livre com os digitos verificadores como consta na documentação do banco.
-      def campo_livre_com_dv1_e_dv2
-        dv1 = self.campo_livre.modulo10 #dv 1 inicial
+        dv1 = campo_livre.modulo10 #dv 1 inicial
         dv2 = nil
 
         begin
           recalcular_dv2 = false
-          valor_inicial = "#{self.campo_livre}#{dv1}"
+          valor_inicial = "#{campo_livre}#{dv1}"
           total = valor_inicial.multiplicador([2,3,4,5,6,7])
 
           case total % 11
@@ -94,7 +101,21 @@ module Brcobranca
           end
         end while(recalcular_dv2)
 
-        return "#{self.campo_livre}#{dv1}#{dv2}"
+        return "#{campo_livre}#{dv1}#{dv2}"
+      end
+
+      private
+      # Campo Livre
+      #
+      # Primeiros 23 caracteres numéricos da segunda parte do código de barras.<br/>
+      #    Código do cedente                           |  (011)<br/>
+      #    Nosso número                                |  (007)<br/>
+      #    Filler                                      |  (002) = 00<br/>
+      #    Código do banco cedente                     |  (003) = 033<br/>
+      #
+      # @return [String] 23 caracteres numéricos.
+      def campo_livre
+        "#{self.convenio}#{self.numero_documento}00#{self.banco}"
       end
 
     end
