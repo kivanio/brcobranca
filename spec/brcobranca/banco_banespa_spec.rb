@@ -235,4 +235,26 @@ describe Brcobranca::Boleto::Banespa do
     end
   end
 
+  it "Gerar multiplos boletos nos formatos válidos" do
+    @valid_attributes[:valor] = 2952.95
+    @valid_attributes[:data_documento] = Date.parse("2009-08-14")
+    @valid_attributes[:dias_vencimento] = 5
+    @valid_attributes[:convenio] = 40013012168
+    @valid_attributes[:numero_documento] = "1234567"
+    @valid_attributes[:conta_corrente] = "0403005"
+    boleto_novo = Brcobranca::Boleto::Banespa.new(@valid_attributes)
+    boleto_novo_2 = Brcobranca::Boleto::Banespa.new(@valid_attributes)
+
+    %w| pdf jpg tif png ps |.each do |format|
+      file_body=Brcobranca::Boleto::Banespa.imprimir_lista([boleto_novo, boleto_novo_2], {:formato => format, :multipage => true})
+      tmp_file=Tempfile.new("foobar." << format)
+      tmp_file.puts file_body
+      tmp_file.close
+      File.exist?(tmp_file.path).should be_true
+      File.stat(tmp_file.path).zero?.should be_false
+      File.delete(tmp_file.path).should eql(1)
+      File.exist?(tmp_file.path).should be_false
+    end
+  end
+
 end

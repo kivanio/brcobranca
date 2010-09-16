@@ -169,9 +169,15 @@ module Brcobranca #:nodoc:[all]
         lambda { boleto_novo.agencia_conta_boleto }.should raise_error(Brcobranca::NaoImplementado, "Sobreescreva este método na classe referente ao banco que você esta criando")
       end
 
-      it "Incluir módulos de template" do
+      it "Incluir módulos de template na classe" do
+        Brcobranca::Boleto::Base.respond_to?(:imprimir_lista).should be_true
+        Brcobranca::Boleto::Base.respond_to?(:to).should be_true
+      end
+
+      it "Incluir módulos de template na instancia" do
         boleto_novo = Brcobranca::Boleto::Base.new
-        boleto_novo.respond_to?(:modelo_generico).should be_true
+        boleto_novo.respond_to?(:imprimir_lista).should be_true
+        boleto_novo.respond_to?(:to).should be_true
       end
 
     end

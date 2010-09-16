@@ -4,6 +4,11 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
+
+      # Configura gerador de arquivo de boleto e código de barras.
+      extend Brcobranca::Boleto::Template::Rghost if Brcobranca.configuration.gerador == :rghost
+      include Brcobranca::Boleto::Template::Rghost if Brcobranca.configuration.gerador == :rghost
+      # Validações do Rails 3
       include ActiveModel::Validations
 
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor
@@ -84,8 +89,6 @@ module Brcobranca
         end
 
         yield self if block_given?
-
-        template_config
       end
 
       # Logotipo do banco
@@ -196,18 +199,6 @@ module Brcobranca
       end
 
       private
-
-      # Configura gerador de arquivo de boleto e código de barras.
-      #
-      # @raise  [Brcobranca::NaoImplementado] Caso não seja suportado pelo Brcobranca.
-      def template_config
-        case Brcobranca.configuration.gerador
-        when :rghost
-          extend Brcobranca::Boleto::Template::Rghost
-        else
-          raise Brcobranca::NaoImplementado.new("Configure o gerador na opção 'Brcobranca.configuration.gerador' corretamente!!!")
-        end
-      end
 
       # Monta a primeira parte do código de barras, que é a mesma para todos banco.
       # @return [String] 18 caracteres numéricos.
