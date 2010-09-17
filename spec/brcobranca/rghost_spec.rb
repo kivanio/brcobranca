@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 require File.dirname(__FILE__) + '/../spec_helper.rb'
+require 'rghost'
 
 describe "RGhost" do
 
@@ -24,12 +25,14 @@ describe "RGhost" do
     }
   end
 
-  it "Testar se RGhost está instalado " do
+  it "Testar se RGhost está instalado" do
     RGhost::Config.config_platform
     File.exist?(RGhost::Config::GS[:path]).should be_true
     File.executable?(RGhost::Config::GS[:path]).should be_true
     s=`#{RGhost::Config::GS[:path]} -v`
-    s.should =~ /^GPL Ghostscript 8\.[6-9]/
+    s.should =~ /^GPL Ghostscript/
+    s=`#{RGhost::Config::GS[:path]} --version`
+    s.should =~ /[8-9]\.[0-9]/
   end
 
 end
