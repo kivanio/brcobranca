@@ -24,14 +24,12 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-require 'spec/rake/spectask'
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
 end
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib'
+RSpec::Core::RakeTask.new(:rcov) do |spec|
+  spec.rcov = true
   spec.rcov_opts = ["--sort coverage", "--exclude /gems/,/Library/,features,script"]
 end
 
