@@ -99,6 +99,7 @@ module Brcobranca
 
     # Módulos para classes de template
     module Template
+      autoload :Base,   'brcobranca/boleto/template/base'
       autoload :Rghost, 'brcobranca/boleto/template/rghost'
     end
   end

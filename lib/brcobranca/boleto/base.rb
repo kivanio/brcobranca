@@ -4,10 +4,13 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
+      include Template::Base
+      extend Template::Base
 
       # Configura gerador de arquivo de boleto e código de barras.
-      extend Brcobranca::Boleto::Template::Rghost if Brcobranca.configuration.gerador == :rghost
-      include Brcobranca::Boleto::Template::Rghost if Brcobranca.configuration.gerador == :rghost
+      extend define_template(Brcobranca.configuration.gerador)
+      include define_template(Brcobranca.configuration.gerador)
+
       # Validações do Rails 3
       include ActiveModel::Validations
 
