@@ -4,7 +4,6 @@ module Brcobranca
   module Boleto
     # Classe base para todas as classes de boletos
     class Base
-      include Template::Base
       extend Template::Base
 
       # Configura gerador de arquivo de boleto e código de barras.
