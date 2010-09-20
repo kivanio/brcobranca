@@ -62,7 +62,7 @@ describe Brcobranca::Boleto::Banespa do
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = Brcobranca::Boleto::Banespa.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(7)
+    boleto_novo.errors.count.should eql(3)
   end
 
   it "Gerar boleto" do
