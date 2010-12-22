@@ -33,7 +33,7 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.7'
+  VERSION = '2.0.8'
   
   class NaoImplementado < NotImplementedError
   end
