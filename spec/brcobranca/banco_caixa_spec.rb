@@ -91,10 +91,10 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo.nosso_numero_dv.should eql(1)
   end
 
-  it "Não permitir gerar boleto com atributos inválido" do
-    boleto_novo = Brcobranca::Boleto::BancoBrasil.new
-    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::NaoImplementado)
-    boleto_novo.errors.count.should eql(2)
+  it "Não permitir gerar boleto com atributos inválidos" do
+    boleto_novo = Brcobranca::Boleto::Caixa.new
+    lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
+    boleto_novo.errors.count.should eql(3)
   end
 
   it "Montar nosso_numero_boleto" do
