@@ -10,7 +10,7 @@ Hoe.plugin :website
 
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
-$hoe = Hoe.spec 'brcobranca' do
+$hoe = Hoe.spec 'tulios-brcobranca-rails2' do
   self.developer 'Kivanio Barbosa', 'kivanio@gmail.com'
   self.post_install_message = 'PostInstall.txt' # TODO remove if post-install message not required
   self.rubyforge_name       = self.name # TODO this is default value
@@ -20,8 +20,12 @@ $hoe = Hoe.spec 'brcobranca' do
     ['parseline','>= 1.0.3']
   ]
 
-  self.summary = 'Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.'
-  self.description = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
+  self.summary = %Q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.
+    Fork de https://github.com/kivanio/brcobranca, tag 2.0.6 adicionando o banco Caixa.
+  }
+  self.description = %Q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.
+    Fork de https://github.com/kivanio/brcobranca, tag 2.0.6 adicionando o banco Caixa.
+  }
   self.clean_globs |= %w[**/.DS_Store tmp *.log]
   # self.rdoc_pattern = /rb$|rdoc$/
   path = (self.rubyforge_name == self.name) ? self.rubyforge_name : "\#{self.rubyforge_name}/\#{self.name}"
