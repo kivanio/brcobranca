@@ -32,6 +32,9 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
   * Sem registro
   * Com registro
 
+* Banco Caixa
+  * Sem registro
+
 == Esta perdido?
 
 Veja a documentação em http://brcobranca.rubyforge.org/rdoc

@@ -21,6 +21,8 @@ module Brcobranca
             imagem = 'unibanco.jpg'
           when "BancoBanespa"
             imagem = 'banespa.jpg'
+          when "BancoCaixa"
+            imagem = 'caixa.jpg'
           else
             return false
           end

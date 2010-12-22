@@ -1,3 +1,7 @@
+== 2.0.7 22-12-2010
+
+* Incluindo boleto para banco Caixa - Túlio Ornelas
+
 == 2.0.6 16-08-2009
 
 * Incluindo boleto para banco Santander Banespa - Diego Lucena

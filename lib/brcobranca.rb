@@ -10,7 +10,9 @@ end
 
 %w(core_ext currency config).each {|req| require File.join(File.dirname(__FILE__),"brcobranca",req) }
 
-%w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco banco_banespa).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) }
+%w(base banco_brasil banco_itau banco_hsbc banco_real banco_bradesco banco_unibanco banco_banespa banco_caixa).each do |req|    
+  require File.join(File.dirname(__FILE__),"brcobranca","boleto",req) 
+end
 
 %w(util rghost).each {|req| require File.join(File.dirname(__FILE__),"brcobranca","boleto","template",req) }
 
@@ -31,5 +33,11 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.6'
+  VERSION = '2.0.7'
+  
+  class NaoImplementado < NotImplementedError
+  end
+  
+  class BoletoInvalido < StandardError
+  end
 end

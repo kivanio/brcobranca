@@ -17,7 +17,7 @@ module Brcobranca
     end
 
     # Gera formatação automatica do documento baseado no tamanho do campo.
-    def formata_documento
+    def formata_documento      
       case (self.kind_of?(String) ? self : self.to_s).size
       when 8 then self.to_br_cep
       when 11 then self.to_br_cpf
@@ -102,6 +102,14 @@ module Brcobranca
 
   # métodos auxiliares de cálculos
   module Calculo
+
+    # Verifica se String só contem caracteres numéricos.
+    #
+    # @return [Boolean]
+    def is_number?
+      self.to_s.empty? ? false : (self.to_s =~ (/\D/)).nil?
+    end
+        
     # Método padrão para cálculo de módulo 10 segundo a BACEN.
     def modulo10
       valor_inicial = self.kind_of?(String) ? self : self.to_s
