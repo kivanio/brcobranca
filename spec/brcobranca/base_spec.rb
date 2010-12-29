@@ -234,6 +234,11 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.class.included_modules.include?(Brcobranca::Boleto::Template::Rghost).should be_true
         boleto_novo.class.included_modules.include?(Brcobranca::Boleto::Template::Util).should be_true
       end
+      
+      it "Incluir módulos de template na classe" do
+        Brcobranca::Boleto::Base.respond_to?(:imprimir_lista).should be_true
+        Brcobranca::Boleto::Base.respond_to?(:to).should be_true
+      end
 
     end
   end

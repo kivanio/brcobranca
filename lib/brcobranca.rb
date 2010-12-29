@@ -24,6 +24,7 @@ when 'rghost'
   module Brcobranca::Boleto
     Base.class_eval do
       include Brcobranca::Boleto::Template::Rghost
+      extend Brcobranca::Boleto::Template::Rghost
       include Brcobranca::Boleto::Template::Util
     end
   end
@@ -33,7 +34,7 @@ else
 end
 
 module Brcobranca
-  VERSION = '2.0.8'
+  VERSION = '2.0.9'
   
   class NaoImplementado < NotImplementedError
   end

@@ -1,6 +1,8 @@
-== 2.0.7 22-12-2010
+== 2.0.9 29-12-2010
 
 * Incluindo boleto para banco Caixa - Túlio Ornelas
+* Adicionando algumas funcionalidades da versão 3
+* Impressão de multiboleto (copiado da versão 3)
 
 == 2.0.6 16-08-2009
 

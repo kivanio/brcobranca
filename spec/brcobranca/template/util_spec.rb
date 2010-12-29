@@ -33,6 +33,10 @@ module Brcobranca
           File.exist?(boleto_novo.monta_logo).should be_true
           File.stat(boleto_novo.monta_logo).zero?.should be_false
           
+          boleto_novo = BancoCaixa.new
+          File.exist?(boleto_novo.monta_logo).should be_true
+          File.stat(boleto_novo.monta_logo).zero?.should be_false
+          
           boleto_novo = Brcobranca::Boleto::Base.new
           boleto_novo.monta_logo.should be_false
         end

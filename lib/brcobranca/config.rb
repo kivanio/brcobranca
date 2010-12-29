@@ -4,6 +4,6 @@ module Brcobranca
     # Opções disponíveis: 
     #  Brcobranca::Config::OPCOES[:tipo] - Pode ser pdf, jpg e ps.
     #  Brcobranca::Config::OPCOES[:gerador] - Somente rghost até o momento
-    OPCOES = {:tipo => 'pdf', :gerador => 'rghost'}
+    OPCOES = {:tipo => 'pdf', :gerador => 'rghost', :resolucao => 150}
   end
 end
