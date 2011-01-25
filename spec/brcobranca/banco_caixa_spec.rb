@@ -71,11 +71,14 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   end
 
   it 'Tamanho do número de convênio deve ser de 6 dígitos' do
-    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:convenio => '12345')
-    boleto_novo.should_not be_valid
-
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:convenio => '1234567')
     boleto_novo.should_not be_valid
+  end
+
+  it 'Número do convênio deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:convenio => '12345')
+    boleto_novo.convenio.should == '012345'
+    boleto_novo.should be_valid
   end
   
   it 'Tamanho da carteira deve ser de 2 dígitos' do
@@ -89,16 +92,18 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it 'Tamanho do número documento deve ser de 15 dígitos' do
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:numero_documento => '1234567891234567')
     boleto_novo.should_not be_valid
+  end
 
-    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:numero_documento => '12345678912345')
-    boleto_novo.should_not be_valid
+  it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 15 dígitos' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:numero_documento => '1')
+    boleto_novo.numero_documento.should == '000000000000001'
+    boleto_novo.should be_valid
   end
 
   it "Montar nosso_numero_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
     boleto_novo.nosso_numero_boleto.should == "#{boleto_novo.carteira}#{boleto_novo.numero_documento}"
   end
-
 
   it "Montar agencia_conta_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
