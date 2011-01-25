@@ -3,121 +3,102 @@ require File.dirname(__FILE__) + '/../spec_helper.rb'
 
 describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   
-  before(:each) do
+  before do
     @valid_attributes = {
-      :especie_documento => "DM",
-      :moeda => "9",
+      :especie_documento => 'DM',
+      :moeda => '9',
       :data_documento => Date.today,
       :dias_vencimento => 1,
-      :aceite => "S",
+      :aceite => 'S',
       :quantidade => 1,
-      :valor => 0.0,
-      :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO",
-      :cedente => "Túlio Ornelas",
-      :documento_cedente => "200874000687",
-      :sacado => "Ana Carolina Mascarenhas",
-      :sacado_documento => "93463665751",
-      :agencia => "1565",
-      :conta_corrente => "13877",
-      :convenio => "87000000414",
-      :numero_documento => "1"
+      :valor => 1.23,
+      :local_pagamento => 'QUALQUER BANCO ATÉ O VENCIMENTO',
+      :cedente => 'Túlio Ornelas',
+      :documento_cedente => '200874000687',
+      :sacado => 'Ana Carolina Mascarenhas',
+      :sacado_documento => '93463665751',
+      :agencia => '1565',
+      :conta_corrente => '0013877',
+      :convenio => '100000',
+      :numero_documento => '123456789123456'
     }
   end
   
-  it "Criar nova instancia com atributos padrões" do
+  it 'Criar nova instância com atributos padrões' do
     boleto_novo = Brcobranca::Boleto::Caixa.new
-    boleto_novo.banco.should eql("104")
-    boleto_novo.especie_documento.should eql("DM")
-    boleto_novo.especie.should eql("R$")
-    boleto_novo.moeda.should eql("9")
+    boleto_novo.banco.should eql('104')
+    boleto_novo.especie_documento.should eql('DM')
+    boleto_novo.especie.should eql('R$')
+    boleto_novo.moeda.should eql('9')
     boleto_novo.data_documento.should eql(Date.today)
     boleto_novo.dias_vencimento.should eql(1)
     boleto_novo.data_vencimento.should eql(Date.today + 1)
-    boleto_novo.aceite.should eql("S")
+    boleto_novo.aceite.should eql('S')
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
     boleto_novo.valor_documento.should eql(0.0)
-    boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
-    boleto_novo.carteira.should eql(Brcobranca::Boleto::Caixa::CARTEIRAS[14])
+    boleto_novo.local_pagamento.should eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     boleto_novo.codigo_servico.should be_false
+    carteira = "#{Brcobranca::Boleto::Caixa::MODALIDADE_COBRANCA[:sem_registro]}" <<
+               "#{Brcobranca::Boleto::Caixa::EMISSAO_BOLETO[:cedente]}"
+    boleto_novo.carteira.should eql(carteira)
   end
   
   it "Criar nova instancia com atributos válidos" do
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    boleto_novo.banco.should eql("104")
-    boleto_novo.especie_documento.should eql("DM")
-    boleto_novo.especie.should eql("R$")
-    boleto_novo.moeda.should eql("9")
-    boleto_novo.data_documento.should eql(Date.today)
-    boleto_novo.dias_vencimento.should eql(1)
-    boleto_novo.data_vencimento.should eql(Date.today + 1)
-    boleto_novo.aceite.should eql("S")
-    boleto_novo.quantidade.should eql(1)
-    boleto_novo.valor.should eql(0.0)
-    boleto_novo.valor_documento.should eql(0.0)
-    boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
-    boleto_novo.cedente.should eql("Túlio Ornelas")
-    boleto_novo.documento_cedente.should eql("200874000687")
-    boleto_novo.sacado.should eql("Ana Carolina Mascarenhas")
-    boleto_novo.sacado_documento.should eql("93463665751")
-    boleto_novo.conta_corrente.should eql("0013877")
-    boleto_novo.agencia.should eql("1565")
-    boleto_novo.convenio.should eql("87000000414")
-    boleto_novo.numero_documento.should eql("8200000001")
-    boleto_novo.carteira.should eql(Brcobranca::Boleto::Caixa::CARTEIRAS[14])
-    boleto_novo.codigo_servico.should be_false
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
+    @valid_attributes.keys.each do |key|
+      boleto_novo.send(key).should eql(@valid_attributes[key])
+    end
+    boleto_novo.should be_valid
+  end
+
+  it 'Gerar o dígito verificador do convênio' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
+    boleto_novo.convenio_dv.should_not be_nil
+    boleto_novo.convenio_dv.should == '4'
   end
   
-  it "Montar código de barras para convenio de 11 digitos e nosso número de 10" do
-    @valid_attributes[:valor] = 135.00
-    @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 0
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-
-    boleto_novo.codigo_barras_segunda_parte.should eql("8200000001156587000000414")  
-    boleto_novo.codigo_barras.should eql("10494376900000135008200000001156587000000414")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("10498.20002 00001.156587 70000.004146 4 37690000013500")
-    boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.nosso_numero_dv.should eql(3)
-
-    @valid_attributes[:dias_vencimento] = 1
-    @valid_attributes[:numero_documento] = "2"
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-
-    boleto_novo.codigo_barras_segunda_parte.should eql("8200000002156587000000414")  
-    boleto_novo.codigo_barras.should eql("10491377000000135008200000002156587000000414")
-    boleto_novo.codigo_barras.linha_digitavel.should eql("10498.20002 00002.156586 70000.004146 1 37700000013500")
-    boleto_novo.conta_corrente_dv.should eql(0)
-    boleto_novo.nosso_numero_dv.should eql(1)
+  it "Gerar o código de barras" do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
+    lambda { boleto_novo.codigo_barras }.should_not raise_error
+    boleto_novo.codigo_barras_segunda_parte.should_not be_blank
+    boleto_novo.codigo_barras_segunda_parte.should eql('1000004123245647891234568')
   end
 
   it "Não permitir gerar boleto com atributos inválidos" do
     boleto_novo = Brcobranca::Boleto::Caixa.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(3)
+  end
+
+  it 'Tamanho do número de convênio deve ser de 6 dígitos' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:convenio => '12345')
+    boleto_novo.should_not be_valid
+
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:convenio => '1234567')
+    boleto_novo.should_not be_valid
+  end
+  
+  it 'Tamanho da carteira deve ser de 2 dígitos' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:carteira => '145')
+    boleto_novo.should_not be_valid
+
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:carteira => '1')
+    boleto_novo.should_not be_valid
+  end
+
+  it 'Tamanho do número documento deve ser de 15 dígitos' do
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:numero_documento => '1234567891234567')
+    boleto_novo.should_not be_valid
+
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:numero_documento => '12345678912345')
+    boleto_novo.should_not be_valid
   end
 
   it "Montar nosso_numero_boleto" do
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    boleto_novo.numero_documento = "1"
-    boleto_novo.nosso_numero_boleto.should eql("82000000013")
-    boleto_novo.nosso_numero_dv.should eql(3)
-    boleto_novo.numero_documento = "2"
-    boleto_novo.nosso_numero_boleto.should eql("82000000021")
-    boleto_novo.nosso_numero_dv.should eql(1)
-    boleto_novo.numero_documento = "3"
-    boleto_novo.nosso_numero_boleto.should eql("82000000031")
-    boleto_novo.nosso_numero_dv.should eql(1)
-    boleto_novo.numero_documento = 10
-    boleto_novo.nosso_numero_boleto.should eql("82000000102")
-    boleto_novo.nosso_numero_dv.should eql(2)
-    boleto_novo.numero_documento = 20
-    boleto_novo.nosso_numero_boleto.should eql("82000000201")
-    boleto_novo.nosso_numero_dv.should eql(1)
-    boleto_novo.numero_documento = 30
-    boleto_novo.nosso_numero_boleto.should eql("82000000307")
-    boleto_novo.nosso_numero_dv.should eql(7)
+    boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
+    boleto_novo.nosso_numero_boleto.should == "#{boleto_novo.carteira}#{boleto_novo.numero_documento}"
   end
+
 
   it "Montar agencia_conta_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
@@ -140,7 +121,7 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 2
-    @valid_attributes[:numero_documento] = "77700168"
+    @valid_attributes[:numero_documento] = "000000077700168"
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.send("to_#{format}".to_sym)
@@ -158,7 +139,7 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
     @valid_attributes[:dias_vencimento] = 2
-    @valid_attributes[:numero_documento] = "77700168"
+    @valid_attributes[:numero_documento] = "000000077700168"
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
     %w| pdf jpg tif png ps |.each do |format|
       file_body=boleto_novo.to(format)
@@ -171,77 +152,5 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       File.exist?(tmp_file.path).should be_false
     end
   end
-     
-  it 'deveria possuir o campo livre igual a segunda parte do codigo de barras' do
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    boleto_novo.codigo_barras_segunda_parte.should eql(boleto_novo.campo_livre)
-  end
-  
-  it 'deveria retornar a carteira sempre com a sigla' do
-    boleto_novo = Brcobranca::Boleto::Caixa.new :carteira => 14
-    boleto_novo.carteira.should eql(Brcobranca::Boleto::Caixa::CARTEIRAS[14])
-    
-    boleto_novo = Brcobranca::Boleto::Caixa.new :carteira => 'SR'
-    boleto_novo.carteira.should eql(Brcobranca::Boleto::Caixa::CARTEIRAS[14])
-  end
-  
-  it 'deveria retornar o numero_documento com base na carteira' do
-    @valid_attributes[:numero_documento] = "1"
-    @valid_attributes[:carteira] = 14
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    
-    boleto_novo.numero_documento.should eql("8200000001")
-    
-    @valid_attributes[:carteira] = 11
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    lambda { boleto_novo.numero_documento }.should raise_error(Brcobranca::NaoImplementado)
-    
-    @valid_attributes[:carteira] = 12
-    boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-    lambda { boleto_novo.numero_documento }.should raise_error(Brcobranca::NaoImplementado)
-  end
-  
-  it "deveria calcular o banco_dv corretamente, com base no modulo10" do
-    boleto_novo = Brcobranca::Boleto::Caixa.new
-    boleto_novo.banco.should eql("104")
-    boleto_novo.banco_dv.should eql(0)
-    boleto_novo.banco_dv.should eql(boleto_novo.banco.modulo10)
-  end
-  
+
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

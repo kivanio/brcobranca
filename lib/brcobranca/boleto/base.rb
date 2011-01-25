@@ -202,7 +202,7 @@ module Brcobranca
 
       private
 
-      # Monta a primeira parte do código de barras, que é a mesma para todos banco.
+      # Monta a primeira parte do código de barras, que é a mesma para todos bancos.
       # @return [String] 18 caracteres numéricos.
       def codigo_barras_primeira_parte
         "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{valor_documento_formatado}"

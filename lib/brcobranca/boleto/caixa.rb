@@ -1,133 +1,84 @@
 # -*- encoding: utf-8 -*-
+#
+# A Caixa tem dois padrões para a geração de boleto: SIGCB e SICOB.
+# O SICOB foi substiuido pelo SIGCB que é implementado por esta classe.
+# http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF
+#
 module Brcobranca
   module Boleto
-    class Caixa < Base # Caixa Economica
-      
-      validates_length_of :convenio, :is => 11, :message => "deve ser igual a 11 dígitos (operacao (3) + convênio (8))."
-                                
-      CARTEIRAS = {
-        14 => 'SR' # Cobranca sem Registro
+    class Caixa < Base # Caixa
+
+      MODALIDADE_COBRANCA = {
+        :registrada => '1',
+        :sem_registro => '2'
       }
-      
-      # Nova instancia da CaixaEconomica
+
+      EMISSAO_BOLETO = {
+        :cedente => '4'
+      }
+
+      # Validações
+      validates_length_of :carteira, :is => 2, :message => 'deve possuir 2 dígitos.'
+      validates_length_of :convenio, :is => 6, :message => 'deve possuir 6 dígitos.'
+      validates_length_of :numero_documento, :is => 15, :message => 'deve possuir 15 dígitos.'
+
+      # Nova instância da CaixaEconomica
       # @param (see Brcobranca::Boleto::Base#initialize)
-      def initialize(campos={})
-        campos = {:carteira => CARTEIRAS[14]}.merge!(campos)
+      def initialize campos = {} 
+        campos = {
+          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}" 
+        }.merge!(campos)
         super(campos)
       end
-                  
-      alias :valor_carteira :carteira
-      def carteira             
-        # Em caso de número, formatar para sigla
-        return CARTEIRAS[self.valor_carteira] if self.valor_carteira.is_number?
-        self.valor_carteira
+
+      # Código do banco emissor
+      # @return [String]
+      def banco; '104' end
+
+      # Nosso número, 17 dígitos
+      #  1 à 2: carteira
+      #  3 à 17: campo_livre
+      # @return [String]
+      def nosso_numero_boleto
+        "#{carteira}#{numero_documento}"      
       end
-      
-      # Codigo do banco emissor (3 dígitos sempre)
-      #
-      # @return [String] 3 caracteres numéricos.
-      def banco
-        "104"
-      end
-      
-      def banco_dv
-        self.banco.modulo10
-      end
-      
+
       # Número da agência/codigo_cedente do cliente para exibir no boleto.
       # @return [String]
       # @example
       #  boleto.agencia_conta_boleto #=> "2391/44335511-5"
       def agencia_conta_boleto            
-        "#{self.agencia}/#{self.conta_corrente}-#{self.conta_corrente_dv}"
+        "#{agencia}/#{conta_corrente}-#{conta_corrente_dv}"
       end
-      
-      # Número seqüencial utilizado para identificar o boleto.
-      # Carteira 14 - SR - Cobranca sem Registro:
-      #  Fixo 2 mais 8 dígitos (ex: 8200000001) 
-      # @raise  [Brcobranca::NaoImplementado] Caso o tipo de convênio não seja suportado pelo Brcobranca.
-      #                       
-      def numero_documento
-        case self.carteira
-        when 'SR'
-          "82#{@numero_documento.to_s.rjust(8, '0')}"
-        else
-          raise Brcobranca::NaoImplementado.new("Tipo de convênio não implementado.")
-        end
-      end
-      
-      # Dígito verificador do nosso número.
-      # @return [String] 1 caracteres numéricos.
-      # @see BancoBrasil#numero_documento
-      def nosso_numero_dv
-        self.numero_documento.modulo11_2to9
-      end
-      
-      # Nosso número para exibir no boleto.
-      # (numero_documento + nosso_numero_dv)
+
+      # Dígito verificador do convênio ou código do cedente
       # @return [String]
-      # @example
-      #  boleto.nosso_numero_boleto #=> "12345678904"
-      def nosso_numero_boleto
-        "#{self.numero_documento}#{self.nosso_numero_dv}"
+      def convenio_dv
+        "#{convenio.modulo11_2to9}"
       end
-      
+
+      # Monta a segunda parte do código de barras.
+      #  1 à 6: código do cedente, também conhecido como convênio
+      #  7: dígito verificador do código do cedente
+      #  8 à 10: dígito 3 à 5 do nosso número
+      #  11: dígito 1 do nosso número (modalidade da cobrança)
+      #  12 à 14: dígito 6 à 8 do nosso número
+      #  15: dígito 2 do nosso número (emissão do boleto)
+      #  16 à 24: dígito 9 à 17 do nosso número
+      #  25: dígito verificador do campo livre
+      # @return [String]
       def codigo_barras_segunda_parte
-        self.campo_livre
-      end
+        campo_livre = "#{convenio}" << 
+        "#{convenio_dv}" <<
+        "#{nosso_numero_boleto[2..4]}" <<
+        "#{nosso_numero_boleto[0..0]}" <<
+        "#{nosso_numero_boleto[5..7]}" <<
+        "#{nosso_numero_boleto[1..1]}" <<
+        "#{nosso_numero_boleto[8..16]}"
         
-      # Para as posições do Campo Livre, informar:
-      # - Se carteira Sem Registro: Nosso número com 10 posições e Código do Cedente, ambos
-      # sem o DV.
-      # 
-      # Ex.: 82NNNNNNNN AAAA YYYXXXXXXXX
-      # 
-      # Onde: 82 - Identificador da carteira Sem Registro
-      # NNNNNNNN - Nosso número do Cliente
-      # AAAA - CNPJ da Agência Cedente
-      # YYY - Operação Código
-      # XXXXXXXX - Código fornecido pela Agência
-      #
-      # Nota: A operação + o código fornecido pela agência = convênio
-      def campo_livre
-        "#{self.numero_documento}#{self.agencia}#{self.convenio}"
+        "#{campo_livre}#{campo_livre.modulo11_2to9}"
       end
-      
+
     end
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
