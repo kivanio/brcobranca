@@ -31,12 +31,24 @@ class BancoCaixa < Brcobranca::Boleto::Base
   # @return [String]
   def banco; '104' end
 
+  # Dígito verificador do código do banco em módulo 10
+  # Módulo 10 de 104 é 0
+  # @return [String]
+  def banco_dv; '0' end
+
   # Nosso número, 17 dígitos
   #  1 à 2: carteira
   #  3 à 17: campo_livre
   # @return [String]
   def nosso_numero_boleto
-    "#{carteira}#{numero_documento}"      
+    "#{carteira}#{numero_documento}-#{nosso_numero_dv}"
+  end
+
+  # Dígito verificador do Nosso Número
+  # Utiliza-se o [-1..-1] para retornar o último caracter
+  # @return [String]
+  def nosso_numero_dv
+    "#{carteira}#{numero_documento}".modulo11_9to2.to_s[-1..-1]
   end
 
   # Número da agência/codigo_cedente do cliente para exibir no boleto.
@@ -44,7 +56,7 @@ class BancoCaixa < Brcobranca::Boleto::Base
   # @example
   #  boleto.agencia_conta_boleto #=> "2391/44335511-5"
   def agencia_conta_boleto            
-    "#{agencia}/#{conta_corrente}-#{conta_corrente_dv}"
+    "#{agencia}/#{convenio}-#{convenio_dv}"
   end
 
   # Dígito verificador do convênio ou código do cedente
