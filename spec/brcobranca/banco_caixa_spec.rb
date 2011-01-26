@@ -73,10 +73,14 @@ describe BancoCaixa do #:nodoc:[all]
   it 'Número do convênio deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
     boleto_novo = BancoCaixa.new @valid_attributes.merge(:convenio => '12345')
     boleto_novo.convenio.should == '012345'
+    boleto_novo = BancoCaixa.new @valid_attributes.merge(:convenio => 12345)
+    boleto_novo.convenio.should == '012345'
   end
 
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 15 dígitos' do
     boleto_novo = BancoCaixa.new @valid_attributes.merge(:numero_documento => '1')
+    boleto_novo.numero_documento.should == '000000000000001'
+    boleto_novo = BancoCaixa.new @valid_attributes.merge(:numero_documento => 1)
     boleto_novo.numero_documento.should == '000000000000001'
   end
 
