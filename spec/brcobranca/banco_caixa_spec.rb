@@ -27,6 +27,7 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it 'Criar nova instância com atributos padrões' do
     boleto_novo = Brcobranca::Boleto::Caixa.new
     boleto_novo.banco.should eql('104')
+    boleto_novo.banco_dv.should eql('0')
     boleto_novo.especie_documento.should eql('DM')
     boleto_novo.especie.should eql('R$')
     boleto_novo.moeda.should eql('9')
@@ -102,18 +103,22 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
 
   it "Montar nosso_numero_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
-    boleto_novo.nosso_numero_boleto.should == "#{boleto_novo.carteira}#{boleto_novo.numero_documento}"
+    boleto_novo.nosso_numero_boleto.should == "#{boleto_novo.carteira}" << 
+                                              "#{boleto_novo.numero_documento}" <<
+                                              "-#{boleto_novo.nosso_numero_dv}"
   end
 
   it "Montar agencia_conta_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
-                   
-    boleto_novo.agencia_conta_boleto.should eql("1565/0013877-0")
-    boleto_novo.agencia = "1314"
-    boleto_novo.agencia_conta_boleto.should eql("1314/0013877-0")
+
+    boleto_novo.agencia_conta_boleto.should eql("1565/100000-4")
+
+    boleto_novo.convenio = "123456"
+    boleto_novo.agencia_conta_boleto.should eql("1565/123456-1")
+
     boleto_novo.agencia = "2030"
-    boleto_novo.conta_corrente = "067164"
-    boleto_novo.agencia_conta_boleto.should eql("2030/0067164-9")
+    boleto_novo.convenio = "654321"
+    boleto_novo.agencia_conta_boleto.should eql("2030/654321-9")
   end
   
   it "Busca logotipo do banco" do
