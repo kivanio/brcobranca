@@ -1,4 +1,9 @@
 # Banco Caixa
+#
+# A Caixa tem dois padrões para a geração de boleto: SIGCB e SICOB.
+# O SICOB foi substiuido pelo SIGCB que é implementado por esta classe.
+# http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF
+
 class BancoCaixa < Brcobranca::Boleto::Base
   MODALIDADE_COBRANCA = {
     :registrada => '1',
@@ -51,10 +56,10 @@ class BancoCaixa < Brcobranca::Boleto::Base
     "#{carteira}#{numero_documento}".modulo11_9to2.to_s[-1..-1]
   end
 
-  # Número da agência/codigo_cedente do cliente para exibir no boleto.
+  # Número da agência/código cedente do cliente para exibir no boleto.
   # @return [String]
   # @example
-  #  boleto.agencia_conta_boleto #=> "2391/44335511-5"
+  #  boleto.agencia_conta_boleto #=> "1565/100000-4"
   def agencia_conta_boleto            
     "#{agencia}/#{convenio}-#{convenio_dv}"
   end
