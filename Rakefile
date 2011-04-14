@@ -5,11 +5,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "brcobranca"
-    gem.summary = %Q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
-    gem.description = %Q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
+    gem.name = "tulios-brcobranca"
+    gem.summary = %Q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros. Fork de http://github.com/kivanio/brcobranca}
+    gem.description = %Q{Gem para emissão de bloquetos de cobrança de bancos brasileiros. Fork de http://github.com/kivanio/brcobranca}
     gem.email = "kivanio@gmail.com"
-    gem.homepage = "http://github.com/kivanio/brcobranca"
+    gem.homepage = "https://github.com/tulios/brcobranca"
     gem.authors = ["Kivanio Barbosa"]
     gem.requirements << 'GhostScript > 8.0, para gear PDF e código de Barras'
     gem.add_runtime_dependency("rghost", ">= 0.8.7")

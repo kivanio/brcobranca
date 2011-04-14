@@ -40,7 +40,6 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("18")
     boleto_novo.codigo_servico.should be_false
-
   end
 
   it "Criar nova instancia com atributos válidos" do
@@ -67,7 +66,6 @@ describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     boleto_novo.numero_documento.should eql("777700168")
     boleto_novo.carteira.should eql("18")
     boleto_novo.codigo_servico.should be_false
-
   end
 
   it "Montar código de barras para convenio de 8 digitos e nosso número de 9" do

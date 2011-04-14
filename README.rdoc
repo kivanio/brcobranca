@@ -35,6 +35,9 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco UNIBANCO
   * Sem registro
   * Com registro
+  
+* Banco Caixa
+  * Sem registro (SR)
 
 == Esta perdido?
 
