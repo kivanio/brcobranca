@@ -70,7 +70,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.requirements = ["GhostScript > 8.0, para gear PDF e c\303\263digo de Barras"]
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.5.2}
   s.summary = %q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
   s.test_files = [
     "spec/brcobranca/banco_banespa_spec.rb",

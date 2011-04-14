@@ -1,3 +1,7 @@
+== 3.0.0 14-04-2011
+
+* Incluindo boleto para CAIXA by Túlio Ornelas
+
 == 2.0.7 14-05-2010
 
 * Resolução de imagens com maior qualidade - Anderson Dias

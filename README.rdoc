@@ -35,9 +35,9 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco UNIBANCO
   * Sem registro
   * Com registro
-  
+
 * Banco Caixa
-  * Sem registro (SR)
+  * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
 == Esta perdido?
 

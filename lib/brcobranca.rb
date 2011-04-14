@@ -96,7 +96,7 @@ module Brcobranca
     autoload :Bradesco,      'brcobranca/boleto/bradesco'
     autoload :Unibanco,      'brcobranca/boleto/unibanco'
     autoload :Banespa,       'brcobranca/boleto/banespa'
-    autoload :Caixa,'brcobranca/boleto/caixa'
+    autoload :Caixa,         'brcobranca/boleto/caixa'
 
     # Módulos para classes de template
     module Template
