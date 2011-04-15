@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+$:.push File.join(File.dirname(__FILE__))
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
@@ -95,7 +95,6 @@ module Brcobranca
     autoload :Real,          'brcobranca/boleto/real'
     autoload :Bradesco,      'brcobranca/boleto/bradesco'
     autoload :Unibanco,      'brcobranca/boleto/unibanco'
-    autoload :Banespa,       'brcobranca/boleto/banespa'
     autoload :Caixa,         'brcobranca/boleto/caixa'
 
     # Módulos para classes de template
