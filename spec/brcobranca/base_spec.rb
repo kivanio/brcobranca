@@ -170,13 +170,13 @@ module Brcobranca #:nodoc:[all]
       end
 
       it "Incluir módulos de template na classe" do
-        Brcobranca::Boleto::Base.respond_to?(:imprimir_lista).should be_true
+        Brcobranca::Boleto::Base.respond_to?(:lote).should be_true
         Brcobranca::Boleto::Base.respond_to?(:to).should be_true
       end
 
       it "Incluir módulos de template na instancia" do
         boleto_novo = Brcobranca::Boleto::Base.new
-        boleto_novo.respond_to?(:imprimir_lista).should be_true
+        boleto_novo.respond_to?(:lote).should be_true
         boleto_novo.respond_to?(:to).should be_true
       end
 

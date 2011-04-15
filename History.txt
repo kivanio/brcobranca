@@ -1,5 +1,7 @@
 == 3.0.0 14-04-2011
 
+* Múltiplos boletos em lote com RGhost
+* Validações
 * Incluindo boleto para CAIXA by Túlio Ornelas
 * Removendo BANESPA que virou Santander
 
