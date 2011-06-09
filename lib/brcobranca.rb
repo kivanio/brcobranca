@@ -47,7 +47,7 @@ module Brcobranca
   # Para mudar as configurações padrão, você pode fazer assim:
   # config/environments/test.rb:
   #
-  #     Brcobranca.configure do |config|
+  #     Brcobranca.setup do |config|
   #       config.formato = :gif
   #     end
   #
@@ -67,6 +67,13 @@ module Brcobranca
     # @return [Integer]
     # @param  [Integer] (Padrão: 150)
     attr_accessor :resolucao
+
+    # Ajusta o Encoding externo (do arquivo) - Ruby 1.9
+    # Ex: Caso esteja dando UndefinedConversionError - from ASCII-8BIT to UTF-8
+    # configurar com a string 'ascii-8bit'
+    # @return [String]
+    # @param  [String] (Padrão: nil)
+    attr_accessor :external_encoding
 
     # Atribui valores padrões de configuração
     def initialize
@@ -110,3 +117,4 @@ module Brcobranca
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
   end
 end
+
