@@ -23,6 +23,7 @@ module Brcobranca
       module Rghost
         extend self
         include RGhost unless self.include?(RGhost)
+        RGhost::Config::GS[:external_encoding] = Brcobranca.configuration.external_encoding
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         #
@@ -225,3 +226,4 @@ module Brcobranca
     end
   end
 end
+
