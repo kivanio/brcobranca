@@ -39,7 +39,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco Caixa
   * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
-== Esta perdido?
+== Está perdido?
 
 Veja a documentação da versão atual em http://rubydoc.info/gems/brcobranca e da versão de desenvolvimento em http://rubydoc.info/github/kivanio/brcobranca/master/frames
 
@@ -70,7 +70,7 @@ Informe em http://github.com/kivanio/brcobranca/issues
 
 Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
 
-== LICENSA
+== LICENÇA
 
 BSD
 
