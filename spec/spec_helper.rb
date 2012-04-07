@@ -10,4 +10,5 @@ require 'rghost'
 RGhost::Config::GS[:path] = '/usr/local/bin/gs'
 
 RSpec.configure do |config|
+	
 end
