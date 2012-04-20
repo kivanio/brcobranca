@@ -103,6 +103,7 @@ module Brcobranca
     autoload :Bradesco,      'brcobranca/boleto/bradesco'
     autoload :Unibanco,      'brcobranca/boleto/unibanco'
     autoload :Caixa,         'brcobranca/boleto/caixa'
+    autoload :Sicredi,         'brcobranca/boleto/sicredi'
 
     # Módulos para classes de template
     module Template
@@ -115,6 +116,7 @@ module Brcobranca
   module Retorno
     autoload :Base,           'brcobranca/retorno/base'
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
+    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
   end
 end
 
