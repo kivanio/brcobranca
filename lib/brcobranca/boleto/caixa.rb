@@ -56,7 +56,7 @@ module Brcobranca
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
       def nosso_numero_dv
-        "#{carteira}#{numero_documento}".modulo11_9to2.to_s[-1..-1]
+        "#{carteira}#{numero_documento}".modulo11_2to9_caixa.to_s
       end
 
       # Número da agência/código cedente do cliente para exibir no boleto.
@@ -70,7 +70,7 @@ module Brcobranca
       # Dígito verificador do convênio ou código do cedente
       # @return [String]
       def convenio_dv
-        "#{convenio.modulo11_2to9}"
+        "#{convenio.modulo11_2to9_caixa}"
       end
 
       # Monta a segunda parte do código de barras.
@@ -92,7 +92,7 @@ module Brcobranca
         "#{nosso_numero_boleto[1..1]}" <<
         "#{nosso_numero_boleto[8..16]}"
         
-        "#{campo_livre}#{campo_livre.modulo11_2to9}"
+        "#{campo_livre}#{campo_livre.modulo11_2to9_caixa}"
       end
 
     end
