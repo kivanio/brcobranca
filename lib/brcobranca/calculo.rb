@@ -58,6 +58,16 @@ module Brcobranca
       valor = (11 - (total % 11))
       return [0,10,11].include?(valor) ? 1 : valor
     end
+    
+    # Calcula módulo 11 com multiplicaroes de 2 a 9 (Utilizado pela CAIXA - boletos SIGCB).
+    #
+    # @return [Integer]
+    def modulo11_2to9_caixa
+      total = self.multiplicador([2,3,4,5,6,7,8,9])
+      total = (total % 11) unless total < 11
+      valor = (11 - total)
+      return valor > 9 ? 0 : valor
+    end
 
     # Calcula módulo 11 com multiplicaroes de 9 a 2 trocando retorno <b>10 por X</b>.
     #

@@ -11,16 +11,16 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       :dias_vencimento => 1,
       :aceite => 'S',
       :quantidade => 1,
-      :valor => 1.23,
+      :valor => 10.00,
       :local_pagamento => 'QUALQUER BANCO ATÉ O VENCIMENTO',
-      :cedente => 'Túlio Ornelas',
-      :documento_cedente => '200874000687',
-      :sacado => 'Ana Carolina Mascarenhas',
-      :sacado_documento => '93463665751',
-      :agencia => '1565',
-      :conta_corrente => '0013877',
-      :convenio => '100000',
-      :numero_documento => '123456789123456'
+      :cedente => 'PREFEITURA MUNICIPAL DE VILHENA',
+      :documento_cedente => '04092706000181',
+      :sacado => 'João Paulo Barbosa',
+      :sacado_documento => '77777777777',
+      :agencia => '1825',
+      :conta_corrente => '0000528',
+      :convenio => '245274',
+      :numero_documento => '000000000000001'
     }
   end
   
@@ -56,14 +56,14 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it 'Gerar o dígito verificador do convênio' do
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
     boleto_novo.convenio_dv.should_not be_nil
-    boleto_novo.convenio_dv.should == '4'
+    boleto_novo.convenio_dv.should == '0'
   end
   
   it "Gerar o código de barras" do
     boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes
     lambda { boleto_novo.codigo_barras }.should_not raise_error
     boleto_novo.codigo_barras_segunda_parte.should_not be_blank
-    boleto_novo.codigo_barras_segunda_parte.should eql('1000004123245647891234568')
+    boleto_novo.codigo_barras_segunda_parte.should eql('2452740000200040000000010')
   end
 
   it "Não permitir gerar boleto com atributos inválidos" do
@@ -111,10 +111,10 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it "Montar agencia_conta_boleto" do
     boleto_novo = Brcobranca::Boleto::Caixa.new(@valid_attributes)
 
-    boleto_novo.agencia_conta_boleto.should eql("1565/100000-4")
+    boleto_novo.agencia_conta_boleto.should eql("1825/245274-0")
 
     boleto_novo.convenio = "123456"
-    boleto_novo.agencia_conta_boleto.should eql("1565/123456-1")
+    boleto_novo.agencia_conta_boleto.should eql("1825/123456-0")
 
     boleto_novo.agencia = "2030"
     boleto_novo.convenio = "654321"
