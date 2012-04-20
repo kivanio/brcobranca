@@ -21,6 +21,7 @@ scratch_directory
 tmp
 .yardoc
 .rvmrc
+.idea
 
 ## PROJECT::SPECIFIC
 config
@@ -29,3 +30,4 @@ pkg
 pkg/*.8
 doc
 doc/*.*
+Gemfile.lock

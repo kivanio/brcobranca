@@ -39,14 +39,21 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco Caixa
   * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
+* Banco SICREDI
+
+== Retornos Disponíveis
+
+* CBR643
+* CNAB240
+
 == Está perdido?
 
 Veja a documentação da versão atual em http://rubydoc.info/gems/brcobranca e da versão de desenvolvimento em http://rubydoc.info/github/kivanio/brcobranca/master/frames
 
 == REQUISITOS
 
-* rghost >= 0.8.7
-* rghost_barcode >= 0.8
+* rghost >= 0.8
+* rghost_barcode >= 0.9
 * parseline >= 1.0.3
 * GhostScript > 8.0
 
