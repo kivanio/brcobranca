@@ -75,6 +75,11 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
+    def modulo11_mercantil
+      valor = self.modulo11_2to9
+      return [0,1].include?(valor) ? 0 : valor
+    end
+    
     # Verifica se String só contem caracteres numéricos.
     #
     # @return [Boolean]
@@ -115,6 +120,7 @@ module Brcobranca
 
       self.to_s.split(//).reverse!.each do |caracter|
         fator = fatores[multiplicador_posicao]
+
         total += if block_given?
           yield(caracter, fator)
         else
