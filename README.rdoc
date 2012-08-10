@@ -39,6 +39,8 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco Caixa
   * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
+* Banco Mercantil
+
 == Está perdido?
 
 Veja a documentação da versão atual em http://rubydoc.info/gems/brcobranca e da versão de desenvolvimento em http://rubydoc.info/github/kivanio/brcobranca/master/frames
