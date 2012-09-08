@@ -29,25 +29,25 @@ module Brcobranca
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 5 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(5,'0') unless valor.nil?
+        @convenio = valor.to_s.rjust(5,'0') if valor
       end
 
       # Conta corrente
       # @return [String] 5 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(5,'0') unless valor.nil?
+        @conta_corrente = valor.to_s.rjust(5,'0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 8 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8,'0') unless valor.nil?
+        @numero_documento = valor.to_s.rjust(8,'0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 7 caracteres numéricos.
       def seu_numero=(valor)
-        @seu_numero = valor.to_s.rjust(7,'0') unless valor.nil?
+        @seu_numero = valor.to_s.rjust(7,'0') if valor
       end
 
       # Dígito verificador do nosso número.

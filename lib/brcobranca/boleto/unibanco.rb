@@ -32,7 +32,7 @@ module Brcobranca
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(7,'0') unless valor.nil?
+        @convenio = valor.to_s.rjust(7,'0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.

@@ -108,7 +108,7 @@ module Brcobranca
       # Código da agencia
       # @return [String] 4 caracteres numéricos.
       def agencia=(valor)
-        @agencia = valor.to_s.rjust(4,'0') unless valor.nil?
+        @agencia = valor.to_s.rjust(4,'0') if valor
       end
 
       # Dígito verificador da agência
@@ -142,7 +142,7 @@ module Brcobranca
       # Valor total do documento: <b>quantidate * valor</b>
       # @return [Float]
       def valor_documento
-        self.quantidade.to_f * self.valor.to_f
+        '%.2f' % (self.quantidade.to_f * self.valor.to_f)
       end
 
       # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
@@ -164,7 +164,7 @@ module Brcobranca
       # Número da conta corrente
       # @return [String] 7 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(7,'0') unless valor.nil?
+        @conta_corrente = valor.to_s.rjust(7,'0') if valor
       end
 
       # Codigo de barras do boleto

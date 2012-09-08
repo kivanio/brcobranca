@@ -57,7 +57,7 @@ module Brcobranca #:nodoc:[all]
   end
 end
 
-[ Numeric].each do |klass|
+[ Numeric, String].each do |klass|
   klass.class_eval { include Brcobranca::Currency::Number }
 end
 

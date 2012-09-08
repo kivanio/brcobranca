@@ -31,20 +31,20 @@ module Brcobranca
       #
       # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
-        @carteira = valor.to_s.rjust(2,'0') unless valor.nil?
+        @carteira = valor.to_s.rjust(2,'0') if valor
       end
 
       # Posto
       #
       # @return [String] 2 caracteres numéricos.
       def posto=(valor)
-        @posto = valor.to_s.rjust(2, '0') unless valor.nil?
+        @posto = valor.to_s.rjust(2, '0') if valor
       end
 
       # Número da conta corrente
       # @return [String] 5 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(5,'0') unless valor.nil?
+        @conta_corrente = valor.to_s.rjust(5,'0') if valor
       end
 
       # Dígito verificador do banco
@@ -68,7 +68,7 @@ module Brcobranca
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 5 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(5,'0') unless valor.nil?
+        @numero_documento = valor.to_s.rjust(5,'0') if valor
       end
 
       # Codigo referente ao tipo de cobrança
