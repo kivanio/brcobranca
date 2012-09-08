@@ -13,9 +13,6 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 == Bancos Disponíveis
 
-* Banco Banespa
-  * COB
-
 * Banco do Brasil
   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
 
@@ -40,6 +37,10 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
   * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
 * Banco SICREDI
+
+* Banco Santander by Ronaldo Araujo - https://github.com/ronaldoaraujo
+  * Sem registro
+  * Com registro
 
 == Retornos Disponíveis
 
