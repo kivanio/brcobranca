@@ -76,8 +76,12 @@ module Brcobranca
     end
 
     def modulo11_mercantil
-      valor = self.modulo11_2to9
-      return [0,1].include?(valor) ? 0 : valor
+      # valor = self.modulo11_2to9
+      total = self.multiplicador([7,6,5,4,3,2,9,8,7,6,5,4,3,2].reverse)
+
+      valor = (total % 11)
+      
+      yield(valor) if block_given?
     end
     
     # Verifica se String só contem caracteres numéricos.

@@ -94,6 +94,23 @@ module Brcobranca
         raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
     end
+    
+    def linha_digitavel_mercantil
+      if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
+        linha = $1
+        linha << $4
+        linha << linha.modulo10.to_s
+        linha << $5
+        linha << $5.modulo11_mercantil { |valor| [0,1].include?(valor) ? 0 : (11 - valor) }.to_s
+        linha << $6
+        linha << $6.modulo10.to_s
+        linha << $2
+        linha << $3
+        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
+      else
+        raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
+      end
+    end
   end
 end
 

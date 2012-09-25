@@ -138,7 +138,11 @@ module Brcobranca
           doc.moveto :x => '5.2 cm' , :y => '23.85 cm'
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", :tag => :grande
           doc.moveto :x => '7.5 cm' , :y => '23.85 cm'
-          doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
+          if boleto.class.to_s.include? "Mercantil"
+            doc.show boleto.codigo_barras.linha_digitavel_mercantil, :tag => :grande
+          else
+            doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
+          end
           doc.moveto :x => '0.7 cm' , :y => '23 cm'
           doc.show boleto.cedente
           doc.moveto :x => '11 cm' , :y => '23 cm'
@@ -172,7 +176,11 @@ module Brcobranca
           doc.moveto :x => '5.2 cm' , :y => '16.8 cm'
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", :tag => :grande
           doc.moveto :x => '7.5 cm' , :y => '16.8 cm'
-          doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
+          if boleto.class.to_s.include? "Mercantil"
+            doc.show boleto.codigo_barras.linha_digitavel_mercantil, :tag => :grande
+          else
+            doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
+          end
           doc.moveto :x => '0.7 cm' , :y => '16 cm'
           doc.show boleto.local_pagamento
           doc.moveto :x => '16.5 cm' , :y => '16 cm'
@@ -186,7 +194,7 @@ module Brcobranca
           doc.moveto :x => '4.2 cm' , :y => '14.4 cm'
           doc.show boleto.numero_documento
           doc.moveto :x => '10 cm' , :y => '14.4 cm'
-          doc.show boleto.especie
+          doc.show boleto.especie_documento || boleto.especie
           doc.moveto :x => '11.7 cm' , :y => '14.4 cm'
           doc.show boleto.aceite
           doc.moveto :x => '13 cm' , :y => '14.4 cm'
@@ -196,7 +204,7 @@ module Brcobranca
           doc.moveto :x => '4.4 cm' , :y => '13.5 cm'
           doc.show boleto.carteira
           doc.moveto :x => '6.4 cm' , :y => '13.5 cm'
-          doc.show boleto.moeda
+          doc.show boleto.especie || boleto.moeda
           doc.moveto :x => '8 cm' , :y => '13.5 cm'
           doc.show boleto.quantidade
           doc.moveto :x => '11 cm' , :y => '13.5 cm'

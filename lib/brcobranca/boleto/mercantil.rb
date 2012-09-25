@@ -12,7 +12,11 @@ module Brcobranca
       # Nova instancia do Banco Mercantil
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "06", :codigo_servico => false}.merge!(campos)
+        campos = {:carteira => "06", :codigo_servico => false,
+            :especie_documento => "DM", :especie => "R$", 
+            :local_pagamento => "PAGÁVEL EM QUALQUER AGÊNCIA BANCÁRIA ATÉ O VENCIMENTO",
+            :data_processamento => Date.today
+          }.merge!(campos)
         super(campos)
       end
 
@@ -40,7 +44,9 @@ module Brcobranca
       # @return [String] 1 caracteres numéricos.
       # @see #numero_documento
       def nosso_numero_dv
-        "#{self.agencia}#{self.numero_documento}".modulo11_mercantil
+        #QUANDO FOR O CÁLCULO DO NOSSO NÚMERO USAR => SE RESTO FOR IGUAL A 0(ZERO) OU 1(UM) 
+        #O DIGITO DEVERÁ SER 0(ZERO), CASO CONTRÁRIO, O DIGITO SERÁ A DIFERENÇA ENTRE 11 E O RESTO.
+        "#{self.agencia}#{self.numero_documento}".modulo11_mercantil { |valor| [0,1].include?(valor) ? 0 : (11 - valor) }
       end
 
       # Nosso número para exibir no boleto.
@@ -48,7 +54,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "11600051123"
       def nosso_numero_boleto
-        "#{self.numero_documento}"
+        "#{self.numero_documento}-#{nosso_numero_dv}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
@@ -68,11 +74,13 @@ module Brcobranca
       # Segunda parte do código de barras.
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "#{self.agencia}#{self.numero_documento}#{nosso_numero_dv}#{numero_contrato}#{dac_recebe}"
+        "#{self.agencia}#{nosso_numero}#{numero_contrato}2"
       end
       
       def dac_recebe
-        "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{valor_documento_formatado}#{self.agencia}#{nosso_numero}#{numero_contrato}2".modulo11_mercantil
+        #QUANDO FOR O CÁLCULO DO DAC USAR => SE RESTO FOR IGUAL A 0(ZERO) OU 1(UM) 
+        #O DIGITO DEVERÁ SER 1(UM), CASO CONTRÁRIO, O DIGITO SERÁ A DIFERENÇA ENTRE 11 E O RESTO.
+        "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{valor_documento_formatado}#{self.agencia}#{self.numero_documento}#{nosso_numero_dv}#{numero_contrato}2".modulo11_mercantil { |valor| [0,1].include?(valor) ? 1 : (11 - valor) }
       end
       
       def numero_contrato
@@ -88,7 +96,7 @@ module Brcobranca
         codigo = codigo_barras_primeira_parte #18 digitos
         codigo << codigo_barras_segunda_parte #25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
-          codigo_dv = codigo.modulo11_mercantil
+          codigo_dv = dac_recebe
           codigo = "#{$1}#{codigo_dv}#{$2}"
           codigo
         else
