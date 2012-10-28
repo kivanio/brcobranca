@@ -84,6 +84,32 @@ module Brcobranca
       yield(valor) if block_given?
     end
     
+    def modulo10_mercantil
+      peso = ""
+      soma = 0
+      
+      # monta o peso conforme a quantidade de caracteres
+      1.upto(self.size) do |i|
+        peso << (i.odd? ? "1" : "2")
+      end
+      
+      0.upto(self.size) do |i|
+        total = peso[i].to_i * self.to_s[i].to_i
+        
+        if total.to_s.size == 2
+          total = total.to_s[0].to_i + total.to_s[1].to_i
+        end
+        soma += total
+      end
+      
+      if soma.to_s.size > 1
+       soma = soma.to_s[soma.to_s.size - 1].to_i
+      end
+
+      soma = 10 - soma if soma > 0
+      soma
+    end
+    
     # Verifica se String só contem caracteres numéricos.
     #
     # @return [Boolean]

@@ -101,9 +101,9 @@ module Brcobranca
         linha << $4
         linha << linha.modulo10.to_s
         linha << $5
-        linha << $5.modulo11_mercantil { |valor| [0,1].include?(valor) ? 0 : (11 - valor) }.to_s
+        linha << $5.modulo10_mercantil.to_s
         linha << $6
-        linha << $6.modulo10.to_s
+        linha << $6.modulo10_mercantil.to_s
         linha << $2
         linha << $3
         linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
