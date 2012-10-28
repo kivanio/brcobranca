@@ -15,7 +15,7 @@ describe Brcobranca::Boleto::Mercantil do
       :sacado_documento => "",
       :agencia => "0165",
       :conta_corrente => "25179",
-      :numero_documento => "82475",
+      :numero_documento => "82475", # "81836",
       :sacado_endereco => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
     }
   end

@@ -77,10 +77,17 @@ module Brcobranca
 
     def modulo11_mercantil
       # valor = self.modulo11_2to9
-      total = self.multiplicador([7,6,5,4,3,2,9,8,7,6,5,4,3,2].reverse)
-
+      num = 2
+      array = []
+      1.upto(self.size) do |i|
+        array.push(num)
+        num += 1
+        if num > 9
+          num = 2
+        end
+      end
+      total = self.multiplicador(array)
       valor = (total % 11)
-      
       yield(valor) if block_given?
     end
     
