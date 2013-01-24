@@ -13,9 +13,8 @@ Gem::Specification.new do |s|
   s.email = %q{kivanio@gmail.com}
   s.homepage = %q{http://rubygems.org/gems/brcobranca}
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = %w(Gemfile Gemfile.lock README.rdoc LICENSE History.txt Rakefile VERSION brcobranca.gemspec lib spec)
+  s.test_files    = %w(spec)
   s.require_paths = ["lib"]
 
   s.requirements = ["GhostScript > 8.0, para gear PDF e c\303\263digo de Barras"]
