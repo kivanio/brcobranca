@@ -44,7 +44,7 @@ module Brcobranca
       end
 
       def nosso_numero_dv
-        modulo = "#{self.carteira}#{self.numero_documento}".modulo_11_base_7
+        modulo = "#{self.carteira}#{self.numero_documento}".modulo11_base_7
 
         case modulo
         when 0
