@@ -27,6 +27,7 @@ describe Brcobranca::Retorno::RetornoCnab240 do
     pagamento.juros_mora.should eql('000000000000009')
     pagamento.outros_recebimento.should eql('000000000000005')
     pagamento.sequencial.should eql('00001')
+    pagamento.valor_tarifa.should eql('000000000000103')
 
     # Dados que não consegui extrair dos registros T e U
     #pagamento.convenio.should eql('')
