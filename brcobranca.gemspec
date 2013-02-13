@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Brcobranca::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors = ["Kivanio Barbosa"]
-  s.date = %q{2012-04-20}
+  s.date = %q{2013-02-13}
   s.description = %q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
   s.summary = %q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
   s.email = %q{kivanio@gmail.com}
