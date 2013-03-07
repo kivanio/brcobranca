@@ -103,6 +103,7 @@ module Brcobranca
     autoload :Bradesco,      'brcobranca/boleto/bradesco'
     autoload :Unibanco,      'brcobranca/boleto/unibanco'
     autoload :Caixa,         'brcobranca/boleto/caixa'
+    autoload :Caixa16,       'brcobranca/boleto/caixa16'
     autoload :Sicredi,       'brcobranca/boleto/sicredi'
     autoload :Santander,     'brcobranca/boleto/santander'
 
