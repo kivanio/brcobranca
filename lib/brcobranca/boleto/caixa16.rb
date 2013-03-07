@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-#
 # A Caixa tem dois padrões para a geração de boleto: SIGCB e SICOB.
 # O SICOB foi substiuido pelo SIGCB que é implementado por esta classe.
 # http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF
@@ -19,9 +18,9 @@ module Brcobranca
       }
 
       # Validações
-      validates_length_of :carteira, :is => 2, :message => 'deve possuir 2 dígitos.'
-      validates_length_of :convenio, :is => 5, :message => 'deve possuir 6 dígitos.'
-      validates_length_of :numero_documento, :is => 15, :message => 'deve possuir 15 dígitos.'
+      validates_length_of :carteira, :is => 2, :message => 'deve possuir 2 dígitos. (caixa16)'
+      validates_length_of :convenio, :is => 5, :message => 'deve possuir 5 dígitos. (caixa16)'
+      validates_length_of :numero_documento, :is => 14, :message => 'deve possuir 14 dígitos. (caixa16)'
 
       # Nova instância da CaixaEconomica
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -30,8 +29,8 @@ module Brcobranca
           :carteira => "87"
         }.merge!(campos)
 
-        campos.merge!(:convenio => campos[:convenio].rjust(6, '0')) if campos[:convenio]
-        campos.merge!(:numero_documento => campos[:numero_documento].rjust(15, '0')) if campos[:numero_documento]
+        campos.merge!(:convenio => campos[:convenio].rjust(5, '0')) if campos[:convenio]
+        campos.merge!(:numero_documento => campos[:numero_documento].rjust(14, '0')) if campos[:numero_documento]
 
         super(campos)
       end
@@ -50,7 +49,7 @@ module Brcobranca
       #  3 à 17: campo_livre
       # @return [String]
       def nosso_numero_boleto
-        "#{carteira}#{numero_documento}-#{nosso_numero_dv}"
+        "#{carteira[0]}#{numero_documento}-#{nosso_numero_dv}"
       end
 
       # Dígito verificador do Nosso Número
