@@ -13,9 +13,6 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 
 == Bancos Disponíveis
 
-* Banco Banespa
-  * COB
-
 * Banco do Brasil
   * TODAS AS CARTEIRAS PRESENTES NA DOCUMENTAÇÃO
 
@@ -39,14 +36,25 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros
 * Banco Caixa
   * Sem registro (SR)  by Túlio Ornelas - https://github.com/tulios
 
+* Banco SICREDI
+
+* Banco Santander by Ronaldo Araujo - https://github.com/ronaldoaraujo
+  * Sem registro
+  * Com registro
+
+== Retornos Disponíveis
+
+* CBR643
+* CNAB240
+
 == Está perdido?
 
 Veja a documentação da versão atual em http://rubydoc.info/gems/brcobranca e da versão de desenvolvimento em http://rubydoc.info/github/kivanio/brcobranca/master/frames
 
 == REQUISITOS
 
-* rghost >= 0.8.7
-* rghost_barcode >= 0.8
+* rghost >= 0.8
+* rghost_barcode >= 0.9
 * parseline >= 1.0.3
 * GhostScript > 8.0
 
@@ -69,6 +77,11 @@ Informe em http://github.com/kivanio/brcobranca/issues
 == Gostou?
 
 Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
+
+== APOIO
+
+{RubyMine}[http://www.jetbrains.com/ruby/features?utm_source=RubyMineUser&utm_medium=Banner&utm_campaign=RubyMine]
+http://www.jetbrains.com/ruby/features/ruby_banners/ruby1/ruby468x60_rubin.gif
 
 == LICENÇA
 

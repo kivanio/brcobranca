@@ -36,7 +36,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.aceite.should eql("S")
         boleto_novo.quantidade.should eql(1)
         boleto_novo.valor.should eql(0.0)
-        boleto_novo.valor_documento.should eql(0.0)
+        boleto_novo.valor_documento.should eql("0.00")
         boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
         boleto_novo.valid?.should be_false
       end
@@ -52,7 +52,7 @@ module Brcobranca #:nodoc:[all]
         boleto_novo.aceite.should eql("S")
         boleto_novo.quantidade.should eql(1)
         boleto_novo.valor.should eql(0.0)
-        boleto_novo.valor_documento.should eql(0.0)
+        boleto_novo.valor_documento.should eql("0.00")
         boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
         boleto_novo.cedente.should eql("Kivanio Barbosa")
         boleto_novo.documento_cedente.should eql("12345678912")
@@ -125,22 +125,22 @@ module Brcobranca #:nodoc:[all]
         boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
         boleto_novo.quantidade = 1
         boleto_novo.valor = 1
-        boleto_novo.valor_documento.should eql(1.0)
+        boleto_novo.valor_documento.should eql("1.00")
         boleto_novo.quantidade = 1
         boleto_novo.valor = 1.0
-        boleto_novo.valor_documento.should eql(1.0)
+        boleto_novo.valor_documento.should eql("1.00")
         boleto_novo.quantidade = 100
         boleto_novo.valor = 1
-        boleto_novo.valor_documento.should eql(100.0)
+        boleto_novo.valor_documento.should eql("100.00")
         boleto_novo.quantidade = 1
         boleto_novo.valor = 1.2
-        boleto_novo.valor_documento.should eql(1.2)
+        boleto_novo.valor_documento.should eql("1.20")
         boleto_novo.quantidade = 1
         boleto_novo.valor = 135.43
-        boleto_novo.valor_documento.should eql(135.43)
+        boleto_novo.valor_documento.should eql("135.43")
         boleto_novo.quantidade = "gh"
         boleto_novo.valor = 135.43
-        boleto_novo.valor_documento.should eql(0.0)
+        boleto_novo.valor_documento.should eql("0.00")
       end
 
       it "Calcula data_vencimento" do

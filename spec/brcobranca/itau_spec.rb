@@ -35,7 +35,7 @@ describe Brcobranca::Boleto::Itau do
     boleto_novo.aceite.should eql("S")
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
-    boleto_novo.valor_documento.should eql(0.0)
+    boleto_novo.valor_documento.should eql("0.00")
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.carteira.should eql("175")
   end
@@ -52,7 +52,7 @@ describe Brcobranca::Boleto::Itau do
     boleto_novo.aceite.should eql("S")
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
-    boleto_novo.valor_documento.should eql(0.0)
+    boleto_novo.valor_documento.should eql("0.00")
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
     boleto_novo.cedente.should eql("Kivanio Barbosa")
     boleto_novo.documento_cedente.should eql("12345678912")

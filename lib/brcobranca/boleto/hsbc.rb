@@ -25,7 +25,7 @@ module Brcobranca
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 13 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(13,'0') unless valor.nil?
+        @numero_documento = valor.to_s.rjust(13,'0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -45,8 +45,7 @@ module Brcobranca
 
           parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
           soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
-          numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
-          numero
+          "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
         else
           raise Brcobranca::NaoImplementado.new("Tipo de carteira não implementado.")
           # TODO - Verificar outras carteiras.

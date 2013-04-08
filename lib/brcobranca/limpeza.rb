@@ -14,6 +14,6 @@ module Brcobranca
   end
 end
 
-[ Float ].each do |klass|
+[ Float, String ].each do |klass|
   klass.class_eval { include Brcobranca::Limpeza }
 end

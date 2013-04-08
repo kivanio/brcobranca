@@ -46,7 +46,7 @@ module Brcobranca
       #
       # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
-        @carteira = valor.to_s.rjust(2,'0') unless valor.nil?
+        @carteira = valor.to_s.rjust(2,'0') if valor
       end
 
       # Dígito verificador do banco
@@ -66,7 +66,7 @@ module Brcobranca
       # Conta corrente
       # @return [String] 8 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(8,'0') unless valor.nil?
+        @conta_corrente = valor.to_s.rjust(8,'0') if valor
       end
 
       # Dígito verificador da conta corrente
