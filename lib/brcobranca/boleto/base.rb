@@ -36,6 +36,8 @@ module Brcobranca
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
+      attr_accessor :endereco_cedente
+      # <b>REQUERIDO</b>: Endereço do proprietario da conta corrente (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
       attr_accessor :numero_documento
