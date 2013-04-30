@@ -126,6 +126,8 @@ module Brcobranca
 
           doc.define_tags do
             tag :grande, :size => 13
+
+            tag :cedente_endereco, :size => 6
           end
         end
 
@@ -139,8 +141,10 @@ module Brcobranca
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", :tag => :grande
           doc.moveto :x => '7.5 cm' , :y => '23.85 cm'
           doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
-          doc.moveto :x => '0.7 cm' , :y => '23 cm'
+          doc.moveto :x => '0.7 cm' , :y => '23.20 cm'
           doc.show boleto.cedente
+          doc.moveto :x => '0.7 cm' , :y => '23 cm'
+          doc.show boleto.cedente_endereco, :tag => :cedente_endereco
           doc.moveto :x => '11 cm' , :y => '23 cm'
           doc.show boleto.agencia_conta_boleto
           doc.moveto :x => '14.2 cm' , :y => '23 cm'
