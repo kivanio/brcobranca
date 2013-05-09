@@ -261,8 +261,8 @@ module Brcobranca
 
           #dt processamento
           doc.moveto :x => colunas[10] , :y => linhas[3]
-          # doc.show boleto.data_processamento.to_s_br if boleto.data_processamento
-          doc.show "01/01/0111"
+          doc.show boleto.data_processamento.to_s_br if boleto.data_processamento
+
 
           #nosso numero
           doc.moveto :x => colunas[11] , :y => linhas[3]
