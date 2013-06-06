@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 # @author Fernando Vieira do http://simplesideias.com.br
 module Brcobranca #:nodoc:[all]
   module Currency #:nodoc:[all]
