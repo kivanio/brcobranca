@@ -24,7 +24,7 @@ describe "RGhost" do
     }
   end
 
-  it "Testar se RGhost está instalado" do
+  it "Testar se RGhost e GhostScript estão instalados" do
     # RGhost::Config.config_platform
     File.exist?(RGhost::Config::GS[:path]).should be_true
     File.executable?(RGhost::Config::GS[:path]).should be_true
