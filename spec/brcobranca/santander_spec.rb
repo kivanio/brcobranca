@@ -17,7 +17,6 @@ describe Brcobranca::Boleto::Santander do
       :sacado => "Claudio Pozzebom",
       :sacado_documento => "12345678900",
       :agencia => "0059",
-      :conta_corrente => "53678",
       :convenio => 1899775,
       :numero_documento => "90000267"
     }
@@ -58,7 +57,6 @@ describe Brcobranca::Boleto::Santander do
     boleto_novo.documento_cedente.should eql("12345678912")
     boleto_novo.sacado.should eql("Claudio Pozzebom")
     boleto_novo.sacado_documento.should eql("12345678900")
-    boleto_novo.conta_corrente.should eql("53678")
     boleto_novo.agencia.should eql("0059")
     boleto_novo.convenio.should eql("1899775")
     boleto_novo.numero_documento.should eql("90000267")
@@ -84,12 +82,7 @@ describe Brcobranca::Boleto::Santander do
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = Brcobranca::Boleto::Santander.new
     lambda { boleto_novo.codigo_barras }.should raise_error(Brcobranca::BoletoInvalido)
-    boleto_novo.errors.count.should eql(3)
-  end
-
-  it "Montar agencia_conta_corrente_dv" do
-    boleto_novo = Brcobranca::Boleto::Santander.new(@valid_attributes)
-    boleto_novo.agencia_conta_boleto.should eql("0059/1899775")
+    boleto_novo.errors.count.should eql(2)
   end
 
   it "Montar nosso_numero_dv" do
