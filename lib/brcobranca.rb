@@ -119,6 +119,7 @@ module Brcobranca
     autoload :Base,           'brcobranca/retorno/base'
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
     autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
+    autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400'
   end
 end
 
