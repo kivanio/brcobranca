@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module Brcobranca
   module Retorno
     class Base # Classe base para retornos bancários
