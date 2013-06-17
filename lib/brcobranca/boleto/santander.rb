@@ -5,19 +5,20 @@ module Brcobranca
   module Boleto
     class Santander < Base # Banco Santander
 
-      # Usado somente em carteiras especiais com registro para complementar o número do cocumento
+      # Usado somente em carteiras especiais com registro para complementar o número do documento
       attr_reader :seu_numero
 
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
       validates_length_of :numero_documento, :maximum => 8, :message => "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :conta_corrente, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
       validates_length_of :seu_numero, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Santander
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "102"}.merge!(campos)
+        campos = {:carteira => "102",
+                  :conta_corrente => '00000' # Obrigatória na classe base
+                  }.merge!(campos)
         super(campos)
       end
 
@@ -28,25 +29,20 @@ module Brcobranca
         "033"
       end
 
-      # Número do convênio/contrato do cliente junto ao banco.
-      # @return [String] 5 caracteres numéricos.
+      # Número do convênio/contrato do cliente junto ao banco. No Santander, é
+      # chamado de Código do Cedente.
+      # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(5,'0') if valor
+        @convenio = valor.to_s.rjust(7,'0') if valor
       end
 
-      # Conta corrente
-      # @return [String] 5 caracteres numéricos.
-      def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(5,'0') if valor
-      end
-
-      # Número seqüencial utilizado para identificar o boleto.
+      # Número sequencial utilizado para identificar o boleto.
       # @return [String] 8 caracteres numéricos.
       def numero_documento=(valor)
         @numero_documento = valor.to_s.rjust(8,'0') if valor
       end
 
-      # Número seqüencial utilizado para identificar o boleto.
+      # Número sequencial utilizado para identificar o boleto.
       # @return [String] 7 caracteres numéricos.
       def seu_numero=(valor)
         @seu_numero = valor.to_s.rjust(7,'0') if valor
