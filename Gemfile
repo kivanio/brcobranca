@@ -7,5 +7,4 @@ gem "rake"
 
 group :test do
   gem "rspec",      :require => false
-  gem "ruby-debug", :require => false, :platform => :ruby_18
 end
