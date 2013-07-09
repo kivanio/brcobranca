@@ -164,7 +164,7 @@ module Brcobranca
           doc.moveto :x => '1.4 cm' , :y => '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
           doc.moveto :x => '1.4 cm' , :y => '20.6 cm'
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco
           #FIM Primeira parte do BOLETO
         end
 
@@ -222,7 +222,7 @@ module Brcobranca
           doc.moveto :x => '1.2 cm' , :y => '8.8 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
           doc.moveto :x => '1.2 cm' , :y => '8.4 cm'
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco
           #FIM Segunda parte do BOLETO
         end
 
