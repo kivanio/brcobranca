@@ -43,7 +43,7 @@ module Brcobranca
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 8 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8,'0') if valor
+        @numero_documento = valor.to_s.rjust(9,'0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -86,7 +86,7 @@ module Brcobranca
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "9#{self.convenio}00000#{self.numero_documento}0#{self.carteira}"
+        "9#{self.convenio}000#{self.numero_documento}#{self.nosso_numero_dv}0#{self.carteira}"
       end
 
     end
