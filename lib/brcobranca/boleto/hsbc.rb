@@ -6,7 +6,7 @@ module Brcobranca
       validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
       validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
       validates_length_of :numero_documento, :maximum => 13, :message => "deve ser menor ou igual a 13 dígitos."
-      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
 
       # Nova instancia do Hsbc
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -44,14 +44,14 @@ module Brcobranca
           data = "#{dia}#{mes}#{ano}"
 
           parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
-          soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
+          soma = parte_1.to_i + self.convenio.to_i + data.to_i
           "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
         else
           raise Brcobranca::NaoImplementado.new("Tipo de carteira não implementado.")
           # TODO - Verificar outras carteiras.
           # self.codigo_servico = "5"
           # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
-          # soma = parte_1.to_i + self.conta_corrente.to_i
+          # soma = parte_1.to_i + self.convenio.to_i
           # numero = "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
           # numero
         end
@@ -70,7 +70,7 @@ module Brcobranca
       # @example
       #  boleto.agencia_conta_boleto #=> "0061900"
       def agencia_conta_boleto
-        self.conta_corrente
+        self.convenio
       end
 
       # Segunda parte do código de barras.
@@ -83,7 +83,7 @@ module Brcobranca
       def codigo_barras_segunda_parte
         if self.carteira == "CNR"
           dias_julianos = self.data_vencimento.to_juliano
-          "#{self.conta_corrente}#{self.numero_documento}#{dias_julianos}2"
+          "#{self.convenio}#{self.numero_documento}#{dias_julianos}2"
         else
           raise Brcobranca::NaoImplementado.new("Tipo de carteira não implementado.")
         end
