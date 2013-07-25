@@ -24,9 +24,9 @@ module Brcobranca
 
       # Nova instância da CaixaEconomica
       # @param (see Brcobranca::Boleto::Base#initialize)
-      def initialize campos = {} 
+      def initialize campos = {}
         campos = {
-          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}" 
+          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}"
         }.merge!(campos)
 
         campos.merge!(:convenio => campos[:convenio].rjust(6, '0')) if campos[:convenio]
@@ -52,6 +52,14 @@ module Brcobranca
         "#{carteira}#{numero_documento}-#{nosso_numero_dv}"
       end
 
+      # Nosso número.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero #=> "123879890000040424"
+      def nosso_numero
+        "#{carteira}#{numero_documento}#{nosso_numero_dv}"
+      end
+
       # Dígito verificador do Nosso Número
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
@@ -63,7 +71,7 @@ module Brcobranca
       # @return [String]
       # @example
       #  boleto.agencia_conta_boleto #=> "1565/100000-4"
-      def agencia_conta_boleto            
+      def agencia_conta_boleto
         "#{agencia}/#{convenio}-#{convenio_dv}"
       end
 
@@ -84,14 +92,14 @@ module Brcobranca
       #  25: dígito verificador do campo livre
       # @return [String]
       def codigo_barras_segunda_parte
-        campo_livre = "#{convenio}" << 
+        campo_livre = "#{convenio}" <<
         "#{convenio_dv}" <<
         "#{nosso_numero_boleto[2..4]}" <<
         "#{nosso_numero_boleto[0..0]}" <<
         "#{nosso_numero_boleto[5..7]}" <<
         "#{nosso_numero_boleto[1..1]}" <<
         "#{nosso_numero_boleto[8..16]}"
-        
+
         "#{campo_livre}#{campo_livre.modulo11_2to9_caixa}"
       end
 

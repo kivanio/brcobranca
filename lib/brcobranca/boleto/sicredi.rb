@@ -53,6 +53,14 @@ module Brcobranca
         'X'
       end
 
+      # Nosso número.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero #=> "123879890000040424"
+      def nosso_numero
+        "#{numero_documento_with_byte_idt}#{nosso_numero_dv}"
+      end
+
       # Nosso número para exibir no boleto.
       # @return [String]
       # @example

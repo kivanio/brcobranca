@@ -68,6 +68,15 @@ module Brcobranca
         "#{nosso_numero}-#{self.nosso_numero_dv}"
       end
 
+      # Nosso número.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero #=> "123879890000040424"
+      def nosso_numero
+        nosso_numero = numero_documento.to_s.rjust(12,'0') unless numero_documento.nil?
+        "#{nosso_numero}#{nosso_numero_dv}"
+      end
+
       # Agência + codigo do cedente do cliente para exibir no boleto.
       # @return [String]
       # @example

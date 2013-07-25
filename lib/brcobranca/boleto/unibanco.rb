@@ -56,6 +56,14 @@ module Brcobranca
         self.numero_documento.modulo11_2to9
       end
 
+      # Nosso número.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero #=> "123879890000040424"
+      def nosso_numero
+        "#{self.numero_documento}#{self.nosso_numero_dv}"
+      end
+
       # Nosso número para exibir no boleto.
       # @return [String]
       # @example
