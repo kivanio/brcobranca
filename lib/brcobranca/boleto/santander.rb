@@ -71,7 +71,7 @@ module Brcobranca
       # Nosso número.
       # @return [String]
       # @example
-      #  boleto.nosso_numero #=> "123879890000040424"
+      #  boleto.nosso_numero #=> "0000900027207"
       def nosso_numero
         nosso_numero = numero_documento.to_s.rjust(12,'0') unless numero_documento.nil?
         "#{nosso_numero}#{nosso_numero_dv}"

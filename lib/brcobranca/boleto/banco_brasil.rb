@@ -130,7 +130,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero #=> "123879890000040424"
       def nosso_numero
-        "#{self.convenio}#{self.numero_documento}#{self.nosso_numero_dv}"
+        "#{self.convenio}#{self.numero_documento}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
