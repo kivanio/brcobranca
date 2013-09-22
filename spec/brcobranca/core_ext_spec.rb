@@ -6,25 +6,31 @@ module Brcobranca
     it "Formata o CPF" do
       98789298790.to_br_cpf.should eql("987.892.987-90")
       "98789298790".to_br_cpf.should eql("987.892.987-90")
+      "987.892.987-90".to_br_cpf.should eql("987.892.987-90")
     end
 
     it "Formata o CEP" do
       85253100.to_br_cep.should eql("85253-100")
       "85253100".to_br_cep.should eql("85253-100")
+      "85253-100".to_br_cep.should eql("85253-100")
     end
 
     it "Formata o CNPJ" do
       88394510000103.to_br_cnpj.should eql("88.394.510/0001-03")
       "88394510000103".to_br_cnpj.should eql("88.394.510/0001-03")
+      "88.394.510/0001-03".to_br_cnpj.should eql("88.394.510/0001-03")
     end
 
     it "Formata números automáticamente de acordo com o número de caracteres" do
       98789298790.formata_documento.should eql("987.892.987-90")
       "98789298790".formata_documento.should eql("987.892.987-90")
+      "987.892.987-90".formata_documento.should eql("987.892.987-90")
       85253100.formata_documento.should eql("85253-100")
       "85253100".formata_documento.should eql("85253-100")
+      "85253-100".formata_documento.should eql("85253-100")
       88394510000103.formata_documento.should eql("88.394.510/0001-03")
       "88394510000103".formata_documento.should eql("88.394.510/0001-03")
+      "88.394.510/0001-03".formata_documento.should eql("88.394.510/0001-03")
       "8839".formata_documento.should eql("8839")
       "8839451000010388394510000103".formata_documento.should eql("8839451000010388394510000103")
     end
