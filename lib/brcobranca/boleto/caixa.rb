@@ -26,11 +26,12 @@ module Brcobranca
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize campos = {} 
         campos = {
-          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}" 
+          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}"
         }.merge!(campos)
 
         campos.merge!(:convenio => campos[:convenio].rjust(6, '0')) if campos[:convenio]
         campos.merge!(:numero_documento => campos[:numero_documento].rjust(15, '0')) if campos[:numero_documento]
+        campos.merge!(:local_pagamento => "PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE")
 
         super(campos)
       end
