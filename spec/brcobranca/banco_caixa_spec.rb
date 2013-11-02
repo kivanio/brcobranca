@@ -12,7 +12,6 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       :aceite => 'S',
       :quantidade => 1,
       :valor => 10.00,
-      :local_pagamento => 'QUALQUER BANCO ATÉ O VENCIMENTO',
       :cedente => 'PREFEITURA MUNICIPAL DE VILHENA',
       :documento_cedente => '04092706000181',
       :sacado => 'João Paulo Barbosa',
@@ -37,8 +36,8 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo.aceite.should eql('S')
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
-    boleto_novo.valor_documento.should eql("0.00")
-    boleto_novo.local_pagamento.should eql('QUALQUER BANCO ATÉ O VENCIMENTO')
+    boleto_novo.valor_documento.should eql(0.0)
+    boleto_novo.local_pagamento.should eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     boleto_novo.codigo_servico.should be_false
     carteira = "#{Brcobranca::Boleto::Caixa::MODALIDADE_COBRANCA[:sem_registro]}" <<
                "#{Brcobranca::Boleto::Caixa::EMISSAO_BOLETO[:cedente]}"

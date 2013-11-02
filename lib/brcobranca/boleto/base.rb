@@ -143,7 +143,7 @@ module Brcobranca
       # Valor total do documento: <b>quantidate * valor</b>
       # @return [Float]
       def valor_documento
-        '%.2f' % (self.quantidade.to_f * self.valor.to_f)
+        self.quantidade.to_f * self.valor.to_f
       end
 
       # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
