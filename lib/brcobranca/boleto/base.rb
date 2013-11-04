@@ -83,7 +83,7 @@ module Brcobranca
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
           :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
-          :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"
+          :local_pagamento => "QUALQUER BANCO ATE O VENCIMENTO"
         }
 
         campos = padrao.merge!(campos)
