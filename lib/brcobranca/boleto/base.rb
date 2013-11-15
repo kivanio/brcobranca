@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# encoding: utf-8
+
 # @author Kivanio Barbosa
 module Brcobranca
   module Boleto
@@ -82,7 +83,7 @@ module Brcobranca
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
           :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
-          :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"
+          :local_pagamento => "QUALQUER BANCO ATE O VENCIMENTO"
         }
 
         campos = padrao.merge!(campos)
@@ -204,7 +205,7 @@ module Brcobranca
 
       # Monta a primeira parte do código de barras, que é a mesma para todos bancos.
       # @return [String] 18 caracteres numéricos.
-      def codigo_barras_primeira_parte
+      def codigo_barras_primeira_parte # OK PARA CAIXA
         "#{self.banco}#{self.moeda}#{self.fator_vencimento}#{valor_documento_formatado}"
       end
 
