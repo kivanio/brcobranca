@@ -15,6 +15,23 @@ module Brcobranca
         end
       end
 
+
+      def self.load_lines_from_contents(file_contents, options={})
+        default_options = {:except => REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U}
+        options = default_options.merge!(options)
+
+        array_of_lines = file_contents.split("\n")
+
+        array_of_lines.each do |line|
+          Line.load_line(line).each_slice(2).inject([])
+        end
+        
+        Line.load_lines(file, options).each_slice(2).inject([]) do |retornos, cnab_lines|
+          retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
+        end
+      end
+
+
       def self.generate_retorno_based_on_cnab_lines(cnab_lines)
         retorno = self.new
         cnab_lines.each do |line|
