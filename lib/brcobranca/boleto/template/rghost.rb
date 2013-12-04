@@ -157,9 +157,10 @@ module Brcobranca
           doc.show boleto.nosso_numero_boleto
           doc.moveto :x => '16.5 cm' , :y => '22.2 cm'
           doc.show boleto.valor_documento.to_currency
-          doc.moveto :x => '1.4 cm' , :y => '20.9 cm'
+          
+          doc.moveto :x => '1.5 cm' , :y => '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
-          doc.moveto :x => '1.4 cm' , :y => '20.6 cm'
+          doc.moveto :x => '1.5 cm' , :y => '20.6 cm'
           doc.show "#{boleto.sacado_endereco}"
           #FIM Primeira parte do BOLETO
         end
@@ -179,6 +180,10 @@ module Brcobranca
           doc.show boleto.data_vencimento.to_s_br if boleto.data_vencimento
           doc.moveto :x => '0.7 cm' , :y => '15.2 cm'
           doc.show boleto.cedente
+
+          doc.moveto :x => '11.4 cm' , :y => '15.2 cm'
+          doc.show "CNPJ: #{boleto.documento_cedente.formata_documento}"
+
           doc.moveto :x => '16.5 cm' , :y => '15.2 cm'
           doc.show boleto.agencia_conta_boleto
           doc.moveto :x => '0.7 cm' , :y => '14.4 cm'
