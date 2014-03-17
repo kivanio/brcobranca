@@ -200,7 +200,7 @@ module Brcobranca
           doc.moveto :x => '16.5 cm', :y => '14.4 cm'
           doc.show boleto.nosso_numero_boleto
           doc.moveto :x => '4.4 cm', :y => '13.5 cm'
-          doc.show boleto.carteira
+          doc.show boleto.carteira_boleto
           doc.moveto :x => '6.4 cm', :y => '13.5 cm'
           doc.show boleto.especie
           doc.moveto :x => '8 cm', :y => '13.5 cm'

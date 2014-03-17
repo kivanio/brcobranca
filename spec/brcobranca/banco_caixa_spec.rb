@@ -162,4 +162,16 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     end
   end
 
+  describe '#carteira_boleto' do
+    it "Retorna 'SR' quando é uma carteira sem registro" do
+      boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:carteira => '24')
+      boleto_novo.carteira_boleto.should be_eql('SR')
+      end
+
+    it "Retorna 'RG' quando é uma carteira registrada" do
+      boleto_novo = Brcobranca::Boleto::Caixa.new @valid_attributes.merge(:carteira => '14')
+      boleto_novo.carteira_boleto.should be_eql('RG')
+    end
+  end
+
 end

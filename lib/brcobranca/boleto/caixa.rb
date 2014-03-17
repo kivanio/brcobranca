@@ -50,6 +50,15 @@ module Brcobranca
         '0'
       end
 
+      # Representação da carteira no boleto.
+      def carteira_boleto
+        if carteira.to_s.start_with? '1'
+          'RG'
+        elsif carteira.to_s.start_with? '2'
+          'SR'
+        end
+      end
+
       # Nosso número, 17 dígitos
       #  1 à 2: carteira
       #  3 à 17: campo_livre

@@ -117,6 +117,13 @@ module Brcobranca
         self.agencia.modulo11_9to2
       end
 
+      # Representação da carteira no boleto.
+      # Não usar este campo para gerar o código de barras (aceita valores não numéricos)
+      # @return [String]
+      def carteira_boleto
+        self.carteira.to_s
+      end
+
       # Dígito verificador da conta corrente
       # @return [Integer] 1 caracteres numéricos.
       def conta_corrente_dv
