@@ -29,7 +29,7 @@ module Brcobranca
 
         # :conta, 23..27 #numero da conta corrente da empresa
         # :dac, 28..28 #digito de auto conferencia ag/conta empresa
-        parse.field :cedente_com_dv,23..28
+        parse.field :beneficiario_com_dv,23..28
 
         # :brancos, 29..36 #complemento de registro
         # :uso_da_empresa, 37..61 #identificacao do titulo na empresa

@@ -11,7 +11,7 @@ describe Brcobranca::Retorno::RetornoCnab240 do
     pagamentos.size.should == 35
     pagamento = pagamentos.first
     pagamento.agencia_com_dv.should eql('012345')
-    pagamento.cedente_com_dv.should eql('0000000054321')
+    pagamento.beneficiario_com_dv.should eql('0000000054321')
     pagamento.nosso_numero.should eql('00020673')
     pagamento.carteira.should eql('7')
     pagamento.data_vencimento.should eql('00000000')

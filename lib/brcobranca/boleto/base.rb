@@ -34,9 +34,9 @@ module Brcobranca
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
-      attr_accessor :cedente
+      attr_accessor :beneficiario
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
-      attr_accessor :documento_cedente
+      attr_accessor :documento_beneficiario
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
       attr_accessor :numero_documento
       # <b>REQUERIDO</b>: Símbolo da moeda utilizada (R$ no brasil)
@@ -47,30 +47,30 @@ module Brcobranca
       attr_accessor :data_documento
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao1
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao2
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao3
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao4
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao5
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao6
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao7
-      # <b>REQUERIDO</b>: Informação sobre onde o sacado podera efetuar o pagamento
+      # <b>REQUERIDO</b>: Informação sobre onde o pagador podera efetuar o pagamento
       attr_accessor :local_pagamento
-      # <b>REQUERIDO</b>: Informa se o banco deve aceitar o boleto após o vencimento ou não( S ou N, quase sempre S)
+      # <b>REQUERIDO</b>: O título de cobrança foi reconhecido (assinado) pelo Pagador? (A = aceito, N = não)
       attr_accessor :aceite
       # <b>REQUERIDO</b>: Nome da pessoa que receberá o boleto
-      attr_accessor :sacado
+      attr_accessor :pagador
       # <b>OPCIONAL</b>: Endereco da pessoa que receberá o boleto
-      attr_accessor :sacado_endereco
+      attr_accessor :pagador_endereco
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
-      attr_accessor :sacado_documento
+      attr_accessor :pagador_documento
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
@@ -81,7 +81,7 @@ module Brcobranca
       def initialize(campos={})
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
-          :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
+          :especie_documento => "DM", :especie => "R$", :aceite => "N", :valor => 0.0,
           :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"
         }
 

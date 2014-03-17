@@ -12,10 +12,10 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       :aceite => 'S',
       :quantidade => 1,
       :valor => 10.00,
-      :cedente => 'PREFEITURA MUNICIPAL DE VILHENA',
-      :documento_cedente => '04092706000181',
-      :sacado => 'João Paulo Barbosa',
-      :sacado_documento => '77777777777',
+      :beneficiario => 'PREFEITURA MUNICIPAL DE VILHENA',
+      :documento_beneficiario => '04092706000181',
+      :pagador => 'João Paulo Barbosa',
+      :pagador_documento => '77777777777',
       :agencia => '1825',
       :conta_corrente => '0000528',
       :convenio => '245274',
@@ -33,14 +33,14 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo.data_documento.should eql(Date.today)
     boleto_novo.dias_vencimento.should eql(1)
     boleto_novo.data_vencimento.should eql(Date.today + 1)
-    boleto_novo.aceite.should eql('S')
+    boleto_novo.aceite.should eql('N')
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
     boleto_novo.valor_documento.should eql(0.0)
     boleto_novo.local_pagamento.should eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     boleto_novo.codigo_servico.should be_false
     carteira = "#{Brcobranca::Boleto::Caixa::MODALIDADE_COBRANCA[:sem_registro]}" <<
-               "#{Brcobranca::Boleto::Caixa::EMISSAO_BOLETO[:cedente]}"
+               "#{Brcobranca::Boleto::Caixa::EMISSAO_BOLETO[:beneficiario]}"
     boleto_novo.carteira.should eql(carteira)
   end
   

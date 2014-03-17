@@ -17,7 +17,7 @@ describe Brcobranca::Retorno::RetornoCnab400 do
     pagamentos.size.should == 53 #deve ignorar a primeira linha que é header
     pagamento = pagamentos.first
     pagamento.agencia_com_dv.should eql("0730")
-    pagamento.cedente_com_dv.should eql("035110")
+    pagamento.beneficiario_com_dv.should eql("035110")
     pagamento.nosso_numero.should eql("00000011")
     pagamento.carteira_variacao.should eql("109")
     pagamento.carteira.should eql("I")

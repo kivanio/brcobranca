@@ -12,10 +12,10 @@ describe Brcobranca::Boleto::Bradesco do
       :quantidade => 1,
       :valor => 0.0,
       :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO",
-      :cedente => "Kivanio Barbosa",
-      :documento_cedente => "12345678912",
-      :sacado => "Claudio Pozzebom",
-      :sacado_documento => "12345678900",
+      :beneficiario => "Kivanio Barbosa",
+      :documento_beneficiario => "12345678912",
+      :pagador => "Claudio Pozzebom",
+      :pagador_documento => "12345678900",
       :agencia => "4042",
       :conta_corrente => "61900",
       :convenio => 12387989,
@@ -32,7 +32,7 @@ describe Brcobranca::Boleto::Bradesco do
     boleto_novo.data_documento.should eql(Date.today)
     boleto_novo.dias_vencimento.should eql(1)
     boleto_novo.data_vencimento.should eql(Date.today + 1)
-    boleto_novo.aceite.should eql("S")
+    boleto_novo.aceite.should eql("N")
     boleto_novo.quantidade.should eql(1)
     boleto_novo.valor.should eql(0.0)
     boleto_novo.valor_documento.should eql(0.0)
@@ -55,10 +55,10 @@ describe Brcobranca::Boleto::Bradesco do
     boleto_novo.valor.should eql(0.0)
     boleto_novo.valor_documento.should eql(0.0)
     boleto_novo.local_pagamento.should eql("QUALQUER BANCO ATÉ O VENCIMENTO")
-    boleto_novo.cedente.should eql("Kivanio Barbosa")
-    boleto_novo.documento_cedente.should eql("12345678912")
-    boleto_novo.sacado.should eql("Claudio Pozzebom")
-    boleto_novo.sacado_documento.should eql("12345678900")
+    boleto_novo.beneficiario.should eql("Kivanio Barbosa")
+    boleto_novo.documento_beneficiario.should eql("12345678912")
+    boleto_novo.pagador.should eql("Claudio Pozzebom")
+    boleto_novo.pagador_documento.should eql("12345678900")
     boleto_novo.conta_corrente.should eql("0061900")
     boleto_novo.agencia.should eql("4042")
     boleto_novo.convenio.should eql(12387989)
