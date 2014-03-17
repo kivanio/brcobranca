@@ -5,9 +5,9 @@ module Brcobranca #:nodoc:[all]
   module Currency #:nodoc:[all]
     # Implementação feita por Fernando Vieira do http://simplesideias.com.br
     # post http://simplesideias.com.br/usando-number_to_currency-em-modelos-no-rails
-    BRL = {:delimiter => ".", :separator => ",", :unit => "R$", :precision => 2, :position => "before"}
-    USD = {:delimiter => ',', :separator => ".", :unit => "US$", :precision => 2, :position => "before"}
-    DEFAULT = BRL.merge(:unit => "")
+    BRL = {:delimiter => '.', :separator => ',', :unit => 'R$', :precision => 2, :position => 'before'}
+    USD = {:delimiter => ',', :separator => '.', :unit => 'US$', :precision => 2, :position => 'before'}
+    DEFAULT = BRL.merge(:unit => '')
 
     module String #:nodoc:[all]
       def to_number(options={})
@@ -28,19 +28,19 @@ module Brcobranca #:nodoc:[all]
         precision = options[:precision] || default[:precision]
         unit      = options[:unit] || default[:unit]
         position  = options[:position] || default[:position]
-        separator = precision > 0 ? options[:separator] || default[:separator] : ""
+        separator = precision > 0 ? options[:separator] || default[:separator] : ''
         delimiter = options[:delimiter] || default[:delimiter]
 
         begin
           parts = number.with_precision(precision).split('.')
           number = parts[0].to_i.with_delimiter(delimiter) + separator + parts[1].to_s
-          position == "before" ? unit + number : number + unit
+          position == 'before' ? unit + number : number + unit
         rescue
           number
         end
       end
 
-      def with_delimiter(delimiter=",", separator=".")
+      def with_delimiter(delimiter=',', separator='.')
         number = self
         begin
           parts = number.to_s.split(separator)
@@ -59,10 +59,10 @@ module Brcobranca #:nodoc:[all]
   end
 end
 
-[ Numeric, String].each do |klass|
+[Numeric, String].each do |klass|
   klass.class_eval { include Brcobranca::Currency::Number }
 end
 
-[ String ].each do |klass|
+[String].each do |klass|
   klass.class_eval { include Brcobranca::Currency::String }
 end

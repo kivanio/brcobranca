@@ -6,16 +6,16 @@ module Brcobranca
       # Usado somente em carteiras especiais com registro para complementar o número do cocumento
       attr_reader :seu_numero
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :convenio, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
-      validates_length_of :numero_documento, :maximum => 8, :message => "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :conta_corrente, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
-      validates_length_of :seu_numero, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :convenio, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :numero_documento, :maximum => 8, :message => 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :seu_numero, :maximum => 7, :message => 'deve ser menor ou igual a 7 dígitos.'
 
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "175"}.merge!(campos)
+        campos = {:carteira => '175'}.merge!(campos)
         super(campos)
       end
 
@@ -23,31 +23,31 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numéricos.
       def banco
-        "341"
+        '341'
       end
 
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 5 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(5,'0') if valor
+        @convenio = valor.to_s.rjust(5, '0') if valor
       end
 
       # Conta corrente
       # @return [String] 5 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(5,'0') if valor
+        @conta_corrente = valor.to_s.rjust(5, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 8 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8,'0') if valor
+        @numero_documento = valor.to_s.rjust(8, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 7 caracteres numéricos.
       def seu_numero=(valor)
-        @seu_numero = valor.to_s.rjust(7,'0') if valor
+        @seu_numero = valor.to_s.rjust(7, '0') if valor
       end
 
       # Dígito verificador do nosso número.
@@ -120,11 +120,11 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         case self.carteira.to_i
-        when 198, 106, 107, 122, 142, 143, 195, 196
-          dv = "#{self.carteira}#{numero_documento}#{self.seu_numero}#{self.convenio}".modulo10
-          "#{self.carteira}#{self.numero_documento}#{self.seu_numero}#{self.convenio}#{dv}0"
-        else
-          "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
+          when 198, 106, 107, 122, 142, 143, 195, 196
+            dv = "#{self.carteira}#{numero_documento}#{self.seu_numero}#{self.convenio}".modulo10
+            "#{self.carteira}#{self.numero_documento}#{self.seu_numero}#{self.convenio}#{dv}0"
+          else
+            "#{self.carteira}#{self.numero_documento}#{self.nosso_numero_dv}#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_dv}000"
         end
       end
 

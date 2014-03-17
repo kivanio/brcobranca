@@ -31,19 +31,23 @@ module Brcobranca
 
         campos.merge!(:convenio => campos[:convenio].rjust(6, '0')) if campos[:convenio]
         campos.merge!(:numero_documento => campos[:numero_documento].rjust(15, '0')) if campos[:numero_documento]
-        campos.merge!(:local_pagamento => "PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE")
+        campos.merge!(:local_pagamento => 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
 
         super(campos)
       end
 
       # Código do banco emissor
       # @return [String]
-      def banco; '104' end
+      def banco;
+        '104'
+      end
 
       # Dígito verificador do código do banco em módulo 10
       # Módulo 10 de 104 é 0
       # @return [String]
-      def banco_dv; '0' end
+      def banco_dv;
+        '0'
+      end
 
       # Nosso número, 17 dígitos
       #  1 à 2: carteira

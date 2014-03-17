@@ -3,15 +3,15 @@ module Brcobranca
   module Boleto
     class Hsbc < Base # Banco HSBC
 
-      validates_inclusion_of :carteira, :in => %w( CNR ), :message => "não existente para este banco."
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :numero_documento, :maximum => 13, :message => "deve ser menor ou igual a 13 dígitos."
-      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_inclusion_of :carteira, :in => %w( CNR ), :message => 'não existente para este banco.'
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :numero_documento, :maximum => 13, :message => 'deve ser menor ou igual a 13 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 7, :message => 'deve ser menor ou igual a 7 dígitos.'
 
       # Nova instancia do Hsbc
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "CNR"}.merge!(campos)
+        campos = {:carteira => 'CNR'}.merge!(campos)
         super(campos)
       end
 
@@ -19,13 +19,13 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numéricos.
       def banco
-        "399"
+        '399'
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 13 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(13,'0') if valor
+        @numero_documento = valor.to_s.rjust(13, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -37,9 +37,9 @@ module Brcobranca
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR.
       def nosso_numero
         if self.data_vencimento.kind_of?(Date)
-          self.codigo_servico = "4"
-          dia = self.data_vencimento.day.to_s.rjust(2,'0')
-          mes = self.data_vencimento.month.to_s.rjust(2,'0')
+          self.codigo_servico = '4'
+          dia = self.data_vencimento.day.to_s.rjust(2, '0')
+          mes = self.data_vencimento.month.to_s.rjust(2, '0')
           ano = self.data_vencimento.year.to_s[2..3]
           data = "#{dia}#{mes}#{ano}"
 
@@ -47,7 +47,7 @@ module Brcobranca
           soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
           "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
         else
-          raise Brcobranca::NaoImplementado.new("Tipo de carteira não implementado.")
+          raise Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
           # TODO - Verificar outras carteiras.
           # self.codigo_servico = "5"
           # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
@@ -81,11 +81,11 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR.
       def codigo_barras_segunda_parte
-        if self.carteira == "CNR"
+        if self.carteira == 'CNR'
           dias_julianos = self.data_vencimento.to_juliano
           "#{self.conta_corrente}#{self.numero_documento}#{dias_julianos}2"
         else
-          raise Brcobranca::NaoImplementado.new("Tipo de carteira não implementado.")
+          raise Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
         end
       end
 

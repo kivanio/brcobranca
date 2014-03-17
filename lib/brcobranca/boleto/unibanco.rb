@@ -5,10 +5,10 @@ module Brcobranca
 
       #  Com Registro 4
       #  Sem Registro 5
-      validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => "não existente para este banco."
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :convenio, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
-      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_inclusion_of :carteira, :in => %w( 5 4 ), :message => 'não existente para este banco.'
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :convenio, :maximum => 7, :message => 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 7, :message => 'deve ser menor ou igual a 7 dígitos.'
 
       validates_each :numero_documento do |record, attr, value|
         record.errors.add attr, 'deve ser menor ou igual a 14 dígitos.' if (value.to_s.size > 14) && (record.carteira.to_i == 5)
@@ -18,7 +18,7 @@ module Brcobranca
       # Nova instancia do Unibanco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "5"}.merge!(campos)
+        campos = {:carteira => '5'}.merge!(campos)
         super(campos)
       end
 
@@ -26,13 +26,13 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numéricos.
       def banco
-        "409"
+        '409'
       end
 
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(7,'0') if valor
+        @convenio = valor.to_s.rjust(7, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -43,10 +43,10 @@ module Brcobranca
       # @return [String]
       def numero_documento
         case self.carteira.to_i
-        when 5
-          @numero_documento.to_s.rjust(14,'0')
-        else #4
-          @numero_documento.to_s.rjust(11,'0')
+          when 5
+            @numero_documento.to_s.rjust(14, '0')
+          else #4
+            @numero_documento.to_s.rjust(11, '0')
         end
       end
 
@@ -103,11 +103,11 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         case self.carteira.to_i
-        when 5
-          "#{self.carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
-        else # 4
-          data = self.data_vencimento.strftime('%y%m%d')
-          "0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
+          when 5
+            "#{self.carteira}#{self.convenio}00#{self.numero_documento}#{self.nosso_numero_dv}"
+          else # 4
+            data = self.data_vencimento.strftime('%y%m%d')
+            "0#{self.carteira}#{data}#{self.agencia}#{self.agencia_dv}#{self.numero_documento}#{self.nosso_numero_dv}"
         end
       end
     end

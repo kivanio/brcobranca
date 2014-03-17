@@ -3,8 +3,8 @@ module Brcobranca
   module Boleto
     class Real < Base # Banco REAL
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :conta_corrente, :maximum => 7, :message => "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 7, :message => 'deve ser menor ou igual a 7 dígitos.'
 
       validates_each :numero_documento do |record, attr, value|
         record.errors.add attr, 'deve ser menor ou igual a 13 dígitos.' if (value.to_s.size > 13) && (record.carteira.to_i == 57)
@@ -14,13 +14,13 @@ module Brcobranca
       ## Nova instancia do Real
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "57"}.merge!(campos)
+        campos = {:carteira => '57'}.merge!(campos)
         super(campos)
       end
 
       # Codigo do banco emissor (3 dígitos sempre)
       def banco
-        "356"
+        '356'
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -30,7 +30,7 @@ module Brcobranca
       # @return [String] 7 ou 13 caracteres numéricos.
       def numero_documento
         quantidade = (self.carteira.to_i == 57) ? 13 : 7
-        @numero_documento.to_s.rjust(quantidade,'0')
+        @numero_documento.to_s.rjust(quantidade, '0')
       end
 
       # Nosso número para exibir no boleto.
@@ -62,11 +62,11 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         case self.carteira.to_i
-        when 57
-          "#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
-        else
-          # TODO verificar com o banco, pois não consta na documentação
-          "000000#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
+          when 57
+            "#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
+          else
+            # TODO verificar com o banco, pois não consta na documentação
+            "000000#{self.agencia}#{self.conta_corrente}#{self.agencia_conta_corrente_nosso_numero_dv}#{self.numero_documento}"
         end
       end
     end

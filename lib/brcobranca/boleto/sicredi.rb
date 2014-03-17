@@ -8,15 +8,15 @@ module Brcobranca
       # <b>REQUERIDO</b>: Byte de identificação do cedente do bloqueto utilizado para compor o nosso número.
       attr_accessor :byte_idt
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :numero_documento, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
-      validates_length_of :conta_corrente, :maximum => 5, :message => "deve ser menor ou igual a 5 dígitos."
-      validates_length_of :carteira, :maximum => 2, :message => "deve ser menor ou igual a 2 dígitos."
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :numero_documento, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :carteira, :maximum => 2, :message => 'deve ser menor ou igual a 2 dígitos.'
 
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "03", :especie_documento => "A"}.merge!(campos)
+        campos = {:carteira => '03', :especie_documento => 'A'}.merge!(campos)
         super(campos)
       end
 
@@ -24,7 +24,7 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numéricos.
       def banco
-        "748"
+        '748'
       end
 
       # Carteira
@@ -74,14 +74,14 @@ module Brcobranca
       # Codigo referente ao tipo de cobrança
       # @return [String]: 1 caractere numérico
       def tipo_cobranca
-        "3"
+        '3'
       end
 
       # Codigo referente ao tipo de carteira
       # @return [String]: 1 caractere numérico
       def tipo_carteira
-        if self.carteira == "03"
-          "1"
+        if self.carteira == '03'
+          '1'
         end
       end
       # Dígito verificador do nosso número
