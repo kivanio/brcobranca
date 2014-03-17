@@ -18,6 +18,7 @@ module Brcobranca
       }
 
       # Validações
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :carteira, :is => 2, :message => 'deve possuir 2 dígitos.'
       validates_length_of :convenio, :is => 6, :message => 'deve possuir 6 dígitos.'
       validates_length_of :numero_documento, :is => 15, :message => 'deve possuir 15 dígitos.'
