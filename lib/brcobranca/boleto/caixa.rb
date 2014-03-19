@@ -59,6 +59,12 @@ module Brcobranca
         end
       end
 
+      # Logotipo do banco
+      # @return [Path] Caminho para o arquivo de logotipo do banco.
+      def logotipo
+        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.eps")
+      end
+
       # Nosso número, 17 dígitos
       #  1 à 2: carteira
       #  3 à 17: campo_livre
