@@ -41,10 +41,6 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 - [versão estável](http://rubydoc.info/gems/brcobranca)
 - [versão de desenvolvimento](http://rubydoc.info/github/kivanio/brcobranca/master/frames)
 
-## Gostou?
-
-Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa
-
 ## Apoio
 
 [![RubyMine](http://www.jetbrains.com/ruby/features/ruby_banners/ruby1/ruby468x60_rubin.gif)](http://www.jetbrains.com/ruby/features?utm_source=RubyMineUser&utm_medium=Banner&utm_campaign=RubyMine)
@@ -52,4 +48,4 @@ Recomende-nos no http://www.workingwithrails.com/recommendation/new/person/5679-
 ## Licença
 
 - BSD
-- Copyleft 2009 Kivanio Barbosa
+- Copyleft 2009 [Kivanio Barbosa](http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa)
