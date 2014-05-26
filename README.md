@@ -1,5 +1,9 @@
 Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
+## Exemplos
+
+- http://github.com/kivanio/brcobranca_exemplo
+
 ## Bancos Disponíveis
 
 * Banco do Brasil
