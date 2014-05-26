@@ -34,9 +34,9 @@ module Brcobranca
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
-      attr_accessor :cedente
+      attr_accessor :beneficiario
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
-      attr_accessor :documento_cedente
+      attr_accessor :documento_beneficiario
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
       attr_accessor :numero_documento
       # <b>REQUERIDO</b>: Símbolo da moeda utilizada (R$ no brasil)
@@ -47,42 +47,42 @@ module Brcobranca
       attr_accessor :data_documento
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao1
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao2
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao3
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao4
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao5
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao6
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao pagador
       attr_accessor :instrucao7
-      # <b>REQUERIDO</b>: Informação sobre onde o sacado podera efetuar o pagamento
+      # <b>REQUERIDO</b>: Informação sobre onde o pagador podera efetuar o pagamento
       attr_accessor :local_pagamento
-      # <b>REQUERIDO</b>: Informa se o banco deve aceitar o boleto após o vencimento ou não( S ou N, quase sempre S)
+      # <b>REQUERIDO</b>: O título de cobrança foi reconhecido (assinado) pelo Pagador? (A = aceito, N = não)
       attr_accessor :aceite
       # <b>REQUERIDO</b>: Nome da pessoa que receberá o boleto
-      attr_accessor :sacado
+      attr_accessor :pagador
       # <b>OPCIONAL</b>: Endereco da pessoa que receberá o boleto
-      attr_accessor :sacado_endereco
+      attr_accessor :pagador_endereco
       # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
-      attr_accessor :sacado_documento
+      attr_accessor :pagador_documento
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => "não pode estar em branco."
-      validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :message => "não é um número.", :allow_nil => true
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :message => 'não pode estar em branco.'
+      validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :message => 'não é um número.', :allow_nil => true
 
       # Nova instancia da classe Base
       # @param [Hash] campos
       def initialize(campos={})
         padrao = {
-          :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
-          :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
-          :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"
+            :moeda => '9', :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
+            :especie_documento => 'DM', :especie => 'R$', :aceite => 'N', :valor => 0.0,
+            :local_pagamento => 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }
 
         campos = padrao.merge!(campos)
@@ -108,13 +108,20 @@ module Brcobranca
       # Código da agencia
       # @return [String] 4 caracteres numéricos.
       def agencia=(valor)
-        @agencia = valor.to_s.rjust(4,'0') if valor
+        @agencia = valor.to_s.rjust(4, '0') if valor
       end
 
       # Dígito verificador da agência
       # @return [Integer] 1 caracteres numéricos.
       def agencia_dv
         self.agencia.modulo11_9to2
+      end
+
+      # Representação da carteira no boleto.
+      # Não usar este campo para gerar o código de barras (aceita valores não numéricos)
+      # @return [String]
+      def carteira_boleto
+        self.carteira.to_s
       end
 
       # Dígito verificador da conta corrente
@@ -131,12 +138,12 @@ module Brcobranca
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def nosso_numero_boleto
-        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def agencia_conta_boleto
-        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
       end
 
       # Valor total do documento: <b>quantidate * valor</b>
@@ -150,7 +157,7 @@ module Brcobranca
       # @return [Date]
       # @raise [ArgumentError] Caso {#data_documento} esteja em branco.
       def data_vencimento
-        raise ArgumentError, "data_documento não pode estar em branco." unless self.data_documento
+        raise ArgumentError, 'data_documento não pode estar em branco.' unless self.data_documento
         return self.data_documento unless self.dias_vencimento
         (self.data_documento + self.dias_vencimento.to_i)
       end
@@ -164,7 +171,7 @@ module Brcobranca
       # Número da conta corrente
       # @return [String] 7 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(7,'0') if valor
+        @conta_corrente = valor.to_s.rjust(7, '0') if valor
       end
 
       # Codigo de barras do boleto
@@ -186,8 +193,7 @@ module Brcobranca
         codigo << codigo_barras_segunda_parte #25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
           codigo_dv = codigo.modulo11_2to9
-          codigo = "#{$1}#{codigo_dv}#{$2}"
-          codigo
+          "#{$1}#{codigo_dv}#{$2}"
         else
           raise Brcobranca::BoletoInvalido.new(self)
         end
@@ -197,7 +203,7 @@ module Brcobranca
       #
       # @abstract Deverá ser sobreescrito para cada banco.
       def codigo_barras_segunda_parte
-        raise Brcobranca::NaoImplementado.new("Sobreescreva este método na classe referente ao banco que você esta criando")
+        raise Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
       end
 
       private
@@ -211,13 +217,13 @@ module Brcobranca
       # Valor total do documento
       # @return [String] 10 caracteres numéricos.
       def valor_documento_formatado
-        self.valor_documento.limpa_valor_moeda.to_s.rjust(10,'0')
+        self.valor_documento.limpa_valor_moeda.to_s.rjust(10, '0')
       end
 
       # Nome da classe do boleto
       # @return [String]
       def class_name
-        self.class.to_s.split("::").last.downcase
+        self.class.to_s.split('::').last.downcase
       end
 
     end

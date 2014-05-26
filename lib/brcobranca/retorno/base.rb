@@ -4,7 +4,7 @@ module Brcobranca
   module Retorno
     class Base # Classe base para retornos bancários
       attr_accessor :agencia_com_dv
-      attr_accessor :cedente_com_dv
+      attr_accessor :beneficiario_com_dv
       attr_accessor :convenio
       attr_accessor :nosso_numero
       attr_accessor :tipo_cobranca

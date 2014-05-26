@@ -18,7 +18,7 @@ begin
   require 'active_model'
 rescue LoadError
   require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'active_model', ">= 3.0.0"
+  gem 'active_model', '>= 3.0.0'
   require 'active_model'
 end
 

@@ -9,7 +9,7 @@ module Brcobranca
     # @example
     #  "12345678901".to_br_cpf #=> 123.456.789-01
     def to_br_cpf
-      somente_numeros.gsub(/^(.{3})(.{3})(.{3})(.{2})$/,'\1.\2.\3-\4')
+      somente_numeros.gsub(/^(.{3})(.{3})(.{3})(.{2})$/, '\1.\2.\3-\4')
     end
 
     # Formata como CEP
@@ -19,7 +19,7 @@ module Brcobranca
     #   "85253100".to_br_cep #=> "85253-100"
     #   85253100.to_br_cep #=> "85253-100"
     def to_br_cep
-      somente_numeros.gsub(/^(.{5})(.{3})$/,'\1-\2')
+      somente_numeros.gsub(/^(.{5})(.{3})$/, '\1-\2')
     end
 
     # Formata como CNPJ
@@ -28,7 +28,7 @@ module Brcobranca
     # @example
     #  "12345678000901".to_br_cnpj #=> 12.345.678/0009-01
     def to_br_cnpj
-      somente_numeros.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/,'\1.\2.\3/\4-\5')
+      somente_numeros.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/, '\1.\2.\3/\4-\5')
     end
 
     # Gera formatação automática do documento baseado no tamanho do campo.
@@ -41,11 +41,14 @@ module Brcobranca
     #  "12345".formata_documento #=> 12345
     def formata_documento
       case somente_numeros.size
-      when 8 then to_br_cep
-      when 11 then to_br_cpf
-      when 14 then to_br_cnpj
-      else
-        self
+        when 8 then
+          to_br_cep
+        when 11 then
+          to_br_cpf
+        when 14 then
+          to_br_cnpj
+        else
+          self
       end
     end
 
@@ -55,7 +58,7 @@ module Brcobranca
     # @example
     #   1a23e45+".somente_numeros #=> 12345
     def somente_numeros
-      to_s.gsub(/\D/,'')
+      to_s.gsub(/\D/, '')
     end
 
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
@@ -89,7 +92,7 @@ module Brcobranca
         linha << $6.modulo10.to_s
         linha << $2
         linha << $3
-        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
+        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/, '\1.\2 \3.\4 \5.\6 \7 \8')
       else
         raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
@@ -97,6 +100,6 @@ module Brcobranca
   end
 end
 
-[ String, Numeric ].each do |klass|
+[String, Numeric].each do |klass|
   klass.class_eval { include Brcobranca::Formatacao }
 end

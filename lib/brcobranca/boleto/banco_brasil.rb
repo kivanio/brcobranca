@@ -3,10 +3,10 @@ module Brcobranca
   module Boleto
     class BancoBrasil < Base # Banco do Brasil
 
-      validates_length_of :agencia, :maximum => 4, :message => "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :conta_corrente, :maximum => 8, :message => "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :carteira, :maximum => 2, :message => "deve ser menor ou igual a 2 dígitos."
-      validates_length_of :convenio, :in => 4..8, :message => "não existente para este banco."
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :conta_corrente, :maximum => 8, :message => 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :carteira, :maximum => 2, :message => 'deve ser menor ou igual a 2 dígitos.'
+      validates_length_of :convenio, :in => 4..8, :message => 'não existente para este banco.'
 
       validates_each :numero_documento do |record, attr, value|
         valor_tamanho = value.to_s.size
@@ -31,7 +31,7 @@ module Brcobranca
       # Nova instancia do BancoBrasil
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos={})
-        campos = {:carteira => "18", :codigo_servico => false}.merge!(campos)
+        campos = {:carteira => '18', :codigo_servico => false}.merge!(campos)
         super(campos)
       end
 
@@ -39,14 +39,14 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numéricos.
       def banco
-        "001"
+        '001'
       end
 
       # Carteira
       #
       # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
-        @carteira = valor.to_s.rjust(2,'0') if valor
+        @carteira = valor.to_s.rjust(2, '0') if valor
       end
 
       # Dígito verificador do banco
@@ -66,7 +66,7 @@ module Brcobranca
       # Conta corrente
       # @return [String] 8 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(8,'0') if valor
+        @conta_corrente = valor.to_s.rjust(8, '0') if valor
       end
 
       # Dígito verificador da conta corrente
@@ -105,7 +105,7 @@ module Brcobranca
         when 6
           self.codigo_servico ? 17 : 5
         else
-          raise Brcobranca::NaoImplementado.new("Tipo de convênio não implementado.")
+          raise Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
         end
         quantidade ? @numero_documento.to_s.rjust(quantidade,'0') : @numero_documento
       end
@@ -138,21 +138,21 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         case self.convenio.to_s.size
-        when 8 # Nosso Número de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-          "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
-        when 7 # Nosso Número de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-          "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
-        when 6 # Convenio de 6 dígitos
-          if self.codigo_servico == false
-            # Nosso Número de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 dígitos
+          when 8 # Nosso Número de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
+            "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
+          when 7 # Nosso Número de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
+            "000000#{self.convenio}#{self.numero_documento}#{self.carteira}"
+          when 6 # Convenio de 6 dígitos
+            unless self.codigo_servico
+              # Nosso Número de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 dígitos
+              "#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
+            else
+              # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
+              raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (['16', '18'].include?(self.carteira))
+              "#{self.convenio}#{self.numero_documento}21"
+            end
+          when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
             "#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
-          else
-            # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
-            raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{self.carteira}" unless (["16","18"].include?(self.carteira))
-            "#{self.convenio}#{self.numero_documento}21"
-          end
-        when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-          "#{self.convenio}#{self.numero_documento}#{self.agencia}#{self.conta_corrente}#{self.carteira}"
         end
       end
 

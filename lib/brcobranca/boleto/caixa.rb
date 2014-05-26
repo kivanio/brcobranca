@@ -9,41 +9,61 @@ module Brcobranca
     class Caixa < Base # Caixa
 
       MODALIDADE_COBRANCA = {
-        :registrada => '1',
-        :sem_registro => '2'
+          :registrada => '1',
+          :sem_registro => '2'
       }
 
       EMISSAO_BOLETO = {
-        :cedente => '4'
+          :beneficiario => '4'
       }
 
       # Validações
+      validates_length_of :agencia, :maximum => 4, :message => 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :carteira, :is => 2, :message => 'deve possuir 2 dígitos.'
       validates_length_of :convenio, :is => 6, :message => 'deve possuir 6 dígitos.'
       validates_length_of :numero_documento, :is => 15, :message => 'deve possuir 15 dígitos.'
 
       # Nova instância da CaixaEconomica
       # @param (see Brcobranca::Boleto::Base#initialize)
-      def initialize campos = {} 
+      def initialize campos = {}
         campos = {
-          :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}"
+            :carteira => "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:beneficiario]}"
         }.merge!(campos)
 
         campos.merge!(:convenio => campos[:convenio].rjust(6, '0')) if campos[:convenio]
         campos.merge!(:numero_documento => campos[:numero_documento].rjust(15, '0')) if campos[:numero_documento]
-        campos.merge!(:local_pagamento => "PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE")
+        campos.merge!(:local_pagamento => 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
 
         super(campos)
       end
 
       # Código do banco emissor
       # @return [String]
-      def banco; '104' end
+      def banco;
+        '104'
+      end
 
       # Dígito verificador do código do banco em módulo 10
       # Módulo 10 de 104 é 0
       # @return [String]
-      def banco_dv; '0' end
+      def banco_dv;
+        '0'
+      end
+
+      # Representação da carteira no boleto.
+      def carteira_boleto
+        if carteira.to_s.start_with? '1'
+          'RG'
+        elsif carteira.to_s.start_with? '2'
+          'SR'
+        end
+      end
+
+      # Logotipo do banco
+      # @return [Path] Caminho para o arquivo de logotipo do banco.
+      def logotipo
+        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.eps")
+      end
 
       # Nosso número, 17 dígitos
       #  1 à 2: carteira
@@ -60,23 +80,23 @@ module Brcobranca
         "#{carteira}#{numero_documento}".modulo11_2to9_caixa.to_s
       end
 
-      # Número da agência/código cedente do cliente para exibir no boleto.
+      # Número da agência/código beneficiario do cliente para exibir no boleto.
       # @return [String]
       # @example
       #  boleto.agencia_conta_boleto #=> "1565/100000-4"
-      def agencia_conta_boleto            
+      def agencia_conta_boleto
         "#{agencia}/#{convenio}-#{convenio_dv}"
       end
 
-      # Dígito verificador do convênio ou código do cedente
+      # Dígito verificador do convênio ou código do beneficiario
       # @return [String]
       def convenio_dv
         "#{convenio.modulo11_2to9_caixa}"
       end
 
       # Monta a segunda parte do código de barras.
-      #  1 à 6: código do cedente, também conhecido como convênio
-      #  7: dígito verificador do código do cedente
+      #  1 à 6: código do beneficiario, também conhecido como convênio
+      #  7: dígito verificador do código do beneficiario
       #  8 à 10: dígito 3 à 5 do nosso número
       #  11: dígito 1 do nosso número (modalidade da cobrança)
       #  12 à 14: dígito 6 à 8 do nosso número
@@ -85,14 +105,14 @@ module Brcobranca
       #  25: dígito verificador do campo livre
       # @return [String]
       def codigo_barras_segunda_parte
-        campo_livre = "#{convenio}" << 
-        "#{convenio_dv}" <<
-        "#{nosso_numero_boleto[2..4]}" <<
-        "#{nosso_numero_boleto[0..0]}" <<
-        "#{nosso_numero_boleto[5..7]}" <<
-        "#{nosso_numero_boleto[1..1]}" <<
-        "#{nosso_numero_boleto[8..16]}"
-        
+        campo_livre = "#{convenio}" <<
+            "#{convenio_dv}" <<
+            "#{nosso_numero_boleto[2..4]}" <<
+            "#{nosso_numero_boleto[0..0]}" <<
+            "#{nosso_numero_boleto[5..7]}" <<
+            "#{nosso_numero_boleto[1..1]}" <<
+            "#{nosso_numero_boleto[8..16]}"
+
         "#{campo_livre}#{campo_livre.modulo11_2to9_caixa}"
       end
 

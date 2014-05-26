@@ -191,7 +191,7 @@ module Brcobranca
           doc.moveto :x => colunas[0] , :y => linhas[1]
           doc.show boleto.data_vencimento.to_s_br
 
-          #agencia/codigo cedente
+          #agencia/codigo beneficiario
           doc.moveto :x => colunas[0] , :y => linhas[2]
           doc.show boleto.agencia_conta_boleto
 
@@ -207,9 +207,9 @@ module Brcobranca
           doc.moveto :x => colunas[0] , :y => linhas[11]
           doc.show boleto.numero_documento
 
-          #sacado
+          #pagador
           doc.moveto :x => colunas[0] , :y => linhas[13]
-          doc.show "#{boleto.sacado}"
+          doc.show "#{boleto.pagador}"
 
         end
 
@@ -235,11 +235,11 @@ module Brcobranca
           doc.moveto :x => colunas[11] , :y => linhas[1]
           doc.show boleto.data_vencimento.to_s_br
 
-          #cedente
+          #beneficiario
           doc.moveto :x => colunas[2] , :y => linhas[2]
-          doc.show boleto.cedente
+          doc.show boleto.beneficiario
 
-          #agencia/codigo cedente
+          #agencia/codigo beneficiario
           doc.moveto :x => colunas[11] , :y => linhas[2]
           doc.show boleto.agencia_conta_boleto
 
@@ -306,13 +306,13 @@ module Brcobranca
           doc.moveto :x => colunas[2] , :y => linhas[10]
           doc.show boleto.instrucao6
 
-          #Sacado
+          #pagador
           doc.moveto :x => colunas[2] , :y => linhas[11]
-          doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
+          doc.show "#{boleto.pagador} - #{boleto.pagador_documento.formata_documento}" if boleto.pagador && boleto.pagador_documento
 
-          #Sacado endereço
+          #pagador endereço
           doc.moveto :x => colunas[2] , :y => linhas[12]
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show "#{boleto.pagador_endereco}"
 
           #codigo de barras
           #Gerando codigo de barra com rghost_barcode

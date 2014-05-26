@@ -7,7 +7,7 @@ module Brcobranca
 
       fixed_width_layout do |parse|
         parse.field :agencia_com_dv,17..21
-        parse.field :cedente_com_dv,22..30
+        parse.field :beneficiario_com_dv,22..30
         parse.field :convenio,31..37
         parse.field :nosso_numero,63..79
         parse.field :tipo_cobranca,80..80
