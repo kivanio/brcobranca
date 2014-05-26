@@ -40,6 +40,10 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 * CBR643
 * CNAB240
 
+### Documentação dos boletos
+
+Caso queira verificar(ou adicionar) alguma documentação sobre os boletos, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki/Especifica%C3%A7%C3%A3o-dos-Boletos).
+
 ### Rubydoc
 
 - [versão estável](http://rubydoc.info/gems/brcobranca)
