@@ -85,6 +85,14 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
+    # Calcula módulo 11 com multiplicadores de 7 a 2
+    #
+    # @return [Integer]
+    def modulo11_base_7
+      total = self.multiplicador([2,3,4,5,6,7])
+      total % 11
+    end
+
     # Verifica se String só contem caracteres numéricos.
     #
     # @return [Boolean]
