@@ -15,16 +15,8 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 * Banco HSBC
   * CNR
 
-* Banco Real
-  * Sem registro
-  * Com registro
-
 * Banco Bradesco
   * Todas as carteiras presentes na documentação
-
-* Banco UNIBANCO
-  * Sem registro
-  * Com registro
 
 * Banco Caixa
   * Sem registro - [Túlio Ornelas](https://github.com/tulios)
