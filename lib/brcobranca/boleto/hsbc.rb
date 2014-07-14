@@ -39,7 +39,7 @@ module Brcobranca
       # Número seqüencial utilizado para identificar o boleto.
       #
       # Montagem é baseada na presença da data de vencimento.<br/>
-      # <b>OBS:</b> Somente a carteira <b>CNR/CSB</b> está implementada.<br/>
+      # <b>OBS:</b> Somente as carteiras <b>CNR/CSB</b> estão implementadas.<br/>
       #
       # @return [String]
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR/CSB.
@@ -56,6 +56,8 @@ module Brcobranca
               parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11_9to2_10_como_zero}#{self.codigo_servico}"
               soma = parte_1.to_i + self.conta_corrente.to_i + data.to_i
               "#{parte_1}#{soma.to_s.modulo11_9to2_10_como_zero}"
+            else
+              raise "data_vencimento não é uma data."
             end
           when 'CSB'
             @nosso_numero
@@ -89,7 +91,7 @@ module Brcobranca
       # Segunda parte do código de barras.
       #
       # Montagem é baseada no tipo de carteira e na presença da data de vencimento<br/>
-      # <b>OBS:</b> Somente a carteira <b>CNR/CSB</b> está implementada.<br/>
+      # <b>OBS:</b> Somente as carteiras <b>CNR/CSB</b> estão implementadas.<br/>
       #
       # @return [String] 25 caracteres numéricos.
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR/CSB.
