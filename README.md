@@ -14,6 +14,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
 * Banco HSBC
   * CNR
+  * CSB - [Rafael DL](https://github.com/rafaeldl)
 
 * Banco Bradesco
   * Todas as carteiras presentes na documentação
