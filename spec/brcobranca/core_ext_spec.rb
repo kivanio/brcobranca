@@ -67,13 +67,6 @@ module Brcobranca
       1905009.modulo10.should be_a_kind_of(Fixnum)
     end
 
-    it "Calcula módulo 10 para o banespa" do
-      "4007469108".modulo_10_banespa.should eql(1)
-      4007469108.modulo_10_banespa.should eql(1)
-      "1237469108".modulo_10_banespa.should eql(3)
-      1237469108.modulo_10_banespa.should eql(3)
-    end
-
     it "Multiplicador" do
       "85068014982".multiplicador([2,3,4,5,6,7,8,9]).should eql(255)
       "05009401448".multiplicador([2,3,4,5,6,7,8,9]).should eql(164)

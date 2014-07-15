@@ -22,24 +22,6 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
-    # Calcula módulo 10 do Banespa.
-    #
-    # @return [Integer]
-    # @raise  [ArgumentError] Caso não seja um número inteiro.
-    def modulo_10_banespa
-      raise ArgumentError, "Número inválido" unless self.is_number?
-
-      fatores = [7,3,1,9,7,3,1,9,7,3]
-      total = 0
-      posicao = 0
-      self.to_s.split(//).each do |digito|
-        total += (digito.to_i * fatores[posicao]).to_s.split(//)[-1].to_i
-        posicao = (posicao < (fatores.size - 1)) ? (posicao + 1) : 0
-      end
-      dv = 10 - total.to_s.split(//)[-1].to_i
-      dv == 10 ? 0 : dv
-    end
-
     # Calcula módulo 11 com multiplicaroes de 9 a 2 segundo a BACEN.
     #
     # @return [Integer]
