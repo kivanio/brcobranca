@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # -*- encoding: utf-8 -*-
 # @author Kivanio Barbosa
 module Brcobranca
@@ -38,8 +36,6 @@ module Brcobranca
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
-      attr_accessor :endereco_cedente
-      # <b>REQUERIDO</b>: Endereço do proprietario da conta corrente (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
       attr_accessor :numero_documento
@@ -67,7 +63,6 @@ module Brcobranca
       attr_accessor :instrucao7
       # <b>REQUERIDO</b>: Informação sobre onde o sacado podera efetuar o pagamento
       attr_accessor :local_pagamento
-      attr_accessor :local_pagamento2
       # <b>REQUERIDO</b>: Informa se o banco deve aceitar o boleto após o vencimento ou não( S ou N, quase sempre S)
       attr_accessor :aceite
       # <b>REQUERIDO</b>: Nome da pessoa que receberá o boleto
@@ -87,8 +82,7 @@ module Brcobranca
         padrao = {
           :moeda => "9", :data_documento => Date.today, :dias_vencimento => 1, :quantidade => 1,
           :especie_documento => "DM", :especie => "R$", :aceite => "S", :valor => 0.0,
-          :local_pagamento => "ATÉ O VENCIMENTO PAGUE PREFERENCIALMENTE NO ITAÚ",
-          :local_pagamento2 => "APÓS O VENCIMENTO PAGUE SOMENTE NO ITAÚ"
+          :local_pagamento => "QUALQUER BANCO ATÉ O VENCIMENTO"
         }
 
         campos = padrao.merge!(campos)
