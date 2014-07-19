@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 # -*- encoding: utf-8 -*-
 module Brcobranca
   module Boleto
@@ -85,7 +87,7 @@ module Brcobranca
       # @example
       #  boleto.agencia_conta_boleto #=> "0811 / 53678-8"
       def agencia_conta_boleto
-        "#{self.agencia} / #{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
+        "#{self.agencia}/#{self.conta_corrente}-#{self.agencia_conta_corrente_dv}"
       end
 
       # Segunda parte do código de barras.
