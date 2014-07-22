@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.dirname(__FILE__) + '/../spec_helper.rb'
+require 'spec_helper'
 
 module Brcobranca #:nodoc:[all]
   module Currency #:nodoc:[all]
