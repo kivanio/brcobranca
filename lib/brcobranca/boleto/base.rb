@@ -96,7 +96,7 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.jpg")
+        File.join(File.dirname(__FILE__),'..','arquivos','logos',"#{class_name}.eps")
       end
 
       # Dígito verificador do banco
