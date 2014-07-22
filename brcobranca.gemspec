@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
 
   # Gems that must be intalled for sift to work
-  gem.add_dependency 'rghost', '~> 0.9'
+  gem.add_dependency 'rghost', '0.9.3'
   gem.add_dependency 'rghost_barcode', '~> 0.9'
   gem.add_dependency 'parseline', '~> 1.0.3'
   gem.add_dependency 'activemodel', '>= 3'
