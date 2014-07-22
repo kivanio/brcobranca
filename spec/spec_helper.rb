@@ -13,4 +13,4 @@ require 'tempfile'
 require 'brcobranca'
 require 'rghost'
 
-RGhost::Config::GS[:path] = '/usr/local/bin/gs'
+RGhost::Config.config_platform
