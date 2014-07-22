@@ -20,12 +20,23 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     builder (3.2.2)
+    codeclimate-test-reporter (0.3.0)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
+    coveralls (0.7.0)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
     diff-lcs (1.2.5)
+    docile (1.1.3)
     i18n (0.6.11)
     json (1.8.1)
     method_source (0.8.2)
+    mime-types (2.3)
     minitest (5.4.0)
+    multi_json (1.10.1)
     parseline (1.0.3)
     pry (0.10.0)
       coderay (~> 1.1.0)
@@ -37,6 +48,8 @@ GEM
       slop (~> 3.4)
       win32console (~> 1.3)
     rake (10.3.2)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rghost (0.9.4)
     rghost_barcode (0.9)
     rspec (3.0.0)
@@ -51,8 +64,17 @@ GEM
     rspec-mocks (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.3)
+    simplecov (0.8.2)
+      docile (~> 1.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     slop (3.6.0)
+    term-ansicolor (1.3.0)
+      tins (~> 1.0)
+    thor (0.19.1)
     thread_safe (0.3.4)
+    tins (1.3.0)
     tzinfo (1.2.1)
       thread_safe (~> 0.1)
     win32console (1.3.2-x86-mingw32)
@@ -63,6 +85,8 @@ PLATFORMS
 
 DEPENDENCIES
   brcobranca!
+  codeclimate-test-reporter
+  coveralls
   pry (~> 0.10.0)
   rake
   rspec (~> 3.0.0)

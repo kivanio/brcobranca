@@ -26,12 +26,12 @@ describe "RGhost" do
 
   it "Testar se RGhost e GhostScript estão instalados" do
     # RGhost::Config.config_platform
-    File.exist?(RGhost::Config::GS[:path]).should be_true
-    File.executable?(RGhost::Config::GS[:path]).should be_true
+    expect(File.exist?(RGhost::Config::GS[:path])).to be_truthy
+    expect(File.executable?(RGhost::Config::GS[:path])).to be_truthy
     s=`#{RGhost::Config::GS[:path]} -v`
-    s.should =~ /^GPL Ghostscript/
+    expect(s).to match(/^GPL Ghostscript/)
     s=`#{RGhost::Config::GS[:path]} --version`
-    s.should =~ /[8-9]\.[0-9]/
+    expect(s).to match(/[8-9]\.[0-9]/)
   end
 
 end

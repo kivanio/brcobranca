@@ -31,15 +31,15 @@ describe "Muúltiplos boletos" do #:nodoc:[all]
 
     boletos = [boleto_1, boleto_2, boleto_3]
 
-    %w| pdf jpg tif png ps |.each do |format|
+    %w| pdf jpg tif png |.each do |format|
       file_body=Brcobranca::Boleto::Base.lote(boletos, {:formato => "#{format}".to_sym})
       tmp_file=Tempfile.new("foobar." << format)
       tmp_file.puts file_body
       tmp_file.close
-      File.exist?(tmp_file.path).should be_true
-      File.stat(tmp_file.path).zero?.should be_false
-      File.delete(tmp_file.path).should eql(1)
-      File.exist?(tmp_file.path).should be_false
+      expect(File.exist?(tmp_file.path)).to be_truthy
+      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
 

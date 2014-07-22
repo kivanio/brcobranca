@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "Brcobranca" do
   it "Validar opções padrão" do
-    Brcobranca.configuration.gerador.should eql(:rghost)
-    Brcobranca.configuration.formato.should eql(:pdf)
+    expect(Brcobranca.configuration.gerador).to eql(:rghost)
+    expect(Brcobranca.configuration.formato).to eql(:pdf)
   end
 
   it "Mudar configurações" do
@@ -12,7 +12,7 @@ describe "Brcobranca" do
       config.gerador = :prawn
       config.formato = :gif
     end
-    Brcobranca.configuration.gerador.should eql(:prawn)
-    Brcobranca.configuration.formato.should eql(:gif)
+    expect(Brcobranca.configuration.gerador).to eql(:prawn)
+    expect(Brcobranca.configuration.formato).to eql(:gif)
   end
 end

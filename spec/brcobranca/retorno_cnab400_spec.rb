@@ -9,32 +9,32 @@ describe Brcobranca::Retorno::RetornoCnab400 do
   it "Ignora primeira linha que é header" do
      pagamentos = Brcobranca::Retorno::RetornoCnab400.load_lines(@arquivo)
      pagamento = pagamentos.first
-     pagamento.sequencial.should eql("000002")
+     expect(pagamento.sequencial).to eql("000002")
   end
 
   it 'Transforma arquivo de retorno em objetos de retorno retornando somente as linhas de pagamentos de títulos sem registro' do
     pagamentos = Brcobranca::Retorno::RetornoCnab400.load_lines(@arquivo)
-    pagamentos.size.should == 53 #deve ignorar a primeira linha que é header
+    expect(pagamentos.size).to eq(53) #deve ignorar a primeira linha que é header
     pagamento = pagamentos.first
-    pagamento.agencia_com_dv.should eql("0730")
-    pagamento.cedente_com_dv.should eql("035110")
-    pagamento.nosso_numero.should eql("00000011")
-    pagamento.carteira_variacao.should eql("109")
-    pagamento.carteira.should eql("I")
-    pagamento.data_vencimento.should eql("000000")
-    pagamento.valor_titulo.should eql("0000000004000")
-    pagamento.banco_recebedor.should eql("104")
-    pagamento.agencia_recebedora_com_dv.should eql("18739")
-    pagamento.especie_documento.should eql("")
-    pagamento.valor_tarifa.should eql("0000000000210")
-    pagamento.iof.should eql("0000000000000")
-    pagamento.valor_abatimento.should eql("0000000000000")
-    pagamento.desconto.should eql("0000000000000")
-    pagamento.valor_recebido.should eql("0000000003790")
-    pagamento.juros_mora.should eql("0000000000000")
-    pagamento.outros_recebimento.should eql("0000000000000")
-    pagamento.data_credito.should eql("210513")
-    pagamento.sequencial.should eql("000002")
+    expect(pagamento.agencia_com_dv).to eql("0730")
+    expect(pagamento.cedente_com_dv).to eql("035110")
+    expect(pagamento.nosso_numero).to eql("00000011")
+    expect(pagamento.carteira_variacao).to eql("109")
+    expect(pagamento.carteira).to eql("I")
+    expect(pagamento.data_vencimento).to eql("000000")
+    expect(pagamento.valor_titulo).to eql("0000000004000")
+    expect(pagamento.banco_recebedor).to eql("104")
+    expect(pagamento.agencia_recebedora_com_dv).to eql("18739")
+    expect(pagamento.especie_documento).to eql("")
+    expect(pagamento.valor_tarifa).to eql("0000000000210")
+    expect(pagamento.iof).to eql("0000000000000")
+    expect(pagamento.valor_abatimento).to eql("0000000000000")
+    expect(pagamento.desconto).to eql("0000000000000")
+    expect(pagamento.valor_recebido).to eql("0000000003790")
+    expect(pagamento.juros_mora).to eql("0000000000000")
+    expect(pagamento.outros_recebimento).to eql("0000000000000")
+    expect(pagamento.data_credito).to eql("210513")
+    expect(pagamento.sequencial).to eql("000002")
 
     # Campos da classe base que não encontrei a relação com CNAB400
         # parse.field :tipo_cobranca,80..80
