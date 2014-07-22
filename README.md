@@ -1,5 +1,17 @@
 Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
+[![Gem Version](http://img.shields.io/gem/v/brcobranca.svg)][gem]
+[![Build Status](http://img.shields.io/travis/kivanio/brcobranca.svg)][travis]
+[![Dependency Status](http://img.shields.io/gemnasium/kivanio/brcobranca.svg)][gemnasium]
+[![Code Climate](http://img.shields.io/codeclimate/github/kivanio/brcobranca.svg)][codeclimate]
+[![Coverage Status](http://img.shields.io/coveralls/kivanio/brcobranca.svg)][coveralls]
+
+[gem]: https://rubygems.org/gems/brcobranca
+[travis]: http://travis-ci.org/kivanio/brcobranca
+[gemnasium]: https://gemnasium.com/kivanio/brcobranca
+[codeclimate]: https://codeclimate.com/github/kivanio/brcobranca
+[coveralls]: https://coveralls.io/r/kivanio/brcobranca
+
 ### Exemplos
 
 - http://github.com/kivanio/brcobranca_exemplo
