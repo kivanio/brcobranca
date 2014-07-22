@@ -68,9 +68,8 @@ module Brcobranca
     # @param  [Integer] (Padrão: 150)
     attr_accessor :resolucao
 
-    # Ajusta o Encoding externo (do arquivo) - Ruby 1.9
-    # Ex: Caso esteja dando UndefinedConversionError - from ASCII-8BIT to UTF-8
-    # configurar com a string 'ascii-8bit'
+    # Ajusta o encoding do texto do boleto enviado para o GhostScript
+    # O valor 'ascii-8bit' evita problemas com acentos e cedilha
     # @return [String]
     # @param  [String] (Padrão: nil)
     attr_accessor :external_encoding
@@ -80,6 +79,7 @@ module Brcobranca
       self.gerador = :rghost
       self.formato = :pdf
       self.resolucao = 150
+      self.external_encoding = 'ascii-8bit'
     end
   end
 
