@@ -4,7 +4,7 @@ PATH
     brcobranca (3.2.0)
       activemodel (>= 3)
       parseline (~> 1.0.3)
-      rghost (= 0.9.3)
+      rghost (= 0.9.5)
       rghost_barcode (~> 0.9)
 
 GEM
@@ -57,7 +57,7 @@ GEM
       ffi (~> 1.9)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rghost (0.9.3)
+    rghost (0.9.5)
     rghost_barcode (0.9)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
