@@ -21,6 +21,8 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 * Banco do Brasil
   * Todas as carteiras presentes na documentação
 
+* Banco CredCREA
+
 * Banco Itaú
   * Todas as carteiras presentes na documentação
 

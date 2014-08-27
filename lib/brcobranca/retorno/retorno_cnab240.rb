@@ -50,7 +50,7 @@ module Brcobranca
           parse.field :sequencial,8..12
           parse.field :agencia_com_dv,17..22
           parse.field :cedente_com_dv,23..35
-          parse.field :nosso_numero,46..56
+          parse.field :nosso_numero,37..56
           parse.field :carteira,57..57
           parse.field :data_vencimento,73..80
           parse.field :valor_titulo,81..95
