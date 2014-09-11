@@ -66,17 +66,17 @@ describe Brcobranca::Boleto::Santander do
   it "Gerar boleto" do
     @valid_attributes[:data_documento] = Date.parse("2011/10/08")
     boleto_novo = Brcobranca::Boleto::Santander.new(@valid_attributes)
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql("9189977500000900002670102")
-    expect(boleto_novo.codigo_barras).to eql("03391511500000025009189977500000900002670102")
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("03399.18997 77500.000904 00026.701029 1 51150000002500")
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql("9189977500009000026700102")
+    expect(boleto_novo.codigo_barras).to eql("03398511500000025009189977500009000026700102")
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("03399.18997 77500.009004 00267.001022 8 51150000002500")
 
     @valid_attributes[:valor] = 54.00
     @valid_attributes[:numero_documento] = "90002720"
     @valid_attributes[:data_documento] = Date.parse("2012/09/07")
     boleto_novo = Brcobranca::Boleto::Santander.new(@valid_attributes)
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql("9189977500000900027200102")
-    expect(boleto_novo.codigo_barras).to eql("03391545000000054009189977500000900027200102")
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("03399.18997 77500.000904 00272.001025 1 54500000005400")
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql("9189977500009000272070102")
+    expect(boleto_novo.codigo_barras).to eql("03399545000000054009189977500009000272070102")
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("03399.18997 77500.009004 02720.701024 9 54500000005400")
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
@@ -146,5 +146,4 @@ describe Brcobranca::Boleto::Santander do
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
-
 end
