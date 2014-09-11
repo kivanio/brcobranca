@@ -93,6 +93,10 @@ describe Brcobranca::Boleto::Santander do
     @valid_attributes[:numero_documento] = "90002720"
     boleto_novo = Brcobranca::Boleto::Santander.new(@valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(7)
+
+    @valid_attributes[:numero_documento] = "1961005"
+    boleto_novo = Brcobranca::Boleto::Santander.new(@valid_attributes)
+    expect(boleto_novo.nosso_numero_dv).to eql(0)
   end
 
   it "Montar nosso_numero_boleto" do

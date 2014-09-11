@@ -40,7 +40,27 @@ module Brcobranca
       valor = (11 - (total % 11))
       return [0,10,11].include?(valor) ? 1 : valor
     end
-    
+
+    # Calcula módulo 11 com multiplicaroes de 2 a 9 (Utilizado pelo Santander).
+    #
+    # @return [Integer]
+    def modulo11_2to9_santander
+      return '0' if self.to_i == 0
+      somatorio = 0
+      multiplicadores = %w(2 3 4 5 6 7 8 9 2 3 4 5)
+      base = "#{self.rjust(12, '0')}".reverse
+      index = 0
+      base.each_char do |char|
+        somatorio += base[index].to_i * multiplicadores[index].to_i
+        index += 1
+      end
+
+      resto = somatorio % 11
+      return 1 if resto == 10
+      return 0 if resto == 1 || resto == 0
+      return 11 - resto
+    end
+
     # Calcula módulo 11 com multiplicaroes de 2 a 9 (Utilizado pela CAIXA - boletos SIGCB).
     #
     # @return [Integer]
