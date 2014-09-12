@@ -16,7 +16,7 @@ module Brcobranca
       validates_length_of :numero_documento, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
       validates_length_of :conta_corrente, :maximum => 5, :message => 'deve ser menor ou igual a 5 dígitos.'
       validates_length_of :carteira, :maximum => 2, :message => 'deve ser menor ou igual a 2 dígitos.'
-      validates_length_of :byte_idt, :is => 1, :message => 'deve ser 1 se o numero foi gerado pela agencia ou 2-9 se foi gerado pelo cedente'
+      validates_length_of :byte_idt, :is => 1, :message => 'deve ser 1 se o numero foi gerado pela agencia ou 2-9 se foi gerado pelo beneficiário'
 
       # Nova instancia do Bradesco
       # @param (see Brcobranca::Boleto::Base#initialize)
