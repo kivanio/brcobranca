@@ -33,6 +33,8 @@ module Brcobranca
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
+      # <b>REQUERIDO</b>: Número da conta corrente na Cooperativa (CredCREA) sem <b>Digito Verificador</b>
+      attr_accessor :conta_cooperativa
       # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
       attr_accessor :cedente
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
@@ -121,6 +123,12 @@ module Brcobranca
       # @return [Integer] 1 caracteres numéricos.
       def conta_corrente_dv
         self.conta_corrente.modulo11_9to2
+      end
+
+      # Conta na Cooperativa
+      # @return [String] 8 caracteres numéricos.
+      def conta_cooperativa=(valor)
+        @conta_cooperativa = valor.to_s.rjust(8,'0') if valor
       end
 
       # Dígito verificador do nosso número

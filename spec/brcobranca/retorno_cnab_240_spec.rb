@@ -12,7 +12,7 @@ describe Brcobranca::Retorno::RetornoCnab240 do
     pagamento = pagamentos.first
     expect(pagamento.agencia_com_dv).to eql('012345')
     expect(pagamento.cedente_com_dv).to eql('0000000054321')
-    expect(pagamento.nosso_numero).to eql('00020673')
+    expect(pagamento.nosso_numero).to eql('14499570000020673')
     expect(pagamento.carteira).to eql('7')
     expect(pagamento.data_vencimento).to eql('00000000')
     expect(pagamento.valor_titulo).to eql('000000000034400')
