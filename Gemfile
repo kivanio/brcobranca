@@ -5,7 +5,6 @@ gemspec
 gem 'codeclimate-test-reporter', group: :test, require: nil
 gem 'coveralls', require: false
 
-
 gem 'pry',             '~> 0.10.0'
 gem 'rspec',           '~> 3.1.0'
 gem 'rake',            '~> 10.3.2'

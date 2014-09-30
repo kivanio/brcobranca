@@ -4,31 +4,31 @@ require 'spec_helper'
 describe Brcobranca::Retorno::RetornoCbr643 do
 
   before(:each) do
-    @arquivo = File.join(File.dirname(__FILE__),'..','arquivos','CBR64310.RET')
+    @arquivo = File.join(File.dirname(__FILE__), '..', 'arquivos', 'CBR64310.RET')
   end
 
-  it "Transforma arquivo de retorno em objetos de retorno" do
-    pagamentos = Brcobranca::Retorno::RetornoCbr643.load_lines(@arquivo)
-    expect(pagamentos.first.sequencial).to eql("000001")
-    expect(pagamentos.first.agencia_com_dv).to eql("CA")
-    expect(pagamentos.first.cedente_com_dv).to eql("33251")
-    expect(pagamentos.first.convenio).to eql("0002893")
-    expect(pagamentos.first.data_liquidacao).to eql("")
-    expect(pagamentos.first.data_credito).to eql("")
-    expect(pagamentos.first.valor_recebido).to eql("")
-    expect(pagamentos.first.nosso_numero).to eql("OSSENSE DO AL001B")
+  it 'Transforma arquivo de retorno em objetos de retorno' do
+    pagamentos = described_class.load_lines(@arquivo)
+    expect(pagamentos.first.sequencial).to eql('000001')
+    expect(pagamentos.first.agencia_com_dv).to eql('CA')
+    expect(pagamentos.first.cedente_com_dv).to eql('33251')
+    expect(pagamentos.first.convenio).to eql('0002893')
+    expect(pagamentos.first.data_liquidacao).to eql('')
+    expect(pagamentos.first.data_credito).to eql('')
+    expect(pagamentos.first.valor_recebido).to eql('')
+    expect(pagamentos.first.nosso_numero).to eql('OSSENSE DO AL001B')
   end
 
-  it "Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except" do
-    pagamentos = Brcobranca::Retorno::RetornoCbr643.load_lines(@arquivo,{:except => [1]})
-    expect(pagamentos.first.sequencial).to eql("000002")
-    expect(pagamentos.first.agencia_com_dv).to eql("33251")
-    expect(pagamentos.first.cedente_com_dv).to eql("000289353")
-    expect(pagamentos.first.convenio).to eql("1622420")
-    expect(pagamentos.first.data_liquidacao).to eql("200109")
-    expect(pagamentos.first.data_credito).to eql("220109")
-    expect(pagamentos.first.valor_recebido).to eql("0000000009064")
-    expect(pagamentos.first.nosso_numero).to eql("16224200000000003")
+  it 'Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except' do
+    pagamentos = described_class.load_lines(@arquivo, except: [1])
+    expect(pagamentos.first.sequencial).to eql('000002')
+    expect(pagamentos.first.agencia_com_dv).to eql('33251')
+    expect(pagamentos.first.cedente_com_dv).to eql('000289353')
+    expect(pagamentos.first.convenio).to eql('1622420')
+    expect(pagamentos.first.data_liquidacao).to eql('200109')
+    expect(pagamentos.first.data_credito).to eql('220109')
+    expect(pagamentos.first.valor_recebido).to eql('0000000009064')
+    expect(pagamentos.first.nosso_numero).to eql('16224200000000003')
   end
 
   # it "Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except e :length" do
@@ -43,16 +43,16 @@ describe Brcobranca::Retorno::RetornoCbr643 do
   #   pagamentos.first.nosso_numero.should eql("16224200000000003")
   # end
 
-  it "Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except em regex" do
-    pagamentos = Brcobranca::Retorno::RetornoCbr643.load_lines(@arquivo,{:except => /^[^7]/})
-    expect(pagamentos.first.sequencial).to eql("000002")
-    expect(pagamentos.first.agencia_com_dv).to eql("33251")
-    expect(pagamentos.first.cedente_com_dv).to eql("000289353")
-    expect(pagamentos.first.convenio).to eql("1622420")
-    expect(pagamentos.first.data_liquidacao).to eql("200109")
-    expect(pagamentos.first.data_credito).to eql("220109")
-    expect(pagamentos.first.valor_recebido).to eql("0000000009064")
-    expect(pagamentos.first.nosso_numero).to eql("16224200000000003")
+  it 'Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except em regex' do
+    pagamentos = described_class.load_lines(@arquivo, except: /^[^7]/)
+    expect(pagamentos.first.sequencial).to eql('000002')
+    expect(pagamentos.first.agencia_com_dv).to eql('33251')
+    expect(pagamentos.first.cedente_com_dv).to eql('000289353')
+    expect(pagamentos.first.convenio).to eql('1622420')
+    expect(pagamentos.first.data_liquidacao).to eql('200109')
+    expect(pagamentos.first.data_credito).to eql('220109')
+    expect(pagamentos.first.valor_recebido).to eql('0000000009064')
+    expect(pagamentos.first.nosso_numero).to eql('16224200000000003')
   end
 
   # it "Transforma arquivo de retorno em objetos de retorno excluindo a primeira linha com a opção :except em regex e :length" do
