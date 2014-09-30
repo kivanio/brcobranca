@@ -1,0 +1,13 @@
+require: rubocop-rspec
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/LineLength:
+  Enabled: false
