@@ -21,11 +21,6 @@ Gem::Specification.new do |gem|
 
   gem.requirements = ["GhostScript > 9.0, para gear PDF e código de Barras"]
 
-  # Gems that must be installed for sift to compile and build
-  gem.add_development_dependency 'pry', '~> 0.10.0'
-  gem.add_development_dependency 'rspec', '~> 3.0.0'
-  gem.add_development_dependency 'rake'
-
   # Gems that must be intalled for sift to work
   gem.add_dependency 'rghost', '0.9.5'
   gem.add_dependency 'rghost_barcode', '~> 0.9'
