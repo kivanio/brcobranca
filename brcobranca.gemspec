@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.platform    = Gem::Platform::RUBY
   gem.authors = ["Kivanio Barbosa"]
   gem.date = %q{2013-06-17}
-  gem.description = %q{Gem para emissão de bloquetos de cobrança de bancos brasileiros.}
-  gem.summary = %q{Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.}
+  gem.description = %q{Gem para emissao de bloquetos de cobranca de bancos brasileiros.}
+  gem.summary = %q{Gem que permite trabalhar com bloquetos de cobranca para bancos brasileiros.}
   gem.email = %q{kivanio@gmail.com}
   gem.homepage = %q{http://rubygems.org/gems/brcobranca}
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.requirements = ["GhostScript > 9.0, para gear PDF e código de Barras"]
+  gem.requirements = ["GhostScript > 9.0, para gear PDF e codigo de Barras"]
 
   # Gems that must be installed for sift to compile and build
   gem.add_development_dependency 'pry', '~> 0.10.0'
