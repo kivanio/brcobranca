@@ -1,11 +1,17 @@
 language: ruby
 rvm:
-  - '2.1.1'
+  - '2.1.3'
   - '2.0.0'
   - '1.9.3'
+  - 'jruby'
+  - 'rbx'
 branches:
   only:
     - master
 addons:
   code_climate:
     repo_token: 69a23bee43b8c53271b1a6fbe18b6167de91a06d66ab19908dd52f73158ab71b
+matrix:
+  allow_failures:
+    - rvm: jruby
+    - rvm: rbx

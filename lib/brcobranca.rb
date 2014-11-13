@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.join(File.dirname(__FILE__))
+$LOAD_PATH.push File.join(File.dirname(__FILE__))
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
@@ -18,10 +18,9 @@ begin
   require 'active_model'
 rescue LoadError
   require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'active_model', ">= 3.0.0"
+  gem 'active_model', '>= 3.0.0'
   require 'active_model'
 end
-
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
@@ -34,7 +33,6 @@ module Brcobranca
   #   rescue Brcobranca::BoletoInvalido => invalido
   #   puts invalido.errors
   class BoletoInvalido < StandardError
-
     # Atribui o objeto boleto e pega seus erros de validação
     def initialize(boleto)
       errors = boleto.errors.full_messages.join(', ')
@@ -120,4 +118,3 @@ module Brcobranca
     autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400'
   end
 end
-

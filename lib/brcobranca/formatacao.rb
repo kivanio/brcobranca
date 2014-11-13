@@ -9,7 +9,7 @@ module Brcobranca
     # @example
     #  "12345678901".to_br_cpf #=> 123.456.789-01
     def to_br_cpf
-      somente_numeros.gsub(/^(.{3})(.{3})(.{3})(.{2})$/,'\1.\2.\3-\4')
+      somente_numeros.gsub(/^(.{3})(.{3})(.{3})(.{2})$/, '\1.\2.\3-\4')
     end
 
     # Formata como CEP
@@ -19,7 +19,7 @@ module Brcobranca
     #   "85253100".to_br_cep #=> "85253-100"
     #   85253100.to_br_cep #=> "85253-100"
     def to_br_cep
-      somente_numeros.gsub(/^(.{5})(.{3})$/,'\1-\2')
+      somente_numeros.gsub(/^(.{5})(.{3})$/, '\1-\2')
     end
 
     # Formata como CNPJ
@@ -28,7 +28,7 @@ module Brcobranca
     # @example
     #  "12345678000901".to_br_cnpj #=> 12.345.678/0009-01
     def to_br_cnpj
-      somente_numeros.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/,'\1.\2.\3/\4-\5')
+      somente_numeros.gsub(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/, '\1.\2.\3/\4-\5')
     end
 
     # Gera formatação automática do documento baseado no tamanho do campo.
@@ -55,7 +55,7 @@ module Brcobranca
     # @example
     #   1a23e45+".somente_numeros #=> 12345
     def somente_numeros
-      to_s.gsub(/\D/,'')
+      to_s.gsub(/\D/, '')
     end
 
     # Monta a linha digitável padrão para todos os bancos segundo a BACEN.
@@ -80,23 +80,23 @@ module Brcobranca
     #  "00192376900000135000000001238798777770016818".linha_digitavel #=> "00190.00009 01238.798779 77700.168188 2 37690000013500"
     def linha_digitavel
       if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
-        linha = $1
-        linha << $4
+        linha = Regexp.last_match[1]
+        linha << Regexp.last_match[4]
         linha << linha.modulo10.to_s
-        linha << $5
-        linha << $5.modulo10.to_s
-        linha << $6
-        linha << $6.modulo10.to_s
-        linha << $2
-        linha << $3
-        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/,'\1.\2 \3.\4 \5.\6 \7 \8')
+        linha << Regexp.last_match[5]
+        linha << Regexp.last_match[5].modulo10.to_s
+        linha << Regexp.last_match[6]
+        linha << Regexp.last_match[6].modulo10.to_s
+        linha << Regexp.last_match[2]
+        linha << Regexp.last_match[3]
+        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/, '\1.\2 \3.\4 \5.\6 \7 \8')
       else
-        raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
+        fail ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
     end
   end
 end
 
-[ String, Numeric ].each do |klass|
+[String, Numeric].each do |klass|
   klass.class_eval { include Brcobranca::Formatacao }
 end

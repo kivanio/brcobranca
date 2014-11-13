@@ -7,7 +7,6 @@ module Brcobranca
         extend self
 
         def define_template(template)
-
           case template
           when :rghost
             return Brcobranca::Boleto::Template::Rghost
@@ -16,7 +15,6 @@ module Brcobranca
           else
             return Brcobranca::Boleto::Template::Rghost
           end
-
         end
       end
     end
