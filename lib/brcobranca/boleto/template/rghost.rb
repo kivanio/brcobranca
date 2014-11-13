@@ -219,6 +219,11 @@ module Brcobranca
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
           doc.moveto x: '1.2 cm', y: '8.4 cm'
           doc.show "#{boleto.sacado_endereco}"
+
+          if boleto.avalista && boleto.avalista_documento
+            doc.moveto x: '2.4 cm', y: '7.47 cm'
+            doc.show "#{boleto.avalista} - #{boleto.avalista_documento}"
+          end
           # FIM Segunda parte do BOLETO
         end
       end # Base
