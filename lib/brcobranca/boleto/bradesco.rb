@@ -45,6 +45,10 @@ module Brcobranca
         "#{carteira}/#{numero_documento}-#{nosso_numero_dv}"
       end
 
+      def nosso_numero_dv
+        "#{carteira}#{numero_documento}".modulo11_bradesco
+      end
+
       # Agência + conta corrente do cliente para exibir no boleto.
       # @return [String]
       # @example

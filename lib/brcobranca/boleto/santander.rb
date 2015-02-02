@@ -51,7 +51,7 @@ module Brcobranca
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
         nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
-        nosso_numero.modulo11_2to9_santander
+        nosso_numero.modulo11_santander
       end
 
       # Nosso número para exibir no boleto.
