@@ -11,7 +11,7 @@ describe Brcobranca::Boleto::Bradesco do
       aceite: 'S',
       quantidade: 1,
       valor: 0.0,
-      local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO',
+      local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
       sacado: 'Claudio Pozzebom',
@@ -36,7 +36,7 @@ describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
+    expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.carteira).to eql('06')
 
   end
@@ -54,7 +54,7 @@ describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
+    expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
     expect(boleto_novo.sacado).to eql('Claudio Pozzebom')
