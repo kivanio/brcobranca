@@ -75,6 +75,8 @@ module Brcobranca
       attr_accessor :avalista
       # <b>OPCIONAL</b>: Documento do avalista
       attr_accessor :avalista_documento
+      # <b>OPCIONAL</b>: Endereço da pessoa que envia o boleto
+      attr_accessor :cedente_endereco
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, message: 'não pode estar em branco.'
