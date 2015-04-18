@@ -56,6 +56,7 @@ module Brcobranca
           parse.field :valor_titulo, 81..95
           parse.field :banco_recebedor, 96..98
           parse.field :agencia_recebedora_com_dv, 99..104
+          parse.field :data_ocorrencia, 137..144
           parse.field :data_credito, 145..152
           parse.field :outras_despesas, 107..121
           parse.field :iof_desconto, 62..76
