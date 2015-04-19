@@ -28,8 +28,6 @@ module Brcobranca
           carteira: "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}"
         }.merge!(campos)
 
-        campos.merge!(convenio: campos[:convenio].rjust(6, '0')) if campos[:convenio]
-        campos.merge!(numero_documento: campos[:numero_documento].rjust(15, '0')) if campos[:numero_documento]
         campos.merge!(local_pagamento: 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
 
         super(campos)
@@ -46,6 +44,18 @@ module Brcobranca
       # @return [String]
       def banco_dv
         '0'
+      end
+      
+      # Número do convênio/contrato do cliente junto ao banco.
+      # @return [String] 6 caracteres numéricos.
+      def convenio=(valor)
+        @convenio = valor.to_s.rjust(6, '0') if valor
+      end
+
+      # Número seqüencial utilizado para identificar o boleto.
+      # @return [String] 15 caracteres numéricos.
+      def numero_documento=(valor)
+        @numero_documento = valor.to_s.rjust(15, '0') if valor
       end
 
       # Nosso número, 17 dígitos
