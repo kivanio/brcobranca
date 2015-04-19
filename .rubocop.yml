@@ -9,5 +9,5 @@ Style/CommentAnnotation:
 Style/Documentation:
   Enabled: false
 
-Style/LineLength:
+Metrics/LineLength:
   Enabled: false
