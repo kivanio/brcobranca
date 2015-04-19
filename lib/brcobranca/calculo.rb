@@ -45,14 +45,14 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_santander
-      return 0 if self.to_i == 0
+      return 0 if to_i == 0
 
       somatorio = 0
       multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
-      base = "#{self.rjust(12, '0')}".reverse
+      base = "#{rjust(12, '0')}".reverse
       index = 0
 
-      base.each_char do |char|
+      base.each_char do |_char|
         somatorio += base[index].to_i * multiplicadores[index].to_i
         index += 1
       end
@@ -60,7 +60,7 @@ module Brcobranca
       resto = somatorio % 11
       return 1 if resto == 10
       return 0 if resto == 1 || resto == 0
-      return 11 - resto
+      11 - resto
     end
 
     # Calcula módulo 11 com multiplicadores de 2, 7 a 2, e 7 a 2 (Utilizado pelo Bradesco).
@@ -72,7 +72,7 @@ module Brcobranca
       multiplicadores = [2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
       index = 0
 
-      self.each_char do |char|
+      each_char do |_char|
         somatorio += self[index].to_i * multiplicadores[index]
         index += 1
       end
@@ -80,7 +80,7 @@ module Brcobranca
       resto = somatorio % 11
       return 0 if resto == 0
       return 'P' if resto == 1
-      return 11 - resto
+      11 - resto
     end
 
     # Calcula módulo 11 com multiplicaroes de 2 a 9 (Utilizado pela CAIXA - boletos SIGCB).

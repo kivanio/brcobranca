@@ -45,7 +45,7 @@ module Brcobranca
       def banco_dv
         '0'
       end
-      
+
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 6 caracteres numéricos.
       def convenio=(valor)
