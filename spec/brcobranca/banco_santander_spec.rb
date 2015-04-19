@@ -18,7 +18,8 @@ describe Brcobranca::Boleto::Santander do
       sacado_documento: '12345678900',
       agencia: '0059',
       convenio: 1_899_775,
-      numero_documento: '90000267'
+      numero_documento: '90000267',
+      conta_corrente: '013000123'
     }
   end
 
@@ -82,7 +83,7 @@ describe Brcobranca::Boleto::Santander do
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(2)
+    expect(boleto_novo.errors.count).to eql(3)
   end
 
   it 'Montar nosso_numero_dv' do
