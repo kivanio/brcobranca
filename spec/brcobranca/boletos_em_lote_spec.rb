@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe 'Muúltiplos boletos' do #:nodoc:[all]
-
   before(:each) do
     @valid_attributes = {
       especie_documento: 'DM',
@@ -42,5 +41,4 @@ describe 'Muúltiplos boletos' do #:nodoc:[all]
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
-
 end

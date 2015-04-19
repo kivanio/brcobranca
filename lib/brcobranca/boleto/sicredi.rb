@@ -86,9 +86,7 @@ module Brcobranca
       # Codigo referente ao tipo de carteira
       # @return [String]: 1 caractere numérico
       def tipo_carteira
-        if carteira == '03'
-          '1'
-        end
+        '1' if carteira == '03'
       end
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.

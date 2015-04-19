@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe 'RGhost' do
-
   before(:each) do
     @valid_attributes = {
       especie_documento: 'DM',
@@ -33,5 +32,4 @@ describe 'RGhost' do
     s = `#{RGhost::Config::GS[:path]} --version`
     expect(s).to match(/[8-9]\.[0-9]/)
   end
-
 end

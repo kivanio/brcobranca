@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
-
   before do
     @valid_attributes = {
       especie_documento: 'DM',
@@ -161,5 +160,4 @@ describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
-
 end

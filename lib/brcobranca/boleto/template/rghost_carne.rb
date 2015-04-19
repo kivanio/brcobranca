@@ -104,7 +104,7 @@ module Brcobranca
           modelo_carne_define_tags(doc)
 
           boletos.each_with_index do |boleto, index|
-            curr_page_position = curr_page_position + 1
+            curr_page_position += 1
 
             margin_bottom = initial_margin_bottom + (heigth_template * (max_per_page - curr_page_position)) # onde o boleto sera impresso na pagina A4
 
@@ -122,7 +122,6 @@ module Brcobranca
 
               curr_page_position = 0 # reinicia contador por página
             end
-
           end
 
           # Gerando stream

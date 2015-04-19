@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 describe Brcobranca::Retorno::RetornoCbr643 do
-
   before(:each) do
     @arquivo = File.join(File.dirname(__FILE__), '..', 'arquivos', 'CBR64310.RET')
   end
@@ -66,5 +65,4 @@ describe Brcobranca::Retorno::RetornoCbr643 do
   #   pagamentos.first.valor_recebido.should eql("0000000009064")
   #   pagamentos.first.nosso_numero.should eql("16224200000000003")
   # end
-
 end

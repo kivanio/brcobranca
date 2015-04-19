@@ -102,7 +102,6 @@ module Brcobranca
           fail 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           boletos.each_with_index do |boleto, index|
-
             modelo_generico_template(doc, boleto, template_path)
             modelo_generico_cabecalho(doc, boleto)
             modelo_generico_rodape(doc, boleto)
@@ -111,7 +110,6 @@ module Brcobranca
             doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: '0.7 cm', y: '5.8 cm') if boleto.codigo_barras
             # Cria nova página se não for o último boleto
             doc.next_page unless index == boletos.length - 1
-
           end
           # Gerando stream
           formato = (options.delete(:formato) || Brcobranca.configuration.formato)

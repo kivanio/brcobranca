@@ -38,7 +38,6 @@ describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.valor_documento).to eql(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.carteira).to eql('06')
-
   end
 
   it 'Criar nova instancia com atributos válidos' do
@@ -188,5 +187,4 @@ describe Brcobranca::Boleto::Bradesco do
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
-
 end

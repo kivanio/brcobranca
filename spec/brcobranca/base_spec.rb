@@ -179,7 +179,6 @@ module Brcobranca #:nodoc:[all]
         expect(boleto_novo.respond_to?(:lote)).to be_truthy
         expect(boleto_novo.respond_to?(:to)).to be_truthy
       end
-
     end
   end
 end

@@ -151,8 +151,8 @@ module Brcobranca
         fator = fatores[multiplicador_posicao]
         total += if block_given?
                    yield(caracter, fator)
-        else
-          (caracter.to_i * fator)
+                 else
+                   (caracter.to_i * fator)
         end
         multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
       end

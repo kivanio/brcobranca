@@ -243,5 +243,4 @@ describe Brcobranca::Boleto::Itau do
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
-
 end
