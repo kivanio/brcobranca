@@ -6,12 +6,11 @@ require 'brcobranca/version'
 Gem::Specification.new do |gem|
   gem.name        = 'brcobranca'
   gem.version     = Brcobranca::VERSION
-  gem.authors = ['Kivanio Barbosa']
-  gem.description = 'Gem para emissão de bloquetos de cobrança de bancos brasileiros.'
-  gem.summary = 'Gem que permite trabalhar com bloquetos de cobrança para bancos brasileiros.'
-  gem.email = 'kivanio@gmail.com'
-  gem.homepage = 'http://rubygems.org/gems/brcobranca'
-
+  gem.authors = ["Kivanio Barbosa"]
+  gem.description = %q{Gem para emissao de bloquetos de cobranca de bancos brasileiros.}
+  gem.summary = %q{Gem que permite trabalhar com bloquetos de cobranca para bancos brasileiros.}
+  gem.email = %q{kivanio@gmail.com}
+  gem.homepage = %q{http://rubygems.org/gems/brcobranca}
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})

@@ -11,7 +11,7 @@ describe Brcobranca::Boleto::Bradesco do
       aceite: 'S',
       quantidade: 1,
       valor: 0.0,
-      local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO',
+      local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
       sacado: 'Claudio Pozzebom',
@@ -36,7 +36,7 @@ describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
+    expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.carteira).to eql('06')
 
   end
@@ -54,7 +54,7 @@ describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
+    expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
     expect(boleto_novo.sacado).to eql('Claudio Pozzebom')
@@ -104,30 +104,30 @@ describe Brcobranca::Boleto::Bradesco do
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
 
-    boleto_novo.numero_documento = '4042'
+    boleto_novo.numero_documento = '00000000525'
     boleto_novo.carteira = '06'
-    expect(boleto_novo.nosso_numero_boleto).to eql('06/00000004042-8')
+    expect(boleto_novo.nosso_numero_boleto).to eql('06/00000000525-P')
+    expect(boleto_novo.nosso_numero_dv).to eql('P')
+
+    boleto_novo.numero_documento = '00000000001'
+    boleto_novo.carteira = '09'
+    expect(boleto_novo.nosso_numero_boleto).to eql('09/00000000001-1')
+    expect(boleto_novo.nosso_numero_dv).to eql(1)
+
+    boleto_novo.numero_documento = '00000000002'
+    boleto_novo.carteira = '19'
+    expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000002-8')
     expect(boleto_novo.nosso_numero_dv).to eql(8)
-    boleto_novo.numero_documento = '61900'
-    boleto_novo.carteira = '05'
-    expect(boleto_novo.nosso_numero_boleto).to eql('05/00000061900-0')
+
+    boleto_novo.numero_documento = 6
+    boleto_novo.carteira = '19'
+    expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000006-0')
     expect(boleto_novo.nosso_numero_dv).to eql(0)
-    boleto_novo.numero_documento = '0719'
-    boleto_novo.carteira = '07'
-    expect(boleto_novo.nosso_numero_boleto).to eql('07/00000000719-6')
-    expect(boleto_novo.nosso_numero_dv).to eql(6)
-    boleto_novo.numero_documento = 4042
-    boleto_novo.carteira = '06'
-    expect(boleto_novo.nosso_numero_boleto).to eql('06/00000004042-8')
-    expect(boleto_novo.nosso_numero_dv).to eql(8)
-    boleto_novo.numero_documento = 61_900
-    boleto_novo.carteira = '05'
-    expect(boleto_novo.nosso_numero_boleto).to eql('05/00000061900-0')
-    expect(boleto_novo.nosso_numero_dv).to eql(0)
-    boleto_novo.numero_documento = 719
-    boleto_novo.carteira = '07'
-    expect(boleto_novo.nosso_numero_boleto).to eql('07/00000000719-6')
-    expect(boleto_novo.nosso_numero_dv).to eql(6)
+
+    boleto_novo.numero_documento = '00000000001'
+    boleto_novo.carteira = '19'
+    expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000001-P')
+    expect(boleto_novo.nosso_numero_dv).to eql('P')
   end
 
   it 'Montar agencia_conta_boleto' do

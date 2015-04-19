@@ -50,8 +50,8 @@ module Brcobranca
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        nosso_numero = numero_documento.to_s.rjust(12, '0') unless numero_documento.nil?
-        nosso_numero.modulo11_2to9
+        nosso_numero = self.numero_documento.to_s.rjust(12,'0') unless self.numero_documento.nil?
+        nosso_numero.modulo11_santander
       end
 
       # Nosso número para exibir no boleto.
@@ -81,7 +81,7 @@ module Brcobranca
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "9#{convenio}00000#{numero_documento}0#{carteira}"
+        "9#{self.convenio}0000#{self.numero_documento}#{self.nosso_numero_dv}0#{self.carteira}"
       end
     end
   end

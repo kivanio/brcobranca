@@ -11,6 +11,9 @@ module Brcobranca
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = { carteira: '06' }.merge!(campos)
+
+        campos.merge!(local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
+
         super(campos)
       end
 
@@ -40,6 +43,10 @@ module Brcobranca
       #  boleto.nosso_numero_boleto #=> ""06/00000004042-8"
       def nosso_numero_boleto
         "#{carteira}/#{numero_documento}-#{nosso_numero_dv}"
+      end
+
+      def nosso_numero_dv
+        "#{carteira}#{numero_documento}".modulo11_bradesco
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.

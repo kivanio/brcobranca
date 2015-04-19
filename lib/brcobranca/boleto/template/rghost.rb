@@ -139,7 +139,7 @@ module Brcobranca
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :grande
           doc.moveto x: '7.5 cm', y: '23.85 cm'
           doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
-          doc.moveto x: '0.7 cm', y: '23 cm'
+          doc.moveto x: '0.7 cm', y: '23.0 cm'
           doc.show boleto.cedente
           doc.moveto x: '11 cm', y: '23 cm'
           doc.show boleto.agencia_conta_boleto
@@ -177,8 +177,10 @@ module Brcobranca
           doc.show boleto.local_pagamento
           doc.moveto x: '16.5 cm', y: '16 cm'
           doc.show boleto.data_vencimento.to_s_br if boleto.data_vencimento
-          doc.moveto x: '0.7 cm', y: '15.2 cm'
+          doc.moveto x: '1.9 cm', y: '15.5 cm'
           doc.show boleto.cedente
+          doc.moveto x: '0.7 cm', y: '15.2 cm'
+          doc.show boleto.cedente_endereco
           doc.moveto x: '16.5 cm', y: '15.2 cm'
           doc.show boleto.agencia_conta_boleto
           doc.moveto x: '0.7 cm', y: '14.4 cm'
@@ -197,8 +199,8 @@ module Brcobranca
           doc.show boleto.carteira
           doc.moveto x: '6.4 cm', y: '13.5 cm'
           doc.show boleto.especie
-          doc.moveto x: '8 cm', y: '13.5 cm'
-          doc.show boleto.quantidade
+          # doc.moveto x: '8 cm', y: '13.5 cm'
+          # doc.show boleto.quantidade
           # doc.moveto :x => '11 cm' , :y => '13.5 cm'
           # doc.show boleto.valor.to_currency
           doc.moveto x: '16.5 cm', y: '13.5 cm'
@@ -216,9 +218,14 @@ module Brcobranca
           doc.moveto x: '0.7 cm', y: '10.7 cm'
           doc.show boleto.instrucao6
           doc.moveto x: '1.2 cm', y: '8.8 cm'
-          doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
+          doc.show "#{boleto.sacado} - CNPJ/CNPJ: #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
           doc.moveto x: '1.2 cm', y: '8.4 cm'
           doc.show "#{boleto.sacado_endereco}"
+
+          if boleto.avalista && boleto.avalista_documento
+            doc.moveto x: '2.4 cm', y: '7.47 cm'
+            doc.show "#{boleto.avalista} - #{boleto.avalista_documento}"
+          end
           # FIM Segunda parte do BOLETO
         end
       end # Base
