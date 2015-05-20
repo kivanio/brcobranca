@@ -108,7 +108,7 @@ module Brcobranca
       # Dígito verificador do banco
       # @return [Integer] 1 caracteres numéricos.
       def banco_dv
-        banco.modulo11_9to2
+        banco.modulo11
       end
 
       # Código da agencia
@@ -120,19 +120,19 @@ module Brcobranca
       # Dígito verificador da agência
       # @return [Integer] 1 caracteres numéricos.
       def agencia_dv
-        agencia.modulo11_9to2
+        agencia.modulo11
       end
 
       # Dígito verificador da conta corrente
       # @return [Integer] 1 caracteres numéricos.
       def conta_corrente_dv
-        conta_corrente.modulo11_9to2
+        conta_corrente.modulo11
       end
 
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        numero_documento.modulo11_9to2
+        numero_documento.modulo11
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.
@@ -191,7 +191,12 @@ module Brcobranca
         codigo = codigo_barras_primeira_parte # 18 digitos
         codigo << codigo_barras_segunda_parte # 25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
-          codigo_dv = codigo.modulo11_2to9
+
+          codigo_dv = codigo.modulo11(
+            multiplicador: (2..9).to_a,
+            mapeamento: {0 => 1, 10 => 1, 11 => 1}
+          ) { |t| 11 - (t % 11) }
+
           codigo = "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
           codigo
         else

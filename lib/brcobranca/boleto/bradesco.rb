@@ -46,7 +46,10 @@ module Brcobranca
       end
 
       def nosso_numero_dv
-        "#{carteira}#{numero_documento}".modulo11_bradesco
+        "#{carteira}#{numero_documento}".modulo11(
+          multiplicador: [2, 3, 4, 5, 6, 7],
+          mapeamento: {10 => 'P', 11 => 0}
+        ) { |total| 11 - (total % 11) }
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
