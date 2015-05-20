@@ -105,7 +105,7 @@ module Brcobranca
       # Segunda parte do código de barras.
       def codigo_barras_segunda_parte
         campo_livre = "#{tipo_cobranca}#{tipo_carteira}#{nosso_numero_boleto.gsub(/\D/, '')}#{agencia_posto_conta}10"
-        campo_livre + campo_livre.modulo11(mapeamento: {10 => 0}).to_s
+        campo_livre + campo_livre.modulo11(mapeamento: { 10 => 0 }).to_s
       end
     end
   end

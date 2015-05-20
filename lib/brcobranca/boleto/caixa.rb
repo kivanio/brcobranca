@@ -72,7 +72,7 @@ module Brcobranca
       def nosso_numero_dv
         "#{carteira}#{numero_documento}".modulo11(
           multiplicador: (2..9).to_a,
-          mapeamento: {10 => 0, 11 => 0}
+          mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s
       end
 
@@ -89,7 +89,7 @@ module Brcobranca
       def convenio_dv
         convenio.modulo11(
           multiplicador: (2..9).to_a,
-          mapeamento: {10 => 0, 11 => 0}
+          mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s
       end
 
@@ -113,10 +113,10 @@ module Brcobranca
         "#{nosso_numero_boleto[8..16]}"
 
         "#{campo_livre}" +
-        campo_livre.modulo11(
-          multiplicador: (2..9).to_a,
-          mapeamento: {10 => 0, 11 => 0}
-        ) { |total| 11 - (total % 11) }.to_s
+          campo_livre.modulo11(
+            multiplicador: (2..9).to_a,
+            mapeamento: { 10 => 0, 11 => 0 }
+          ) { |total| 11 - (total % 11) }.to_s
       end
     end
   end

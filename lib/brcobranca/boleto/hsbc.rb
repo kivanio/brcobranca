@@ -50,9 +50,9 @@ module Brcobranca
               ano = data_vencimento.year.to_s[2..3]
               data = "#{dia}#{mes}#{ano}"
 
-              parte_1 = "#{numero_documento}#{numero_documento.modulo11(mapeamento: {10 => 0})}#{codigo_servico}"
+              parte_1 = "#{numero_documento}#{numero_documento.modulo11(mapeamento: { 10 => 0 })}#{codigo_servico}"
               soma = parte_1.to_i + conta_corrente.to_i + data.to_i
-              "#{parte_1}#{soma.to_s.modulo11(mapeamento: {10 => 0})}"
+              "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
             else
               fail 'data_vencimento não é uma data.'
             end
@@ -62,9 +62,9 @@ module Brcobranca
             fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
           # TODO - Verificar outras carteiras.
           # self.codigo_servico = "5"
-          # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11(mapeamento: {10 => 0})}#{self.codigo_servico}"
+          # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11(mapeamento: { 10 => 0 })}#{self.codigo_servico}"
           # soma = parte_1.to_i + self.conta_corrente.to_i
-          # numero = "#{parte_1}#{soma.to_s.modulo11(mapeamento: {10 => 0})}"
+          # numero = "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
           # numero
         end
       end

@@ -57,7 +57,7 @@ module Brcobranca
         nosso_numero = numero_documento.to_s.rjust(12, '0') unless numero_documento.nil?
         nosso_numero.modulo11(
           multiplicador: (2..9).to_a,
-          mapeamento: {10 => 0, 11 => 0}
+          mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }
       end
 

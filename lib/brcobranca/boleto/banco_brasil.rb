@@ -52,14 +52,14 @@ module Brcobranca
       #
       # @return [String] 1 caracteres numéricos.
       def banco_dv
-        banco.modulo11(mapeamento: {10 => 'X'})
+        banco.modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Retorna dígito verificador da agência
       #
       # @return [String] 1 caracteres numéricos.
       def agencia_dv
-        agencia.modulo11(mapeamento: {10 => 'X'})
+        agencia.modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Conta corrente
@@ -71,7 +71,7 @@ module Brcobranca
       # Dígito verificador da conta corrente
       # @return [String] 1 caracteres numéricos.
       def conta_corrente_dv
-        conta_corrente.modulo11(mapeamento: {10 => 'X'})
+        conta_corrente.modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -113,7 +113,7 @@ module Brcobranca
       # @return [String] 1 caracteres numéricos.
       # @see BancoBrasil#numero_documento
       def nosso_numero_dv
-        "#{convenio}#{numero_documento}".modulo11(mapeamento: {10 => 'X'})
+        "#{convenio}#{numero_documento}".modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Nosso número para exibir no boleto.

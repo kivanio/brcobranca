@@ -125,7 +125,7 @@ module Brcobranca
 
     describe 'Módulo 11 de 9 até 2 trocando 10 por X' do
       def modulo_11_de_9_ate_2_map_10_X(numero)
-        numero.modulo11(mapeamento: {10 => 'X'})
+        numero.modulo11(mapeamento: { 10 => 'X' })
       end
 
       it 'Calcula o resultado' do
@@ -154,7 +154,7 @@ module Brcobranca
       def modulo_11_de_2_ate_9(numero)
         numero.modulo11(
           multiplicador: (2..9).to_a,
-          mapeamento: {0 => 1, 10 => 1, 11 => 1}
+          mapeamento: { 0 => 1, 10 => 1, 11 => 1 }
         ) { |total| 11 - (total % 11) }
       end
 
@@ -179,7 +179,7 @@ module Brcobranca
       def modulo_11_de_2_ate_7_map_10_P_e_11_0(numero)
         numero.modulo11(
           multiplicador: [2, 3, 4, 5, 6, 7],
-          mapeamento: {10 => 'P', 11 => 0}
+          mapeamento: { 10 => 'P', 11 => 0 }
         ) { |total| 11 - (total % 11) }
       end
 
