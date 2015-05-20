@@ -22,7 +22,7 @@ module Brcobranca
       valor == 10 ? 0 : valor
     end
 
-    # Calcula o módulo 11 segundo a GACEN
+    # Calcula o módulo 11 segundo a BACEN
     #
     # @return [Integer]
     # @raise  [ArgumentError] Caso não seja um número inteiro.
