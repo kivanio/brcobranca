@@ -91,7 +91,7 @@ module Brcobranca
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        "#{agencia_posto_conta}#{numero_documento_with_byte_idt}".modulo11_9to2
+        "#{agencia_posto_conta}#{numero_documento_with_byte_idt}".modulo11
       end
 
       def agencia_conta_boleto
@@ -105,7 +105,7 @@ module Brcobranca
       # Segunda parte do código de barras.
       def codigo_barras_segunda_parte
         campo_livre = "#{tipo_cobranca}#{tipo_carteira}#{nosso_numero_boleto.gsub(/\D/, '')}#{agencia_posto_conta}10"
-        campo_livre + campo_livre.modulo11_9to2_10_como_zero.to_s
+        campo_livre + campo_livre.modulo11(mapeamento: { 10 => 0 }).to_s
       end
     end
   end
