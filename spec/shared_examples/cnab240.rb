@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 shared_examples_for 'cnab240' do
   let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
                                                        data_vencimento: Date.today,

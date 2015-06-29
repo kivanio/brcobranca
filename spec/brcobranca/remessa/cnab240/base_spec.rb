@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require 'spec_helper'
 
 describe Brcobranca::Remessa::Cnab240::Base do

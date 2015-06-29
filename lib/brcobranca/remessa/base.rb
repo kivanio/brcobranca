@@ -1,5 +1,4 @@
-# encoding: utf-8
-
+# -*- encoding: utf-8 -*-
 module Brcobranca
   module Remessa
     class Base
