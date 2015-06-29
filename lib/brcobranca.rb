@@ -3,6 +3,7 @@ $LOAD_PATH.push File.join(File.dirname(__FILE__))
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
+require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 
@@ -36,6 +37,19 @@ module Brcobranca
     # Atribui o objeto boleto e pega seus erros de validação
     def initialize(boleto)
       errors = boleto.errors.full_messages.join(', ')
+      super(errors)
+    end
+  end
+
+  # Exception lançada quando os dados informados para o arquivo remessa estão inválidos.
+  #
+  # Você pode usar assim na sua aplicação:
+  #   rescue Brcobranca::RemessaInvalida => invalido
+  #   puts invalido.errors
+  class RemessaInvalida < StandardError
+    # Atribui o objeto boleto e pega seus erros de validação
+    def initialize(remessa)
+      errors = remessa.errors.full_messages.join(', ')
       super(errors)
     end
   end
@@ -116,5 +130,23 @@ module Brcobranca
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
     autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
     autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400'
+  end
+
+  # Módulos para as classes que geram os arquivos remessa
+  module Remessa
+    autoload :Base,         'brcobranca/remessa/base'
+    autoload :Pagamento,    'brcobranca/remessa/pagamento'
+
+    module Cnab400
+      autoload :Base,      'brcobranca/remessa/cnab400/base'
+      autoload :Bradesco,  'brcobranca/remessa/cnab400/bradesco'
+      autoload :Itau,      'brcobranca/remessa/cnab400/itau'
+    end
+
+    module Cnab240
+      autoload :Base,         'brcobranca/remessa/cnab240/base'
+      autoload :Caixa,        'brcobranca/remessa/cnab240/caixa'
+      autoload :BancoBrasil,  'brcobranca/remessa/cnab240/banco_brasil'
+    end
   end
 end
