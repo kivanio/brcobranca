@@ -57,7 +57,10 @@ module Brcobranca
         end
 
         def digito_nosso_numero nosso_numero
-          "#{carteira}#{nosso_numero.to_s.rjust(11, '0')}".modulo11_bradesco
+          "#{carteira}#{nosso_numero.to_s.rjust(11, '0')}".modulo11(
+              multiplicador: [2, 3, 4, 5, 6, 7],
+              mapeamento: { 10 => 'P', 11 => 0 }
+          ) { |total| 11 - (total % 11) }
         end
 
         # Formata o endereco do sacado

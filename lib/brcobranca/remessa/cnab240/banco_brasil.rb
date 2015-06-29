@@ -40,13 +40,13 @@ module Brcobranca
         def digito_agencia
           # utilizando a agencia com 4 digitos
           # para calcular o digito
-          agencia.modulo11_9to2_10_como_x.to_s
+          agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
         end
 
         def digito_conta
           # utilizando a conta corrente com 5 digitos
           # para calcular o digito
-          conta_corrente.modulo11_9to2_10_como_x.to_s
+          conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
         end
 
         def codigo_convenio
@@ -105,7 +105,7 @@ module Brcobranca
           nosso_numero = nosso_numero.to_s.rjust(quantidade, '0')
 
           # calcula o digito do nosso numero (menos para quando nosso numero tiver 10 posicoes)
-          digito = "#{convenio}#{nosso_numero}".modulo11_9to2_10_como_x unless quantidade == 10
+          digito = "#{convenio}#{nosso_numero}".modulo11(mapeamento: { 10 => 'X' }) unless quantidade == 10
           "#{nosso_numero}#{digito}"
         end
 
