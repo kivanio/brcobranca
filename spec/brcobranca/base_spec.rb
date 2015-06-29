@@ -185,6 +185,11 @@ module Brcobranca #:nodoc:[all]
           boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '')
           expect{ boleto_novo.data_vencimento }.to raise_error(/data_documento não pode estar em branco/)
         end
+
+        it 'data_documento em string' do
+          boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '2015-06-15')
+          expect(boleto_novo.data_vencimento).to eql(Date.parse('2015-06-16'))
+        end
       end
     end
   end
