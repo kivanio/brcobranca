@@ -180,25 +180,25 @@ shared_examples_for 'cnab240' do
     it 'remessa deve conter os registros mais as quebras de linha' do
       remessa = objeto.gera_arquivo
 
-      expect(remessa.size).to eq 1450
+      expect(remessa.size).to eq 1445
       # quebras de linha
-      expect(remessa[240..241]).to eq '\n'
-      expect(remessa[482..483]).to eq '\n'
-      expect(remessa[724..725]).to eq '\n'
-      expect(remessa[966..967]).to eq '\n'
-      expect(remessa[1208..1209]).to eq '\n'
+      expect(remessa[240]).to eq "\n"
+      expect(remessa[481]).to eq "\n"
+      expect(remessa[722]).to eq "\n"
+      expect(remessa[963]).to eq "\n"
+      expect(remessa[1204]).to eq "\n"
     end
 
     it 'pode ser adicionado varios lotes' do
       objeto.pagamentos << pagamento
       remessa = objeto.gera_arquivo
-      lote1 = remessa[242..1207]
-      lote2 = remessa[1210..2175]
+      lote1 = remessa[241..1203]
+      lote2 = remessa[1205..2167]
 
       # 10 registros (2400) + 9 quebras de linha (18)
-      expect(remessa.size).to eq 2418
-      expect(lote1).to eq objeto.monta_lote(pagamento, 1).join('\n')
-      expect(lote2).to eq objeto.monta_lote(pagamento, 2).join('\n')
+      expect(remessa.size).to eq 2409
+      expect(lote1).to eq objeto.monta_lote(pagamento, 1).join("\n")
+      expect(lote2).to eq objeto.monta_lote(pagamento, 2).join("\n")
     end
   end
 end

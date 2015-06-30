@@ -32,7 +32,7 @@ module Brcobranca
           # data geracao          [6]        formato DDMMAA
           # complemento registro  [294]
           # num. sequencial       [6]        000001
-          "11REMESSA01COBRANCA       #{info_conta}#{empresa_mae.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
+          "11REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
         end
 
         # Trailer do arquivo remessa
@@ -72,7 +72,7 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
-          retorno = ret.join('\n')
+          retorno = ret.join("\n")
           retorno
         end
 

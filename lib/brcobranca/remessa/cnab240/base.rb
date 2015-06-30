@@ -79,7 +79,7 @@ module Brcobranca
           header_arquivo << '0'                                         # tipo de registro              1
           header_arquivo << ''.rjust(9, ' ')                            # uso exclusivo FEBRABAN        9
           header_arquivo << tipo_inscricao                              # tipo inscricao                1
-          header_arquivo << documento_cedente.rjust(14, '0')            # numero de inscricao           14
+          header_arquivo << documento_cedente.to_s.rjust(14, '0')       # numero de inscricao           14
           header_arquivo << codigo_convenio                             # codigo do convenio no banco   20
           header_arquivo << info_conta                                  # informacoes da conta          20
           header_arquivo << empresa_mae.format_size(30)                 # nome da empresa               30
@@ -115,13 +115,13 @@ module Brcobranca
           header_lote << versao_layout                            # num.versao layout    3
           header_lote << ' '                                      # uso exclusivo        1
           header_lote << tipo_inscricao                           # tipo de inscricao    1
-          header_lote << documento_cedente.rjust(15, '0')         # inscricao cedente    15
+          header_lote << documento_cedente.to_s.rjust(15, '0')    # inscricao cedente    15
           header_lote << convenio_lote                            # codigo do convenio   20
           header_lote << info_conta                               # informacoes conta    20
           header_lote << empresa_mae.ljust(30, ' ')               # nome empresa         30
           header_lote << mensagem_1.to_s.format_size(40)          # 1a mensagem          40
           header_lote << mensagem_2.to_s.format_size(40)          # 2a mensagem          40
-          header_lote << sequencial_remessa.rjust(8, '0')         # numero remessa       8
+          header_lote << sequencial_remessa.to_s.rjust(8, '0')    # numero remessa       8
           header_lote << data_geracao                             # data gravacao        8
           header_lote << ''.rjust(8, '0')                         # data do credito      8
           header_lote << ''.rjust(33, ' ')                        # complemento          33
@@ -149,7 +149,7 @@ module Brcobranca
           segmento_p << 'P'                                           # cod. segmento                         1
           segmento_p << ' '                                           # uso exclusivo                         1
           segmento_p << '01'                                          # cod. movimento remessa                2
-          segmento_p << agencia.rjust(5, '0')                         # agencia                               5
+          segmento_p << agencia.to_s.rjust(5, '0')                    # agencia                               5
           segmento_p << digito_agencia.to_s                           # dv agencia                            1
           segmento_p << complemento_p(pagamento)                      # informacoes da conta                  34
           segmento_p << codigo_carteira                               # codigo da carteira                    1
@@ -197,29 +197,29 @@ module Brcobranca
         # @return [String]
         #
         def monta_segmento_q(pagamento, nro_lote, sequencial)
-          segmento_q = ''                                             # CAMPO                                TAMANHO
-          segmento_q << cod_banco                                     # codigo banco                         3
-          segmento_q << nro_lote.to_s.rjust(4, '0')                   # lote de servico                      4
-          segmento_q << '3'                                           # tipo de registro                     1
-          segmento_q << sequencial.to_s.rjust(5, '0')                 # num. sequencial do registro no lote  5
-          segmento_q << 'Q'                                           # cod. segmento                        1
-          segmento_q << ' '                                           # uso exclusivo                        1
-          segmento_q << '01'                                          # cod. movimento remessa               2
-          segmento_q << pagamento.identificacao_sacado(1)             # tipo insc. sacado                    1
-          segmento_q << pagamento.documento_sacado.rjust(15, '0')     # documento sacado                     14
-          segmento_q << pagamento.nome_sacado.format_size(40)         # nome cliente                         40
-          segmento_q << pagamento.endereco_sacado.format_size(40)     # endereco cliente                     40
-          segmento_q << pagamento.bairro_sacado.format_size(15)       # bairro                               15
-          segmento_q << pagamento.cep_sacado[0..4]                    # cep                                  5
-          segmento_q << pagamento.cep_sacado[5..7]                    # sufixo cep                           3
-          segmento_q << pagamento.cidade_sacado.format_size(15)       # cidade                               15
-          segmento_q << pagamento.uf_sacado                           # uf                                   2
-          segmento_q << pagamento.identificacao_avalista(1)           # identificacao do sacador             1
-          segmento_q << pagamento.documento_avalista.rjust(15, '0')   # documento sacador                    15
-          segmento_q << pagamento.nome_avalista.format_size(40)       # nome avalista                         40
-          segmento_q << ''.rjust(3, '0')                              # cod. banco correspondente            3
-          segmento_q << ''.rjust(20, ' ')                             # nosso numero banco correspondente    20
-          segmento_q << ''.rjust(8, ' ')                              # uso exclusivo                        8
+          segmento_q = ''                                                 # CAMPO                                TAMANHO
+          segmento_q << cod_banco                                         # codigo banco                         3
+          segmento_q << nro_lote.to_s.rjust(4, '0')                       # lote de servico                      4
+          segmento_q << '3'                                               # tipo de registro                     1
+          segmento_q << sequencial.to_s.rjust(5, '0')                     # num. sequencial do registro no lote  5
+          segmento_q << 'Q'                                               # cod. segmento                        1
+          segmento_q << ' '                                               # uso exclusivo                        1
+          segmento_q << '01'                                              # cod. movimento remessa               2
+          segmento_q << pagamento.identificacao_sacado(1)                 # tipo insc. sacado                    1
+          segmento_q << pagamento.documento_sacado.to_s.rjust(15, '0')    # documento sacado                     14
+          segmento_q << pagamento.nome_sacado.format_size(40)             # nome cliente                         40
+          segmento_q << pagamento.endereco_sacado.format_size(40)         # endereco cliente                     40
+          segmento_q << pagamento.bairro_sacado.format_size(15)           # bairro                               15
+          segmento_q << pagamento.cep_sacado[0..4]                        # cep                                  5
+          segmento_q << pagamento.cep_sacado[5..7]                        # sufixo cep                           3
+          segmento_q << pagamento.cidade_sacado.format_size(15)           # cidade                               15
+          segmento_q << pagamento.uf_sacado                               # uf                                   2
+          segmento_q << pagamento.identificacao_avalista(1)               # identificacao do sacador             1
+          segmento_q << pagamento.documento_avalista.to_s.rjust(15, '0')  # documento sacador                    15
+          segmento_q << pagamento.nome_avalista.format_size(40)           # nome avalista                         40
+          segmento_q << ''.rjust(3, '0')                                  # cod. banco correspondente            3
+          segmento_q << ''.rjust(20, ' ')                                 # nosso numero banco correspondente    20
+          segmento_q << ''.rjust(8, ' ')                                  # uso exclusivo                        8
           segmento_q.upcase
         end
 
@@ -315,7 +315,7 @@ module Brcobranca
 
           arquivo << monta_trailer_arquivo(pagamentos.count, contador)
 
-          retorno = arquivo.join('\n')
+          retorno = arquivo.join("\n")
           retorno
         end
 
