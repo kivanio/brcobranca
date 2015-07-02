@@ -49,7 +49,7 @@ module Brcobranca
   class RemessaInvalida < StandardError
     # Atribui o objeto boleto e pega seus erros de validação
     def initialize(remessa)
-      errors = remessa.errors.full_messages.join(', ')
+      errors = remessa.errors.full_messages
       super(errors)
     end
   end

@@ -23,7 +23,7 @@ module Brcobranca
       # Validações do Rails 3
       include ActiveModel::Validations
 
-      validates_presence_of :pagamentos, :empresa_mae, :agencia, :conta_corrente, message: 'não pode estar em branco.'
+      validates_presence_of :empresa_mae, :agencia, :conta_corrente, message: 'não pode estar em branco.'
       validates_length_of :empresa_mae, maximum: 30, message: 'deve ser menor ou igual a 30 caracteres.'
 
       validates_each :pagamentos do |record, attr, value|
@@ -48,7 +48,7 @@ module Brcobranca
       # @param campos [Hash]
       #
       def initialize(campos = {})
-        campos = { aceite: 'N' }.merge!(campos)
+        campos = { aceite: 'N', pagamentos: [] }.merge!(campos)
         campos.each do |campo, valor|
           send "#{campo}=", valor
         end
