@@ -1,27 +1,11 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.push File.join(File.dirname(__FILE__))
+require 'active_model'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
 require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
-
-begin
-  require 'date'
-rescue LoadError
-  require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'date'
-  require 'date'
-end
-
-begin
-  require 'active_model'
-rescue LoadError
-  require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'active_model', '>= 3.0.0'
-  require 'active_model'
-end
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
