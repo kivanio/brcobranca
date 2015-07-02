@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Caixa < Brcobranca::Remessa::Cnab240::Base
-
         # digito da agencia
         attr_accessor :digito_agencia
         # versao do aplicativo da CAIXA
@@ -90,13 +89,13 @@ module Brcobranca
           "#{''.rjust(69, '0')}#{''.rjust(148, ' ')}"
         end
 
-        def complemento_p pagamento
+        def complemento_p(pagamento)
           # CAMPO                 TAMANHO
           # convenio              6
           # uso CAIXA             11
           # modalidade carteira   2
           # ident. titulo         15
-          "#{convenio.rjust(6, '0')}#{''.rjust(11, '0')}#{modalidade_carteira.to_s}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
+          "#{convenio.rjust(6, '0')}#{''.rjust(11, '0')}#{modalidade_carteira}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
         end
       end
     end

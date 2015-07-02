@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Bradesco < Brcobranca::Remessa::Cnab400::Base
-
         # codigo da empresa (informado pelo Bradesco no cadastramento)
         attr_accessor :codigo_empresa
 
@@ -56,10 +55,10 @@ module Brcobranca
           identificacao << digito_conta                  # digito da conta             [1]
         end
 
-        def digito_nosso_numero nosso_numero
+        def digito_nosso_numero(nosso_numero)
           "#{carteira}#{nosso_numero.to_s.rjust(11, '0')}".modulo11(
-              multiplicador: [2, 3, 4, 5, 6, 7],
-              mapeamento: { 10 => 'P', 11 => 0 }
+            multiplicador: [2, 3, 4, 5, 6, 7],
+            mapeamento: { 10 => 'P', 11 => 0 }
           ) { |total| 11 - (total % 11) }
         end
 
@@ -67,7 +66,7 @@ module Brcobranca
         # de acordo com os caracteres disponiveis (40)
         # concatenando o endereco, cidade e uf
         #
-        def formata_endereco_sacado pgto
+        def formata_endereco_sacado(pgto)
           ret = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}".ljust(40, ' ')
           return ret if ret.size == 40
           "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".ljust(40, ' ')

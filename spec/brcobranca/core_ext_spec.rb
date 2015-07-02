@@ -83,7 +83,7 @@ module Brcobranca
       expect { '2582fd81'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9]) }.to raise_error(ArgumentError)
     end
 
-    describe "módulo 11 de 9 até 2" do
+    describe 'módulo 11 de 9 até 2' do
       def modulo_11_de_9_ate_2(numero)
         numero.modulo11
       end
@@ -184,8 +184,8 @@ module Brcobranca
       end
 
       it 'Calcula o resultado' do
-        expect(modulo_11_de_2_ate_7_map_10_P_e_11_0 "19669").to eql('P')
-        expect(modulo_11_de_2_ate_7_map_10_P_e_11_0 "19694").to eql(0)
+        expect(modulo_11_de_2_ate_7_map_10_P_e_11_0 '19669').to eql('P')
+        expect(modulo_11_de_2_ate_7_map_10_P_e_11_0 '19694').to eql(0)
       end
     end
 

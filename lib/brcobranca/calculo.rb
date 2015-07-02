@@ -29,7 +29,7 @@ module Brcobranca
     # @param  [Hash] options Opções para o cálculo do módulo
     # @option options [Hash] :mapeamento Mapeamento do valor final. Ex: { 10 => "X" }. Padrão: {}
     # @option options [Array] :multiplicador Números a serem utilizados na multiplicação da direita para a esquerda. Padrão: [9 até 2]
-    def modulo11(options={}, &block )
+    def modulo11(options = {}, &_block)
       options[:mapeamento] ||= {}
       options[:multiplicador] ||= [9, 8, 7, 6, 5, 4, 3, 2]
 
@@ -55,13 +55,13 @@ module Brcobranca
     #  13 (1+3) #=> 4
     def soma_digitos
       total = case to_i
-      when (0..9)
-        self
-      else
-        numero = to_s
-        total = 0
-        0.upto(numero.size - 1) { |digito| total += numero[digito, 1].to_i }
-        total
+              when (0..9)
+                self
+              else
+                numero = to_s
+                total = 0
+                0.upto(numero.size - 1) { |digito| total += numero[digito, 1].to_i }
+                total
       end
       total.to_i
     end

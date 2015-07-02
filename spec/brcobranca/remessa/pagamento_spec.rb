@@ -2,16 +2,18 @@
 require 'spec_helper'
 
 describe Brcobranca::Remessa::Pagamento do
-  let(:pagamento) { subject.class.new(valor: 199.9,
-                                      data_vencimento: Date.parse('2015-06-25'),
-                                      nosso_numero: 123,
-                                      documento_sacado: '12345678901',
-                                      nome_sacado: 'nome',
-                                      endereco_sacado: 'endereco',
-                                      bairro_sacado: 'bairro',
-                                      cep_sacado: '12345678',
-                                      cidade_sacado: 'cidade',
-                                      uf_sacado: 'SP') }
+  let(:pagamento) do
+    subject.class.new(valor: 199.9,
+                      data_vencimento: Date.parse('2015-06-25'),
+                      nosso_numero: 123,
+                      documento_sacado: '12345678901',
+                      nome_sacado: 'nome',
+                      endereco_sacado: 'endereco',
+                      bairro_sacado: 'bairro',
+                      cep_sacado: '12345678',
+                      cidade_sacado: 'cidade',
+                      uf_sacado: 'SP')
+  end
 
   context 'validacoes' do
     it 'deve ser invalido se nao possuir nosso numero' do
@@ -110,7 +112,6 @@ describe Brcobranca::Remessa::Pagamento do
   end
 
   context 'formatacoes dos valores' do
-
     context 'formata data do desconto' do
       it 'formata data limite do desconto de acordo com o formato passado' do
         pagamento.data_desconto = Date.parse('2015-06-25')

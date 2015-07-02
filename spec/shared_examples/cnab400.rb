@@ -1,33 +1,35 @@
 # -*- encoding: utf-8 -*-
 shared_examples_for 'cnab400' do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
   let(:params) do
     if subject.class == Brcobranca::Remessa::Cnab400::Bradesco
-      {carteira: '01',
-       agencia: '12345',
-       conta_corrente: '1234567',
-       digito_conta: '1',
-       empresa_mae: 'asd',
-       sequencial_remessa: '1',
-       codigo_empresa: '123',
-       pagamentos: [pagamento]}
+      { carteira: '01',
+        agencia: '12345',
+        conta_corrente: '1234567',
+        digito_conta: '1',
+        empresa_mae: 'asd',
+        sequencial_remessa: '1',
+        codigo_empresa: '123',
+        pagamentos: [pagamento] }
     else
-      {carteira: '123',
-       agencia: '1234',
-       conta_corrente: '12345',
-       digito_conta: '1',
-       empresa_mae: 'asd',
-       documento_cedente: '12345678910',
-       pagamentos: [pagamento]}
+      { carteira: '123',
+        agencia: '1234',
+        conta_corrente: '12345',
+        digito_conta: '1',
+        empresa_mae: 'asd',
+        documento_cedente: '12345678910',
+        pagamentos: [pagamento] }
     end
   end
   let(:objeto) { subject.class.new(params) }

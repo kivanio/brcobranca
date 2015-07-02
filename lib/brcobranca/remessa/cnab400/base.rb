@@ -3,8 +3,7 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
-
-        validates_presence_of  :carteira, :digito_conta, message: 'não pode estar em branco.'
+        validates_presence_of :carteira, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         # Data da geracao do arquivo seguindo o padrao DDMMAA
@@ -42,7 +41,7 @@ module Brcobranca
         #
         # @return [String]
         #
-        def monta_trailer sequencial
+        def monta_trailer(sequencial)
           # CAMPO                   TAMANHO  VALOR
           # identificacao registro  [1]      9
           # complemento             [393]
@@ -54,7 +53,7 @@ module Brcobranca
         #
         # Este metodo deve ser sobrescrevido na classe do banco
         #
-        def monta_detalhe(pagamento, sequencial)
+        def monta_detalhe(_pagamento, _sequencial)
           fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
         end
 

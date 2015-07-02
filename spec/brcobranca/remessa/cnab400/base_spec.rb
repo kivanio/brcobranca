@@ -2,28 +2,31 @@
 require 'spec_helper'
 
 describe Brcobranca::Remessa::Cnab400::Base do
-
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {empresa_mae: 'teste',
-                  agencia: '123',
-                  conta_corrente: '1234',
-                  digito_conta: '1',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { empresa_mae: 'teste',
+      agencia: '123',
+      conta_corrente: '1234',
+      digito_conta: '1',
+      pagamentos: [pagamento] }
+  end
   let(:cnab400) { subject.class.new(params) }
 
   context 'validacoes dos campos' do
     context '@digito_conta' do
       it 'deve ser invalido se nao possuir um digito da conta corrente' do
-        objeto = subject.class.new(params.merge!({digito_conta: nil}))
+        objeto = subject.class.new(params.merge!(digito_conta: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Digito conta não pode estar em branco.')
       end

@@ -2,28 +2,32 @@
 require 'spec_helper'
 
 describe Brcobranca::Remessa::Cnab240::Base do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {empresa_mae: 'teste',
-                  agencia: '123',
-                  conta_corrente: '1234',
-                  documento_cedente: '12345678901',
-                  convenio: '123',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { empresa_mae: 'teste',
+      agencia: '123',
+      conta_corrente: '1234',
+      documento_cedente: '12345678901',
+      convenio: '123',
+      pagamentos: [pagamento] }
+  end
   let(:cnab240) { subject.class.new(params) }
 
   context 'validacoes' do
     context '@documento_cedente' do
       it 'deve ser invalido se nao possuir o documento do cedente' do
-        objeto = subject.class.new(params.merge!({documento_cedente: nil}))
+        objeto = subject.class.new(params.merge!(documento_cedente: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Documento cedente não pode estar em branco.')
       end
@@ -31,7 +35,7 @@ describe Brcobranca::Remessa::Cnab240::Base do
 
     context '@convenio' do
       it 'deve ser invalido se nao possuir o convenio' do
-        objeto = subject.class.new(params.merge!({convenio: nil}))
+        objeto = subject.class.new(params.merge!(convenio: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
       end

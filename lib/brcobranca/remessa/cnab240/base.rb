@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Base < Brcobranca::Remessa::Base
-
         # documento do cedente (CPF/CNPJ)
         attr_accessor :documento_cedente
         # convenio do cedente
@@ -39,7 +38,7 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = { codigo_carteira: '1',
-                     forma_cadastramento: '1'}.merge!(campos)
+                     forma_cadastramento: '1' }.merge!(campos)
           super(campos)
         end
 
@@ -104,7 +103,7 @@ module Brcobranca
         #
         # @return [String]
         #
-        def monta_header_lote nro_lote
+        def monta_header_lote(nro_lote)
           header_lote = ''                                        # CAMPO                TAMANHO
           header_lote << cod_banco                                # codigo banco         3
           header_lote << nro_lote.to_s.rjust(4, '0')              # lote servico         4
@@ -252,7 +251,7 @@ module Brcobranca
         #
         # @return [String]
         #
-        def monta_trailer_arquivo nro_lotes, sequencial
+        def monta_trailer_arquivo(nro_lotes, sequencial)
           # CAMPO                     TAMANHO
           # codigo banco              3
           # lote de servico           4
@@ -274,7 +273,7 @@ module Brcobranca
         #
         # @return [Array]
         #
-        def monta_lote pagamento, nro_lote
+        def monta_lote(pagamento, nro_lote)
           fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
 
           # contador dos registros do lote

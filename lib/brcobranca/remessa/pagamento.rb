@@ -2,7 +2,6 @@
 module Brcobranca
   module Remessa
     class Pagamento
-
       # Validações do Rails 3
       include ActiveModel::Validations
 
@@ -61,13 +60,13 @@ module Brcobranca
       #
       def initialize(campos = {})
         padrao = {
-            data_emissao: Date.today,
-            valor_mora: 0.0,
-            valor_desconto: 0.0,
-            valor_iof: 0.0,
-            valor_abatimento: 0.0,
-            nome_avalista: '',
-            cod_desconto: '0'
+          data_emissao: Date.today,
+          valor_mora: 0.0,
+          valor_desconto: 0.0,
+          valor_iof: 0.0,
+          valor_abatimento: 0.0,
+          nome_avalista: '',
+          cod_desconto: '0'
         }
 
         campos = padrao.merge!(campos)

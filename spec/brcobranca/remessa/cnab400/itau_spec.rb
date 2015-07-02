@@ -3,29 +3,33 @@ require 'spec_helper'
 require 'shared_examples/cnab400'
 
 describe Brcobranca::Remessa::Cnab400::Itau do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {carteira: '123',
-                  agencia: '1234',
-                  conta_corrente: '12345',
-                  digito_conta: '1',
-                  empresa_mae: 'asd',
-                  documento_cedente: '12345678910',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { carteira: '123',
+      agencia: '1234',
+      conta_corrente: '12345',
+      digito_conta: '1',
+      empresa_mae: 'asd',
+      documento_cedente: '12345678910',
+      pagamentos: [pagamento] }
+  end
   let(:itau_cnab400) { subject.class.new(params) }
 
   context 'validacoes dos campos' do
     context '@agencia' do
       it 'deve ser invalido se nao possuir uma agencia' do
-        object = subject.class.new(params.merge!({agencia: nil}))
+        object = subject.class.new(params.merge!(agencia: nil))
         expect(object.invalid?).to be true
         expect(object.errors.full_messages).to include('Agencia não pode estar em branco.')
       end
@@ -39,7 +43,7 @@ describe Brcobranca::Remessa::Cnab400::Itau do
 
     context '@conta_corrente' do
       it 'deve ser invalido se nao possuir uma conta corrente' do
-        object = subject.class.new(params.merge!({conta_corrente: nil}))
+        object = subject.class.new(params.merge!(conta_corrente: nil))
         expect(object.invalid?).to be true
         expect(object.errors.full_messages).to include('Conta corrente não pode estar em branco.')
       end
@@ -53,7 +57,7 @@ describe Brcobranca::Remessa::Cnab400::Itau do
 
     context '@carteira' do
       it 'deve ser invalido se nao possuir uma carteira' do
-        object = subject.class.new(params.merge!({carteira: nil}))
+        object = subject.class.new(params.merge!(carteira: nil))
         expect(object.invalid?).to be true
         expect(object.errors.full_messages).to include('Carteira não pode estar em branco.')
       end
@@ -67,7 +71,7 @@ describe Brcobranca::Remessa::Cnab400::Itau do
 
     context '@documento_cedente' do
       it 'deve ser invalido se nao possuir o documento cedente' do
-        object = subject.class.new(params.merge!({documento_cedente: nil}))
+        object = subject.class.new(params.merge!(documento_cedente: nil))
         expect(object.invalid?).to be true
         expect(object.errors.full_messages).to include('Documento cedente não pode estar em branco.')
       end

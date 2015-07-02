@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab240
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
-
         # variacao da carteira
         attr_accessor :variacao
         # identificacao da emissao do boleto (attr na classe base)
@@ -78,7 +77,7 @@ module Brcobranca
           ''.rjust(217, ' ')
         end
 
-        def complemento_p pagamento
+        def complemento_p(pagamento)
           # CAMPO                   TAMANHO
           # conta corrente          12
           # digito conta            1
@@ -91,16 +90,16 @@ module Brcobranca
         #
         # @return [String]
         #
-        def formata_nosso_numero nosso_numero
+        def formata_nosso_numero(nosso_numero)
           quantidade = case convenio.to_s.size
                          # convenio de 4 posicoes com nosso numero de 7
-                         when 4 then 7
+                       when 4 then 7
                          # convenio de 6 posicoes com nosso numero de 5
-                         when 6 then 5
+                       when 6 then 5
                          # convenio de 7 posicoes com nosso numero de 10
-                         when 7 then 10
-                         else
-                           fail Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
+                       when 7 then 10
+                       else
+                         fail Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
                        end
           nosso_numero = nosso_numero.to_s.rjust(quantidade, '0')
 
@@ -109,7 +108,7 @@ module Brcobranca
           "#{nosso_numero}#{digito}"
         end
 
-        def identificador_titulo nosso_numero
+        def identificador_titulo(nosso_numero)
           "#{convenio}#{formata_nosso_numero(nosso_numero)}".ljust(20, ' ')
         end
       end

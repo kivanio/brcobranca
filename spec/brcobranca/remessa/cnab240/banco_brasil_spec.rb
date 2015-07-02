@@ -3,30 +3,34 @@ require 'spec_helper'
 require 'shared_examples/cnab240'
 
 describe Brcobranca::Remessa::Cnab240::BancoBrasil do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {empresa_mae: 'teste',
-                  agencia: '1234',
-                  conta_corrente: '12345',
-                  documento_cedente: '12345678901',
-                  convenio: '1234567',
-                  carteira: '12',
-                  variacao: '123',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { empresa_mae: 'teste',
+      agencia: '1234',
+      conta_corrente: '12345',
+      documento_cedente: '12345678901',
+      convenio: '1234567',
+      carteira: '12',
+      variacao: '123',
+      pagamentos: [pagamento] }
+  end
   let(:banco_brasil) { subject.class.new(params) }
 
   context 'validacoes' do
     context '@carteira' do
       it 'deve ser invalido se nao possuir a carteira' do
-        objeto = subject.class.new(params.merge!({carteira: nil}))
+        objeto = subject.class.new(params.merge!(carteira: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Carteira não pode estar em branco.')
       end
@@ -40,7 +44,7 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
 
     context '@variacao' do
       it 'deve ser invalido se nao possuir a variacao da carteira' do
-        objeto = subject.class.new(params.merge!({variacao: nil}))
+        objeto = subject.class.new(params.merge!(variacao: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Variacao não pode estar em branco.')
       end

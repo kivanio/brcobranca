@@ -3,30 +3,34 @@ require 'spec_helper'
 require 'shared_examples/cnab240'
 
 describe Brcobranca::Remessa::Cnab240::Caixa do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {empresa_mae: 'teste',
-                  agencia: '12345',
-                  conta_corrente: '1234',
-                  documento_cedente: '12345678901',
-                  convenio: '123456',
-                  versao_aplicativo: '1234',
-                  digito_agencia: '1',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { empresa_mae: 'teste',
+      agencia: '12345',
+      conta_corrente: '1234',
+      documento_cedente: '12345678901',
+      convenio: '123456',
+      versao_aplicativo: '1234',
+      digito_agencia: '1',
+      pagamentos: [pagamento] }
+  end
   let(:caixa) { subject.class.new(params) }
 
   context 'validacoes' do
     context '@versao_aplicativo' do
       it 'deve ser invalido se nao possuir a versao do aplicativo' do
-        objeto = subject.class.new(params.merge!({versao_aplicativo: nil}))
+        objeto = subject.class.new(params.merge!(versao_aplicativo: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Versao aplicativo não pode estar em branco.')
       end
@@ -40,7 +44,7 @@ describe Brcobranca::Remessa::Cnab240::Caixa do
 
     context '@digito_agencia' do
       it 'deve ser invalido se nao possuir o digito da agencia' do
-        objeto = subject.class.new(params.merge!({digito_agencia: nil}))
+        objeto = subject.class.new(params.merge!(digito_agencia: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Digito agencia não pode estar em branco.')
       end

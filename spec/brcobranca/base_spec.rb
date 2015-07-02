@@ -183,7 +183,7 @@ module Brcobranca #:nodoc:[all]
       context 'Validações' do
         it 'data_documento em branco' do
           boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '')
-          expect{ boleto_novo.data_vencimento }.to raise_error(/Data Documento não pode estar em branco/)
+          expect { boleto_novo.data_vencimento }.to raise_error(/Data Documento não pode estar em branco/)
         end
 
         it 'data_documento em string' do

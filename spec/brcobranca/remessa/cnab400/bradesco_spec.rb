@@ -3,30 +3,34 @@ require 'spec_helper'
 require 'shared_examples/cnab400'
 
 describe Brcobranca::Remessa::Cnab400::Bradesco do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {carteira: '01',
-                  agencia: '12345',
-                  conta_corrente: '1234567',
-                  digito_conta: '1',
-                  empresa_mae: 'asd',
-                  sequencial_remessa: '1',
-                  codigo_empresa: '123',
-                  pagamentos: [pagamento]} }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP')
+  end
+  let(:params) do
+    { carteira: '01',
+      agencia: '12345',
+      conta_corrente: '1234567',
+      digito_conta: '1',
+      empresa_mae: 'asd',
+      sequencial_remessa: '1',
+      codigo_empresa: '123',
+      pagamentos: [pagamento] }
+  end
   let(:bradesco_cnab400) { subject.class.new(params) }
 
   context 'validacoes dos campos' do
     context '@agencia' do
       it 'deve ser invalido se nao possuir uma agencia' do
-        objeto = subject.class.new(params.merge!({agencia: nil}))
+        objeto = subject.class.new(params.merge!(agencia: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Agencia não pode estar em branco.')
       end
@@ -40,7 +44,7 @@ describe Brcobranca::Remessa::Cnab400::Bradesco do
 
     context '@conta_corrente' do
       it 'deve ser invalido se nao possuir uma conta corrente' do
-        objeto = subject.class.new(params.merge!({conta_corrente: nil}))
+        objeto = subject.class.new(params.merge!(conta_corrente: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Conta corrente não pode estar em branco.')
       end
@@ -54,7 +58,7 @@ describe Brcobranca::Remessa::Cnab400::Bradesco do
 
     context '@carteira' do
       it 'deve ser invalido se nao possuir uma carteira' do
-        objeto = subject.class.new(params.merge!({carteira: nil}))
+        objeto = subject.class.new(params.merge!(carteira: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Carteira não pode estar em branco.')
       end
@@ -68,7 +72,7 @@ describe Brcobranca::Remessa::Cnab400::Bradesco do
 
     context '@sequencial_remessa' do
       it 'deve ser invalido se nao possuir um num. sequencial de remessa' do
-        objeto = subject.class.new(params.merge!({sequencial_remessa: nil}))
+        objeto = subject.class.new(params.merge!(sequencial_remessa: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Sequencial remessa não pode estar em branco.')
       end
@@ -82,7 +86,7 @@ describe Brcobranca::Remessa::Cnab400::Bradesco do
 
     context '@codigo_empresa' do
       it 'deve ser invalido se nao possuir um codigo da empresa' do
-        objeto = subject.class.new(params.merge!({codigo_empresa: nil}))
+        objeto = subject.class.new(params.merge!(codigo_empresa: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Codigo empresa não pode estar em branco.')
       end

@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Itau < Brcobranca::Remessa::Cnab400::Base
-
         # documento do cedente
         attr_accessor :documento_cedente
 
@@ -15,7 +14,7 @@ module Brcobranca
 
         # Nova instancia do Itau
         def initialize(campos = {})
-          campos = {aceite: 'N'}.merge!(campos)
+          campos = { aceite: 'N' }.merge!(campos)
           super(campos)
         end
 

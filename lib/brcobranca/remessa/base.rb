@@ -2,7 +2,6 @@
 module Brcobranca
   module Remessa
     class Base
-
       # pagamentos da remessa (cada pagamento representa um registro detalhe no arquivo)
       attr_accessor :pagamentos
       # empresa mae (razao social)
@@ -55,7 +54,6 @@ module Brcobranca
 
         yield self if block_given?
       end
-
     end
   end
 end

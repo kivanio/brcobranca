@@ -1,35 +1,37 @@
 # -*- encoding: utf-8 -*-
 shared_examples_for 'cnab240' do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP',
-                                                       valor_iof: 9.9,
-                                                       valor_abatimento: 24.35,
-                                                       documento_avalista: '12345678901',
-                                                       nome_avalista: 'avalista') }
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.today,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'nome',
+                                       endereco_sacado: 'endereco',
+                                       bairro_sacado: 'bairro',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'cidade',
+                                       uf_sacado: 'SP',
+                                       valor_iof: 9.9,
+                                       valor_abatimento: 24.35,
+                                       documento_avalista: '12345678901',
+                                       nome_avalista: 'avalista')
+  end
   let(:params) do
-    p = {empresa_mae: 'teste',
-         agencia: '1234',
-         conta_corrente: '12345',
-         documento_cedente: '12345678901',
-         convenio: '123456',
-         sequencial_remessa: '1',
-         mensagem_1: 'mensagem 1',
-         mensagem_2: 'mensagem 2',
-         pagamentos: [pagamento]}
-    if subject.class == Brcobranca::Remessa::Cnab240::Caixa then
-      p.merge!({versao_aplicativo: '1234',
-                digito_agencia: '1'})
+    p = { empresa_mae: 'teste',
+          agencia: '1234',
+          conta_corrente: '12345',
+          documento_cedente: '12345678901',
+          convenio: '123456',
+          sequencial_remessa: '1',
+          mensagem_1: 'mensagem 1',
+          mensagem_2: 'mensagem 2',
+          pagamentos: [pagamento] }
+    if subject.class == Brcobranca::Remessa::Cnab240::Caixa
+      p.merge!(versao_aplicativo: '1234',
+               digito_agencia: '1')
     else
-      p.merge!({carteira: '12',
-                variacao: '123'})
+      p.merge!(carteira: '12',
+               variacao: '123')
     end
   end
   let(:objeto) { subject.class.new(params) }
