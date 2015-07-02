@@ -156,8 +156,10 @@ module Brcobranca
       # @return [Date]
       # @raise [ArgumentError] Caso {#data_documento} esteja em branco.
       def data_vencimento
-        fail ArgumentError, 'data_documento não pode estar em branco.' unless data_documento
+        fail ArgumentError, 'Data Documento não pode estar em branco.' unless data_documento.present?
         return data_documento unless dias_vencimento
+
+        self.data_documento = Date.parse(data_documento) if data_documento.is_a?(String)
         (data_documento + dias_vencimento.to_i)
       end
 
