@@ -21,12 +21,6 @@ describe Brcobranca::Remessa::Base do
 
   context 'validacoes' do
     context '@pagamentos' do
-      it 'deve ser invalido se nao possuir ao menos um pagamento' do
-        objeto = subject.class.new(params.merge!({pagamentos: nil}))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Pagamentos não pode estar em branco.')
-      end
-
       it 'deve ser invalido se nao for uma colecao (array)' do
         objeto = subject.class.new(params.merge!({pagamentos: 'teste'}))
         expect(objeto.invalid?).to be true
