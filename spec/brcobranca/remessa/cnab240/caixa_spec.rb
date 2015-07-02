@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
-require 'shared_examples/cnab240'
 
-describe Brcobranca::Remessa::Cnab240::Caixa do
+RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
                                        data_vencimento: Date.today,

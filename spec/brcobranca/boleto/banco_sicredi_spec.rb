@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Boleto::Sicredi do
-  before(:each) do
+RSpec.describe Brcobranca::Boleto::Sicredi do
+  before do
     @valid_attributes = {
       especie_documento: 'A',
       moeda: '9',

@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Retorno::RetornoCbr643 do
-  before(:each) do
-    @arquivo = File.join(File.dirname(__FILE__), '..', 'arquivos', 'CBR64310.RET')
+RSpec.describe Brcobranca::Retorno::RetornoCbr643 do
+  before do
+    @arquivo = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'CBR64310.RET')
   end
 
   it 'Transforma arquivo de retorno em objetos de retorno' do

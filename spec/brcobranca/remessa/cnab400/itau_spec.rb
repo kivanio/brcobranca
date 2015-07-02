@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
-require 'shared_examples/cnab400'
 
-describe Brcobranca::Remessa::Cnab400::Itau do
+RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
                                        data_vencimento: Date.today,

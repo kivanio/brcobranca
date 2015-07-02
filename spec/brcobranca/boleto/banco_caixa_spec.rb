@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   before do
     @valid_attributes = {
       especie_documento: 'DM',

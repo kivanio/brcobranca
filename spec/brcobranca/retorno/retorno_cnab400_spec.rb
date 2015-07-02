@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Retorno::RetornoCnab400 do
-  before(:each) do
-    @arquivo = File.join(File.dirname(__FILE__), '..', 'arquivos', 'CNAB400.RET')
+RSpec.describe Brcobranca::Retorno::RetornoCnab400 do
+  before do
+    @arquivo = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'CNAB400.RET')
   end
 
   it 'Ignora primeira linha que é header' do

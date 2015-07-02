@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Remessa::Pagamento do
+RSpec.describe Brcobranca::Remessa::Pagamento do
   let(:pagamento) do
     subject.class.new(valor: 199.9,
                       data_vencimento: Date.parse('2015-06-25'),
