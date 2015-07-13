@@ -32,8 +32,12 @@ module Brcobranca
           'BANCO DO BRASIL S.A.'.ljust(30, ' ')
         end
 
-        def versao_layout
-          '000'
+        def versao_layout_arquivo
+          '083'
+        end
+
+        def versao_layout_lote
+          '042'
         end
 
         def digito_agencia

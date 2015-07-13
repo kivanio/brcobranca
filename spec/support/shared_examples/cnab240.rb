@@ -43,14 +43,14 @@ shared_examples_for 'cnab240' do
 
     it 'header arquivo deve ter as informacoes nas posicoes corretas' do
       header = objeto.monta_header_arquivo
-      expect(header[0..2]).to eq objeto.cod_banco            # cod. do banco
-      expect(header[17]).to eq '1'                           # tipo inscricao do cedente
-      expect(header[18..31]).to eq '00012345678901'          # documento do cedente
-      expect(header[32..51]).to eq objeto.codigo_convenio    # informacoes do convenio
-      expect(header[52..71]).to eq objeto.info_conta         # informacoes da conta
-      expect(header[72..101]).to eq 'TESTE'.ljust(30, ' ')   # razao social do cedente
-      expect(header[157..162]).to eq '000001'                # sequencial de remessa
-      expect(header[163..165]).to eq objeto.versao_layout    # versao do layout
+      expect(header[0..2]).to eq objeto.cod_banco                    # cod. do banco
+      expect(header[17]).to eq '1'                                   # tipo inscricao do cedente
+      expect(header[18..31]).to eq '00012345678901'                  # documento do cedente
+      expect(header[32..51]).to eq objeto.codigo_convenio            # informacoes do convenio
+      expect(header[52..71]).to eq objeto.info_conta                 # informacoes da conta
+      expect(header[72..101]).to eq 'TESTE'.ljust(30, ' ')           # razao social do cedente
+      expect(header[157..162]).to eq '000001'                        # sequencial de remessa
+      expect(header[163..165]).to eq objeto.versao_layout_arquivo    # versao do layout
     end
   end
 
@@ -63,7 +63,7 @@ shared_examples_for 'cnab240' do
       header = objeto.monta_header_lote 1
       expect(header[0..2]).to eq objeto.cod_banco                   # cod. do banco
       expect(header[3..6]).to eq '0001'                             # numero do lote
-      expect(header[13..15]).to eq objeto.versao_layout             # versao do layout
+      expect(header[13..15]).to eq objeto.versao_layout_lote        # versao do layout
       expect(header[17]).to eq '1'                                  # tipo inscricao do cedente
       expect(header[18..32]).to eq '000012345678901'                # documento do cedente
       expect(header[33..52]).to eq objeto.convenio_lote             # informacoes do convenio

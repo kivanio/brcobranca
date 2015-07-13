@@ -87,8 +87,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       expect(nome_banco[0..22]).to eq 'CAIXA ECONOMICA FEDERAL'
     end
 
-    it 'versao do layout deve retornar 050' do
-      expect(caixa.versao_layout).to eq '050'
+    it 'versao do layout do arquivo deve retornar 050' do
+      expect(caixa.versao_layout_arquivo).to eq '050'
+    end
+
+    it 'versao do layout do lote deve ser 040' do
+      expect(caixa.versao_layout_lote).to eq '030'
     end
 
     it 'codigo do convenio deve ser 20 zeros' do

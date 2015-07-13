@@ -59,8 +59,12 @@ module Brcobranca
           'CAIXA ECONOMICA FEDERAL'.ljust(30, ' ')
         end
 
-        def versao_layout
+        def versao_layout_arquivo
           '050'
+        end
+
+        def versao_layout_lote
+          '030'
         end
 
         def codigo_convenio
