@@ -20,7 +20,7 @@ module Brcobranca
         #
         def monta_header
           # CAMPO                 TAMANHO    VALOR
-          # tipo do registro      [1]        1
+          # tipo do registro      [1]        0
           # operacao              [1]        1
           # literal remessa       [7]        REMESSA
           # cod. servico          [15]       COBRANCA
@@ -31,7 +31,7 @@ module Brcobranca
           # data geracao          [6]        formato DDMMAA
           # complemento registro  [294]
           # num. sequencial       [6]        000001
-          "11REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
         end
 
         # Trailer do arquivo remessa
