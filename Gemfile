@@ -12,6 +12,7 @@ end
 group :test do
   gem 'codeclimate-test-reporter', require: nil
   gem 'coveralls', require: false
-  gem 'rspec', '~> 3.3'
-  gem 'rake', '~> 10.4'
+  gem 'rspec'
+  gem 'rake'
+  gem 'timecop'
 end
