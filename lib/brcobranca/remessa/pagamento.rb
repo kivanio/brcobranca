@@ -47,6 +47,12 @@ module Brcobranca
       attr_accessor :valor_iof
       # <b>OPCIONAL</b>: valor do abatimento
       attr_accessor :valor_abatimento
+      # <b>OPCIONAL</b>: Número do Documento de Cobrança - Número adotado e controlado pelo Cliente,
+      # para identificar o título de cobrança.
+      # Informação utilizada para referenciar a identificação do documento objeto de cobrança.
+      # Poderá conter número de duplicata, no caso de cobrança de duplicatas; número da apólice,
+      # no caso de cobrança de seguros, etc
+      attr_accessor :numero_documento
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
@@ -151,7 +157,7 @@ module Brcobranca
       # Se for juridica (CNPJ com 14 digitos) é 2
       #
       def identificacao_avalista(tamanho = 2)
-        return 0 if documento_avalista.nil?
+        return '0' if documento_avalista.nil?
         documento_avalista.size < 14 ? '1'.rjust(tamanho, '0') : '2'.rjust(tamanho, '0')
       end
     end

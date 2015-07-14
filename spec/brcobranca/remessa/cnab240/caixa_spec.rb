@@ -56,6 +56,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
     end
 
     context '@convenio' do
+      it 'deve ser invalido se nao possuir o convenio' do
+        objeto = subject.class.new(params.merge!(convenio: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
+      end
+
       it 'deve ser invalido se o convenio tiver mais de 6 digitos' do
         caixa.convenio = '1234567'
         expect(caixa.invalid?).to be true

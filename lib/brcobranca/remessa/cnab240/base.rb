@@ -29,8 +29,10 @@ module Brcobranca
         attr_accessor :distribuicao_boleto
         # especie do titulo (verificar o padrao nas classes referentes aos bancos)
         attr_accessor :especie_titulo
+        # tipo de documento (verificar o padrao nas classes referentes aos bancos)
+        attr_accessor :tipo_documento
 
-        validates_presence_of :documento_cedente, :convenio, message: 'não pode estar em branco.'
+        validates_presence_of :documento_cedente, message: 'não pode estar em branco.'
         validates_length_of :codigo_carteira, is: 1, message: 'deve ter 1 dígito.'
         validates_length_of :forma_cadastramento, is: 1, message: 'deve ter 1 dígito.'
         validates_length_of :emissao_boleto, is: 1, message: 'deve ter 1 dígito.'
@@ -38,7 +40,8 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = { codigo_carteira: '1',
-            forma_cadastramento: '1' }.merge!(campos)
+            forma_cadastramento: '1',
+            tipo_documento: ' '}.merge!(campos)
           super(campos)
         end
 
@@ -82,7 +85,7 @@ module Brcobranca
           header_arquivo << codigo_convenio # codigo do convenio no banco   20
           header_arquivo << info_conta # informacoes da conta          20
           header_arquivo << empresa_mae.format_size(30) # nome da empresa               30
-          header_arquivo << nome_banco # nome do banco                 30
+          header_arquivo << nome_banco.format_size(30) # nome do banco                 30
           header_arquivo << ''.rjust(10, ' ') # uso exclusivo FEBRABAN        10
           header_arquivo << '1' # codigo remessa                1
           header_arquivo << data_geracao # data geracao                  8
@@ -110,7 +113,7 @@ module Brcobranca
           header_lote << '1' # tipo de registro        1
           header_lote << 'R' # tipo de operacao        1
           header_lote << '01' # tipo de servico         2
-          header_lote << '00' # uso exclusivo           2
+          header_lote << '  ' # uso exclusivo           2
           header_lote << versao_layout_lote # num.versao layout lote  3
           header_lote << ' ' # uso exclusivo           1
           header_lote << tipo_inscricao # tipo de inscricao       1
@@ -153,11 +156,10 @@ module Brcobranca
           segmento_p << complemento_p(pagamento) # informacoes da conta                  34
           segmento_p << codigo_carteira # codigo da carteira                    1
           segmento_p << forma_cadastramento # forma de cadastro do titulo           1
-          segmento_p << '2' # tipo de documento                     1
+          segmento_p << tipo_documento # tipo de documento                     1
           segmento_p << emissao_boleto # identificaco emissao                  1
           segmento_p << distribuicao_boleto # indentificacao entrega                1
-          segmento_p << pagamento.nosso_numero.to_s.rjust(11, '0') # numro do documento                    11
-          segmento_p << ''.rjust(4, ' ') # uso exclusivo                         4
+          segmento_p << pagamento.numero_documento.to_s.rjust(15, '0') # uso exclusivo                         4
           segmento_p << pagamento.data_vencimento.strftime('%d%m%Y') # data de venc.                         8
           segmento_p << pagamento.formata_valor(15) # valor documento                       15
           segmento_p << ''.rjust(5, '0') # agencia cobradora                     5
@@ -280,13 +282,12 @@ module Brcobranca
           contador = 1
 
           lote = [monta_header_lote(nro_lote)]
-          contador += 1
 
           lote << monta_segmento_p(pagamento, nro_lote, contador)
           contador += 1
 
           lote << monta_segmento_q(pagamento, nro_lote, contador)
-          contador += 1
+          contador += 2 #header + trailer
 
           lote << monta_trailer_lote(nro_lote, contador)
 
@@ -300,22 +301,20 @@ module Brcobranca
         def gera_arquivo
           fail Brcobranca::RemessaInvalida.new(self) if self.invalid?
 
-          # contador dos registros do lote
+          # contador de do lotes
           contador = 1
 
           arquivo = [monta_header_arquivo]
-          contador += 1
 
-          pagamentos.each_with_index do |pagamento, index|
-            novo_lote = monta_lote(pagamento, (index + 1))
+          pagamentos.each do |pagamento|
+            novo_lote = monta_lote(pagamento, contador)
             arquivo.push novo_lote
-            novo_lote.each { |_lote| contador += 1 }
           end
 
-          arquivo << monta_trailer_arquivo(pagamentos.count, contador)
+          arquivo << monta_trailer_arquivo(contador, (arquivo.size + (pagamentos.size * 4)))
 
-          retorno = arquivo.join("\n")
-          retorno
+          remessa = arquivo.join("\n")
+          remessa
         end
 
         # Complemento do registro

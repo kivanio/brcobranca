@@ -33,14 +33,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
       end
     end
 
-    context '@convenio' do
-      it 'deve ser invalido se nao possuir o convenio' do
-        objeto = subject.class.new(params.merge!(convenio: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
-      end
-    end
-
     context '@codigo_carteira' do
       it 'valor padrao deve ser 1 (cobranca simples)' do
         expect(cnab240.codigo_carteira).to eq '1'
