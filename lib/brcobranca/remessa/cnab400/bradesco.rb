@@ -83,17 +83,17 @@ module Brcobranca
           detalhe << ''.rjust(1, '0')                                 # digito da conta corrente (op)               X[01]       020 a 020
           detalhe << identificacao_empresa                            # identficacao da empresa                     X[17]       021 a 037
           detalhe << ''.rjust(25, ' ')                                # num. controle                               X[25]       038 a 062
-          detalhe << cod_banco                                        # codigo do banco                             9[03]       063 a 065
+          detalhe << ''.rjust(3, '0')                                 # codigo do banco (debito automatico apenas)  9[03]       063 a 065
           detalhe << ''.rjust(1, '0')                                 # campo da multa                              9[01]       066 a 066 *
           detalhe << ''.rjust(4, '0')                                 # percentual multa                            9[04]       067 a 070 *
           detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')       # identificacao do titulo (nosso numero)      9[11]       071 a 081
-          detalhe << digito_nosso_numero(pagamento.nosso_numero)      # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
+          detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
           detalhe << ''.rjust(10, '0')                                # desconto por dia                            9[10]       083 a 092
           detalhe << '2'                                              # condicao emissao boleto (2 = cliente)       9[01]       093 a 093
           detalhe << 'N'                                              # emite boleto para debito                    X[01]       094 a 094
           detalhe << ''.rjust(10, ' ')                                # operacao no banco (brancos)                 X[10]       095 a 104
           detalhe << ' '                                              # indicador rateio                            X[01]       105 a 105
-          detalhe << ' '                                              # endereco para aviso debito (op)             9[01]       106 a 106
+          detalhe << '2'                                              # endereco para aviso debito (op 2 = ignora)  9[01]       106 a 106
           detalhe << ''.rjust(2, ' ')                                 # brancos                                     X[02]       107 a 108
           detalhe << '01'                                             # identif. da ocorrencia                      9[02]       109 a 110
           detalhe << pagamento.nosso_numero.to_s.rjust(10, ' ')       # numero do documento alfanum.                X[10]       111 a 120
