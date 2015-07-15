@@ -6,11 +6,13 @@ module Brcobranca
         # documento do cedente
         attr_accessor :documento_cedente
 
-        validates_presence_of :agencia, :conta_corrente, :documento_cedente, message: 'não pode estar em branco.'
+        validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
+        validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 5, message: 'deve ter 5 dígitos.'
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 3, message: 'deve ter no máximo 3 dígitos.'
+        validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         # Nova instancia do Itau
         def initialize(campos = {})

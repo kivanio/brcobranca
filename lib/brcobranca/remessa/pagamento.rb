@@ -53,6 +53,10 @@ module Brcobranca
       # Poderá conter número de duplicata, no caso de cobrança de duplicatas; número da apólice,
       # no caso de cobrança de seguros, etc
       attr_accessor :numero_documento
+      # <b>OPCIONAL</b>: data limite para o desconto
+      attr_accessor :data_segundo_desconto
+      # <b>OPCIONAL</b>: valor a ser concedido de desconto
+      attr_accessor :valor_segundo_desconto
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
@@ -69,6 +73,7 @@ module Brcobranca
           data_emissao: Date.today,
           valor_mora: 0.0,
           valor_desconto: 0.0,
+          valor_segundo_desconto: 0.0,
           valor_iof: 0.0,
           valor_abatimento: 0.0,
           nome_avalista: '',
@@ -89,6 +94,20 @@ module Brcobranca
       #
       def formata_data_desconto(formato = '%d%m%y')
         data_desconto.strftime(formato)
+      rescue
+        if formato == '%d%m%y'
+          '000000'
+        else
+          '00000000'
+        end
+      end
+
+      # Formata a data de segundo desconto de acordo com o formato passado
+      #
+      # @return [String]
+      #
+      def formata_data_segundo_desconto(formato = '%d%m%y')
+        data_segundo_desconto.strftime(formato)
       rescue
         if formato == '%d%m%y'
           '000000'
@@ -124,6 +143,15 @@ module Brcobranca
       #
       def formata_valor_desconto(tamanho = 13)
         sprintf('%.2f', valor_desconto).delete('.').rjust(tamanho, '0')
+      end
+
+      # Formata o campo valor do segundo desconto
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      def formata_valor_segundo_desconto(tamanho = 13)
+        sprintf('%.2f', valor_segundo_desconto).delete('.').rjust(tamanho, '0')
       end
 
       # Formata o campo valor do IOF
