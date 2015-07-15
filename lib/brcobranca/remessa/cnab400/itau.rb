@@ -61,15 +61,6 @@ module Brcobranca
           ''.rjust(294, ' ')
         end
 
-        # Tipo de empresa (fisica ou juridica)
-        # de acordo com o documento (CPF/CNPJ)
-        #
-        # @author Isabella Santos
-        #
-        def tipo_empresa
-          documento_cedente.size < 14 ? '01' : '02'
-        end
-
         # Codigo da carteira de acordo com a documentacao o Itau
         # se a carteira nao forem as testadas (150, 191 e 147)
         # retorna 'I' que é o codigo das carteiras restantes na documentacao
@@ -96,7 +87,7 @@ module Brcobranca
           fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << tipo_empresa                                           # tipo de identificacao da empresa      9[02]
+          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]

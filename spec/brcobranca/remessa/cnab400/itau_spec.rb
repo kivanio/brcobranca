@@ -106,14 +106,6 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
       expect(info_conta[11]).to eq '1'        # num. do digito
     end
 
-    it 'deve retornar o tipo da empresa (fisica ou juridica)' do
-      # teste pessoa fisica
-      expect(itau_cnab400.tipo_empresa).to eq '01'
-      # teste pessoa juridica
-      itau_cnab400.documento_cedente = '12345678910111'
-      expect(itau_cnab400.tipo_empresa).to eq '02'
-    end
-
     it 'deve retornar o codigo da carteira' do
       # de acordo com a documentacao,
       # o codigo da carteira 150 é U

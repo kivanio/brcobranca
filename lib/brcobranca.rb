@@ -134,4 +134,9 @@ module Brcobranca
       autoload :Sicoob,      'brcobranca/remessa/cnab240/sicoob'
     end
   end
+
+  # Módulos para classes de utilidades
+  module Util
+    autoload :Empresa, 'brcobranca/util/empresa'
+  end
 end

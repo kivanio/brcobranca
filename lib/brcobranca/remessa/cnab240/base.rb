@@ -45,15 +45,6 @@ module Brcobranca
           super(campos)
         end
 
-        # Tipo de inscricao do cedente
-        # (pessoa fisica ou juridica)
-        #
-        # @return [String]
-        #
-        def tipo_inscricao
-          documento_cedente.to_s.delete('./-').size <= 11 ? '1' : '2'
-        end
-
         # Data de geracao do arquivo
         #
         # @return [String]
@@ -80,7 +71,7 @@ module Brcobranca
           header_arquivo << '0000' # lote do servico               4
           header_arquivo << '0' # tipo de registro              1
           header_arquivo << ''.rjust(9, ' ') # uso exclusivo FEBRABAN        9
-          header_arquivo << tipo_inscricao # tipo inscricao                1
+          header_arquivo << Brcobranca::Util::Empresa.new(documento_cedente, false).tipo # tipo inscricao                1
           header_arquivo << documento_cedente.to_s.rjust(14, '0') # numero de inscricao           14
           header_arquivo << codigo_convenio # codigo do convenio no banco   20
           header_arquivo << info_conta # informacoes da conta          20
@@ -116,7 +107,7 @@ module Brcobranca
           header_lote << '  ' # uso exclusivo           2
           header_lote << versao_layout_lote # num.versao layout lote  3
           header_lote << ' ' # uso exclusivo           1
-          header_lote << tipo_inscricao # tipo de inscricao       1
+          header_lote << Brcobranca::Util::Empresa.new(documento_cedente, false).tipo # tipo de inscricao       1
           header_lote << documento_cedente.to_s.rjust(15, '0') # inscricao cedente       15
           header_lote << convenio_lote # codigo do convenio      20
           header_lote << info_conta # informacoes conta       20
@@ -206,7 +197,7 @@ module Brcobranca
           segmento_q << 'Q' # cod. segmento                        1
           segmento_q << ' ' # uso exclusivo                        1
           segmento_q << '01' # cod. movimento remessa               2
-          segmento_q << pagamento.identificacao_sacado(1) # tipo insc. sacado                    1
+          segmento_q << pagamento.identificacao_sacado(false) # tipo insc. sacado                    1
           segmento_q << pagamento.documento_sacado.to_s.rjust(15, '0') # documento sacado                     14
           segmento_q << pagamento.nome_sacado.format_size(40) # nome cliente                         40
           segmento_q << pagamento.endereco_sacado.format_size(40) # endereco cliente                     40
@@ -215,7 +206,7 @@ module Brcobranca
           segmento_q << pagamento.cep_sacado[5..7] # sufixo cep                           3
           segmento_q << pagamento.cidade_sacado.format_size(15) # cidade                               15
           segmento_q << pagamento.uf_sacado # uf                                   2
-          segmento_q << pagamento.identificacao_avalista(1) # identificacao do sacador             1
+          segmento_q << pagamento.identificacao_avalista(false) # identificacao do sacador             1
           segmento_q << pagamento.documento_avalista.to_s.rjust(15, '0') # documento sacador                    15
           segmento_q << pagamento.nome_avalista.format_size(40) # nome avalista                         40
           segmento_q << ''.rjust(3, '0') # cod. banco correspondente            3

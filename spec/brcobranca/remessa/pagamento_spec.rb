@@ -171,17 +171,15 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
         # pessoa juridica
         pagamento.documento_sacado = '123456789101112'
         expect(pagamento.identificacao_sacado).to eq '02'
-      end
-
-      it 'formata a identificacao com o numero de caracteres informados' do
-        expect(pagamento.identificacao_sacado(4)).to eq '0001'
+        pagamento.documento_sacado = '123456789101112'
+        expect(pagamento.identificacao_sacado(false)).to eq '2'
       end
     end
 
     context 'identificacao avalista' do
       it 'verifica a identificacao do avalista (pessoa fisica ou juridica)' do
         # pessoa fisica
-        pagamento.documento_avalista = '123456789101'
+        pagamento.documento_avalista = '12345678901'
         expect(pagamento.identificacao_avalista).to eq '01'
         # pessoa juridica
         pagamento.documento_avalista = '123456789101112'
@@ -189,8 +187,8 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       end
 
       it 'formata a identificacao com o numero de caracteres informados' do
-        pagamento.documento_avalista = '123456789101'
-        expect(pagamento.identificacao_avalista(1)).to eq '1'
+        pagamento.documento_avalista = '12345678901'
+        expect(pagamento.identificacao_avalista(false)).to eq '1'
       end
     end
   end

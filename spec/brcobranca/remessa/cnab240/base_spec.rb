@@ -58,14 +58,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
     end
   end
 
-  it 'deve retornar o tipo de inscricao' do
-    # pessoa fisica
-    expect(cnab240.tipo_inscricao).to eq '1'
-    # pessoa juridica
-    cnab240.documento_cedente = '1234567890101112'
-    expect(cnab240.tipo_inscricao).to eq '2'
-  end
-
   context 'sobrescrita dos metodos' do
     it 'mostrar aviso sobre sobrecarga de métodos padrões' do
       expect { cnab240.complemento_header }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')

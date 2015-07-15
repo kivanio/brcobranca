@@ -148,17 +148,17 @@ module Brcobranca
       # Se for pessoa fisica (CPF com 11 digitos) é 1
       # Se for juridica (CNPJ com 14 digitos) é 2
       #
-      def identificacao_sacado(tamanho = 2)
-        documento_sacado.size < 14 ? '1'.rjust(tamanho, '0') : '2'.rjust(tamanho, '0')
+      def identificacao_sacado(zero = true)
+        Brcobranca::Util::Empresa.new(documento_sacado, zero).tipo
       end
 
       # Retorna a identificacao do avalista
       # Se for pessoa fisica (CPF com 11 digitos) é 1
       # Se for juridica (CNPJ com 14 digitos) é 2
       #
-      def identificacao_avalista(tamanho = 2)
+      def identificacao_avalista(zero = true)
         return '0' if documento_avalista.nil?
-        documento_avalista.size < 14 ? '1'.rjust(tamanho, '0') : '2'.rjust(tamanho, '0')
+        Brcobranca::Util::Empresa.new(documento_avalista, zero).tipo
       end
     end
   end
