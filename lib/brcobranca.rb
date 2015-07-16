@@ -102,16 +102,16 @@ module Brcobranca
 
     # Módulos para classes de template
     module Template
-      autoload :Base,   'brcobranca/boleto/template/base'
-      autoload :Rghost, 'brcobranca/boleto/template/rghost'
+      autoload :Base,        'brcobranca/boleto/template/base'
+      autoload :Rghost,      'brcobranca/boleto/template/rghost'
       autoload :RghostCarne, 'brcobranca/boleto/template/rghost_carne'
     end
   end
 
   # Módulos para classes de retorno bancário
   module Retorno
-    autoload :Base,           'brcobranca/retorno/base'
-    autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
+    autoload :Base,            'brcobranca/retorno/base'
+    autoload :RetornoCbr643,   'brcobranca/retorno/retorno_cbr643'
     autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
     autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400' # DEPRECATED
 
@@ -131,12 +131,19 @@ module Brcobranca
       autoload :Base,      'brcobranca/remessa/cnab400/base'
       autoload :Bradesco,  'brcobranca/remessa/cnab400/bradesco'
       autoload :Itau,      'brcobranca/remessa/cnab400/itau'
+      autoload :Citibank,  'brcobranca/remessa/cnab400/citibank'
     end
 
     module Cnab240
       autoload :Base,         'brcobranca/remessa/cnab240/base'
       autoload :Caixa,        'brcobranca/remessa/cnab240/caixa'
       autoload :BancoBrasil,  'brcobranca/remessa/cnab240/banco_brasil'
+      autoload :Sicoob,       'brcobranca/remessa/cnab240/sicoob'
     end
+  end
+
+  # Módulos para classes de utilidades
+  module Util
+    autoload :Empresa, 'brcobranca/util/empresa'
   end
 end

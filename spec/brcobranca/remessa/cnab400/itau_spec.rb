@@ -40,6 +40,20 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
       end
     end
 
+    context '@digito_conta' do
+      it 'deve ser invalido se nao possuir um digito da conta corrente' do
+        objeto = subject.class.new(params.merge!(digito_conta: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Digito conta não pode estar em branco.')
+      end
+
+      it 'deve ser invalido se a carteira tiver mais de 1 digito' do
+        itau_cnab400.digito_conta = '12'
+        expect(itau_cnab400.invalid?).to be true
+        expect(itau_cnab400.errors.full_messages).to include('Digito conta deve ter 1 dígito.')
+      end
+    end
+
     context '@conta_corrente' do
       it 'deve ser invalido se nao possuir uma conta corrente' do
         object = subject.class.new(params.merge!(conta_corrente: nil))
@@ -104,14 +118,6 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
       expect(info_conta[0..3]).to eq '1234'   # num. da agencia
       expect(info_conta[6..10]).to eq '12345' # num. da conta
       expect(info_conta[11]).to eq '1'        # num. do digito
-    end
-
-    it 'deve retornar o tipo da empresa (fisica ou juridica)' do
-      # teste pessoa fisica
-      expect(itau_cnab400.tipo_empresa).to eq '01'
-      # teste pessoa juridica
-      itau_cnab400.documento_cedente = '12345678910111'
-      expect(itau_cnab400.tipo_empresa).to eq '02'
     end
 
     it 'deve retornar o codigo da carteira' do

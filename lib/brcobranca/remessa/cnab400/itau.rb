@@ -6,11 +6,13 @@ module Brcobranca
         # documento do cedente
         attr_accessor :documento_cedente
 
-        validates_presence_of :agencia, :conta_corrente, :documento_cedente, message: 'não pode estar em branco.'
+        validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
+        validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 5, message: 'deve ter 5 dígitos.'
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 3, message: 'deve ter no máximo 3 dígitos.'
+        validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         # Nova instancia do Itau
         def initialize(campos = {})
@@ -61,15 +63,6 @@ module Brcobranca
           ''.rjust(294, ' ')
         end
 
-        # Tipo de empresa (fisica ou juridica)
-        # de acordo com o documento (CPF/CNPJ)
-        #
-        # @author Isabella Santos
-        #
-        def tipo_empresa
-          documento_cedente.size < 14 ? '01' : '02'
-        end
-
         # Codigo da carteira de acordo com a documentacao o Itau
         # se a carteira nao forem as testadas (150, 191 e 147)
         # retorna 'I' que é o codigo das carteiras restantes na documentacao
@@ -96,7 +89,7 @@ module Brcobranca
           fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << tipo_empresa                                           # tipo de identificacao da empresa      9[02]
+          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]

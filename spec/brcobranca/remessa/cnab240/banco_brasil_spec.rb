@@ -4,15 +4,15 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
-                                       nosso_numero: 123,
-                                       documento_sacado: '12345678901',
-                                       nome_sacado: 'nome',
-                                       endereco_sacado: 'endereco',
-                                       bairro_sacado: 'bairro',
-                                       cep_sacado: '12345678',
-                                       cidade_sacado: 'cidade',
-                                       uf_sacado: 'SP')
+      data_vencimento: Date.today,
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'nome',
+      endereco_sacado: 'endereco',
+      bairro_sacado: 'bairro',
+      cep_sacado: '12345678',
+      cidade_sacado: 'cidade',
+      uf_sacado: 'SP')
   end
   let(:params) do
     { empresa_mae: 'teste',
@@ -56,6 +56,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
     end
 
     context '@convenio' do
+      it 'deve ser invalido se nao possuir o convenio' do
+        objeto = subject.class.new(params.merge!(convenio: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
+      end
+
       it 'deve ser invalido se o convenio nao tiver entre 4 e 7 digitos' do
         banco_brasil.convenio = '12345678'
         expect(banco_brasil.invalid?).to be true
@@ -91,8 +97,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       expect(nome_banco[0..19]).to eq 'BANCO DO BRASIL S.A.'
     end
 
-    it 'versao layout deve ser zerada' do
-      expect(banco_brasil.versao_layout).to eq '000'
+    it 'versao do layout do arquivo deve ser 083' do
+      expect(banco_brasil.versao_layout_arquivo).to eq '083'
+    end
+
+    it 'versao do layout do lote deve ser 040' do
+      expect(banco_brasil.versao_layout_lote).to eq '042'
     end
 
     it 'deve calcular o digito da agencia' do

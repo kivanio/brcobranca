@@ -6,6 +6,7 @@ module Brcobranca
         # codigo da empresa (informado pelo Bradesco no cadastramento)
         attr_accessor :codigo_empresa
 
+        validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :codigo_empresa, :sequencial_remessa,
                               :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :codigo_empresa, maximum: 20, message: 'deve ser menor ou igual a 20 dígitos.'
@@ -13,6 +14,7 @@ module Brcobranca
         validates_length_of :conta_corrente, maximum: 7, message: 'deve ter 7 dígitos.'
         validates_length_of :sequencial_remessa, maximum: 7, message: 'deve ter 7 dígitos.'
         validates_length_of :carteira, maximum: 2, message: 'deve ter no máximo 2 dígitos.'
+        validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         def agencia=(valor)
           @agencia = valor.to_s.rjust(5, '0') if valor

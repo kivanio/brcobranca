@@ -56,6 +56,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
     end
 
     context '@convenio' do
+      it 'deve ser invalido se nao possuir o convenio' do
+        objeto = subject.class.new(params.merge!(convenio: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
+      end
+
       it 'deve ser invalido se o convenio tiver mais de 6 digitos' do
         caixa.convenio = '1234567'
         expect(caixa.invalid?).to be true
@@ -87,8 +93,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       expect(nome_banco[0..22]).to eq 'CAIXA ECONOMICA FEDERAL'
     end
 
-    it 'versao do layout deve retornar 050' do
-      expect(caixa.versao_layout).to eq '050'
+    it 'versao do layout do arquivo deve retornar 050' do
+      expect(caixa.versao_layout_arquivo).to eq '050'
+    end
+
+    it 'versao do layout do lote deve ser 040' do
+      expect(caixa.versao_layout_lote).to eq '030'
     end
 
     it 'codigo do convenio deve ser 20 zeros' do

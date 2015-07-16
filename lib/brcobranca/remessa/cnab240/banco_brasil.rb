@@ -11,6 +11,7 @@ module Brcobranca
         #   campo nao tratado pelo sistema do Banco do Brasil
 
         validates_presence_of :carteira, :variacao, message: 'não pode estar em branco.'
+        validates_presence_of :convenio, message: 'não pode estar em branco.'
         validates_length_of :conta_corrente, is: 5, message: 'deve ter 5 dígitos.'
         validates_length_of :agencia, is: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :carteira, is: 2, message: 'deve ter 2 dígitos.'
@@ -32,8 +33,12 @@ module Brcobranca
           'BANCO DO BRASIL S.A.'.ljust(30, ' ')
         end
 
-        def versao_layout
-          '000'
+        def versao_layout_arquivo
+          '083'
+        end
+
+        def versao_layout_lote
+          '042'
         end
 
         def digito_agencia

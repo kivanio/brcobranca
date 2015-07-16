@@ -67,21 +67,5 @@ RSpec.describe Brcobranca::Remessa::Base do
         expect(base.errors.full_messages).to include('Empresa mae deve ser menor ou igual a 30 caracteres.')
       end
     end
-
-    context '@agencia' do
-      it 'deve ser invalido se nao possuir uma agencia' do
-        objeto = subject.class.new(params.merge!(agencia: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Agencia não pode estar em branco.')
-      end
-    end
-
-    context '@conta_corrente' do
-      it 'deve ser invalido se nao possuir uma conta corrente' do
-        objeto = subject.class.new(params.merge!(conta_corrente: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Conta corrente não pode estar em branco.')
-      end
-    end
   end
 end

@@ -22,6 +22,14 @@ shared_examples_for 'cnab400' do
         sequencial_remessa: '1',
         codigo_empresa: '123',
         pagamentos: [pagamento] }
+    elsif subject.class == Brcobranca::Remessa::Cnab400::Citibank
+      {
+        portfolio: '17777751042700080112',
+        carteira: '1',
+        empresa_mae: 'asd',
+        documento_cedente: '12345678910',
+        pagamentos: [pagamento]
+      }
     else
       { carteira: '123',
         agencia: '1234',
@@ -76,7 +84,7 @@ shared_examples_for 'cnab400' do
     expect(remessa[801]).to eq "\n"
   end
 
-  it 'deve ser mais possivel adicionar mais de um pagamento' do
+  it 'deve ser possivel adicionar mais de um pagamento' do
     objeto.pagamentos << pagamento
     remessa = objeto.gera_arquivo
 

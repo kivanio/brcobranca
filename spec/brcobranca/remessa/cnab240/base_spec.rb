@@ -4,15 +4,15 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab240::Base do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
-                                       nosso_numero: 123,
-                                       documento_sacado: '12345678901',
-                                       nome_sacado: 'nome',
-                                       endereco_sacado: 'endereco',
-                                       bairro_sacado: 'bairro',
-                                       cep_sacado: '12345678',
-                                       cidade_sacado: 'cidade',
-                                       uf_sacado: 'SP')
+      data_vencimento: Date.today,
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'nome',
+      endereco_sacado: 'endereco',
+      bairro_sacado: 'bairro',
+      cep_sacado: '12345678',
+      cidade_sacado: 'cidade',
+      uf_sacado: 'SP')
   end
   let(:params) do
     { empresa_mae: 'teste',
@@ -25,19 +25,27 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
   let(:cnab240) { subject.class.new(params) }
 
   context 'validacoes' do
+    context '@agencia' do
+      it 'deve ser invalido se nao possuir uma agencia' do
+        objeto = subject.class.new(params.merge!(agencia: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Agencia não pode estar em branco.')
+      end
+    end
+
+    context '@conta_corrente' do
+      it 'deve ser invalido se nao possuir uma conta corrente' do
+        objeto = subject.class.new(params.merge!(conta_corrente: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Conta corrente não pode estar em branco.')
+      end
+    end
+
     context '@documento_cedente' do
       it 'deve ser invalido se nao possuir o documento do cedente' do
         objeto = subject.class.new(params.merge!(documento_cedente: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Documento cedente não pode estar em branco.')
-      end
-    end
-
-    context '@convenio' do
-      it 'deve ser invalido se nao possuir o convenio' do
-        objeto = subject.class.new(params.merge!(convenio: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
       end
     end
 
@@ -66,18 +74,11 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
     end
   end
 
-  it 'deve retornar o tipo de inscricao' do
-    # pessoa fisica
-    expect(cnab240.tipo_inscricao).to eq '1'
-    # pessoa juridica
-    cnab240.documento_cedente = '1234567890101112'
-    expect(cnab240.tipo_inscricao).to eq '2'
-  end
-
   context 'sobrescrita dos metodos' do
     it 'mostrar aviso sobre sobrecarga de métodos padrões' do
       expect { cnab240.complemento_header }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.versao_layout }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect { cnab240.versao_layout_arquivo }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect { cnab240.versao_layout_lote }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
       expect { cnab240.convenio_lote }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
       expect { cnab240.nome_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
       expect { cnab240.cod_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
