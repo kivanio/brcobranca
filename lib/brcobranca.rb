@@ -113,7 +113,13 @@ module Brcobranca
     autoload :Base,           'brcobranca/retorno/base'
     autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
     autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
-    autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400'
+    autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400' # DEPRECATED
+
+    module Cnab400
+      autoload :Base, 'brcobranca/retorno/cnab400/base'
+      autoload :Bradesco, 'brcobranca/retorno/cnab400/bradesco'
+      autoload :Itau, 'brcobranca/retorno/cnab400/itau'
+    end
   end
 
   # Módulos para as classes que geram os arquivos remessa
