@@ -10,7 +10,9 @@ module Brcobranca
         def self.load_lines(file, options={})
           return nil if file.blank?
 
-          case codigo_banco_do_arquivo(file)
+          codigo_banco = codigo_banco_do_arquivo(file)
+
+          case codigo_banco
           when "237"
             Brcobranca::Retorno::Cnab400::Bradesco.load_lines(file, options)
 
@@ -18,7 +20,6 @@ module Brcobranca
             Brcobranca::Retorno::Cnab400::Itau.load_lines(file, options)
 
           else
-            warn "Banco não encontrado (#{codigo_banco}). Carregando layout antigo padrão (ITAÚ)."
             Brcobranca::Retorno::RetornoCnab400.load_lines(file, options)
           end
         end
