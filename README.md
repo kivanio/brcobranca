@@ -42,6 +42,9 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
   * Sem registro
   * Com registro
 
+* Banco Sicoob
+  * Todas as carteiras presentes na documentação
+
 ### Retornos Disponíveis
 
 * CBR643
