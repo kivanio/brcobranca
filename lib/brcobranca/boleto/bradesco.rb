@@ -45,8 +45,28 @@ module Brcobranca
         "#{carteira}/#{numero_documento}-#{nosso_numero_dv}"
       end
 
+      # Dígito verificador da agência
+      # @return [Integer] 1 caracteres numéricos.
+      def agencia_dv
+        agencia.modulo11(
+          multiplicador: [2, 3, 4, 5],
+          mapeamento: { 10 => 'P', 11 => 0 }
+        ) { |total| 11 - (total % 11) }
+      end
+
+      # Dígito verificador do nosso número
+      # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
         "#{carteira}#{numero_documento}".modulo11(
+          multiplicador: [2, 3, 4, 5, 6, 7],
+          mapeamento: { 10 => 'P', 11 => 0 }
+        ) { |total| 11 - (total % 11) }
+      end
+
+      # Dígito verificador da conta corrente
+      # @return [Integer] 1 caracteres numéricos.
+      def conta_corrente_dv
+        conta_corrente.modulo11(
           multiplicador: [2, 3, 4, 5, 6, 7],
           mapeamento: { 10 => 'P', 11 => 0 }
         ) { |total| 11 - (total % 11) }

@@ -6,6 +6,10 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Base do
 
   describe "#load_lines" do
 
+    it "retorna nil se o arquivo é nil" do
+      expect(Brcobranca::Retorno::Cnab400::Base.load_lines(nil)).to be_nil
+    end
+
     context "Bradesco" do
       let(:nome_arquivo) { "CNAB400BRADESCO.RET" }
 
