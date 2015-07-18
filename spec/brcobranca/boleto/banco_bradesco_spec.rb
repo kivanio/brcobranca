@@ -2,26 +2,24 @@
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Bradesco do
-  before do
-    @valid_attributes = {
-      especie_documento: 'DM',
-      moeda: '9',
-      data_documento: Date.today,
-      dias_vencimento: 1,
-      aceite: 'S',
-      quantidade: 1,
-      valor: 0.0,
-      local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
-      cedente: 'Kivanio Barbosa',
-      documento_cedente: '12345678912',
-      sacado: 'Claudio Pozzebom',
-      sacado_documento: '12345678900',
-      agencia: '4042',
-      conta_corrente: '61900',
-      convenio: 12_387_989,
-      numero_documento: '777700168'
-    }
-  end
+  let(:valid_attributes) {{
+    especie_documento: 'DM',
+    moeda: '9',
+    data_documento: Date.today,
+    dias_vencimento: 1,
+    aceite: 'S',
+    quantidade: 1,
+    valor: 0.0,
+    local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
+    cedente: 'Kivanio Barbosa',
+    documento_cedente: '12345678912',
+    sacado: 'Claudio Pozzebom',
+    sacado_documento: '12345678900',
+    agencia: '4042',
+    conta_corrente: '61900',
+    convenio: 12_387_989,
+    numero_documento: '777700168'
+  }}
 
   it 'Criar nova instancia com atributos padrões' do
     boleto_novo = described_class.new
@@ -41,7 +39,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Criar nova instancia com atributos válidos' do
-    boleto_novo = described_class.new(@valid_attributes)
+    boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.banco).to eql('237')
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
@@ -66,13 +64,13 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Montar código de barras para carteira número 06' do
-    @valid_attributes[:valor] = 2952.95
-    @valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = '75896452'
-    @valid_attributes[:conta_corrente] = '0403005'
-    @valid_attributes[:agencia] = '1172'
-    boleto_novo = described_class.new(@valid_attributes)
+    valid_attributes[:valor] = 2952.95
+    valid_attributes[:data_documento] = Date.parse('2009-04-30')
+    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:conta_corrente] = '0403005'
+    valid_attributes[:agencia] = '1172'
+    boleto_novo = described_class.new(valid_attributes)
 
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1172060007589645204030050')
     expect(boleto_novo.codigo_barras).to eql('23795422300002952951172060007589645204030050')
@@ -80,14 +78,14 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Montar código de barras para carteira número 03' do
-    @valid_attributes[:valor] = 135.00
-    @valid_attributes[:dias_vencimento] = 1
-    @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:numero_documento] = '777700168'
-    @valid_attributes[:conta_corrente] = '61900'
-    @valid_attributes[:agencia] = '4042'
-    @valid_attributes[:carteira] = '03'
-    boleto_novo = described_class.new(@valid_attributes)
+    valid_attributes[:valor] = 135.00
+    valid_attributes[:dias_vencimento] = 1
+    valid_attributes[:data_documento] = Date.parse('2008-02-01')
+    valid_attributes[:numero_documento] = '777700168'
+    valid_attributes[:conta_corrente] = '61900'
+    valid_attributes[:agencia] = '4042'
+    valid_attributes[:carteira] = '03'
+    boleto_novo = described_class.new(valid_attributes)
 
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('4042030077770016800619000')
     expect(boleto_novo.codigo_barras).to eql('23791377000000135004042030077770016800619000')
@@ -101,7 +99,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Montar nosso_numero_boleto' do
-    boleto_novo = described_class.new(@valid_attributes)
+    boleto_novo = described_class.new(valid_attributes)
 
     boleto_novo.numero_documento = '00000000525'
     boleto_novo.carteira = '06'
@@ -130,7 +128,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Montar agencia_conta_boleto' do
-    boleto_novo = described_class.new(@valid_attributes)
+    boleto_novo = described_class.new(valid_attributes)
 
     expect(boleto_novo.agencia_conta_boleto).to eql('4042-8 / 0061900-0')
     boleto_novo.agencia = '0719'
@@ -147,13 +145,13 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do
-    @valid_attributes[:valor] = 2952.95
-    @valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = '75896452'
-    @valid_attributes[:conta_corrente] = '0403005'
-    @valid_attributes[:agencia] = '1172'
-    boleto_novo = described_class.new(@valid_attributes)
+    valid_attributes[:valor] = 2952.95
+    valid_attributes[:data_documento] = Date.parse('2009-04-30')
+    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:conta_corrente] = '0403005'
+    valid_attributes[:agencia] = '1172'
+    boleto_novo = described_class.new(valid_attributes)
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
@@ -168,13 +166,13 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   end
 
   it 'Gerar boleto nos formatos válidos' do
-    @valid_attributes[:valor] = 2952.95
-    @valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    @valid_attributes[:dias_vencimento] = 0
-    @valid_attributes[:numero_documento] = '75896452'
-    @valid_attributes[:conta_corrente] = '0403005'
-    @valid_attributes[:agencia] = '1172'
-    boleto_novo = described_class.new(@valid_attributes)
+    valid_attributes[:valor] = 2952.95
+    valid_attributes[:data_documento] = Date.parse('2009-04-30')
+    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:conta_corrente] = '0403005'
+    valid_attributes[:agencia] = '1172'
+    boleto_novo = described_class.new(valid_attributes)
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)
@@ -186,5 +184,34 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
       expect(File.delete(tmp_file.path)).to eql(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
+  end
+
+  describe "#agencia_dv" do
+    it { expect(described_class.new(agencia: "0255").agencia_dv).to eq(0) }
+    it { expect(described_class.new(agencia: "0943").agencia_dv).to eq(1) }
+    it { expect(described_class.new(agencia: "1467").agencia_dv).to eq(2) }
+    it { expect(described_class.new(agencia: "0794").agencia_dv).to eq(3) }
+    it { expect(described_class.new(agencia: "0155").agencia_dv).to eq(4) }
+    it { expect(described_class.new(agencia: "0650").agencia_dv).to eq(5) }
+    it { expect(described_class.new(agencia: "0199").agencia_dv).to eq(6) }
+    it { expect(described_class.new(agencia: "1425").agencia_dv).to eq(7) }
+    it { expect(described_class.new(agencia: "2839").agencia_dv).to eq(8) }
+    it { expect(described_class.new(agencia: "2332").agencia_dv).to eq(9) }
+    it { expect(described_class.new(agencia: "0121").agencia_dv).to eq("P") }
+  end
+
+  describe "#conta_corrente_dv" do
+    it { expect(described_class.new(conta_corrente: "0325620").conta_corrente_dv).to eq(0) }
+    it { expect(described_class.new(conta_corrente: "0284025").conta_corrente_dv).to eq(1) }
+    it { expect(described_class.new(conta_corrente: "0238069").conta_corrente_dv).to eq(2) }
+    it { expect(described_class.new(conta_corrente: "0135323").conta_corrente_dv).to eq(3) }
+    it { expect(described_class.new(conta_corrente: "0010667").conta_corrente_dv).to eq(4) }
+    it { expect(described_class.new(conta_corrente: "0420571").conta_corrente_dv).to eq(5) }
+    it { expect(described_class.new(conta_corrente: "0510701").conta_corrente_dv).to eq(6) }
+    it { expect(described_class.new(conta_corrente: "0420536").conta_corrente_dv).to eq(7) }
+    it { expect(described_class.new(conta_corrente: "0012500").conta_corrente_dv).to eq(8) }
+    it { expect(described_class.new(conta_corrente: "0010673").conta_corrente_dv).to eq(9) }
+    it { expect(described_class.new(conta_corrente: "0019669").conta_corrente_dv).to eq("P") }
+    it { expect(described_class.new(conta_corrente: "0301357").conta_corrente_dv).to eq("P") }
   end
 end
