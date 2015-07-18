@@ -3,6 +3,7 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
+        require "unidecoder"
         validates_presence_of :carteira, message: 'não pode estar em branco.'
 
         # Data da geracao do arquivo seguindo o padrao DDMMAA
@@ -71,7 +72,7 @@ module Brcobranca
           end
           ret << monta_trailer(contador + 1)
           retorno = ret.join("\n")
-          retorno
+          retorno.to_ascii.upcase
         end
 
         # Informacoes referentes a conta do cedente

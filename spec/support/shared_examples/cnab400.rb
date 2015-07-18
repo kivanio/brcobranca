@@ -18,7 +18,7 @@ shared_examples_for 'cnab400' do
         agencia: '12345',
         conta_corrente: '1234567',
         digito_conta: '1',
-        empresa_mae: 'asd',
+        empresa_mae: 'ASD',
         sequencial_remessa: '1',
         codigo_empresa: '123',
         pagamentos: [pagamento] }
@@ -26,7 +26,7 @@ shared_examples_for 'cnab400' do
       {
         portfolio: '17777751042700080112',
         carteira: '1',
-        empresa_mae: 'asd',
+        empresa_mae: 'ASD',
         documento_cedente: '12345678910',
         pagamentos: [pagamento]
       }
@@ -35,7 +35,7 @@ shared_examples_for 'cnab400' do
         agencia: '1234',
         conta_corrente: '12345',
         digito_conta: '1',
-        empresa_mae: 'asd',
+        empresa_mae: 'ASD',
         documento_cedente: '12345678910',
         pagamentos: [pagamento] }
     end
