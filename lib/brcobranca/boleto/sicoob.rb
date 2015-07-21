@@ -51,7 +51,14 @@ module Brcobranca
       #
       # @return [String] 8 caracteres numéricos.
       def nosso_numero_boleto
-        "#{Date.today.strftime("%y")}#{numero_documento}"
+        "#{numero_documento}#{nosso_numero_dv}"
+      end
+
+      def nosso_numero_dv
+        "#{agencia}#{convenio}#{numero_documento}".modulo11(
+          multiplicador: [3, 7, 9, 1],
+          mapeamento: { 10 => 0, 11 => 0 }
+        ) { |t| 11 - (t % 11) }
       end
 
       # Modalidade de cobrança
