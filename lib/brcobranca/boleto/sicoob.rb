@@ -54,6 +54,9 @@ module Brcobranca
         "#{numero_documento}#{nosso_numero_dv}"
       end
 
+      # DV do nosso número seguindo o manual da sicoob
+      # http://www.bancoob.com.br/atendimentocobranca/CAS/2_Implantação_do_Serviço/Sistema_Proprio/DigitoVerificador.htm
+      #
       def nosso_numero_dv
         "#{agencia}#{convenio}#{numero_documento}".modulo11(
           multiplicador: [3, 7, 9, 1],
