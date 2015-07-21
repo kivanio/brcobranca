@@ -4,7 +4,7 @@ module Brcobranca
     class Sicoob < Base # Sicoob (Bancoob)
       validates_length_of :agencia, maximum: 4, message: "deve ser menor ou igual a 4 dígitos."
       validates_length_of :conta_corrente, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :numero_documento, maximum: 6, message: "deve ser menor ou igual a 6 dígitos."
+      validates_length_of :numero_documento, maximum: 7, message: "deve ser menor ou igual a 6 dígitos."
 
       def initialize(campos = {})
         campos = { carteira: "1" }.merge!(campos)
@@ -42,9 +42,9 @@ module Brcobranca
 
       # Número documento
       #
-      # @return [String] 6 caracteres numéricos.
+      # @return [String] 7 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(6, "0") if valor
+        @numero_documento = valor.to_s.rjust(7, "0") if valor
       end
 
       # Nosso número para exibição no boleto.
