@@ -57,6 +57,9 @@ module Brcobranca
       # DV do nosso número seguindo o manual da sicoob
       # http://www.bancoob.com.br/atendimentocobranca/CAS/2_Implantação_do_Serviço/Sistema_Proprio/DigitoVerificador.htm
       #
+      # Os dígitos multiplicadores presentes na documentação da sicoob estão em ordem diferente da ordem abaixo
+      # devido ao cálculo em ordem inversa em Brcobranca::Calculo pelo método `multiplicador`.
+      #
       def nosso_numero_dv
         "#{agencia}#{convenio}#{numero_documento}".modulo11(
           multiplicador: [3, 7, 9, 1],
