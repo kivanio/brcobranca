@@ -4,7 +4,7 @@ module Brcobranca
     class Sicoob < Base # Sicoob (Bancoob)
       validates_length_of :agencia, maximum: 4, message: "deve ser menor ou igual a 4 dígitos."
       validates_length_of :conta_corrente, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :numero_documento, maximum: 7, message: "deve ser menor ou igual a 6 dígitos."
+      validates_length_of :numero_documento, maximum: 7, message: "deve ser menor ou igual a 7 dígitos."
 
       def initialize(campos = {})
         campos = { carteira: "1" }.merge!(campos)
