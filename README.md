@@ -20,30 +20,16 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
 ### Bancos Disponíveis
 
-* Banco do Brasil
-  * Todas as carteiras presentes na documentação
-
-* Banco Itaú
-  * Todas as carteiras presentes na documentação
-
-* Banco HSBC
-  * CNR
-  * CSB - [Rafael DL](https://github.com/rafaeldl)
-
-* Banco Bradesco
-  * Todas as carteiras presentes na documentação
-
-* Banco Caixa
-  * Sem registro - [Túlio Ornelas](https://github.com/tulios)
-
-* Banco SICREDI
-
-* Banco Santander - [Ronaldo Araujo](https://github.com/ronaldoaraujo)
-  * Sem registro
-  * Com registro
-
-* Banco Sicoob
-  * Todas as carteiras presentes na documentação
+| Bancos                | Carteiras         | Documentações  |
+|-----------------------|-------------------|----------------|
+| 001 - Banco do Brasil | Todas as carteiras presentes na documentação | [pdf](http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc5175Bloqueto.pdf) |
+| 033 - Santander       | Sem registro, Com registro - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
+| 104 - Caixa           | Sem registro - [Túlio Ornelas](https://github.com/tulios) | [pdf](http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF) |
+| 237 - Bradesco        | Todas as carteiras presentes na documentação | [pdf](http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf) |
+| 341 - Itaú            | Todas as carteiras presentes na documentação | [CNAB240](http://download.itau.com.br/bankline/cobranca_cnab240.pdf), [CNAB400](http://download.itau.com.br/bankline/layout_cobranca_400bytes_cnab_itau_mensagem.pdf) |
+| 399 - HSBC            | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
+| 748 - Sicredi         | C (03)            |                |
+| 756 - Sicoob          | Todas as carteiras presentes na documentação |                |
 
 ### Retornos Disponíveis
 
