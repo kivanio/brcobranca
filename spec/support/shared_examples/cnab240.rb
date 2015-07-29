@@ -156,19 +156,15 @@ shared_examples_for 'cnab240' do
   end
 
   context 'monta lote' do
-    it 'deve falhar se o pagamento passado nao for valido' do
-      expect { objeto.monta_lote(Brcobranca::Remessa::Pagamento.new, 1) }.to raise_error(Brcobranca::RemessaInvalida)
-    end
-
     it 'retorno de lote deve ser uma colecao com os registros' do
-      lote = objeto.monta_lote pagamento, 1
+      lote = objeto.monta_lote(1)
 
       expect(lote.is_a?(Array)).to be true
       expect(lote.count).to be 4  # header, segmento p, segmento q e trailer
     end
 
     it 'contador de registros deve acrescer 1 a cada registro' do
-      lote = objeto.monta_lote pagamento, 1
+      lote = objeto.monta_lote(1)
 
       expect(lote[1][8..12]).to eq '00001'     # segmento P
       expect(lote[2][8..12]).to eq '00002'     # segmento Q
@@ -191,18 +187,6 @@ shared_examples_for 'cnab240' do
       expect(remessa[722]).to eq "\n"
       expect(remessa[963]).to eq "\n"
       expect(remessa[1204]).to eq "\n"
-    end
-
-    # TODO no momento só existe um lote e todos os pagamentos são adicionados a ele
-    it 'pode ser adicionado varios lotes' do
-      objeto.pagamentos << pagamento
-      remessa = objeto.gera_arquivo
-      lote1 = remessa[241..1203]
-      lote2 = remessa[1205..2167]
-
-      # 10 registros (2400) + 9 quebras de linha (18)
-      expect(remessa.size).to eq 2409
-      expect(lote1).to eq objeto.monta_lote(pagamento, 1).join("\n")
     end
   end
 end

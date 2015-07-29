@@ -42,7 +42,7 @@ module Brcobranca
         def initialize(campos = {})
           campos = { codigo_carteira: '1',
             forma_cadastramento: '1',
-            tipo_documento: ' '}.merge!(campos)
+            tipo_documento: ' ' }.merge!(campos)
           super(campos)
         end
 
@@ -267,19 +267,21 @@ module Brcobranca
         #
         # @return [Array]
         #
-        def monta_lote(pagamento, nro_lote)
-          fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
-
+        def monta_lote(nro_lote)
           # contador dos registros do lote
-          contador = 1
+          contador = 1 #header
 
           lote = [monta_header_lote(nro_lote)]
 
-          lote << monta_segmento_p(pagamento, nro_lote, contador)
-          contador += 1
+          pagamentos.each do |pagamento|
+            fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
 
-          lote << monta_segmento_q(pagamento, nro_lote, contador)
-          contador += 2 #header + trailer
+            lote << monta_segmento_p(pagamento, nro_lote, contador)
+            contador += 1
+            lote << monta_segmento_q(pagamento, nro_lote, contador)
+            contador += 1
+          end
+          contador += 1 #trailer
 
           lote << monta_trailer_lote(nro_lote, contador)
 
@@ -298,10 +300,8 @@ module Brcobranca
 
           arquivo = [monta_header_arquivo]
 
-          pagamentos.each do |pagamento|
-            novo_lote = monta_lote(pagamento, contador)
-            arquivo.push novo_lote
-          end
+          novo_lote = monta_lote(contador)
+          arquivo.push novo_lote
 
           arquivo << monta_trailer_arquivo(contador, (arquivo.size + (pagamentos.size * 4)))
 
