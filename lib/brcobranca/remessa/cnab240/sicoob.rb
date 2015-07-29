@@ -26,7 +26,9 @@ module Brcobranca
         #       Parcela - 02 posições (11 a 12) - "01" se parcela única
 
         validates_presence_of :modalidade_carteira, :tipo_formulario, :parcela, message: 'não pode estar em branco.'
-        validates_length_of :conta_corrente, is: 5, message: 'deve ter 5 dígitos.'
+        # Remessa 400 - 8 digitos
+        # Remessa 240 - 12 digitos
+        validates_length_of :conta_corrente, maximum: 8, message: 'deve ter 8 dígitos.'
         validates_length_of :agencia, is: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :modalidade_carteira, is: 2, message: 'deve ter 2 dígitos.'
 
