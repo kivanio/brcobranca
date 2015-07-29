@@ -295,15 +295,14 @@ module Brcobranca
         def gera_arquivo
           fail Brcobranca::RemessaInvalida.new(self) if self.invalid?
 
-          # contador de do lotes
-          contador = 1
-
           arquivo = [monta_header_arquivo]
 
+          # contador de do lotes
+          contador = 1
           novo_lote = monta_lote(contador)
           arquivo.push novo_lote
 
-          arquivo << monta_trailer_arquivo(contador, (arquivo.size + (pagamentos.size * 4)))
+          arquivo << monta_trailer_arquivo(contador, ((pagamentos.size * 2) + (contador * 2) + 2))
 
           remessa = arquivo.join("\n")
           remessa
