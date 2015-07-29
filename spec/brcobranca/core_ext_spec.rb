@@ -174,6 +174,20 @@ RSpec.describe Brcobranca::Calculo do
     it { expect { modulo_11_de_2_ate_9 '2582fd81' }.to raise_error(ArgumentError) }
   end
 
+  # Ex: Sicoob
+  describe 'Módulo 11 com multiplicadores 3, 7, 9, 1, trocando 11 e 10 por 0' do
+    def modulo_11_com_3_7_9_1_map_10_e_10_por_0(numero)
+      numero.modulo11(
+        multiplicador: [3, 7, 9, 1],
+        mapeamento: { 10 => 0, 11 => 0 }
+      ) { |t| 11 - (t % 11) }
+    end
+
+    it { expect(modulo_11_com_3_7_9_1_map_10_e_10_por_0 "000100000000190000045").to eql(4) }
+    it { expect(modulo_11_com_3_7_9_1_map_10_e_10_por_0 "442300000520270100183").to eql(4) }
+    it { expect(modulo_11_com_3_7_9_1_map_10_e_10_por_0 "442300000520270100184").to eql(1) }
+  end
+
 # Ex: Bradesco
   describe 'Módulo 11 de 2 até 7 trocando 10 por P e 11 por 0' do
     def modulo_11_de_2_ate_7_map_10_P_e_11_0(numero)

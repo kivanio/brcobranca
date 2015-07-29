@@ -4,7 +4,7 @@ module Brcobranca
     class Sicoob < Base # Sicoob (Bancoob)
       validates_length_of :agencia, maximum: 4, message: "deve ser menor ou igual a 4 dígitos."
       validates_length_of :conta_corrente, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :numero_documento, maximum: 6, message: "deve ser menor ou igual a 6 dígitos."
+      validates_length_of :numero_documento, maximum: 7, message: "deve ser menor ou igual a 7 dígitos."
 
       def initialize(campos = {})
         campos = { carteira: "1" }.merge!(campos)
@@ -42,16 +42,29 @@ module Brcobranca
 
       # Número documento
       #
-      # @return [String] 6 caracteres numéricos.
+      # @return [String] 7 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(6, "0") if valor
+        @numero_documento = valor.to_s.rjust(7, "0") if valor
       end
 
       # Nosso número para exibição no boleto.
       #
       # @return [String] 8 caracteres numéricos.
       def nosso_numero_boleto
-        "#{Date.today.strftime("%y")}#{numero_documento}"
+        "#{numero_documento}#{nosso_numero_dv}"
+      end
+
+      # DV do nosso número seguindo o manual da sicoob
+      # http://www.bancoob.com.br/atendimentocobranca/CAS/2_Implantação_do_Serviço/Sistema_Proprio/DigitoVerificador.htm
+      #
+      # Os dígitos multiplicadores presentes na documentação da sicoob estão em ordem diferente da ordem abaixo
+      # devido ao cálculo em ordem inversa em Brcobranca::Calculo pelo método `multiplicador`.
+      #
+      def nosso_numero_dv
+        "#{agencia}#{convenio}#{numero_documento}".modulo11(
+          multiplicador: [3, 7, 9, 1],
+          mapeamento: { 10 => 0, 11 => 0 }
+        ) { |t| 11 - (t % 11) }
       end
 
       # Modalidade de cobrança
