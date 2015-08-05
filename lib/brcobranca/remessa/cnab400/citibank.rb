@@ -67,7 +67,7 @@ module Brcobranca
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << portfolio                                              # portfolio                             X[20]
           detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
-          detalhe << '02'                                                   # espécie do título                     9[02] - 00 = DMI – Duplicata Mercantil por Indicação, 02 = DM – Duplicata Mercantil
+          detalhe << pagamento.especie_titulo                               # espécie do título                     9[02] - 00 = DMI – Duplicata Mercantil por Indicação, 02 = DM – Duplicata Mercantil
           detalhe << pagamento.nosso_numero.to_s.rjust(12, '0')             # nosso numero                          9[12]
           detalhe << ''.rjust(6, ' ')                                       # brancos                               X[06]
           detalhe << pagamento.formata_data_segundo_desconto                # data limite para o segundo desconto   9[06]

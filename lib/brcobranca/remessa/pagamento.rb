@@ -57,12 +57,14 @@ module Brcobranca
       attr_accessor :data_segundo_desconto
       # <b>OPCIONAL</b>: valor a ser concedido de desconto
       attr_accessor :valor_segundo_desconto
-
+      # <b>OPCIONAL</b>: espécie do título
+      attr_accessor :especie_titulo
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
                             :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
+      validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
 
       # Nova instancia da classe Pagamento
       #
@@ -77,7 +79,8 @@ module Brcobranca
           valor_iof: 0.0,
           valor_abatimento: 0.0,
           nome_avalista: '',
-          cod_desconto: '0'
+          cod_desconto: '0',
+          especie_titulo: '00'
         }
 
         campos = padrao.merge!(campos)
