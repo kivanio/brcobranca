@@ -70,18 +70,18 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
     end
 
     context '@agencia' do
-      it 'deve ser invalido se a agencia tiver mais de 4 digitos' do
-        banco_brasil.agencia = '12345'
+      it 'deve ser invalido se a agencia tiver mais de 5 digitos' do
+        banco_brasil.agencia = '123456'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Agencia deve ter 4 dígitos.')
+        expect(banco_brasil.errors.full_messages).to include('Agencia deve ter 5 dígitos.')
       end
     end
 
     context '@conta_corrente' do
-      it 'deve ser invalido se a conta corrente tiver mais de 5 digitos' do
-        banco_brasil.conta_corrente = '123456'
+      it 'deve ser invalido se a conta corrente tiver mais de 12 digitos' do
+        banco_brasil.conta_corrente = '1234567890123'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Conta corrente deve ter 5 dígitos.')
+        expect(banco_brasil.errors.full_messages).to include('Conta corrente deve ter 12 dígitos.')
       end
     end
   end

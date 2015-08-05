@@ -12,16 +12,16 @@ module Brcobranca
 
         validates_presence_of :carteira, :variacao, message: 'não pode estar em branco.'
         validates_presence_of :convenio, message: 'não pode estar em branco.'
-        validates_length_of :conta_corrente, is: 5, message: 'deve ter 5 dígitos.'
-        validates_length_of :agencia, is: 4, message: 'deve ter 4 dígitos.'
+        validates_length_of :conta_corrente, maximum: 12, message: 'deve ter 12 dígitos.'
+        validates_length_of :agencia, maximum: 5, message: 'deve ter 5 dígitos.'
         validates_length_of :carteira, is: 2, message: 'deve ter 2 dígitos.'
         validates_length_of :variacao, is: 3, message: 'deve ter 3 dígitos.'
         validates_length_of :convenio, in: 4..7, message: 'não existente para este banco.'
 
         def initialize(campos = {})
           campos = { emissao_boleto: '0',
-                     distribuicao_boleto: '0',
-                     especie_titulo: '02' }.merge!(campos)
+            distribuicao_boleto: '0',
+            especie_titulo: '02' }.merge!(campos)
           super(campos)
         end
 
@@ -62,6 +62,7 @@ module Brcobranca
           # campo reservado      2
           "#{convenio.rjust(9, '0')}0014#{carteira}#{variacao}  "
         end
+
         alias_method :convenio_lote, :codigo_convenio
 
         def info_conta
@@ -98,11 +99,14 @@ module Brcobranca
         def formata_nosso_numero(nosso_numero)
           quantidade = case convenio.to_s.size
                          # convenio de 4 posicoes com nosso numero de 7
-                       when 4 then 7
+                       when 4 then
+                         7
                          # convenio de 6 posicoes com nosso numero de 5
-                       when 6 then 5
+                       when 6 then
+                         5
                          # convenio de 7 posicoes com nosso numero de 10
-                       when 7 then 10
+                       when 7 then
+                         10
                        else
                          fail Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
                        end
