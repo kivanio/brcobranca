@@ -23,6 +23,7 @@ module Brcobranca
           # tipo do registro      [1]        0
           # operacao              [1]        1
           # literal remessa       [7]        REMESSA
+          # Código do serviço     [2]        01
           # cod. servico          [15]       COBRANCA
           # info. conta           [20]
           # empresa mae           [30]
