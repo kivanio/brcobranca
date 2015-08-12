@@ -97,8 +97,8 @@ module Brcobranca
           detalhe << ' '                                              # indicador rateio                            X[01]       105 a 105
           detalhe << '2'                                              # endereco para aviso debito (op 2 = ignora)  9[01]       106 a 106
           detalhe << ''.rjust(2, ' ')                                 # brancos                                     X[02]       107 a 108
-          detalhe << '01'                                             # identif. da ocorrencia                      9[02]       109 a 110
-          detalhe << pagamento.nosso_numero.to_s.rjust(10, ' ')       # numero do documento alfanum.                X[10]       111 a 120
+          detalhe << pagamento.identificacao_ocorrencia               # identificacao ocorrencia              9[02]
+          detalhe << pagamento.numero_documento.to_s.rjust(10, ' ')   # numero do documento alfanum.                X[10]       111 a 120
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')     # data de vencimento                          9[06]       121 a 126
           detalhe << pagamento.formata_valor                          # valor do titulo                             9[13]       127 a 139
           detalhe << ''.rjust(3, '0')                                 # banco encarregado (zeros)                   9[03]       140 a 142

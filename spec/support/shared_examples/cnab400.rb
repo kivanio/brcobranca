@@ -30,6 +30,13 @@ shared_examples_for 'cnab400' do
         documento_cedente: '12345678910',
         pagamentos: [pagamento]
       }
+    elsif subject.class == Brcobranca::Remessa::Cnab400::Santander
+      {
+        codigo_transmissao: '17777751042700080112',
+        empresa_mae: 'ASD',
+        documento_cedente: '12345678910',
+        pagamentos: [pagamento]
+      }
     else
       { carteira: '123',
         agencia: '1234',

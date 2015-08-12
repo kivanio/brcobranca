@@ -27,6 +27,8 @@ module Brcobranca
       attr_accessor :cidade_sacado
       # <b>REQUERIDO</b>: UF do sacado (cliente)
       attr_accessor :uf_sacado
+      # <b>REQUERIDO</b>: Código da ocorrência
+      attr_accessor :identificacao_ocorrencia
       # <b>OPCIONAL</b>: nome do avalista
       attr_accessor :nome_avalista
       # <b>OPCIONAL</b>: documento do avalista
@@ -59,12 +61,20 @@ module Brcobranca
       attr_accessor :valor_segundo_desconto
       # <b>OPCIONAL</b>: espécie do título
       attr_accessor :especie_titulo
+      # <b>OPCIONAL</b>: código da multa
+      attr_accessor :codigo_multa
+      # <b>OPCIONAL</b>: Percentual multa por atraso %
+      attr_accessor :percentual_multa
+      # <b>OPCIONAL</b>: Data para cobrança de multa
+      attr_accessor :data_multa
+
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
-                            :documento_sacado, :nome_sacado, :endereco_sacado,
-                            :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
+        :documento_sacado, :nome_sacado, :endereco_sacado,
+        :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
+      validates_length_of :identificacao_ocorrencia, is: 2, message: 'deve ter 2 dígitos.'
 
       # Nova instancia da classe Pagamento
       #
@@ -80,7 +90,10 @@ module Brcobranca
           valor_abatimento: 0.0,
           nome_avalista: '',
           cod_desconto: '0',
-          especie_titulo: '00'
+          especie_titulo: '01',
+          identificacao_ocorrencia: '01',
+          codigo_multa: '0',
+          percentual_multa: '0'
         }
 
         campos = padrao.merge!(campos)
@@ -111,6 +124,20 @@ module Brcobranca
       #
       def formata_data_segundo_desconto(formato = '%d%m%y')
         data_segundo_desconto.strftime(formato)
+      rescue
+        if formato == '%d%m%y'
+          '000000'
+        else
+          '00000000'
+        end
+      end
+
+      # Formata a data de cobrança da multa
+      #
+      # @return [String]
+      #
+      def formata_data_multa(formato = '%d%m%y')
+        data_multa.strftime(formato)
       rescue
         if formato == '%d%m%y'
           '000000'

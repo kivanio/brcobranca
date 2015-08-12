@@ -75,8 +75,8 @@ module Brcobranca
           detalhe << '000'                                                  # carne                                 9[03] - Válido apenas quando o campo 148/149 for igual a 03
           detalhe << '000'                                                  # parcela                               9[03] - Só preencher se o banco for imprimir e enviar e for um carnê
           detalhe << carteira                                               # codigo da carteira                    X[01] - Código 1 = Cobrança Simples, Código 2 = Cobrança Caucionada
-          detalhe << '01'                                                   # identificacao ocorrencia (remessa)    9[02]
-          detalhe << pagamento.nosso_numero.to_s.rjust(10, '0')             # numero do documento                   X[10]
+          detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
+          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
