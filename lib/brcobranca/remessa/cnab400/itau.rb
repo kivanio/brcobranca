@@ -108,7 +108,7 @@ module Brcobranca
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
-          detalhe << ''.rjust(5, ' ')                                       # agencia cobradora - deixar zero       9[05]
+          detalhe << ''.rjust(5, '0')                                       # agencia cobradora - deixar zero       9[05]
           detalhe << '99'                                                   # especie  do titulo                    X[02]
           detalhe << aceite                                                 # aceite (A/N)                          X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
