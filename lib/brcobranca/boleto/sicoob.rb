@@ -4,11 +4,13 @@ module Brcobranca
     class Sicoob < Base # Sicoob (Bancoob)
       validates_length_of :agencia, maximum: 4, message: "deve ser menor ou igual a 4 dígitos."
       validates_length_of :conta_corrente, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :numero_documento, maximum: 7, message: "deve ser menor ou igual a 7 dígitos."
+      validates_length_of :numero_documento, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :variacao, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
+      validates_length_of :quantidade, maximum: 3, message: 'deve ser menor ou igual a 3 dígitos.'
 
       def initialize(campos = {})
-        campos = { carteira: "1" }.merge!(campos)
+        campos = { carteira: "1", variacao: '01', quantidade: '001' }.merge!(campos)
         super(campos)
       end
 
@@ -33,7 +35,6 @@ module Brcobranca
         @agencia = valor.to_s.rjust(4, "0") if valor
       end
 
-
       # Convênio
       #
       # @return [String] 7 caracteres numéricos.
@@ -43,9 +44,16 @@ module Brcobranca
 
       # Número documento
       #
-      # @return [String] 7 caracteres numéricos.
+      # @return [String] 8 caracteres numéricos.
       def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(7, "0") if valor
+        @numero_documento = valor.to_s.rjust(8, "0") if valor
+      end
+
+      # Quantidade
+      #
+      # @return [String] 3 caracteres numéricos.
+      def quantidade=(valor)
+        @quantidade = valor.to_s.rjust(3, "0") if valor
       end
 
       # Nosso número para exibição no boleto.
@@ -90,26 +98,19 @@ module Brcobranca
         ) { |t| 11 - (t % 11) }
       end
 
-      # Modalidade de cobrança
-      #
-      # @return [String] 2 caracteres numéricos.
-      def modalidade_cobranca
-        "01"
-      end
-
-      # Número da parcela do título
-      #
-      # @return [String] 3 caracteres numéricos.
-      def parcela_titulo
-        "001"
-      end
-
       def agencia_conta_boleto
         "#{agencia} / #{convenio}"
       end
 
+      # Posição     Tamanho     Conteúdo
+      #    20 a 20      01                 Código da carteira de cobrança - vide planilha "Capa" deste arquivo
+      #    21 a 24      04                 Código da agência/cooperativa - verificar na planilha "Capa" deste arquivo
+      #    25 a 26      02                 Código da modalidade - verificar na planilha "Capa" deste arquivo
+      #    27 a 33      07                 Código do cedente/cliente - verificar na planilha "Capa" deste arquivo
+      #    34 a 41      08                 Nosso número do boleto
+      #    41 a 44      03                 Número da parcela a que o boleto se refere - "001" se parcela única
       def codigo_barras_segunda_parte
-        "#{carteira}#{agencia}#{modalidade_cobranca}#{convenio}#{nosso_numero_boleto}#{parcela_titulo}"
+        "#{carteira}#{agencia}#{variacao}#{convenio}#{numero_documento}#{quantidade}"
       end
     end
   end

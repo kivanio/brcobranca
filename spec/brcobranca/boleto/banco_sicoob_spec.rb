@@ -34,7 +34,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.dias_vencimento).to eql(1)
     expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
     expect(boleto_novo.aceite).to eql("S")
-    expect(boleto_novo.quantidade).to eql(1)
+    expect(boleto_novo.quantidade).to eql("001")
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
     expect(boleto_novo.local_pagamento).to eql("QUALQUER BANCO ATÉ O VENCIMENTO")
@@ -52,7 +52,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.dias_vencimento).to eql(45)
     expect(boleto_novo.data_vencimento).to eql(Date.parse("2013-08-29"))
     expect(boleto_novo.aceite).to eql("N")
-    expect(boleto_novo.quantidade).to eql(1)
+    expect(boleto_novo.quantidade).to eql("001")
     expect(boleto_novo.valor).to eql(100.0)
     expect(boleto_novo.valor_documento).to eql(100.0)
     expect(boleto_novo.local_pagamento).to eql("QUALQUER BANCO ATÉ O VENCIMENTO")
@@ -63,7 +63,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.conta_corrente).to eql("0417270")
     expect(boleto_novo.agencia).to eql("3007")
     expect(boleto_novo.convenio).to eql("0318957")
-    expect(boleto_novo.numero_documento).to eql("0000240")
+    expect(boleto_novo.numero_documento).to eql("00000240")
     expect(boleto_novo.carteira).to eql("1")
     expect(boleto_novo.codigo_servico).to be_falsey
   end
