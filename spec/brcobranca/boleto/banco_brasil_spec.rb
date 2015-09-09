@@ -4,12 +4,6 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   before do
     @valid_attributes = {
-      especie_documento: 'DM',
-      moeda: '9',
-      data_documento: Date.today,
-      dias_vencimento: 1,
-      aceite: 'S',
-      quantidade: 1,
       valor: 0.0,
       local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO',
       cedente: 'Kivanio Barbosa',
@@ -30,8 +24,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -48,8 +41,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -70,7 +62,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 8 digitos e nosso número de 9' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('0000001238798977770016818')
@@ -79,7 +71,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     expect(boleto_novo.conta_corrente_dv).to eql(0)
     expect(boleto_novo.nosso_numero_dv).to eql(7)
 
-    @valid_attributes[:dias_vencimento] = 1
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-02')
     @valid_attributes[:numero_documento] = '7700168'
     boleto_novo = described_class.new(@valid_attributes)
 
@@ -93,7 +85,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 7 digitos e nosso numero de 10' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
@@ -105,7 +97,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
     @valid_attributes[:valor] = 723.56
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
@@ -117,7 +109,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
     @valid_attributes[:valor] = 723.56
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
@@ -131,7 +123,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 6 digitos e nosso numero de 5' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 123_879
     @valid_attributes[:numero_documento] = '1234'
     boleto_novo = described_class.new(@valid_attributes)
@@ -145,7 +137,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 16' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 123_879
     @valid_attributes[:numero_documento] = '1234567899'
     @valid_attributes[:carteira] = '16'
@@ -161,7 +153,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 18' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 123_879
     @valid_attributes[:numero_documento] = '1234567899'
     @valid_attributes[:carteira] = '18'
@@ -177,7 +169,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Não montar código de barras para convenio de 6 digitos, nosso numero de 17 e carteira 17' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 123_879
     @valid_attributes[:numero_documento] = '1234567899'
     @valid_attributes[:carteira] = '17'
@@ -192,7 +184,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar código de barras para convenio de 4 digitos e nosso numero de 7' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 0
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
     @valid_attributes[:convenio] = 1238
     @valid_attributes[:numero_documento] = '123456'
     @valid_attributes[:codigo_servico] = true
@@ -280,7 +272,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos com método to_' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
@@ -299,7 +291,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)

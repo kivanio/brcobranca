@@ -4,14 +4,10 @@ require "spec_helper"
 RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
   before do
     @valid_attributes = {
-      especie_documento: "DM",
-      moeda: "9",
       data_documento: Date.parse("2013-07-15"),
-      dias_vencimento: 45,
+      data_vencimento: Date.parse("2013-08-29"),
       aceite: "N",
-      quantidade: 1,
       valor: 100.0,
-      local_pagamento: "QUALQUER BANCO ATÉ O VENCIMENTO",
       cedente: "Kivanio Barbosa",
       documento_cedente: "12345678912",
       sacado: "Claudio Pozzebom",
@@ -31,8 +27,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.especie).to eql("R$")
     expect(boleto_novo.moeda).to eql("9")
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql("S")
     expect(boleto_novo.quantidade).to eql("001")
     expect(boleto_novo.valor).to eql(0.0)
@@ -49,7 +44,6 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.especie).to eql("R$")
     expect(boleto_novo.moeda).to eql("9")
     expect(boleto_novo.data_documento).to eql(Date.parse("2013-07-15"))
-    expect(boleto_novo.dias_vencimento).to eql(45)
     expect(boleto_novo.data_vencimento).to eql(Date.parse("2013-08-29"))
     expect(boleto_novo.aceite).to eql("N")
     expect(boleto_novo.quantidade).to eql("001")
@@ -89,7 +83,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
   it "Gerar boleto nos formatos válidos com método to_" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = "240"
 
@@ -111,7 +105,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
   it "Gerar boleto nos formatos válidos" do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse("2008-02-01")
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:numero_documento] = "240"
 

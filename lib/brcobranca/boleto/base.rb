@@ -23,8 +23,6 @@ module Brcobranca
       attr_accessor :variacao
       # <b>OPCIONAL</b>: Data de processamento do boleto, geralmente igual a data_documento
       attr_accessor :data_processamento
-      # <b>REQUERIDO</b>: Número de dias a vencer
-      attr_accessor :dias_vencimento
       # <b>REQUERIDO</b>: Quantidade de boleto(padrão = 1)
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
@@ -45,6 +43,8 @@ module Brcobranca
       attr_accessor :especie_documento
       # <b>REQUERIDO</b>: Data em que foi emitido o boleto
       attr_accessor :data_documento
+      # <b>REQUERIDO</b>: Data de vencimento do boleto
+      attr_accessor :data_vencimento
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
@@ -86,7 +86,7 @@ module Brcobranca
       # @param [Hash] campos
       def initialize(campos = {})
         padrao = {
-          moeda: '9', data_documento: Date.today, dias_vencimento: 1, quantidade: 1,
+          moeda: '9', data_documento: Date.today, data_vencimento: Date.today, quantidade: 1,
           especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
           local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }
@@ -149,18 +149,6 @@ module Brcobranca
       # @return [Float]
       def valor_documento
         quantidade.to_f * valor.to_f
-      end
-
-      # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
-      #
-      # @return [Date]
-      # @raise [ArgumentError] Caso {#data_documento} esteja em branco.
-      def data_vencimento
-        fail ArgumentError, 'Data Documento não pode estar em branco.' unless data_documento.present?
-        return data_documento unless dias_vencimento
-
-        self.data_documento = Date.parse(data_documento) if data_documento.is_a?(String)
-        (data_documento + dias_vencimento.to_i)
       end
 
       # Fator de vencimento calculado com base na data de vencimento do boleto.
