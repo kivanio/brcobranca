@@ -94,7 +94,7 @@ module Brcobranca
       def nosso_numero_dv
         "#{agencia}#{convenio}#{numero_documento}".modulo11(
           multiplicador: [3, 1, 9, 7],
-          mapeamento: { 1 => 0 }
+          mapeamento: { 1 => 0, 10 => 0, 11 => 0 }
         ) { |t| 11 - (t % 11) }
       end
 
