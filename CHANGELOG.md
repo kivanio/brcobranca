@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.1.0.beta
+- Adicionado Banestes
+
 ## 6.0.0
 
 - Extraído campo data_vencimento que passa a receber a data de vencimento
