@@ -4,12 +4,6 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   before do
     @valid_attributes = {
-      especie_documento: 'DM',
-      moeda: '9',
-      data_documento: Date.today,
-      dias_vencimento: 1,
-      aceite: 'S',
-      quantidade: 1,
       valor: 10.00,
       cedente: 'PREFEITURA MUNICIPAL DE VILHENA',
       documento_cedente: '04092706000181',
@@ -30,8 +24,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -128,7 +121,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos com método to_' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:numero_documento] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|
@@ -146,7 +139,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    @valid_attributes[:dias_vencimento] = 2
+    @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:numero_documento] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|

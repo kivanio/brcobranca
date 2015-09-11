@@ -6,8 +6,6 @@ RSpec.describe Brcobranca::Boleto::Base do
     @valid_attributes = {
       especie_documento: 'DM',
       moeda: '9',
-      data_documento: Date.today,
-      dias_vencimento: 1,
       aceite: 'S',
       quantidade: 1,
       valor: 0.0,
@@ -29,8 +27,7 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -45,8 +42,7 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -141,25 +137,6 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.valor_documento).to eql(0.0)
   end
 
-  it 'Calcula data_vencimento' do
-    boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
-    boleto_novo.data_documento = Date.parse '2008-02-01'
-    boleto_novo.dias_vencimento = 1
-    expect(boleto_novo.data_vencimento.to_s).to eql('2008-02-02')
-    expect(boleto_novo.data_vencimento).to eql(Date.parse('2008-02-02'))
-    boleto_novo.data_documento = Date.parse '2008-02-02'
-    boleto_novo.dias_vencimento = 28
-    expect(boleto_novo.data_vencimento.to_s).to eql('2008-03-01')
-    expect(boleto_novo.data_vencimento).to eql(Date.parse('2008-03-01'))
-    boleto_novo.data_documento = Date.parse '2008-02-06'
-    boleto_novo.dias_vencimento = 100
-    expect(boleto_novo.data_vencimento.to_s).to eql('2008-05-16')
-    expect(boleto_novo.data_vencimento).to eql(Date.parse('2008-05-16'))
-    boleto_novo.data_documento = Date.parse '2008-02-06'
-    boleto_novo.dias_vencimento = 'df'
-    expect(boleto_novo.data_vencimento).to eql(boleto_novo.data_documento)
-  end
-
   it 'Mostrar aviso sobre sobrecarga de métodos padrões' do
     boleto_novo = Brcobranca::Boleto::Base.new(@valid_attributes)
     expect { boleto_novo.codigo_barras_segunda_parte }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
@@ -178,15 +155,13 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.respond_to?(:to)).to be_truthy
   end
 
-  context 'Validações' do
-    it 'data_documento em branco' do
-      boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '')
-      expect { boleto_novo.data_vencimento }.to raise_error(/Data Documento não pode estar em branco/)
-    end
+  it 'data_documento em string' do
+    boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '2015-06-15')
+    expect(boleto_novo.data_documento).to eql("2015-06-15")
+  end
 
-    it 'data_documento em string' do
-      boleto_novo = Brcobranca::Boleto::Base.new(data_documento: '2015-06-15')
-      expect(boleto_novo.data_vencimento).to eql(Date.parse('2015-06-16'))
-    end
+  it 'data_vencimento em string' do
+    boleto_novo = Brcobranca::Boleto::Base.new(data_vencimento: '2015-06-15')
+    expect(boleto_novo.data_vencimento).to eql("2015-06-15")
   end
 end

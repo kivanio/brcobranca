@@ -3,12 +3,6 @@ require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Bradesco do
   let(:valid_attributes) {{
-    especie_documento: 'DM',
-    moeda: '9',
-    data_documento: Date.today,
-    dias_vencimento: 1,
-    aceite: 'S',
-    quantidade: 1,
     valor: 0.0,
     local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
     cedente: 'Kivanio Barbosa',
@@ -28,8 +22,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -45,8 +38,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -66,7 +58,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   it 'Montar código de barras para carteira número 06' do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
     valid_attributes[:numero_documento] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'
@@ -79,7 +71,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
 
   it 'Montar código de barras para carteira número 03' do
     valid_attributes[:valor] = 135.00
-    valid_attributes[:dias_vencimento] = 1
+    valid_attributes[:data_vencimento] = Date.parse('2008-02-02')
     valid_attributes[:data_documento] = Date.parse('2008-02-01')
     valid_attributes[:numero_documento] = '777700168'
     valid_attributes[:conta_corrente] = '61900'
@@ -147,7 +139,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   it 'Gerar boleto nos formatos válidos com método to_' do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
     valid_attributes[:numero_documento] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'
@@ -168,7 +160,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   it 'Gerar boleto nos formatos válidos' do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
-    valid_attributes[:dias_vencimento] = 0
+    valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
     valid_attributes[:numero_documento] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'

@@ -4,14 +4,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Boleto::Itau do
   before do
     @valid_attributes = {
-      especie_documento: 'DM',
-      moeda: '9',
-      data_documento: Date.today,
-      dias_vencimento: 1,
-      aceite: 'S',
-      quantidade: 1,
       valor: 0.0,
-      local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO',
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
       sacado: 'Claudio Pozzebom',
@@ -30,8 +23,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -47,8 +39,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.dias_vencimento).to eql(1)
-    expect(boleto_novo.data_vencimento).to eql(Date.today + 1)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
@@ -66,7 +57,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
   end
 
   it 'Gerar boleto' do
-    @valid_attributes[:data_documento] = Date.parse('2009/08/13')
+    @valid_attributes[:data_vencimento] = Date.parse('2009/08/14')
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1751234567840810536789000')
@@ -75,7 +66,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
 
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:numero_documento] = '258281'
-    @valid_attributes[:data_documento] = Date.parse('2008/02/01')
+    @valid_attributes[:data_vencimento] = Date.parse('2008/02/02')
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1750025828170810536789000')
@@ -83,7 +74,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.75009 25828.170818 05367.890000 1 37700000013500')
 
     @valid_attributes[:numero_documento] = '258281'
-    @valid_attributes[:data_documento] = Date.parse('2004/09/04')
+    @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 168
     @valid_attributes[:valor] = 135.00
     boleto_novo = described_class.new(@valid_attributes)
@@ -93,7 +84,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.68004 25828.120813 05367.890000 4 25250000013500')
 
     @valid_attributes[:numero_documento] = '258281'
-    @valid_attributes[:data_documento] = Date.parse('2004/09/04')
+    @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = '12345'
@@ -105,7 +96,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.112349 56712.345505 1 25250000013500')
 
     @valid_attributes[:numero_documento] = '258281'
-    @valid_attributes[:data_documento] = Date.parse('2004/09/04')
+    @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = '12345'
@@ -117,7 +108,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.101235 45612.345509 2 25250000013500')
 
     @valid_attributes[:numero_documento] = '258281'
-    @valid_attributes[:data_documento] = Date.parse('2004/09/04')
+    @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:convenio] = '1234'

@@ -62,7 +62,7 @@ module Brcobranca
                 total = 0
                 0.upto(numero.size - 1) { |digito| total += numero[digito, 1].to_i }
                 total
-      end
+              end
       total.to_i
     end
 
@@ -83,6 +83,33 @@ module Brcobranca
         multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
       end
       total
+    end
+
+    # Calcula duplo dígito com modulo 10 e 11
+    #
+    # @return [String]
+    # @raise  [ArgumentError] Caso não seja um número inteiro.
+    def duplo_digito
+      fail ArgumentError, 'Número inválido' unless self.is_number?
+
+      digito_1 = self.modulo10
+      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| 11 - (total % 11) }
+
+      while digito_2 == 1
+        if digito_1 == 9
+          digito_1 = 0
+        else
+          digito_1 = digito_1 + 1
+        end
+
+        digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7])
+      end
+
+      if digito_2 != 0
+        digito_2 = 11 - digito_2
+      end
+
+      "#{digito_1}#{digito_2}"
     end
   end
 end
