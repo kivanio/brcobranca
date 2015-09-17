@@ -7,7 +7,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       data_vencimento: Date.today,
       nosso_numero: 123,
       documento_sacado: '12345678901',
-      nome_sacado: 'nome',
+      nome_sacado: 'João Mauricio terra grande de almeida machado',
       endereco_sacado: 'endereco',
       bairro_sacado: 'bairro',
       cep_sacado: '12345678',
@@ -15,7 +15,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       uf_sacado: 'SP')
   end
   let(:params) do
-    { empresa_mae: 'teste',
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '1234',
       conta_corrente: '12345',
       documento_cedente: '12345678901',
