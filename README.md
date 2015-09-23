@@ -23,6 +23,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | Bancos                | Carteiras         | Documentações  |
 |-----------------------|-------------------|----------------|
 | 001 - Banco do Brasil | Todas as carteiras presentes na documentação | [pdf](http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc5175Bloqueto.pdf) |
+| 021 - Banestes        | Todas as carteiras presentes na documentação  | | 
 | 033 - Santander       | Todas as carteiras presentes na documentação - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
 | 104 - Caixa           | Todas as carteiras presentes na documentação - [Túlio Ornelas](https://github.com/tulios) | [pdf](http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF) |
 | 237 - Bradesco        | Todas as carteiras presentes na documentação | [pdf](http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf) |
@@ -30,7 +31,6 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | 399 - HSBC            | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
 | 748 - Sicredi         | C (03)            |                |
 | 756 - Sicoob          | Todas as carteiras presentes na documentação |                |
-| 021 - Banestes        | Todas as carteiras presentes na documentação  | | 
 
 ### Retornos Disponíveis
 
