@@ -69,9 +69,9 @@ module Brcobranca
         # concatenando o endereco, cidade e uf
         #
         def formata_endereco_sacado(pgto)
-          ret = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}".ljust(40, ' ')
-          return ret if ret.size == 40
-          "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".ljust(40, ' ')
+          endereco = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}"
+          return endereco.ljust(40, ' ') if endereco.size <= 40
+          "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".format_size(40)
         end
 
         def monta_detalhe(pagamento, sequencial)

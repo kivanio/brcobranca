@@ -27,7 +27,7 @@ module Brcobranca
         end
 
         def nome_banco
-          'SANTANDER'.ljust(15, ' ')
+          'SANTANDER'.format_size(15)
         end
 
         # Informacoes do Código de Transmissão
@@ -135,7 +135,7 @@ module Brcobranca
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
-          detalhe << pagamento.nome_avalista.rjust(30, ' ')                 # Sacador/Mensagens                     X[40]
+          detalhe << pagamento.nome_avalista.format_size(30)                # Sacador/Mensagens                     X[30]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           detalhe << ''.rjust(1, ' ')                                       # Identificador do Complemento          X[1]
           detalhe << ''.rjust(2, ' ')                                       # Complemento                           9[2]

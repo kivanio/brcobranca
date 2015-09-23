@@ -128,7 +128,7 @@ module Brcobranca
           #     asterisco);
           #   b) sem o asterisco, este campo será o nome do Sacador/Avalista, quando preenchido;
           #   c) Se posição 148/149 (Tipo de Emissão) estiver com código 08 ou 09, este campo será o e-mail do sacado.
-          detalhe << pagamento.nome_avalista.rjust(40, ' ')                 # Sacador/Mensagens                     X[40]
+          detalhe << pagamento.nome_avalista.format_size(40)                # Sacador/Mensagens                     X[40]
           detalhe << ''.rjust(2, ' ')                                       # Brancos                               X[06]
           detalhe << '9'                                                    # moeda                                 9[01] - Código 9 = REAIS Código 5 = Dólar
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]

@@ -8,18 +8,18 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       data_vencimento: Date.today,
       nosso_numero: '429715',
       documento_sacado: '82136760505',
-      nome_sacado: 'Jose da Silva',
-      endereco_sacado: 'Av. Burkhard Hehn Simoes',
-      bairro_sacado: 'Sao Francisco',
-      cep_sacado: '24360440',
-      cidade_sacado: 'Rio de Janeiro',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
       uf_sacado: 'RJ'
     )
   end
 
   let(:params) do
     {
-      empresa_mae: 'SEBASTIAN ELIAS PUBLICIDADE',
+      empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '4327',
       conta_corrente: '03666',
       documento_cedente: '74576177000177',
@@ -149,7 +149,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
       after { Timecop.return }
 
-      it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-bancoob.rem', sicoob.gera_arquivo)) }
+      it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-bancoob-cnab240.rem', sicoob.gera_arquivo)) }
     end
   end
 end
