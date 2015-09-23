@@ -23,13 +23,14 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | Bancos                | Carteiras         | Documentações  |
 |-----------------------|-------------------|----------------|
 | 001 - Banco do Brasil | Todas as carteiras presentes na documentação | [pdf](http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc5175Bloqueto.pdf) |
-| 033 - Santander       | Sem registro, Com registro - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
-| 104 - Caixa           | Sem registro - [Túlio Ornelas](https://github.com/tulios) | [pdf](http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF) |
+| 033 - Santander       | Todas as carteiras presentes na documentação - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
+| 104 - Caixa           | Todas as carteiras presentes na documentação - [Túlio Ornelas](https://github.com/tulios) | [pdf](http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF) |
 | 237 - Bradesco        | Todas as carteiras presentes na documentação | [pdf](http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf) |
 | 341 - Itaú            | Todas as carteiras presentes na documentação | [CNAB240](http://download.itau.com.br/bankline/cobranca_cnab240.pdf), [CNAB400](http://download.itau.com.br/bankline/layout_cobranca_400bytes_cnab_itau_mensagem.pdf) |
 | 399 - HSBC            | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
 | 748 - Sicredi         | C (03)            |                |
 | 756 - Sicoob          | Todas as carteiras presentes na documentação |                |
+| 021 - Banestes        | Todas as carteiras presentes na documentação  | | 
 
 ### Retornos Disponíveis
 
@@ -45,6 +46,8 @@ Para CNABs do tipo 240 indico usar a gem [cnab240](https://github.com/eduardordm
 * Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 * Bradesco (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 * Itaú (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+* Citibank (CNAB400)
+* Santander (CNAB400)
 
 ### Documentação
 
@@ -64,4 +67,3 @@ Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](h
 ### Licença
 
 * BSD
-* Copyleft 2009 [Kivanio Barbosa](http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa)
