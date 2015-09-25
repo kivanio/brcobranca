@@ -23,7 +23,6 @@ module Brcobranca
       include ActiveModel::Validations
 
       validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
-      validates_length_of :empresa_mae, maximum: 30, message: 'deve ser menor ou igual a 30 caracteres.'
 
       validates_each :pagamentos do |record, attr, value|
         if value.is_a? Array

@@ -7,15 +7,15 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       data_vencimento: Date.today,
       nosso_numero: 123,
       documento_sacado: '12345678901',
-      nome_sacado: 'nome',
-      endereco_sacado: 'endereco',
-      bairro_sacado: 'bairro',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
       cep_sacado: '12345678',
-      cidade_sacado: 'cidade',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
       uf_sacado: 'SP')
   end
   let(:params) do
-    { empresa_mae: 'teste',
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '1234',
       conta_corrente: '12345',
       documento_cedente: '12345678901',
@@ -149,7 +149,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
     end
 
     it 'complemento trailer deve retornar espacos em branco' do
-      expect(banco_brasil.complemento_trailer).to eq ''.rjust(217, ' ')
+      expect(banco_brasil.complemento_trailer).to eq ''.rjust(217, '0')
     end
 
     context 'formatacao nosso numero' do
@@ -205,5 +205,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
+
+    context 'arquivo' do
+      before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+      after { Timecop.return }
+
+      it { expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240.rem', banco_brasil.gera_arquivo)) }
+    end
   end
 end
