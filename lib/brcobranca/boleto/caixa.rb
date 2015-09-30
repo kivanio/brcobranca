@@ -7,17 +7,14 @@
 module Brcobranca
   module Boleto
     class Caixa < Base # Caixa
-      MODALIDADE_COBRANCA = {
-        registrada: '1',
-        sem_registro: '2'
-      }
-
-      EMISSAO_BOLETO = {
-        cedente: '4'
-      }
-
+      # <b>REQUERIDO</b>: Emissão do boleto
+      attr_accessor :emissao
+      
       # Validações
-      validates_length_of :carteira, is: 2, message: 'deve possuir 2 dígitos.'
+      #Modalidade/Carteira de Cobrança (1-Registrada | 2-Sem Registro)
+      validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígitos.'
+      # Emissão do boleto (4-Beneficiário)
+      validates_length_of :emissao, is: 1, message: 'deve possuir 1 dígitos.'
       validates_length_of :convenio, is: 6, message: 'deve possuir 6 dígitos.'
       validates_length_of :numero_documento, is: 15, message: 'deve possuir 15 dígitos.'
 
@@ -25,7 +22,8 @@ module Brcobranca
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = {
-          carteira: "#{MODALIDADE_COBRANCA[:sem_registro]}#{EMISSAO_BOLETO[:cedente]}"
+          carteira: '2',
+          emissao: '4'
         }.merge!(campos)
 
         campos.merge!(local_pagamento: 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
@@ -63,14 +61,14 @@ module Brcobranca
       #  3 à 17: campo_livre
       # @return [String]
       def nosso_numero_boleto
-        "#{carteira}#{numero_documento}-#{nosso_numero_dv}"
+        "#{carteira}#{emissao}#{numero_documento}-#{nosso_numero_dv}"
       end
 
       # Dígito verificador do Nosso Número
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
       def nosso_numero_dv
-        "#{carteira}#{numero_documento}".modulo11(
+        "#{carteira}#{emissao}#{numero_documento}".modulo11(
           multiplicador: (2..9).to_a,
           mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s

@@ -31,9 +31,8 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.valor_documento).to eql(0.0)
     expect(boleto_novo.local_pagamento).to eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     expect(boleto_novo.codigo_servico).to be_falsey
-    carteira = "#{Brcobranca::Boleto::Caixa::MODALIDADE_COBRANCA[:sem_registro]}" \
-               "#{Brcobranca::Boleto::Caixa::EMISSAO_BOLETO[:cedente]}"
-    expect(boleto_novo.carteira).to eql(carteira)
+    expect(boleto_novo.carteira).to eql('2')
+    expect(boleto_novo.emissao).to eql('4')
   end
 
   it 'Criar nova instancia com atributos válidos' do
@@ -73,11 +72,19 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo).to be_valid
   end
 
-  it 'Tamanho da carteira deve ser de 2 dígitos' do
+  it 'Tamanho da carteira deve ser de 1 dígitos' do
     boleto_novo = described_class.new @valid_attributes.merge(carteira: '145')
     expect(boleto_novo).not_to be_valid
 
-    boleto_novo = described_class.new @valid_attributes.merge(carteira: '1')
+    boleto_novo = described_class.new @valid_attributes.merge(carteira: '24')
+    expect(boleto_novo).not_to be_valid
+  end
+  
+  it 'Emissao deve ser de 1 dígitos' do
+    boleto_novo = described_class.new @valid_attributes.merge(emissao: '145')
+    expect(boleto_novo).not_to be_valid
+
+    boleto_novo = described_class.new @valid_attributes.merge(emissao: '24')
     expect(boleto_novo).not_to be_valid
   end
 
@@ -94,9 +101,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new @valid_attributes
-    expect(boleto_novo.nosso_numero_boleto).to eq("#{boleto_novo.carteira}" \
-                                              "#{boleto_novo.numero_documento}" \
-                                              "-#{boleto_novo.nosso_numero_dv}")
+    expect(boleto_novo.nosso_numero_boleto).to eq('24000000000000001-2')
   end
 
   it 'Montar agencia_conta_boleto' do
