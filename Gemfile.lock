@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    brcobranca (6.1.1)
+    brcobranca (6.1.2)
       activemodel (>= 3)
       parseline (~> 1.0.3)
       rghost (= 0.9.5)
@@ -27,7 +27,7 @@ GEM
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
-    coveralls (0.8.2)
+    coveralls (0.8.3)
       json (~> 1.8)
       rest-client (>= 1.6.8, < 2)
       simplecov (~> 0.10.0)
@@ -35,7 +35,7 @@ GEM
       thor (~> 0.19.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.24)
+    domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     ffi (1.9.10-x86-mingw32)
     http-cookie (1.0.2)
