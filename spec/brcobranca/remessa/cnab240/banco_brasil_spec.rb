@@ -65,7 +65,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       it 'deve ser invalido se o convenio nao tiver entre 4 e 7 digitos' do
         banco_brasil.convenio = '12345678'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Convenio não existente para este banco.')
+        expect(banco_brasil.errors.full_messages).to include('Convenio deve ter de 4 a 7 dígitos.')
       end
     end
 
