@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    brcobranca (6.1.2)
+    brcobranca (6.1.3)
       activemodel (>= 3)
       parseline (~> 1.0.3)
       rghost (= 0.9.5)
