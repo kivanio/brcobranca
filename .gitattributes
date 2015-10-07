@@ -1,0 +1,2 @@
+# except these which we want crlf
+*.rem eol=crlf
