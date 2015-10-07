@@ -236,7 +236,7 @@ module Brcobranca
           segmento_p << '09'                                            # cod. da moeda                         2
           segmento_p << ''.rjust(10, '0')                               # uso exclusivo                         10
           segmento_p << ' '                                             # uso exclusivo                         1
-          segmento_p.upcase
+          segmento_p
         end
       end
     end

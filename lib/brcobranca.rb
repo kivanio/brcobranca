@@ -12,6 +12,9 @@ module Brcobranca
   class NaoImplementado < NotImplementedError
   end
 
+  class ValorInvalido < StandardError
+  end
+
   # Exception lançada quando os dados informados para o boleto estão inválidos.
   #
   # Você pode usar assim na sua aplicação:

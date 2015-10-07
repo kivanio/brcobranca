@@ -132,7 +132,7 @@ module Brcobranca
           detalhe << ''.rjust(2, ' ')                                       # Brancos                               X[06]
           detalhe << '9'                                                    # moeda                                 9[01] - Código 9 = REAIS Código 5 = Dólar
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
-          detalhe.upcase
+          detalhe
         end
       end
     end

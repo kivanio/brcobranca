@@ -180,7 +180,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Bradesco do
         expect(detalhe[126..138]).to eq '0000000019990' # valor do documento
         expect(detalhe[220..233]).to eq '00012345678901' # documento do pagador
         expect(detalhe[234..273]).to eq 'PABLO DIEGO JOSE FRANCISCO DE PAULA JUAN' # nome do pagador
-        expect(detalhe[274..313]).to eq bradesco.formata_endereco_sacado(pagamento).upcase # endereco do pagador
+        expect(detalhe[274..313]).to eq bradesco.formata_endereco_sacado(pagamento) # endereco do pagador
       end
     end
 

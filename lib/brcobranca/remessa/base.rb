@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+require 'unidecoder'
+
 module Brcobranca
   module Remessa
     class Base

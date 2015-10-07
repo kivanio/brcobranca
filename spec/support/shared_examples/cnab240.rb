@@ -73,8 +73,8 @@ shared_examples_for 'cnab240' do
       expect(header[33..52]).to eq objeto.convenio_lote # informacoes do convenio
       expect(header[53..72]).to eq objeto.info_conta # informacoes da conta
       expect(header[73..102]).to eq 'SOCIEDADE BRASILEIRA DE ZOOLOG' # razao social do cedente
-      expect(header[103..142]).to eq 'CAMPO DESTINADO AO PREENCHIMENTO NO MOME' # 1a mensagem
-      expect(header[143..182]).to eq 'CAMPO DESTINADO AO PREENCHIMENTO NO MOME' # 2a mensagem
+      expect(header[103..142]).to eq 'Campo destinado ao preenchimento no mome' # 1a mensagem
+      expect(header[143..182]).to eq 'Campo destinado ao preenchimento no mome' # 2a mensagem
       expect(header[183..190]).to eq '00000001' # sequencial de remessa
     end
   end
@@ -118,11 +118,11 @@ shared_examples_for 'cnab240' do
       expect(segmento_q[17]).to eq '1' # tipo inscricao sacado
       expect(segmento_q[18..32]).to eq '000012345678901' # documento do sacado
       expect(segmento_q[33..72]).to eq 'PABLO DIEGO JOSE FRANCISCO DE PAULA JUAN' # nome do sacado
-      expect(segmento_q[73..112]).to eq 'RUA RIO GRANDE DO SUL SAO PAULO MINAS CA' # endereco do sacado
-      expect(segmento_q[113..127]).to eq 'SAO JOSE DOS QU' # bairro do sacado
+      expect(segmento_q[73..112]).to eq 'RUA RIO GRANDE DO SUL Sao paulo Minas ca' # endereco do sacado
+      expect(segmento_q[113..127]).to eq 'Sao jose dos qu' # bairro do sacado
       expect(segmento_q[128..132]).to eq '12345' # CEP do sacado
       expect(segmento_q[133..135]).to eq '678' # sufixo CEP do sacado
-      expect(segmento_q[136..150]).to eq 'SANTA RITA DE C' # cidade do sacado
+      expect(segmento_q[136..150]).to eq 'Santa rita de c' # cidade do sacado
       expect(segmento_q[151..152]).to eq 'SP' # UF do sacado
       expect(segmento_q[153]).to eq '1' # tipo inscricao avalista
       expect(segmento_q[154..168]).to eq '000012345678901' # documento avalista
@@ -182,13 +182,14 @@ shared_examples_for 'cnab240' do
     it 'remessa deve conter os registros mais as quebras de linha' do
       remessa = objeto.gera_arquivo
 
-      expect(remessa.size).to eq 1445
+      expect(remessa.size).to eq 1452
       # quebras de linha
-      expect(remessa[240]).to eq "\n"
-      expect(remessa[481]).to eq "\n"
-      expect(remessa[722]).to eq "\n"
-      expect(remessa[963]).to eq "\n"
-      expect(remessa[1204]).to eq "\n"
+      expect(remessa[240..241]).to eq "\r\n"
+      expect(remessa[482..483]).to eq "\r\n"
+      expect(remessa[724..725]).to eq "\r\n"
+      expect(remessa[966..967]).to eq "\r\n"
+      expect(remessa[1208..1209]).to eq "\r\n"
+      expect(remessa[1450..1451]).to eq "\r\n"
     end
   end
 end

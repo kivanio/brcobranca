@@ -144,7 +144,7 @@ module Brcobranca
           detalhe << '00'.rjust(2, ' ')                                     # Número de dias para protesto          9[02]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
-          detalhe.upcase
+          detalhe
         end
       end
     end
