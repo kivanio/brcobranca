@@ -154,7 +154,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor(tamanho = 13)
-        sprintf('%.2f', valor).delete('.').rjust(tamanho, '0')
+        format_value(valor, tamanho)
       end
 
       # Formata o campo valor da mora
@@ -163,7 +163,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_mora(tamanho = 13)
-        sprintf('%.2f', valor_mora).delete('.').rjust(tamanho, '0')
+        format_value(valor_mora, tamanho)
       end
 
       # Formata o campo valor do desconto
@@ -172,7 +172,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_desconto(tamanho = 13)
-        sprintf('%.2f', valor_desconto).delete('.').rjust(tamanho, '0')
+        format_value(valor_desconto, tamanho)
       end
 
       # Formata o campo valor do segundo desconto
@@ -181,7 +181,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_segundo_desconto(tamanho = 13)
-        sprintf('%.2f', valor_segundo_desconto).delete('.').rjust(tamanho, '0')
+        format_value(valor_segundo_desconto, tamanho)
       end
 
       # Formata o campo valor do IOF
@@ -190,7 +190,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_iof(tamanho = 13)
-        sprintf('%.2f', valor_iof).delete('.').rjust(tamanho, '0')
+        format_value(valor_iof, tamanho)
       end
 
       # Formata o campo valor do IOF
@@ -199,7 +199,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_abatimento(tamanho = 13)
-        sprintf('%.2f', valor_abatimento).delete('.').rjust(tamanho, '0')
+        format_value(valor_abatimento, tamanho)
       end
 
       # Retorna a identificacao do pagador
@@ -217,6 +217,14 @@ module Brcobranca
       def identificacao_avalista(zero = true)
         return '0' if documento_avalista.nil?
         Brcobranca::Util::Empresa.new(documento_avalista, zero).tipo
+      end
+
+      private
+
+      def format_value(value, tamanho)
+        raise ValorInvalido.new('Deve ser um Float') if !(value.to_s =~ /\./)
+
+        sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
       end
     end
   end

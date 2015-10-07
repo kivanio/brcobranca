@@ -4,7 +4,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(
-      valor: 50,
+      valor: 50.0,
       data_vencimento: Date.today,
       nosso_numero: '429715',
       documento_sacado: '82136760505',
