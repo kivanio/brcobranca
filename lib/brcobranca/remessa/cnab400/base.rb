@@ -71,9 +71,7 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
-          ret = ret.join("\r\n").to_ascii.upcase
-          ret << "\r\n"
-          ret
+          ret.join("\r\n").to_ascii.upcase
         end
 
         # Informacoes referentes a conta do cedente

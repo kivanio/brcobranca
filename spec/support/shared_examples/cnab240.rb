@@ -182,14 +182,13 @@ shared_examples_for 'cnab240' do
     it 'remessa deve conter os registros mais as quebras de linha' do
       remessa = objeto.gera_arquivo
 
-      expect(remessa.size).to eq 1452
+      expect(remessa.size).to eq 1450
       # quebras de linha
       expect(remessa[240..241]).to eq "\r\n"
       expect(remessa[482..483]).to eq "\r\n"
       expect(remessa[724..725]).to eq "\r\n"
       expect(remessa[966..967]).to eq "\r\n"
       expect(remessa[1208..1209]).to eq "\r\n"
-      expect(remessa[1450..1451]).to eq "\r\n"
     end
   end
 end
