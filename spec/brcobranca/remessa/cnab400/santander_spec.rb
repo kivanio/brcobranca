@@ -78,8 +78,8 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       expect(nome_banco.strip).to eq 'SANTANDER'
     end
 
-    it 'complemento deve retornar 294 caracteres' do
-      expect(santander_cnab400.complemento.size).to eq 294
+    it 'complemento deve retornar 279 caracteres' do
+      expect(santander_cnab400.complemento.size).to eq 279
     end
 
     it 'info_conta deve retornar com 20 posicoes as informacoes da conta' do
@@ -110,6 +110,17 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
         expect(detalhe[126..138]).to eq '0000000019990'                # valor do titulo
         expect(detalhe[220..233]).to eq '00012345678901'               # documento do pagador
         expect(detalhe[234..263]).to eq 'NOME'.ljust(30, ' ')          # nome do pagador
+      end
+    end
+
+    context 'trailer' do
+      it 'informacoes devem estar posicionadas corretamente no trailer' do
+        trailer = santander_cnab400.monta_trailer "3"
+        expect(trailer[0]).to eq '9'                        # código registro
+        expect(trailer[1..6]).to eq '000001'                # quant. registros
+        expect(trailer[7..19]).to eq '0000000019990'        # valor total dos titulos
+        expect(trailer[20..393]).to eq ''.rjust(374, '0')   # zeros
+        expect(trailer[394..399]).to eq '000003'            # num. sequencial
       end
     end
   end
