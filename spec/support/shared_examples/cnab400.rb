@@ -69,7 +69,9 @@ shared_examples_for 'cnab400' do
     it 'informacoes devem estar posicionadas corretamente no trailer' do
       trailer = objeto.monta_trailer 3
       expect(trailer[0]).to eq '9'                       # identificacao registro
-      expect(trailer[1..393]).to eq ''.rjust(393, ' ')   # brancos
+      if subject.class != Brcobranca::Remessa::Cnab400::Santander
+        expect(trailer[1..393]).to eq ''.rjust(393, ' ')   # brancos
+      end
       expect(trailer[394..399]).to eq '000003'           # numero sequencial do registro
     end
   end

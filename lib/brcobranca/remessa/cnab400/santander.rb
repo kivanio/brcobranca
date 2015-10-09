@@ -45,7 +45,25 @@ module Brcobranca
         # @return [String]
         #
         def complemento
-          '58'.rjust(294, ' ')
+          '058'.rjust(279, ' ')
+        end
+
+        def monta_header
+          # CAMPO                 TAMANHO    VALOR
+          # tipo do registro      [1]        0
+          # operacao              [1]        1
+          # literal remessa       [7]        REMESSA
+          # Código do serviço     [2]        01
+          # cod. servico          [15]       COBRANCA
+          # info. conta           [20]
+          # empresa mae           [30]
+          # cod. banco            [3]
+          # nome banco            [15]
+          # data geracao          [6]        formato DDMMAA
+          # zeros                 [16]
+          # complemento registro  [278]
+          # num. sequencial       [6]        000001
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}000000000000000#{complemento}000001"
         end
 
         # Detalhe do arquivo
@@ -145,6 +163,19 @@ module Brcobranca
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe.upcase
+        end
+
+        def monta_trailer(sequencial)
+          documentos = "#{pagamentos.count.to_s.rjust(6, '0')}"
+          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
+
+          # CAMPO               TAMANHO   VALOR
+          # código registro     [1]       9
+          # quant. documentos   [6]
+          # valor total titulos [13]
+          # zeros               [374]     0
+          # num. sequencial     [6]
+          "9#{documentos}#{total.to_s.somente_numeros.rjust(13, "0")}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
         end
       end
     end
