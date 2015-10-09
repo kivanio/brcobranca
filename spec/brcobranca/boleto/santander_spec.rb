@@ -51,7 +51,7 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.agencia).to eql('0059')
     expect(boleto_novo.convenio).to eql('1899775')
-    expect(boleto_novo.numero_documento).to eql('90000267')
+    expect(boleto_novo.numero_documento).to eql('000090000267')
     expect(boleto_novo.carteira).to eql('102')
   end
 
