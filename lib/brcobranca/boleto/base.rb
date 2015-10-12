@@ -102,7 +102,11 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        if Brcobranca.configuration.gerador == :rghost_carne
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}_carne.eps")
+        else
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        end
       end
 
       # Dígito verificador do banco
