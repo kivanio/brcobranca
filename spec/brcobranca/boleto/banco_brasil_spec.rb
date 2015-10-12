@@ -263,10 +263,8 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     expect(boleto_novo.agencia_conta_boleto).to eql('0548-7 / 00001448-6')
   end
 
-  it 'Busca logotipo do banco' do
-    boleto_novo = described_class.new
-    expect(File.exist?(boleto_novo.logotipo)).to be_truthy
-    expect(File.stat(boleto_novo.logotipo).zero?).to be_falsey
+  describe 'Busca logotipo do banco' do
+    it_behaves_like 'busca_logotipo'
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do
