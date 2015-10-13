@@ -69,7 +69,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
   end
 
   context 'formatacoes dos valores' do
-    it 'cod_banco deve ser 341' do
+    it 'cod_banco deve ser 033' do
       expect(santander_cnab400.cod_banco).to eq '033'
     end
 
@@ -78,8 +78,8 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       expect(nome_banco.strip).to eq 'SANTANDER'
     end
 
-    it 'complemento deve retornar 279 caracteres' do
-      expect(santander_cnab400.complemento.size).to eq 279
+    it 'complemento deve retornar 275 caracteres' do
+      expect(santander_cnab400.complemento.size).to eq 275
     end
 
     it 'info_conta deve retornar com 20 posicoes as informacoes da conta' do
@@ -95,10 +95,13 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
     context 'header' do
       it 'informacoes devem estar posicionadas corretamente no header' do
         header = santander_cnab400.monta_header
-        expect(header[1]).to eq '1'                            # tipo operacao (1 = remessa)
-        expect(header[2..8]).to eq 'REMESSA'                   # literal da operacao
+        expect(header[1]).to eq '1'                                 # tipo operacao (1 = remessa)
+        expect(header[2..8]).to eq 'REMESSA'                        # literal da operacao
         expect(header[26..45]).to eq santander_cnab400.info_conta   # informacoes da conta
-        expect(header[76..78]).to eq '033'                     # codigo do banco
+        expect(header[76..78]).to eq '033'                          # codigo do banco
+        expect(header[100..115]).to eq ''.rjust(16, "0")            # zeros
+        expect(header[116..390]).to eq ''.rjust(275,' ')            # campos mensagens vazios
+        expect(header[391..393]).to eq '058'                        # numero da versão da remessa
       end
     end
 

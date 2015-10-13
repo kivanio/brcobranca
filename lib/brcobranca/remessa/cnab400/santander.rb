@@ -40,12 +40,29 @@ module Brcobranca
           codigo_transmissao.rjust(20, ' ')
         end
 
+        # Zeros do header
+        #
+        # @return [String]
+        #
+        def zeros
+          "".ljust(16, "0")
+        end
+
+
         # Complemento do header
         #
         # @return [String]
         #
         def complemento
-          '058'.rjust(279, ' ')
+          "".ljust(275, " ")
+        end
+
+        # Numero da versão da remessa
+        #
+        # @return [String]
+        #
+        def versao
+          "058"
         end
 
         def monta_header
@@ -61,9 +78,10 @@ module Brcobranca
           # nome banco            [15]
           # data geracao          [6]        formato DDMMAA
           # zeros                 [16]
-          # complemento registro  [278]
+          # complemento registro  [275]
+          # versao                [3]
           # num. sequencial       [6]        000001
-          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}000000000000000#{complemento}000001"
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{zeros}#{complemento}#{versao}000001"
         end
 
         # Detalhe do arquivo
