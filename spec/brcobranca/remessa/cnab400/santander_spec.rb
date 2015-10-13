@@ -120,7 +120,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       it 'informacoes devem estar posicionadas corretamente no trailer' do
         trailer = santander_cnab400.monta_trailer "3"
         expect(trailer[0]).to eq '9'                        # código registro
-        expect(trailer[1..6]).to eq '000001'                # quant. registros
+        expect(trailer[1..6]).to eq '000003'                # quant. total de linhas
         expect(trailer[7..19]).to eq '0000000019990'        # valor total dos titulos
         expect(trailer[20..393]).to eq ''.rjust(374, '0')   # zeros
         expect(trailer[394..399]).to eq '000003'            # num. sequencial

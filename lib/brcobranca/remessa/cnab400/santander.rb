@@ -183,17 +183,39 @@ module Brcobranca
           detalhe.upcase
         end
 
-        def monta_trailer(sequencial)
-          documentos = "#{pagamentos.count.to_s.rjust(6, '0')}"
-          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
+        # Total de linhas (pagamentos + header + trailer)
+        #
+        # @return [String]
+        #
+        def total_linhas
+          documentos = pagamentos.count + 2
+          "#{documentos.to_s.rjust(6, '0')}"
+        end
 
+        # Valor total de todos os títulos
+        #
+        # @return [String]
+        #
+        def total_titulos
+          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
+          total.to_s.somente_numeros.rjust(13, "0")
+        end
+
+        # Trailer do arquivo remessa
+        #
+        # @param sequencial
+        #        num. sequencial do registro no arquivo
+        #
+        # @return [String]
+        #
+        def monta_trailer(sequencial)
           # CAMPO               TAMANHO   VALOR
           # código registro     [1]       9
           # quant. documentos   [6]
           # valor total titulos [13]
           # zeros               [374]     0
           # num. sequencial     [6]
-          "9#{documentos}#{total.to_s.somente_numeros.rjust(13, "0")}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
+          "9#{total_linhas}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
         end
       end
     end
