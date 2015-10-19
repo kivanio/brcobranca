@@ -173,8 +173,8 @@ module Brcobranca
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
           detalhe << pagamento.nome_avalista.rjust(30, ' ')                 # Sacador/Mensagens                     X[40]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
-          detalhe << ''.rjust(1, ' ')                                       # Identificador do Complemento          X[1]
-          detalhe << ''.rjust(2, ' ')                                       # Complemento                           9[2]
+          detalhe << identificador_movimento_complemento                    # Identificador do Complemento          X[1]
+          detalhe << movimento_complemento                                  # Complemento                           9[2]
           detalhe << ''.rjust(6, ' ')                                       # Brancos                               X[06]
           # Se identificacao_ocorrencia = 06
           detalhe << '00'.rjust(2, ' ')                                     # Número de dias para protesto          9[02]
@@ -183,13 +183,18 @@ module Brcobranca
           detalhe.upcase
         end
 
-        # Total de linhas (pagamentos + header + trailer)
-        #
-        # @return [String]
-        #
-        def total_linhas
-          documentos = pagamentos.count + 2
-          "#{documentos.to_s.rjust(6, '0')}"
+        def identificador_movimento_complemento
+          return 'I' if conta_padrao_novo?
+          ''.rjust(1, ' ')
+        end
+
+        def movimento_complemento
+          return "#{conta_corrente[8]}#{digito_conta}" if conta_padrao_novo?
+          ''.rjust(2, ' ')
+        end
+
+        def conta_padrao_novo?
+          conta_corrente.present? && conta_corrente.length > 8
         end
 
         # Valor total de todos os títulos
@@ -215,7 +220,7 @@ module Brcobranca
           # valor total titulos [13]
           # zeros               [374]     0
           # num. sequencial     [6]
-          "9#{total_linhas}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
+          "9#{sequencial.to_s.rjust(6, '0')}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, "0")}"
         end
       end
     end
