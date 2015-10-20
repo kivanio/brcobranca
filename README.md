@@ -17,6 +17,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
 - https://brcobranca.herokuapp.com
 - http://github.com/kivanio/brcobranca_exemplo
+- https://github.com/thiagoc7/brcobranca_app
 
 ### Bancos Disponíveis
 
