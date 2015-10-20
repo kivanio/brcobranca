@@ -172,7 +172,7 @@ module Brcobranca
         # aplica dados do lado esquerdo
         def modelo_carne_build_data_left(doc, boleto, colunas, linhas)
           # LOGOTIPO do BANCO
-          doc.image(boleto.logotipo, x: (colunas[0] - 0.1), y: linhas[0], zoom: 50)
+          doc.image boleto.logotipo, x: (colunas[0] - 0.11), y: linhas[0]
 
           # Dados
 
@@ -208,7 +208,7 @@ module Brcobranca
         # aplica dados do lado direito
         def modelo_carne_build_data_right(doc, boleto, colunas, linhas)
           # LOGOTIPO do BANCO
-          doc.image(boleto.logotipo, x: colunas[2], y: linhas[0], zoom: 50)
+          doc.image boleto.logotipo, x: (colunas[2] - 0.11), y: linhas[0]
 
           # Numero do banco
           doc.moveto x: colunas[4], y: linhas[0]

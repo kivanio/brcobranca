@@ -79,7 +79,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo = described_class.new @valid_attributes.merge(carteira: '24')
     expect(boleto_novo).not_to be_valid
   end
-  
+
   it 'Emissao deve ser de 1 dígitos' do
     boleto_novo = described_class.new @valid_attributes.merge(emissao: '145')
     expect(boleto_novo).not_to be_valid
@@ -117,10 +117,8 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.agencia_conta_boleto).to eql('2030/654321-9')
   end
 
-  it 'Busca logotipo do banco' do
-    boleto_novo = described_class.new
-    expect(File.exist?(boleto_novo.logotipo)).to be_truthy
-    expect(File.stat(boleto_novo.logotipo).zero?).to be_falsey
+  describe 'Busca logotipo do banco' do
+    it_behaves_like 'busca_logotipo'
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do
