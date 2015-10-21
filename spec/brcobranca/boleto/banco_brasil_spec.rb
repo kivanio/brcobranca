@@ -233,22 +233,22 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
     boleto_novo.numero_documento = '4042'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042-4')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042')
     expect(boleto_novo.nosso_numero_dv).to eql(4)
     boleto_novo.numero_documento = '61900'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900-7')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900')
     expect(boleto_novo.nosso_numero_dv).to eql(7)
     boleto_novo.numero_documento = '0719'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719-2')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719')
     expect(boleto_novo.nosso_numero_dv).to eql(2)
     boleto_novo.numero_documento = 4042
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042-4')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042')
     expect(boleto_novo.nosso_numero_dv).to eql(4)
     boleto_novo.numero_documento = 61_900
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900-7')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900')
     expect(boleto_novo.nosso_numero_dv).to eql(7)
     boleto_novo.numero_documento = 719
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719-2')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719')
     expect(boleto_novo.nosso_numero_dv).to eql(2)
   end
 
