@@ -57,18 +57,23 @@ module Brcobranca
       end
 
       # Nosso número, 17 dígitos
-      #  1 à 2: carteira
-      #  3 à 17: campo_livre
       # @return [String]
       def nosso_numero_boleto
-        "#{carteira}#{emissao}#{numero_documento}-#{nosso_numero_dv}"
+        "#{nosso_numero}-#{nosso_numero_dv}"
       end
 
+      # Nosso número, 17 dígitos
+      #  1 à 2: carteira
+      #  3 à 17: campo_livre
+      def nosso_numero
+        "#{carteira}#{emissao}#{numero_documento}"
+      end
+      
       # Dígito verificador do Nosso Número
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
       def nosso_numero_dv
-        "#{carteira}#{emissao}#{numero_documento}".modulo11(
+        nosso_numero.modulo11(
           multiplicador: (2..9).to_a,
           mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s
@@ -104,11 +109,11 @@ module Brcobranca
       def codigo_barras_segunda_parte
         campo_livre = "#{convenio}" \
         "#{convenio_dv}" \
-        "#{nosso_numero_boleto[2..4]}" \
-        "#{nosso_numero_boleto[0..0]}" \
-        "#{nosso_numero_boleto[5..7]}" \
-        "#{nosso_numero_boleto[1..1]}" \
-        "#{nosso_numero_boleto[8..16]}"
+        "#{nosso_numero[2..4]}" \
+        "#{nosso_numero[0..0]}" \
+        "#{nosso_numero[5..7]}" \
+        "#{nosso_numero[1..1]}" \
+        "#{nosso_numero[8..16]}"
 
         "#{campo_livre}" +
           campo_livre.modulo11(
