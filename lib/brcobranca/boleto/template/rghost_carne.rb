@@ -30,7 +30,7 @@ module Brcobranca
         # @return [Stream]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
         # @see Rghost#modelo_carne Recebe os mesmos parâmetros do Rghost#modelo_carne.
-        def to(formato, options = {})
+        def to_carne(formato, options = {})
           modelo_carne(self, options.merge!(formato: formato))
         end
 
@@ -39,7 +39,7 @@ module Brcobranca
         # @return [Stream]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
         # @see Rghost#modelo_carne Recebe os mesmos parâmetros do Rghost#modelo_carne.
-        def lote(boletos, options = {})
+        def lote_carne(boletos, options = {})
           modelo_carne_multipage(boletos, options)
         end
 
