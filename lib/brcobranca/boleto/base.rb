@@ -7,8 +7,10 @@ module Brcobranca
       extend Template::Base
 
       # Configura gerador de arquivo de boleto e código de barras.
-      extend define_template(Brcobranca.configuration.gerador)
-      include define_template(Brcobranca.configuration.gerador)
+      define_template(Brcobranca.configuration.gerador).each do |klass|
+        extend klass
+        include klass
+      end
 
       # Validações do Rails 3
       include ActiveModel::Validations
