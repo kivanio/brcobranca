@@ -145,17 +145,18 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     end
   end
 
-  it 'quando dígito verificador for 10 deve ser mapeado para 0', focus: true do
-    attributes = @valid_attributes.merge({
-      convenio: '2442725',
-      agencia: '0217',
-      conta_corrente: '42725',
+  it "quando dígito verificador for 10 deve ser mapeado para 0" do
+    attributes = {
+      convenio: "2442725",
+      agencia: "0217",
+      conta_corrente: "42725",
       byte_idt: 1,
-      posto: '24',
+      posto: "24",
       numero_documento: 25,
       valor: 20.00,
-      data_documento: Date.parse('2015-01-18'),
-    })
+      data_documento: Date.parse("2015-01-18")
+    }
+    attributes = @valid_attributes.merge(attributes)
     boleto_novo = described_class.new(attributes)
 
     result = boleto_novo.nosso_numero_dv
