@@ -267,7 +267,7 @@ module Brcobranca
 
           # especie
           doc.moveto x: colunas[5], y: linhas[4]
-          doc.show boleto.moeda
+          doc.show boleto.especie
 
           # quantidade
           doc.moveto x: colunas[7], y: linhas[4]
