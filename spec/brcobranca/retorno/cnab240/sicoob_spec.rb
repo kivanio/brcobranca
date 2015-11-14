@@ -1,3 +1,4 @@
+# -*_ encoding: utf-8 -*-
 RSpec.describe Brcobranca::Retorno::Cnab240::Sicoob do
   before do
     @arquivo = File.join(File.dirname(__FILE__), "..", "..", "..", "arquivos", "CNAB240SICOOB.RET")
