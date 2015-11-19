@@ -102,6 +102,7 @@ module Brcobranca
     autoload :Caixa,         'brcobranca/boleto/caixa'
     autoload :Sicoob,        'brcobranca/boleto/sicoob'
     autoload :Sicredi,       'brcobranca/boleto/sicredi'
+    autoload :Unicred,       'brcobranca/boleto/unicred'
     autoload :Santander,     'brcobranca/boleto/santander'
     autoload :Banestes,      'brcobranca/boleto/banestes'
 
