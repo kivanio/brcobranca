@@ -4,7 +4,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Boleto::Unicred do
   before do
     @valid_attributes = {
-      especie_documento: 'A',
+      especie_documento: 'DM',
       data_documento: Date.parse('2012-01-18'),
       valor: 0.0,
       cedente: 'Kivanio Barbosa',
@@ -23,7 +23,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
   it 'Criar nova instancia com atributos padrões' do
     boleto_novo = described_class.new
     expect(boleto_novo.banco).to eql('748')
-    expect(boleto_novo.especie_documento).to eql('A')
+    expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.today)
@@ -32,14 +32,14 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
+    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
     expect(boleto_novo.carteira).to eql('03')
   end
 
   it 'Criar nova instancia com atributos válidos' do
     boleto_novo = described_class.new(@valid_attributes)
     expect(boleto_novo.banco).to eql('748')
-    expect(boleto_novo.especie_documento).to eql('A')
+    expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
     expect(boleto_novo.data_documento).to eql(Date.parse('2012-01-18'))
@@ -48,7 +48,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
+    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
     expect(boleto_novo.sacado).to eql('Claudio Pozzebom')
