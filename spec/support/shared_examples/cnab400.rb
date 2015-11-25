@@ -36,6 +36,7 @@ shared_examples_for 'cnab400' do
         codigo_transmissao: '17777751042700080112',
         empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
         documento_cedente: '12345678910',
+        agencia: '8888',
         pagamentos: [pagamento]
       }
     else
@@ -70,7 +71,6 @@ shared_examples_for 'cnab400' do
     it 'informacoes devem estar posicionadas corretamente no trailer' do
       trailer = objeto.monta_trailer 3
       expect(trailer[0]).to eq '9' # identificacao registro
-      expect(trailer[1..393]).to eq ''.rjust(393, ' ') # brancos
       expect(trailer[394..399]).to eq '000003' # numero sequencial do registro
     end
   end
