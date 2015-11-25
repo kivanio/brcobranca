@@ -55,7 +55,7 @@ module Brcobranca
       #  boleto.nosso_numero_boleto #=> "0020572-9"
       def nosso_numero_boleto
         nosso_numero = numero_documento.to_s.rjust(7, '0') unless numero_documento.nil?
-        "#{nosso_numero}-#{nosso_numero_dv}"
+        "#{nosso_numero}-#{nosso_numero_dv}   #{carteira}"
       end
 
       # Agência + codigo do cedente do cliente para exibir no boleto.
@@ -63,13 +63,17 @@ module Brcobranca
       # @example
       #  boleto.agencia_conta_boleto #=> "0059/1899775"
       def agencia_conta_boleto
-        "#{agencia}/#{convenio}"
+        "#{agencia}/#{convenio_com_dv}"
       end
 
       # Dígito verificador da convênio
       # @return [Integer] 1 caracteres numéricos.
       def convenio_dv
         convenio.modulo11
+      end
+
+      def convenio_com_dv
+        "#{convenio}-#{convenio_dv}"
       end
 
       # Segunda parte do código de barras.
