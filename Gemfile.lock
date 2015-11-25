@@ -37,7 +37,6 @@ GEM
     docile (1.1.5)
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
-    ffi (1.9.10-x86-mingw32)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -57,11 +56,6 @@ GEM
     rainbow (2.0.0)
     rake (10.4.2)
     rest-client (1.8.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
-    rest-client (1.8.0-x86-mingw32)
-      ffi (~> 1.9)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
@@ -105,12 +99,10 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
-    unf_ext (0.0.7.1-x86-mingw32)
     unidecoder (1.1.2)
 
 PLATFORMS
   ruby
-  x86-mingw32
 
 DEPENDENCIES
   brcobranca!

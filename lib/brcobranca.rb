@@ -125,6 +125,11 @@ module Brcobranca
       autoload :Bradesco, 'brcobranca/retorno/cnab400/bradesco'
       autoload :Itau, 'brcobranca/retorno/cnab400/itau'
     end
+
+    module Cnab240
+      autoload :Base, 'brcobranca/retorno/cnab240/base'
+      autoload :Sicoob, 'brcobranca/retorno/cnab240/sicoob'
+    end
   end
 
   # Módulos para as classes que geram os arquivos remessa
