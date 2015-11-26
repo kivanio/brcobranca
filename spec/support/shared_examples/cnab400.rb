@@ -62,6 +62,16 @@ shared_examples_for 'cnab400' do
         documento_cedente: '12345678910',
         sequencial_remessa: '1',
         pagamentos: [pagamento] }
+    elsif subject.class == Brcobranca::Remessa::Cnab400::BancoNordeste
+      {
+        carteira: '21',
+        agencia: '1234',
+        conta_corrente: '1234567',
+        digito_conta: '1',
+        empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
+        documento_cedente: '12345678910',
+        pagamentos: [pagamento]
+      }
     else
       { carteira: '123',
         agencia: '4327',
