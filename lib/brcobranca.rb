@@ -146,8 +146,8 @@ module Brcobranca
 
   # Módulos para as classes que geram os arquivos remessa
   module Remessa
-    autoload :Base,         'brcobranca/remessa/base'
-    autoload :Pagamento,    'brcobranca/remessa/pagamento'
+    autoload :Base,            'brcobranca/remessa/base'
+    autoload :Pagamento,       'brcobranca/remessa/pagamento'
 
     module Cnab400
       autoload :Base,        'brcobranca/remessa/cnab400/base'
@@ -157,6 +157,7 @@ module Brcobranca
       autoload :Santander,   'brcobranca/remessa/cnab400/santander'
       autoload :Sicoob,      'brcobranca/remessa/cnab400/sicoob'
       autoload :BancoBrasil, 'brcobranca/remessa/cnab400/banco_brasil'
+      autoload :BancoNordeste, 'brcobranca/remessa/cnab400/banco_nordeste'
     end
 
     module Cnab240
