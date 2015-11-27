@@ -152,7 +152,7 @@ module Brcobranca
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
           detalhe << pagamento.nome_avalista.format_size(40)                # nome do sacador/avalista              X[30]
           detalhe << "99"                                                   # prazo para protesto                    [02]
-          detalhe << "9"                                                    # código da moeda                       X[01]
+          detalhe << "0"                                                    # código da moeda                       X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe
         end
