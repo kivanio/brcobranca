@@ -22,7 +22,6 @@ module Brcobranca
         def initialize(campos = {})
           campos = {
             aceite: 'N',
-            carteira: '21',
             emissao_boleto: '2'
           }.merge!(campos)
 
@@ -73,8 +72,6 @@ module Brcobranca
         end
 
         # Codigo da carteira de acordo com a documentacao do Banco do Nordeste
-        # se a carteira nao forem as testadas ()
-        # retorna 'I' que é o codigo das carteiras restantes na documentacao
         #
         # @return [String]
         #
@@ -82,8 +79,8 @@ module Brcobranca
           return "I" if carteira.to_s == "51"
 
           carteiras = {
-            "1" => { "21" => "1", "41" => "2" },
-            "2" => { "21" => "4", "41" => "5" }
+            "1" => { "21" => "1", "41" => "2" }, # 1 - Emitido pelo banco
+            "2" => { "21" => "4", "41" => "5" }  # 2 - Emitido pelo cliente
           }
 
           carteiras[emissao_boleto.to_s][carteira.to_s]
@@ -97,7 +94,7 @@ module Brcobranca
         def digito_nosso_numero(nosso_numero)
           nosso_numero.to_s.rjust(7, '0').modulo11(
             multiplicador: (2..8).to_a,
-            mapeamento: { 10 => 0, 11 => 0 }
+            mapeamento: { 1 => 0, 10 => 0, 11 => 0 }
           ) { |total| 11 - (total % 11) }
         end
 
