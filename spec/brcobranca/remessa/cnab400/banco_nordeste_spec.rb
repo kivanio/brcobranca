@@ -141,6 +141,10 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoNordeste do
 
       banco_nordeste.carteira = 51
       expect(banco_nordeste.codigo_carteira).to eq 'I'
+
+      banco_nordeste.carteira = 99
+      expect(banco_nordeste.invalid?).to be true
+      expect(banco_nordeste.errors.full_messages).to include('Carteira não é válida.')
     end
   end
 

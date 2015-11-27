@@ -16,6 +16,7 @@ module Brcobranca
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 2, message: 'deve ter 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
+        validates_inclusion_of :carteira, in: %w(21 41 51), message: 'não é válida.'
 
         # Nova instancia do Banco do Nordeste
         def initialize(campos = {})
@@ -78,15 +79,14 @@ module Brcobranca
         # @return [String]
         #
         def codigo_carteira
-          if emissao_boleto.to_s == "1"
-            return "1" if carteira.to_s == "21"
-            return "2" if carteira.to_s == "41"
-          elsif emissao_boleto.to_s == "2"
-            return "4" if carteira.to_s == "21"
-            return "5" if carteira.to_s == "41"
-          end
+          return "I" if carteira.to_s == "51"
 
-          "I" if carteira.to_s == "51"
+          carteiras = {
+            "1" => { "21" => "1", "41" => "2" },
+            "2" => { "21" => "4", "41" => "5" }
+          }
+
+          carteiras[emissao_boleto.to_s][carteira.to_s]
         end
 
         # Dígito verificador do nosso número.
