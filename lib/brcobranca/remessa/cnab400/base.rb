@@ -71,7 +71,10 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
-          ret.join("\r\n").to_ascii.upcase
+          
+          remittance = ret.join("\n").to_ascii.upcase
+          
+          remittance.encode(remittance.encoding, :universal_newline => true).encode(remittance.encoding, :crlf_newline => true)
         end
 
         # Informacoes referentes a conta do cedente
