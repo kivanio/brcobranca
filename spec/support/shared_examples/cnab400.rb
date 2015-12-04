@@ -81,7 +81,7 @@ shared_examples_for 'cnab400' do
 
   it 'remessa deve conter os registros mais as quebras de linha' do
     remessa = objeto.gera_arquivo
-    expect(remessa.size).to eq 1204
+    expect(remessa.size).to eq 1206
 
     # registros
     expect(remessa[0..399]).to eq objeto.monta_header
@@ -96,6 +96,6 @@ shared_examples_for 'cnab400' do
     objeto.pagamentos << pagamento
     remessa = objeto.gera_arquivo
 
-    expect(remessa.size).to eq 1606
+    expect(remessa.size).to eq 1608
   end
 end
