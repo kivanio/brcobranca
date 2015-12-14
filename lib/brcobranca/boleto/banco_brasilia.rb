@@ -6,7 +6,7 @@ module Brcobranca
       # Validações
       #Modalidade/Carteira de Cobrança (1-Sem Registro | 2-Registrada)
       validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígitos.'
-      validates_length_of :convenio, is: 6, message: 'deve possuir 6 dígitos.'
+      validates_length_of :convenio, is: 7, message: 'deve possuir 7 dígitos.'
       validates_length_of :numero_documento, is: 6, message: 'deve possuir 6 dígitos.'
 
       # Nova instância da BancoBrasilia
@@ -34,9 +34,9 @@ module Brcobranca
       end
 
       # Número do convênio/contrato do cliente junto ao banco.
-      # @return [String] 6 caracteres numéricos.
+      # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(6, '0') if valor
+        @convenio = valor.to_s.rjust(7, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.

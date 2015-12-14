@@ -11,7 +11,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
       sacado_documento: '77777777777',
       agencia: '082',
       conta_corrente: '0000528',
-      convenio: '245274',
+      convenio: '0000528',
       numero_documento: '000001'
     }
   end
@@ -44,7 +44,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
   it 'Gerar o dígito verificador do convênio' do
     boleto_novo = described_class.new @valid_attributes
     expect(boleto_novo.convenio_dv).not_to be_nil
-    expect(boleto_novo.convenio_dv).to eq('0')
+    expect(boleto_novo.convenio_dv).to eq('2')
   end
 
   it 'Gerar o código de barras' do
@@ -60,14 +60,14 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
   end
 
- it 'Tamanho do número de convênio deve ser de 6 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(convenio: '1234567')
+ it 'Tamanho do número de convênio deve ser de 7 dígitos' do
+    boleto_novo = described_class.new @valid_attributes.merge(convenio: '12345678')
     expect(boleto_novo).not_to be_valid
   end
 
-  it 'Número do convênio deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
+  it 'Número do convênio deve ser preenchido com zeros à esquerda quando menor que 7 dígitos' do
     boleto_novo = described_class.new @valid_attributes.merge(convenio: '12345')
-    expect(boleto_novo.convenio).to eq('012345')
+    expect(boleto_novo.convenio).to eq('0012345')
     expect(boleto_novo).to be_valid
   end
 
@@ -98,14 +98,14 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
   it 'Montar agencia_conta_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
 
-    expect(boleto_novo.agencia_conta_boleto).to eql('082/245274-0')
+    expect(boleto_novo.agencia_conta_boleto).to eql('082/0000528-2')
 
     boleto_novo.convenio = '123456'
-    expect(boleto_novo.agencia_conta_boleto).to eql('082/123456-0')
+    expect(boleto_novo.agencia_conta_boleto).to eql('082/0123456-0')
 
     boleto_novo.agencia = '030'
     boleto_novo.convenio = '654321'
-    expect(boleto_novo.agencia_conta_boleto).to eql('030/654321-9')
+    expect(boleto_novo.agencia_conta_boleto).to eql('030/0654321-9')
   end
 
   describe 'Busca logotipo do banco' do
