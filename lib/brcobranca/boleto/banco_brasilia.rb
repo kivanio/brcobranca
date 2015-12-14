@@ -94,7 +94,10 @@ module Brcobranca
         chave = "000#{agencia}#{conta_corrente}#{carteira}#{numero_documento}#{banco}"
 
         chave << chave.modulo10.to_s
-        chave << chave.modulo11.to_s
+        chave << chave.modulo11(
+          multiplicador: (2..7).to_a,
+          mapeamento: { 10 => 0, 11 => 0}
+        ) { |total| 11 - (total % 11) }.to_s
       end
     end
   end
