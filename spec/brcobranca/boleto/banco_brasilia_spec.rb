@@ -60,17 +60,6 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
   end
 
-  it 'Tamanho do número da agência deve ser de 3 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(agencia: '1234')
-    expect(boleto_novo).not_to be_valid
-  end
-
- it 'Número da agência deve ser preenchido com zeros à esquerda quando menor que 3 digítos' do
-    boleto_novo = described_class.new @valid_attributes.merge(agencia: '12')
-    expect(boleto_novo.agencia).to eq('012')
-    expect(boleto_novo).to be_valid
-  end
-
  it 'Tamanho do número de convênio deve ser de 6 dígitos' do
     boleto_novo = described_class.new @valid_attributes.merge(convenio: '1234567')
     expect(boleto_novo).not_to be_valid
