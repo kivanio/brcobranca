@@ -51,7 +51,8 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
     boleto_novo = described_class.new @valid_attributes
     expect { boleto_novo.codigo_barras }.not_to raise_error
     expect(boleto_novo.codigo_barras_segunda_parte).not_to be_blank
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('0000820000528200000107018')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('0000820000528200000107013')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('07090.00087 20000.528206 00001.070135 9 66420000001000')
   end
 
   it 'Não permitir gerar boleto com atributos inválidos' do
