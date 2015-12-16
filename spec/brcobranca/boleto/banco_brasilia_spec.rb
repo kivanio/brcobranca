@@ -48,11 +48,15 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
   end
 
   it 'Gerar o código de barras' do
+    @valid_attributes[:data_documento] = Date.parse('2015-04-30')
+    @valid_attributes[:data_vencimento] = Date.parse('2015-04-30')
+
     boleto_novo = described_class.new @valid_attributes
+
     expect { boleto_novo.codigo_barras }.not_to raise_error
     expect(boleto_novo.codigo_barras_segunda_parte).not_to be_blank
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('0000820000528200000107013')
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('07090.00087 20000.528206 00001.070135 4 66430000001000')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('07090.00087 20000.528206 00001.070135 9 64140000001000')
   end
 
   it 'Não permitir gerar boleto com atributos inválidos' do
