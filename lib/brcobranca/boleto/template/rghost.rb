@@ -95,12 +95,8 @@ module Brcobranca
         # @option options [Symbol] :resolucao Resolução em pixels.
         # @option options [Symbol] :formato Formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         def modelo_generico_multipage(boletos, options={})
-          doc=Document.new :paper => :A4 # 210x297
-          
-          if(options[:campanha].present? && options[:imagem_campanha].present?)
-            template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_campanha.eps')
-          else
-            template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
+          doc=Document.new :paper => :A4 # 210x297            
+          template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
           end
 
           raise "Não foi possível encontrar o template. Verifique o caminho" unless File.exist?(template_path)
@@ -108,11 +104,7 @@ module Brcobranca
           boletos.each_with_index do |boleto, index|
 
             modelo_generico_template(doc, boleto, template_path)
-            if(options[:campanha].present? && options[:imagem_campanha].present?)
-              modelo_campanha_cabecalho(doc, boleto, options[:imagem_campanha])
-            else
-              modelo_generico_cabecalho(doc, boleto)
-            end
+            modelo_generico_cabecalho(doc, boleto)
             modelo_generico_rodape(doc, boleto)
 
             #Gerando codigo de barra com rghost_barcode
@@ -135,18 +127,6 @@ module Brcobranca
           doc.define_tags do
             tag :grande, :size => 13
           end
-        end
-
-        # Monta o cabeçalho do layout do boleto
-        def modelo_campanha_cabecalho(doc, boleto, imagem_campanha)
-          #INICIO Primeira parte do BOLETO
-          # LOGOTIPO do BANCO
-          logo = File.join("", imagem_campanha)
-          doc.image(logo, :x => '0.38 cm', :y => '19.0 cm')
-          # Dados
-          doc.moveto :x => '1.0 cm' , :y => '28.0 cm'
-          doc.show "Prezado(a) #{boleto.sacado}", :tag => :grande
-          #FIM Primeira parte do BOLETO
         end
         
         # Monta o cabeçalho do layout do boleto
