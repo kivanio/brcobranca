@@ -95,9 +95,8 @@ module Brcobranca
         # @option options [Symbol] :resolucao Resolução em pixels.
         # @option options [Symbol] :formato Formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         def modelo_generico_multipage(boletos, options={})
-          doc=Document.new :paper => :A4 # 210x297            
+          doc = Document.new :paper => :A4 # 210x297            
           template_path = File.join(File.dirname(__FILE__),'..','..','arquivos','templates','modelo_generico.eps')
-          end
 
           raise "Não foi possível encontrar o template. Verifique o caminho" unless File.exist?(template_path)
 
