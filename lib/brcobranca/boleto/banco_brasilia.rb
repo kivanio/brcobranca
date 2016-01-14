@@ -4,8 +4,9 @@ module Brcobranca
   module Boleto
     class BancoBrasilia < Base # Banco Brasilia
       # Validações
-      #Modalidade/Carteira de Cobrança (1-Sem Registro | 2-Registrada)
-      validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígitos.'
+      # Modalidade/Carteira de Cobrança (1-Sem Registro | 2-Registrada)
+      validates_length_of :agencia, is: 3, message: 'deve possuir 3 dígitos.'
+      validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígito.'
       validates_length_of :convenio, is: 7, message: 'deve possuir 7 dígitos.'
       validates_length_of :numero_documento, is: 6, message: 'deve possuir 6 dígitos.'
 
@@ -30,6 +31,7 @@ module Brcobranca
       # Número da agência
       # @return [String] 3 caracteres numéricos.
       def agencia=(valor)
+        valor = valor.to_s[-3, 3] if valor.size > 3
         @agencia = valor.to_s.rjust(3, '0') if valor
       end
 
