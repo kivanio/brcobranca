@@ -44,7 +44,7 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_9to2
-      total = self.multiplicador([9,8,7,6,5,4,3,2])
+      total = multiplicador([9,8,7,6,5,4,3,2])
 
       return (total % 11 )
     end
@@ -53,7 +53,7 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_2to9
-      total = self.multiplicador([2,3,4,5,6,7,8,9])
+      total = multiplicador([2,3,4,5,6,7,8,9])
 
       valor = (11 - (total % 11))
       return [0,10,11].include?(valor) ? 1 : valor
@@ -63,7 +63,7 @@ module Brcobranca
     #
     # @return [Integer, String] Caso resultado for 10, retorna X.
     def modulo11_9to2_10_como_x
-      valor = self.modulo11_9to2
+      valor = modulo11_9to2
       valor == 10 ? "X" : valor
     end
 
@@ -71,7 +71,7 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_9to2_10_como_zero
-      valor = self.modulo11_9to2
+      valor = modulo11_9to2
       valor == 10 ? 0 : valor
     end
 
@@ -86,29 +86,29 @@ module Brcobranca
           num = 2
         end
       end
-      total = self.multiplicador(array)
+      total = multiplicador(array)
       valor = (total % 11)
       yield(valor) if block_given?
     end
-    
+
     def modulo10_mercantil
       peso = ""
       soma = 0
-      
+
       # monta o peso conforme a quantidade de caracteres
       1.upto(self.size) do |i|
         peso << (i.odd? ? "1" : "2")
       end
-      
+
       0.upto(self.size) do |i|
         total = peso[i].to_i * self.to_s[i].to_i
-        
+
         if total.to_s.size == 2
           total = total.to_s[0].to_i + total.to_s[1].to_i
         end
         soma += total
       end
-      
+
       if soma.to_s.size > 1
        soma = soma.to_s[soma.to_s.size - 1].to_i
       end
@@ -116,7 +116,7 @@ module Brcobranca
       soma = 10 - soma if soma > 0
       soma
     end
-    
+
     # Verifica se String só contem caracteres numéricos.
     #
     # @return [Boolean]

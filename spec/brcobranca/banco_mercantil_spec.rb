@@ -33,16 +33,14 @@ describe Brcobranca::Boleto::Mercantil do
 
   it "deve gerar numero de codigo de barras" do
     boleto_novo = Brcobranca::Boleto::Mercantil.new(@valid_attributes)
-    boleto_novo.codigo_barras.linha_digitavel_mercantil.should
-       eql("38990.16509 00008.247546 00002.517928 1 55180000000100")
+    boleto_novo.codigo_barras.linha_digitavel_mercantil.should eql("38990.16509 00008.247546 00002.517928 1 55180000000100")
   end
 
   it "deve gerar codigo de barras mesmo que a conta corrente possua menos digitos" do
     @valid_attributes[:conta_corrente] = "25179"
     @valid_attributes[:numero_documento] = "82475"
     boleto_novo = Brcobranca::Boleto::Mercantil.new(@valid_attributes)
-    boleto_novo.codigo_barras.linha_digitavel_mercantil.should 
-       eql("38990.16509 00008.247546 00002.517928 1 55180000000100")
+    boleto_novo.codigo_barras.linha_digitavel_mercantil.should eql("38990.16509 00008.247546 00002.517928 1 55180000000100")
   end
 
   it "não deve gerar boleto com attributos invalidos" do
