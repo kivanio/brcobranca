@@ -94,7 +94,7 @@ module Brcobranca
         raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
     end
-    
+
     def linha_digitavel_mercantil
       if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
         linha = $1

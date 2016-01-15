@@ -44,7 +44,7 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_9to2
-      total = multiplicador([9,8,7,6,5,4,3,2])
+      total = multiplicador([9, 8, 7, 6, 5, 4, 3, 2])
 
       return (total % 11 )
     end
@@ -53,7 +53,7 @@ module Brcobranca
     #
     # @return [Integer]
     def modulo11_2to9
-      total = multiplicador([2,3,4,5,6,7,8,9])
+      total = multiplicador([2, 3, 4, 5, 6, 7, 8, 9])
 
       valor = (11 - (total % 11))
       return [0,10,11].include?(valor) ? 1 : valor
@@ -79,7 +79,7 @@ module Brcobranca
       # valor = self.modulo11_2to9
       num = 2
       array = []
-      1.upto(self.size) do |i|
+      1.upto(self.size)
         array.push(num)
         num += 1
         if num > 9
@@ -101,7 +101,7 @@ module Brcobranca
       end
 
       0.upto(self.size) do |i|
-        total = peso[i].to_i * self.to_s[i].to_i
+        total = peso[i].to_i * to_s[i].to_i
 
         if total.to_s.size == 2
           total = total.to_s[0].to_i + total.to_s[1].to_i
@@ -110,7 +110,7 @@ module Brcobranca
       end
 
       if soma.to_s.size > 1
-       soma = soma.to_s[soma.to_s.size - 1].to_i
+        soma = soma.to_s[soma.to_s.size - 1].to_i
       end
 
       soma = 10 - soma if soma > 0

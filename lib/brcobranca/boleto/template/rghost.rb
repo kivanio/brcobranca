@@ -127,7 +127,7 @@ module Brcobranca
             tag :grande, :size => 13
           end
         end
-        
+
         # Monta o cabeçalho do layout do boleto
         def modelo_generico_cabecalho(doc, boleto)
           #INICIO Primeira parte do BOLETO
@@ -135,12 +135,12 @@ module Brcobranca
           doc.image(boleto.logotipo, :x => '0.5 cm', :y => '23.85 cm', :zoom => 80)
           # Dados
           doc.moveto :x => '5.2 cm' , :y => '23.85 cm'
-          doc.show "#{boleto.banco}-#{boleto.banco_dv}", :tag => :grande
+          doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :grande
           doc.moveto :x => '7.5 cm' , :y => '23.85 cm'
           if boleto.class.to_s.include? "Mercantil"
-            doc.show boleto.codigo_barras.linha_digitavel_mercantil, :tag => :grande
+            doc.show boleto.codigo_barras.linha_digitavel_mercantil, tag: :grande
           else
-            doc.show boleto.codigo_barras.linha_digitavel, :tag => :grande
+            doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
           end
           doc.moveto :x => '0.7 cm' , :y => '23 cm'
           doc.show boleto.cedente
