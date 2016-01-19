@@ -1,4 +1,8 @@
 language: ruby
+before_install:
+  # Travis bundler versions are quite out of date and can cause install errors
+  # see: https://github.com/rubygems/rubygems/issues/1419
+  - gem update bundler
 rvm:
   - '2.2.3'
   - '2.1.6'
