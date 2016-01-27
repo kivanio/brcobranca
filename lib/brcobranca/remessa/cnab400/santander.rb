@@ -12,7 +12,7 @@ module Brcobranca
 
         attr_accessor :codigo_carteira
 
-        validates_presence_of :documento_cedente, :codigo_transmissao, :agencia, message: 'não pode estar em branco.'
+        validates_presence_of :documento_cedente, :codigo_transmissao, :agencia, :conta_corrente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 3, message: 'deve ter no máximo 3 dígitos.'
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
@@ -97,8 +97,7 @@ module Brcobranca
           detalhe << codigo_transmissao                                     # Código de Transmissão                 9[20]
           detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[08]
-          detalhe << ''.rjust(6, ' ')                                       # data limite para o segundo desconto   9[06]
-          # detalhe << pagamento.formata_data_segundo_desconto              # data limite para o segundo desconto   9[06]
+          detalhe << ''.rjust(6, '0')                                       # data limite para o segundo desconto   9[06]
           detalhe << ' '                                                    # brancos                               X[01]
           detalhe << pagamento.codigo_multa                                 # Com multa = 4, Sem multa = 0          9[01]
           detalhe << pagamento.percentual_multa.rjust(4, '0')               # Percentual multa por atraso %         9[04]
@@ -175,7 +174,7 @@ module Brcobranca
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           # INFORMAR NESTE CAMPO CARACTERE 'I' (i maiúsculo)
           detalhe << 'I'                                                    # Identificador do Complemento          X[1]
-          detalhe << '77'                                                   # Complemento                           9[2]
+          detalhe << complemento_remessa                                    # Complemento                           9[2]
           detalhe << ''.rjust(6, ' ')                                       # Brancos                               X[06]
           # Se identificacao_ocorrencia = 06
           detalhe << '00'.rjust(2, ' ')                                     # Número de dias para protesto          9[02]
@@ -199,6 +198,18 @@ module Brcobranca
           # zeros                                 [374]
           # num. sequencial                       [6]
           "9#{sequencial.to_s.rjust(6, '0')}#{valor_total_titulos(13)}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
+        end
+
+        private
+        # Complemento de remessa
+        #
+        # @return [String]
+        #
+        def complemento_remessa
+          # [99]
+          # ultimo digito da conta corrente
+          # digito da conta corrente
+          "#{conta_corrente[-1]}#{digito_conta}"
         end
       end
     end

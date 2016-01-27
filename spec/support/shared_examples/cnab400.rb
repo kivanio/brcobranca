@@ -37,6 +37,8 @@ shared_examples_for 'cnab400' do
         empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
         documento_cedente: '12345678910',
         agencia: '8888',
+        conta_corrente: '000002997',
+        digito_conta: '8',
         pagamentos: [pagamento]
       }
     else
