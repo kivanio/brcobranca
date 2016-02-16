@@ -6,7 +6,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
     Brcobranca::Remessa::Pagamento.new(
       valor: 50.0,
       data_vencimento: Date.today,
-      nosso_numero: '429715',
+      nosso_numero: '00000012',
       documento_sacado: '82136760505',
       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',

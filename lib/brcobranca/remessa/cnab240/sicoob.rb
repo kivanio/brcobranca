@@ -39,7 +39,7 @@ module Brcobranca
             tipo_formulario: '4',
             parcela: '01',
             modalidade_carteira: '01',
-            forma_cadastramento: '0'}.merge!(campos)
+            forma_cadastramento: '0' }.merge!(campos)
           super(campos)
         end
 
@@ -97,6 +97,51 @@ module Brcobranca
           ''.rjust(217, ' ')
         end
 
+        def monta_segmento_p(pagamento, nro_lote, sequencial)
+          # campos com * na frente nao foram implementados
+          #                                                             # DESCRICAO                             TAMANHO
+          segmento_p = cod_banco # codigo banco                          3
+          segmento_p << nro_lote.to_s.rjust(4, '0') # lote de servico                       4
+          segmento_p << '3' # tipo de registro                      1
+          segmento_p << sequencial.to_s.rjust(5, '0') # num. sequencial do registro no lote   5
+          segmento_p << 'P' # cod. segmento                         1
+          segmento_p << ' ' # uso exclusivo                         1
+          segmento_p << '01' # cod. movimento remessa                2
+          segmento_p << agencia.to_s.rjust(5, '0') # agencia                               5
+          segmento_p << digito_agencia.to_s # dv agencia                            1
+          segmento_p << complemento_p(pagamento) # informacoes da conta                  34
+          segmento_p << codigo_carteira # codigo da carteira                    1
+          segmento_p << forma_cadastramento # forma de cadastro do titulo           1
+          segmento_p << tipo_documento # tipo de documento                     1
+          segmento_p << emissao_boleto # identificaco emissao                  1
+          segmento_p << distribuicao_boleto # indentificacao entrega                1
+          segmento_p << pagamento.numero_documento.to_s.rjust(15, '0') # uso exclusivo                         4
+          segmento_p << pagamento.data_vencimento.strftime('%d%m%Y') # data de venc.                         8
+          segmento_p << pagamento.formata_valor(15) # valor documento                       15
+          segmento_p << ''.rjust(5, '0') # agencia cobradora                     5
+          segmento_p << '0' # dv agencia cobradora                  1
+          segmento_p << especie_titulo # especie do titulo                     2
+          segmento_p << aceite # aceite                                1
+          segmento_p << pagamento.data_emissao.strftime('%d%m%Y') # data de emissao titulo                8
+          segmento_p << '0' # cod. do juros                         1   *
+          segmento_p << ''.rjust(8, '0') # data juros                            8   *
+          segmento_p << ''.rjust(15, '0') # valor juros                           15  *
+          segmento_p << pagamento.cod_desconto # cod. do desconto                      1
+          segmento_p << pagamento.formata_data_desconto('%d%m%Y') # data desconto                         8
+          segmento_p << pagamento.formata_valor_desconto(15) # valor desconto                        15
+          segmento_p << pagamento.formata_valor_iof(15) # valor IOF                             15
+          segmento_p << pagamento.formata_valor_abatimento(15) # valor abatimento                      15
+          segmento_p << ''.rjust(25, ' ') # identificacao titulo empresa          25  *
+          segmento_p << '1' # cod. para protesto                    1   *
+          segmento_p << '00' # dias para protesto                    2   *
+          segmento_p << '0' # cod. para baixa                       1   *
+          segmento_p << '000' # dias para baixa                       2   *
+          segmento_p << '09' # cod. da moeda                         2
+          segmento_p << ''.rjust(10, '0') # uso exclusivo                         10
+          segmento_p << ' ' # uso exclusivo                         1
+          segmento_p
+        end
+
         def complemento_p(pagamento)
           # CAMPO                   TAMANHO
           # conta corrente          12
@@ -112,7 +157,7 @@ module Brcobranca
         #
         # Nosso Número:
         #  - Se emissão a cargo do Cedente (vide planilha "Capa" deste arquivo):
-        #       NumTitulo - 10 posições (1 a 10)
+        #       NumTitulo - 10 posições (1 a 10) Com DV
         #       Parcela - 02 posições (11 a 12) - "01" se parcela única
         #       Modalidade - 02 posições (13 a 14) - vide planilha "Capa" deste arquivo
         #       Tipo Formulário - 01 posição  (15 a 15):
@@ -122,7 +167,7 @@ module Brcobranca
         #            "6" -A4 sem envelopamento 3 vias
         #       Em branco - 05 posições (16 a 20)
         def formata_nosso_numero(nosso_numero)
-          "#{nosso_numero.to_s.rjust(10, '0')}#{parcela}#{modalidade_carteira}#{tipo_formulario}     "
+          "#{nosso_numero.to_s.rjust(10, '0')}#{parcela}#{modalidade_carteira}#{tipo_formulario}#{''.to_s.rjust(5, ' ')}"
         end
       end
     end
