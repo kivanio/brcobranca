@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    brcobranca (6.1.11)
+    brcobranca (6.1.12)
       activemodel (>= 3)
       parseline (~> 1.0.3)
       rghost (~> 0.9)
@@ -34,7 +34,7 @@ GEM
       tins (~> 1.6.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
-    domain_name (0.5.25)
+    domain_name (0.5.20160128)
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
@@ -45,7 +45,7 @@ GEM
     minitest (5.8.4)
     netrc (0.11.0)
     parseline (1.0.3)
-    parser (2.3.0.2)
+    parser (2.3.0.6)
       ast (~> 2.2)
     powerpack (0.1.1)
     pry (0.10.3)
@@ -73,14 +73,15 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
-    rubocop (0.36.0)
-      parser (>= 2.3.0.0, < 3.0)
+    rubocop (0.37.2)
+      parser (>= 2.3.0.4, < 3.0)
       powerpack (~> 0.1)
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
-    rubocop-rspec (1.3.1)
+      unicode-display_width (~> 0.3)
+    rubocop-rspec (1.4.0)
     ruby-progressbar (1.7.5)
-    simplecov (0.11.1)
+    simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
@@ -96,7 +97,8 @@ GEM
       thread_safe (~> 0.1)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.1)
+    unf_ext (0.0.7.2)
+    unicode-display_width (0.3.1)
     unidecoder (1.1.2)
 
 PLATFORMS
@@ -106,11 +108,11 @@ DEPENDENCIES
   brcobranca!
   codeclimate-test-reporter
   coveralls
-  pry (~> 0.10.0)
+  pry
   rake
   rspec
-  rubocop (~> 0.36.0)
-  rubocop-rspec (~> 1.3.0)
+  rubocop
+  rubocop-rspec
   timecop
 
 BUNDLED WITH
