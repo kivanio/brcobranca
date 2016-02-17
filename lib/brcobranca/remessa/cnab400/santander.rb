@@ -3,9 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Santander < Brcobranca::Remessa::Cnab400::Base
-        # documento do cedente
-        attr_accessor :documento_cedente
-
         # Código de Transmissão
         # Consultar seu gerente para pegar esse código. Geralmente está no e-mail enviado pelo banco.
         attr_accessor :codigo_transmissao
@@ -100,7 +97,7 @@ module Brcobranca
           detalhe << ''.rjust(6, '0')                                       # data limite para o segundo desconto   9[06]
           detalhe << ' '                                                    # brancos                               X[01]
           detalhe << pagamento.codigo_multa                                 # Com multa = 4, Sem multa = 0          9[01]
-          detalhe << pagamento.percentual_multa.rjust(4, '0')               # Percentual multa por atraso %         9[04]
+          detalhe << pagamento.formata_valor_multa(4)                       # Percentual multa por atraso %         9[04]
           detalhe << '00'                                                   # Unidade de valor moeda corrente = 00  9[02]
           detalhe << '0'.rjust(13, '0')                                     # Valor do título em outra unidade      9[13]
           detalhe << ''.rjust(4, ' ')                                       # brancos                               X[04]

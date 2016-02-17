@@ -41,9 +41,18 @@ shared_examples_for 'cnab400' do
         digito_conta: '8',
         pagamentos: [pagamento]
       }
+    elsif subject.class == Brcobranca::Remessa::Cnab400::Sicoob
+      { carteira: '01',
+        agencia: '1234',
+        conta_corrente: '12345678',
+        digito_conta: '1',
+        empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
+        documento_cedente: '12345678910',
+        convenio: '123456789',
+        pagamentos: [pagamento] }
     else
       { carteira: '123',
-        agencia: '1234',
+        agencia: '4327',
         conta_corrente: '12345',
         digito_conta: '1',
         empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',

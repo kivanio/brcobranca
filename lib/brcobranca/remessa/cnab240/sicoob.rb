@@ -22,10 +22,7 @@ module Brcobranca
         #            "4" -A4 sem envelopamento
         #            "6" -A4 sem envelopamento 3 vias
 
-        attr_accessor :parcela
-        #       Parcela - 02 posições (11 a 12) - "01" se parcela única
-
-        validates_presence_of :modalidade_carteira, :tipo_formulario, :parcela, message: 'não pode estar em branco.'
+        validates_presence_of :modalidade_carteira, :tipo_formulario, message: 'não pode estar em branco.'
         # Remessa 400 - 8 digitos
         # Remessa 240 - 12 digitos
         validates_length_of :conta_corrente, maximum: 8, message: 'deve ter 8 dígitos.'
@@ -35,9 +32,7 @@ module Brcobranca
         def initialize(campos = {})
           campos = { emissao_boleto: '2',
             distribuicao_boleto: '2',
-            especie_titulo: '02',
             tipo_formulario: '4',
-            parcela: '01',
             modalidade_carteira: '01',
             forma_cadastramento: '0' }.merge!(campos)
           super(campos)
@@ -120,7 +115,7 @@ module Brcobranca
           segmento_p << pagamento.formata_valor(15) # valor documento                       15
           segmento_p << ''.rjust(5, '0') # agencia cobradora                     5
           segmento_p << '0' # dv agencia cobradora                  1
-          segmento_p << especie_titulo # especie do titulo                     2
+          segmento_p << pagamento.especie_titulo # especie do titulo                     2
           segmento_p << aceite # aceite                                1
           segmento_p << pagamento.data_emissao.strftime('%d%m%Y') # data de emissao titulo                8
           segmento_p << '0' # cod. do juros                         1   *
@@ -148,7 +143,7 @@ module Brcobranca
           # digito conta            1
           # digito agencia/conta    1
           # ident. titulo no banco  20
-          "#{conta_corrente.rjust(12, '0')}#{digito_conta} #{formata_nosso_numero(pagamento.nosso_numero)}"
+          "#{conta_corrente.rjust(12, '0')}#{digito_conta} #{formata_nosso_numero(pagamento)}"
         end
 
         # Retorna o nosso numero
@@ -166,8 +161,8 @@ module Brcobranca
         #            "4" -A4 sem envelopamento
         #            "6" -A4 sem envelopamento 3 vias
         #       Em branco - 05 posições (16 a 20)
-        def formata_nosso_numero(nosso_numero)
-          "#{nosso_numero.to_s.rjust(10, '0')}#{parcela}#{modalidade_carteira}#{tipo_formulario}#{''.to_s.rjust(5, ' ')}"
+        def formata_nosso_numero(pagamento)
+          "#{pagamento.nosso_numero.to_s.rjust(10, '0')}#{pagamento.parcela.to_s.rjust(2, '0')}#{modalidade_carteira}#{tipo_formulario}#{''.to_s.rjust(5, ' ')}"
         end
       end
     end

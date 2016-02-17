@@ -147,7 +147,8 @@ module Brcobranca
       autoload :Bradesco,  'brcobranca/remessa/cnab400/bradesco'
       autoload :Itau,      'brcobranca/remessa/cnab400/itau'
       autoload :Citibank,  'brcobranca/remessa/cnab400/citibank'
-      autoload :Santander,  'brcobranca/remessa/cnab400/santander'
+      autoload :Santander, 'brcobranca/remessa/cnab400/santander'
+      autoload :Sicoob,    'brcobranca/remessa/cnab400/sicoob'
     end
 
     module Cnab240

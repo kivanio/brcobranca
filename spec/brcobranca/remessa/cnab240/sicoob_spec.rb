@@ -47,14 +47,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       end
     end
 
-    context '@parcela' do
-      it 'deve ser invalido se nao possuir a parcela' do
-        objeto = subject.class.new(params.merge(parcela: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Parcela não pode estar em branco.')
-      end
-    end
-
     context '@agencia' do
       it 'deve ser invalido se a agencia tiver mais de 4 digitos' do
         sicoob.agencia = '12345'
@@ -137,8 +129,8 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
     end
 
     it 'formata o nosso numero' do
-      nosso_numero = sicoob.formata_nosso_numero 1
-      expect(nosso_numero).to eq "000000000101014     "
+      nosso_numero = sicoob.formata_nosso_numero pagamento
+      expect(nosso_numero).to eq "000000001201014     "
     end
   end
 

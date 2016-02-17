@@ -3,8 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Citibank < Brcobranca::Remessa::Cnab400::Base
-        # documento do cedente
-        attr_accessor :documento_cedente
         # Identificação do portfolio.
         # Necessário consultar o Citibank para informações referentes à conta cobrança e carteira do cliente.
         attr_accessor :portfolio
