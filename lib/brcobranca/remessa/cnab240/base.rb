@@ -88,7 +88,7 @@ module Brcobranca
           header_arquivo << ''.rjust(20, '0') # uso exclusivo                 20
           header_arquivo << ''.rjust(20, '0') # uso exclusivo                 20
           header_arquivo << complemento_header # complemento do arquivo        29
-          header_arquivo.upcase
+          header_arquivo
         end
 
         # Monta o registro header do lote
@@ -112,14 +112,14 @@ module Brcobranca
           header_lote << documento_cedente.to_s.rjust(15, '0') # inscricao cedente       15
           header_lote << convenio_lote # codigo do convenio      20
           header_lote << info_conta # informacoes conta       20
-          header_lote << empresa_mae.ljust(30, ' ') # nome empresa            30
+          header_lote << empresa_mae.format_size(30) # nome empresa            30
           header_lote << mensagem_1.to_s.format_size(40) # 1a mensagem             40
           header_lote << mensagem_2.to_s.format_size(40) # 2a mensagem             40
           header_lote << sequencial_remessa.to_s.rjust(8, '0') # numero remessa          8
           header_lote << data_geracao # data gravacao           8
           header_lote << ''.rjust(8, '0') # data do credito         8
           header_lote << ''.rjust(33, ' ') # complemento             33
-          header_lote.upcase
+          header_lote
         end
 
         # Monta o registro segmento P do arquivo
@@ -135,7 +135,7 @@ module Brcobranca
         #
         def monta_segmento_p(pagamento, nro_lote, sequencial)
           # campos com * na frente nao foram implementados
-          #                                                           # DESCRICAO                             TAMANHO
+          #                                                             # DESCRICAO                             TAMANHO
           segmento_p = cod_banco # codigo banco                          3
           segmento_p << nro_lote.to_s.rjust(4, '0') # lote de servico                       4
           segmento_p << '3' # tipo de registro                      1
@@ -175,7 +175,7 @@ module Brcobranca
           segmento_p << '09' # cod. da moeda                         2
           segmento_p << ''.rjust(10, '0') # uso exclusivo                         10
           segmento_p << ' ' # uso exclusivo                         1
-          segmento_p.upcase
+          segmento_p
         end
 
         # Monta o registro segmento Q do arquivo
@@ -213,7 +213,7 @@ module Brcobranca
           segmento_q << ''.rjust(3, '0') # cod. banco correspondente            3
           segmento_q << ''.rjust(20, ' ') # nosso numero banco correspondente    20
           segmento_q << ''.rjust(8, ' ') # uso exclusivo                        8
-          segmento_q.upcase
+          segmento_q
         end
 
         # Monta o registro trailer do lote
@@ -234,6 +234,7 @@ module Brcobranca
           trailer_lote << ''.rjust(9, ' ') # uso exclusivo           9
           trailer_lote << nro_registros.to_s.rjust(6, '0') # qtde de registros lote  6
           trailer_lote << complemento_trailer # uso exclusivo           217
+          trailer_lote
         end
 
         # Monta o registro trailer do arquivo
@@ -299,13 +300,13 @@ module Brcobranca
 
           # contador de do lotes
           contador = 1
-          novo_lote = monta_lote(contador)
-          arquivo.push novo_lote
+          arquivo.push monta_lote(contador)
 
           arquivo << monta_trailer_arquivo(contador, ((pagamentos.size * 2) + (contador * 2) + 2))
 
-          remessa = arquivo.join("\n")
-          remessa
+          remittance = arquivo.join("\n").to_ascii.upcase
+          remittance << "\n"
+          remittance.encode(remittance.encoding, :universal_newline => true).encode(remittance.encoding, :crlf_newline => true)
         end
 
         # Complemento do registro

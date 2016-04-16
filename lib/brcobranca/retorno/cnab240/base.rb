@@ -15,6 +15,8 @@ module Brcobranca
           case codigo_banco
           when "756"
             Brcobranca::Retorno::Cnab240::Sicoob.load_lines(file, options)
+          when "104"
+            Brcobranca::Retorno::Cnab240::Caixa.load_lines(file, options)
           else
             Brcobranca::Retorno::RetornoCnab240.load_lines(file, options)
           end

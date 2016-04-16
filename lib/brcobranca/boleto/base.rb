@@ -7,8 +7,10 @@ module Brcobranca
       extend Template::Base
 
       # Configura gerador de arquivo de boleto e código de barras.
-      extend define_template(Brcobranca.configuration.gerador)
-      include define_template(Brcobranca.configuration.gerador)
+      define_template(Brcobranca.configuration.gerador).each do |klass|
+        extend klass
+        include klass
+      end
 
       # Validações do Rails 3
       include ActiveModel::Validations
@@ -102,7 +104,11 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        if Brcobranca.configuration.gerador == :rghost_carne
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}_carne.eps")
+        else
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        end
       end
 
       # Dígito verificador do banco

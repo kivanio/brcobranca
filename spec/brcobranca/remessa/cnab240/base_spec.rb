@@ -7,15 +7,15 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
       data_vencimento: Date.today,
       nosso_numero: 123,
       documento_sacado: '12345678901',
-      nome_sacado: 'nome',
-      endereco_sacado: 'endereco',
-      bairro_sacado: 'bairro',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
       cep_sacado: '12345678',
-      cidade_sacado: 'cidade',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
       uf_sacado: 'SP')
   end
   let(:params) do
-    { empresa_mae: 'teste',
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '123',
       conta_corrente: '1234',
       documento_cedente: '12345678901',

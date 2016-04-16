@@ -51,7 +51,7 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.agencia).to eql('0059')
     expect(boleto_novo.convenio).to eql('1899775')
-    expect(boleto_novo.numero_documento).to eql('90000267')
+    expect(boleto_novo.numero_documento).to eql('000090000267')
     expect(boleto_novo.carteira).to eql('102')
   end
 
@@ -101,10 +101,8 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.nosso_numero_boleto).to eql('000090002720-7')
   end
 
-  it 'Busca logotipo do banco' do
-    boleto_novo = described_class.new
-    expect(File.exist?(boleto_novo.logotipo)).to be_truthy
-    expect(File.stat(boleto_novo.logotipo).zero?).to be_falsey
+  describe 'Busca logotipo do banco' do
+    it_behaves_like 'busca_logotipo'
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do

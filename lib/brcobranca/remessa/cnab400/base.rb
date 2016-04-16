@@ -3,7 +3,9 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
-        require "unidecoder"
+        # documento do cedente
+        attr_accessor :documento_cedente
+
         validates_presence_of :carteira, message: 'não pode estar em branco.'
 
         # Data da geracao do arquivo seguindo o padrao DDMMAA
@@ -32,7 +34,7 @@ module Brcobranca
           # data geracao          [6]        formato DDMMAA
           # complemento registro  [294]
           # num. sequencial       [6]        000001
-          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.format_size(30)}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento}000001"
         end
 
         # Trailer do arquivo remessa
@@ -72,8 +74,11 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
-          retorno = ret.join("\n")
-          retorno.to_ascii.upcase
+
+          remittance = ret.join("\n").to_ascii.upcase
+          remittance << "\n"
+
+          remittance.encode(remittance.encoding, :universal_newline => true).encode(remittance.encoding, :crlf_newline => true)
         end
 
         # Informacoes referentes a conta do cedente
@@ -106,6 +111,14 @@ module Brcobranca
         #
         def complemento
           fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+        end
+
+        # Soma de todos os boletos
+        #
+        # @return [String]
+        def valor_total_titulos(tamanho=13)
+          value = pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor }
+          sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
         end
       end
     end

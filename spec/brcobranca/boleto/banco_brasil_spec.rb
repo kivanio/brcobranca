@@ -233,22 +233,22 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
     boleto_novo.numero_documento = '4042'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042-4')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042')
     expect(boleto_novo.nosso_numero_dv).to eql(4)
     boleto_novo.numero_documento = '61900'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900-7')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900')
     expect(boleto_novo.nosso_numero_dv).to eql(7)
     boleto_novo.numero_documento = '0719'
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719-2')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719')
     expect(boleto_novo.nosso_numero_dv).to eql(2)
     boleto_novo.numero_documento = 4042
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042-4')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000004042')
     expect(boleto_novo.nosso_numero_dv).to eql(4)
     boleto_novo.numero_documento = 61_900
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900-7')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000061900')
     expect(boleto_novo.nosso_numero_dv).to eql(7)
     boleto_novo.numero_documento = 719
-    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719-2')
+    expect(boleto_novo.nosso_numero_boleto).to eql('12387989000000719')
     expect(boleto_novo.nosso_numero_dv).to eql(2)
   end
 
@@ -263,10 +263,8 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     expect(boleto_novo.agencia_conta_boleto).to eql('0548-7 / 00001448-6')
   end
 
-  it 'Busca logotipo do banco' do
-    boleto_novo = described_class.new
-    expect(File.exist?(boleto_novo.logotipo)).to be_truthy
-    expect(File.stat(boleto_novo.logotipo).zero?).to be_falsey
+  describe 'Busca logotipo do banco' do
+    it_behaves_like 'busca_logotipo'
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do

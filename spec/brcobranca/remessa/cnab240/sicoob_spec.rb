@@ -4,22 +4,22 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(
-      valor: 50,
+      valor: 50.0,
       data_vencimento: Date.today,
-      nosso_numero: '429715',
+      nosso_numero: '00000012',
       documento_sacado: '82136760505',
-      nome_sacado: 'Jose da Silva',
-      endereco_sacado: 'Av. Burkhard Hehn Simoes',
-      bairro_sacado: 'Sao Francisco',
-      cep_sacado: '24360440',
-      cidade_sacado: 'Rio de Janeiro',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
       uf_sacado: 'RJ'
     )
   end
 
   let(:params) do
     {
-      empresa_mae: 'SEBASTIAN ELIAS PUBLICIDADE',
+      empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '4327',
       conta_corrente: '03666',
       documento_cedente: '74576177000177',
@@ -44,14 +44,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
         objeto = subject.class.new(params.merge(tipo_formulario: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Tipo formulario não pode estar em branco.')
-      end
-    end
-
-    context '@parcela' do
-      it 'deve ser invalido se nao possuir a parcela' do
-        objeto = subject.class.new(params.merge(parcela: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Parcela não pode estar em branco.')
       end
     end
 
@@ -137,8 +129,8 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
     end
 
     it 'formata o nosso numero' do
-      nosso_numero = sicoob.formata_nosso_numero 1
-      expect(nosso_numero).to eq "000000000101014     "
+      nosso_numero = sicoob.formata_nosso_numero pagamento
+      expect(nosso_numero).to eq "000000001201014     "
     end
   end
 
@@ -149,7 +141,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
       after { Timecop.return }
 
-      it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-bancoob.rem', sicoob.gera_arquivo)) }
+      it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-bancoob-cnab240.rem', sicoob.gera_arquivo)) }
     end
   end
 end

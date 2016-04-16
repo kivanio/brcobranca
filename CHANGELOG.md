@@ -1,7 +1,9 @@
 # Changelog
 
-## 6.1.0.beta
+## 6.1.0
 - Adicionado Banestes
+- Limpeza e formatação de strings de acordo com o tamanho permitido por cada banco
+- Homologação de cnab240 do Banco do Brazil
 
 ## 6.0.0
 
