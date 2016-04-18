@@ -1,3 +1,6 @@
+require 'active_support/core_ext/string/filters'
+require 'active_support/inflector/transliterate'
+
 module Brcobranca
   # Métodos auxiliares de formatação de strings
   module FormatacaoString
@@ -8,9 +11,9 @@ module Brcobranca
     #
     def format_size(size)
       if self.size > size
-        return truncate(size, omission: '')
+        ActiveSupport::Inflector.transliterate(truncate(size, omission: ''))
       else
-        return ljust(size, ' ')
+        ActiveSupport::Inflector.transliterate(ljust(size, ' '))
       end
     end
   end

@@ -12,6 +12,9 @@ module Brcobranca
   class NaoImplementado < NotImplementedError
   end
 
+  class ValorInvalido < StandardError
+  end
+
   # Exception lançada quando os dados informados para o boleto estão inválidos.
   #
   # Você pode usar assim na sua aplicação:
@@ -114,8 +117,13 @@ module Brcobranca
   module Retorno
     autoload :Base,            'brcobranca/retorno/base'
     autoload :RetornoCbr643,   'brcobranca/retorno/retorno_cbr643'
-    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
+    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240' # DEPRECATED
     autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400' # DEPRECATED
+
+    module Cnab240
+      autoload :Base,  'brcobranca/retorno/cnab240/base'
+      autoload :Caixa, 'brcobranca/retorno/cnab240/caixa'
+    end
 
     module Cnab400
       autoload :Base, 'brcobranca/retorno/cnab400/base'
@@ -139,7 +147,8 @@ module Brcobranca
       autoload :Bradesco,  'brcobranca/remessa/cnab400/bradesco'
       autoload :Itau,      'brcobranca/remessa/cnab400/itau'
       autoload :Citibank,  'brcobranca/remessa/cnab400/citibank'
-      autoload :Santander,  'brcobranca/remessa/cnab400/santander'
+      autoload :Santander, 'brcobranca/remessa/cnab400/santander'
+      autoload :Sicoob,    'brcobranca/remessa/cnab400/sicoob'
     end
 
     module Cnab240

@@ -9,11 +9,13 @@ module Brcobranca
         def define_template(template)
           case template
           when :rghost
-            return Brcobranca::Boleto::Template::Rghost
+            return [Brcobranca::Boleto::Template::Rghost]
           when :rghost_carne
-            return Brcobranca::Boleto::Template::RghostCarne
+            return [Brcobranca::Boleto::Template::RghostCarne]
+          when :both
+            return [Brcobranca::Boleto::Template::Rghost, Brcobranca::Boleto::Template::RghostCarne]
           else
-            return Brcobranca::Boleto::Template::Rghost
+            return [Brcobranca::Boleto::Template::Rghost]
           end
         end
       end

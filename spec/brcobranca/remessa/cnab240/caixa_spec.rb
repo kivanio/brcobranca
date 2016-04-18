@@ -4,18 +4,18 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
-                                       nosso_numero: 123,
-                                       documento_sacado: '12345678901',
-                                       nome_sacado: 'nome',
-                                       endereco_sacado: 'endereco',
-                                       bairro_sacado: 'bairro',
-                                       cep_sacado: '12345678',
-                                       cidade_sacado: 'cidade',
-                                       uf_sacado: 'SP')
+      data_vencimento: Date.today,
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      uf_sacado: 'SP')
   end
   let(:params) do
-    { empresa_mae: 'teste',
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '12345',
       conta_corrente: '1234',
       documento_cedente: '12345678901',
@@ -113,15 +113,15 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
 
     it 'info_conta deve retornar as informacoes nas posicoes corretas' do
       info_conta = caixa.info_conta
-      expect(info_conta[0..4]).to eq '12345'    # agencia
-      expect(info_conta[5]).to eq '1'           # digito agencia
-      expect(info_conta[6..11]).to eq '123456'  # convenio
+      expect(info_conta[0..4]).to eq '12345' # agencia
+      expect(info_conta[5]).to eq '1' # digito agencia
+      expect(info_conta[6..11]).to eq '123456' # convenio
     end
 
     it 'complemento header deve retornar as informacoes nas posicoes corretas' do
       comp_header = caixa.complemento_header
       expect(comp_header.size).to eq 29
-      expect(comp_header[0..3]).to eq '1234'  # versao do aplicativo
+      expect(comp_header[0..3]).to eq '1234' # versao do aplicativo
     end
 
     it 'complemento trailer deve retornar as informacoes nas posicoes corretas' do
@@ -134,13 +134,20 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
     it 'complemento P deve retornar as informacoes nas posicoes corretas' do
       comp_p = caixa.complemento_p pagamento
       expect(comp_p.size).to eq 34
-      expect(comp_p[0..5]).to eq '123456'             # convenio
-      expect(comp_p[17..18]).to eq '14'               # modalidade carteira
-      expect(comp_p[19..33]).to eq '000000000000123'  # nosso numero
+      expect(comp_p[0..5]).to eq '123456' # convenio
+      expect(comp_p[17..18]).to eq '14' # modalidade carteira
+      expect(comp_p[19..33]).to eq '000000000000123' # nosso numero
     end
   end
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
+
+    context 'arquivo' do
+      before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+      after { Timecop.return }
+
+      it { expect(caixa.gera_arquivo).to eq(read_remessa('remessa-caixa-cnab240.rem', caixa.gera_arquivo)) }
+    end
   end
 end

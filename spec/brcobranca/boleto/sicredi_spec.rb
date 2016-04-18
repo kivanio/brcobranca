@@ -75,7 +75,6 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
 
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74893.11220 13871.512342 18123.451009 1 52220000295295')
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('3112213871512341812345100')
-    # boleto_novo.codigo_barras.should eql("23791377000000135004042030077770016800619000")
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
@@ -106,10 +105,8 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     expect(boleto_novo.agencia_conta_boleto).to eql('1234.18.12345')
   end
 
-  it 'Busca logotipo do banco' do
-    boleto_novo = described_class.new
-    expect(File.exist?(boleto_novo.logotipo)).to be_truthy
-    expect(File.stat(boleto_novo.logotipo).zero?).to be_falsey
+  describe 'Busca logotipo do banco' do
+    it_behaves_like 'busca_logotipo'
   end
 
   it 'Gerar boleto nos formatos válidos com método to_' do
@@ -146,5 +143,25 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(File.delete(tmp_file.path)).to eql(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
+  end
+
+  it "quando dígito verificador for 10 deve ser mapeado para 0" do
+    attributes = {
+      convenio: "2442725",
+      agencia: "0217",
+      conta_corrente: "42725",
+      byte_idt: 1,
+      posto: "24",
+      numero_documento: 25,
+      valor: 20.00,
+      data_documento: Date.parse("2015-01-18")
+    }
+    attributes = @valid_attributes.merge(attributes)
+    boleto_novo = described_class.new(attributes)
+
+    result = boleto_novo.nosso_numero_dv
+
+    expect("#{boleto_novo.agencia_posto_conta}#{boleto_novo.numero_documento_with_byte_idt}".modulo11).to eq(10)
+    expect(result).to eq(0)
   end
 end

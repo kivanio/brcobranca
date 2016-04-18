@@ -3,9 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Itau < Brcobranca::Remessa::Cnab400::Base
-        # documento do cedente
-        attr_accessor :documento_cedente
-
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
@@ -134,7 +131,7 @@ module Brcobranca
           detalhe << '03'                                                   # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
-          detalhe.upcase
+          detalhe
         end
       end
     end

@@ -4,18 +4,18 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Base do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
-                                       nosso_numero: 123,
-                                       documento_sacado: '12345678901',
-                                       nome_sacado: 'nome',
-                                       endereco_sacado: 'endereco',
-                                       bairro_sacado: 'bairro',
-                                       cep_sacado: '12345678',
-                                       cidade_sacado: 'cidade',
-                                       uf_sacado: 'SP')
+      data_vencimento: Date.today,
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      uf_sacado: 'SP')
   end
   let(:params) do
-    { empresa_mae: 'teste',
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '123',
       conta_corrente: '1234',
       pagamentos: [pagamento] }
@@ -59,12 +59,6 @@ RSpec.describe Brcobranca::Remessa::Base do
         objeto = subject.class.new(params.merge!(empresa_mae: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Empresa mae não pode estar em branco.')
-      end
-
-      it 'deve ser invalido se a empresa tiver mais de 30 caracteres' do
-        base.empresa_mae = 'teste'.ljust(40, ' ')
-        expect(base.invalid?).to be true
-        expect(base.errors.full_messages).to include('Empresa mae deve ser menor ou igual a 30 caracteres.')
       end
     end
   end

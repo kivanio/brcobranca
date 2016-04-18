@@ -24,19 +24,20 @@ RSpec.describe Brcobranca::Calculo do
   end
 
   it 'Multiplicador' do
-    expect('85068014982'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(255)
-    expect('05009401448'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(164)
-    expect('12387987777700168'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(460)
-    expect('34230'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(55)
-    expect('258281'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(118)
-    expect('5444'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
-    expect('000000005444'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
-    expect(85_068_014_982.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(255)
-    expect(5_009_401_448.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(164)
-    expect(5444.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(61)
-    expect(1_129_004_590.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to eql(162)
-    expect(5444.multiplicador([2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
-    expect { '2582fd81'.multiplicador([2, 3, 4, 5, 6, 7, 8, 9]) }.to raise_error(ArgumentError)
+    expect('85068014982'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(255)
+    expect('05009401448'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(164)
+    expect('12387987777700168'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(460)
+    expect('34230'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(55)
+    expect('258281'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(118)
+    expect('5444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
+    expect('000000005444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
+    expect(85_068_014_982.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(255)
+    expect(5_009_401_448.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(164)
+    expect(5444.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(61)
+    expect(1_129_004_590.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to eql(162)
+    expect(5444.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Fixnum)
+    expect { '2582fd81'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9]) }.to raise_error(ArgumentError)
+    expect { 5444.multiplicador }.to raise_error(ArgumentError)
   end
 
   describe 'módulo 11 de 9 até 2' do

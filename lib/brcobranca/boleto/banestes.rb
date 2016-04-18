@@ -56,7 +56,7 @@ module Brcobranca
       end
 
       def nosso_numero_dv
-        numero_dv_1 = numero_documento.modulo11(mapeamento: { 1 => 0, 11 => 0 })
+        numero_dv_1 = numero_documento.modulo11(mapeamento: { 10 => 0, 11 => 0 })
         numero_dv_2 = "#{numero_documento}#{numero_dv_1}".modulo11
 
         "#{numero_dv_1}#{numero_dv_2}"

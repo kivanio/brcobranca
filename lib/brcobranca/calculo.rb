@@ -33,7 +33,7 @@ module Brcobranca
       options[:mapeamento] ||= {}
       options[:multiplicador] ||= [9, 8, 7, 6, 5, 4, 3, 2]
 
-      total = multiplicador(options[:multiplicador])
+      total = multiplicador(fatores: options[:multiplicador], reverse: options[:reverse])
       valor = block_given? ? yield(total) : (total % 11)
 
       options[:mapeamento][valor] || valor
@@ -71,13 +71,16 @@ module Brcobranca
     # @param  [Array]
     # @return [Integer]
     # @raise  [ArgumentError] Caso não seja um número inteiro.
-    def multiplicador(fatores, &_block)
+    def multiplicador(options = {}, &_block)
       fail ArgumentError, 'Número inválido' unless self.is_number?
+      fail ArgumentError, 'Fatores não podem estar em branco' unless options[:fatores]
 
       total = 0
       multiplicador_posicao = 0
+      fatores = options[:fatores]
+      numeros = options[:reverse].nil? ? to_s.split(//).reverse! : to_s.split(//)
 
-      to_s.split(//).reverse!.each do |caracter|
+      numeros.each do |caracter|
         fator = fatores[multiplicador_posicao]
         total += block_given? ? yield(caracter, fator) : (caracter.to_i * fator)
         multiplicador_posicao = (multiplicador_posicao < (fatores.size - 1)) ? (multiplicador_posicao + 1) : 0
