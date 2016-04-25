@@ -99,7 +99,12 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       info_conta = santander.info_conta
       expect(info_conta.size).to eq 20
       expect(info_conta[0..19]).to eq '17777751042700080112' # codigo_transmissao
-    end
+    
+      object = subject.class.new(params.merge!(codigo_transmissao: '7777751042700080112'))
+      info_conta = object.info_conta
+      expect(info_conta.size).to eq 20
+      expect(info_conta[0..19]).to eq '07777751042700080112' # codigo_transmissao
+     end
   end
 
   context 'monta remessa' do
