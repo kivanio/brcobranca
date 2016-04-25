@@ -41,14 +41,6 @@ module Brcobranca
           codigo_transmissao.rjust(20, ' ')
         end
 
-        # Zeros do header
-        #
-        # @return [String]
-        #
-        def zeros
-          ''.ljust(16, '0')
-        end
-
         # Complemento do header
         #
         # @return [String]
