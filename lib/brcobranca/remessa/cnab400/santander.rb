@@ -15,7 +15,7 @@ module Brcobranca
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
 
         def initialize(campos = {})
-          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5'}.merge!(campos)
+          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5' }.merge!(campos)
           super(campos)
         end
 
@@ -25,6 +25,10 @@ module Brcobranca
 
         def nome_banco
           'SANTANDER'.format_size(15)
+        end
+
+        def codigo_transmissao=(valor)
+          @codigo_transmissao = valor.to_s.strip.rjust(20, '0') if valor
         end
 
         # Informacoes do Código de Transmissão
@@ -42,9 +46,8 @@ module Brcobranca
         # @return [String]
         #
         def zeros
-          "".ljust(16, "0")
+          ''.ljust(16, '0')
         end
-
 
         # Complemento do header
         #
@@ -206,23 +209,6 @@ module Brcobranca
           "9#{sequencial.to_s.rjust(6, '0')}#{valor_total_titulos(13)}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
         end
 
-        # Trailer do arquivo remessa
-        #
-        # @param sequencial
-        #        num. sequencial do registro no arquivo
-        #
-        # @return [String]
-        #
-        def monta_trailer(sequencial)
-          # CAMPO               TAMANHO   VALOR
-          # código registro     [1]       9
-          # quant. documentos   [6]
-          # valor total titulos [13]
-          # zeros               [374]     0
-          # num. sequencial     [6]
-          "9#{sequencial.to_s.rjust(6, '0')}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, "0")}"
-        end
-
         private
 
         # Complemento de remessa
@@ -234,15 +220,6 @@ module Brcobranca
           # ultimo digito da conta corrente
           # digito da conta corrente
           "#{conta_corrente[-1]}#{digito_conta}"
-        end
-
-        # Valor total de todos os títulos
-        #
-        # @return [String]
-        #
-        def total_titulos
-          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
-          total.to_s.somente_numeros.rjust(13, "0")
         end
       end
     end
