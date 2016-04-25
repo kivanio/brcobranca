@@ -15,7 +15,11 @@ module Brcobranca
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
 
         def initialize(campos = {})
-          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5' }.merge!(campos)
+          campos = {
+            aceite: 'N',
+            carteira: '101',
+            codigo_carteira: '5'
+          }.merge!(campos)
           super(campos)
         end
 
