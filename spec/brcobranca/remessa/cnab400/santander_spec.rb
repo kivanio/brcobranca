@@ -69,7 +69,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
         expect(object.errors.full_messages).to include('Codigo transmissao não pode estar em branco.')
       end
 
-      it 'deve ser invalido se o deve ter no máximo 20 dígitos.' do
+      it 'deve ser invalido se o codigo_transmissao ter mais que 20 dígitos.' do
         santander.codigo_transmissao = '123456789012345678901'
         expect(santander.invalid?).to be true
         expect(santander.errors.full_messages).to include('Codigo transmissao deve ter no máximo 20 dígitos.')
@@ -78,7 +78,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
   end
 
   context 'formatacoes dos valores' do
-    it 'cod_banco deve ser 341' do
+    it 'cod_banco deve ser 033' do
       expect(santander.cod_banco).to eq '033'
     end
 
@@ -99,6 +99,12 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       info_conta = santander.info_conta
       expect(info_conta.size).to eq 20
       expect(info_conta[0..19]).to eq '17777751042700080112' # codigo_transmissao
+
+      cod_trans = '7777751042700080112'
+      object = subject.class.new(params.merge!(codigo_transmissao: cod_trans))
+      info_conta = object.info_conta
+      expect(info_conta.size).to eq 20
+      expect(info_conta[0..19]).to eq '07777751042700080112' # codigo_transmissao
     end
   end
 
