@@ -16,9 +16,9 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = {
-            aceite: 'N',
-            carteira: '101',
-            codigo_carteira: '5'
+            aceite: "N",
+            carteira: "101",
+            codigo_carteira: "5"
           }.merge!(campos)
           super(campos)
         end
@@ -32,7 +32,7 @@ module Brcobranca
         end
 
         def codigo_transmissao=(valor)
-          @codigo_transmissao = valor.to_s.strip.rjust(20, '0') if valor
+          @codigo_transmissao = valor.to_s.strip.rjust(20, "0") if valor
         end
 
         # Informacoes do Código de Transmissão
