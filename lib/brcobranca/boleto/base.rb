@@ -29,6 +29,16 @@ module Brcobranca
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
+      # <b>OPCIONAL</b>: Descontos
+      attr_accessor :desconto
+      # <b>OPCIONAL</b>: Deduções
+      attr_accessor :deducao
+      # <b>OPCIONAL</b>: Multa
+      attr_accessor :multa
+      # <b>OPCIONAL</b>: Acréscimos
+      attr_accessor :acrescimo
+      # <b>OPCIONAL</b>: Valor final cobrado
+      attr_accessor :valor_cobrado
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
@@ -218,7 +228,7 @@ module Brcobranca
       # Valor total do documento
       # @return [String] 10 caracteres numéricos.
       def valor_documento_formatado
-        valor_documento.round(2).limpa_valor_moeda.to_s.rjust(10, '0')
+        (valor_cobrado || valor_documento).round(2).limpa_valor_moeda.to_s.rjust(10, '0')
       end
 
       # Nome da classe do boleto
