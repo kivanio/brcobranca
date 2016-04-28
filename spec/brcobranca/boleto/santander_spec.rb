@@ -11,7 +11,7 @@ RSpec.describe Brcobranca::Boleto::Santander do
       sacado_documento: '12345678900',
       agencia: '0059',
       convenio: 1_899_775,
-      numero_documento: '90000267',
+      numero_documento: '9000026',
       conta_corrente: '013000123'
     }
   end
@@ -51,24 +51,26 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.agencia).to eql('0059')
     expect(boleto_novo.convenio).to eql('1899775')
-    expect(boleto_novo.numero_documento).to eql('000090000267')
+    expect(boleto_novo.numero_documento).to eql('9000026')
     expect(boleto_novo.carteira).to eql('102')
   end
 
   it 'Gerar boleto' do
     @valid_attributes[:data_vencimento] = Date.parse('2011/10/09')
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('9189977500009000026700102')
-    expect(boleto_novo.codigo_barras).to eql('03398511500000025009189977500009000026700102')
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('03399.18997 77500.009004 00267.001022 8 51150000002500')
+    expect(boleto_novo.codigo_barras_segunda_parte.size).to eq(25)
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('9189977500000900002690102')
+    expect(boleto_novo.codigo_barras).to eql('03399511500000025009189977500000900002690102')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('03399.18997 77500.000904 00026.901025 9 51150000002500')
 
     @valid_attributes[:valor] = 54.00
-    @valid_attributes[:numero_documento] = '90002720'
+    @valid_attributes[:numero_documento] = '9000272'
     @valid_attributes[:data_vencimento] = Date.parse('2012/09/08')
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('9189977500009000272070102')
-    expect(boleto_novo.codigo_barras).to eql('03399545000000054009189977500009000272070102')
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('03399.18997 77500.009004 02720.701024 9 54500000005400')
+    expect(boleto_novo.codigo_barras_segunda_parte.size).to eq(25)
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('9189977500000900027250102')
+    expect(boleto_novo.codigo_barras).to eql('03393545000000054009189977500000900027250102')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('03399.18997 77500.000904 00272.501024 3 54500000005400')
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
@@ -98,7 +100,7 @@ RSpec.describe Brcobranca::Boleto::Santander do
 
     @valid_attributes[:numero_documento] = '90002720'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_boleto).to eql('000090002720-7')
+    expect(boleto_novo.nosso_numero_boleto).to eql('90002720-7')
   end
 
   describe 'Busca logotipo do banco' do
