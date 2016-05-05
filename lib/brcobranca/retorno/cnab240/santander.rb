@@ -7,6 +7,10 @@ module Brcobranca
       # Baseado em: http://www.caixa.gov.br/downloads/cobranca-caixa-manuais/LEIAUTE_CNAB_240_SIGCB_COBRANCA_CAIXA.pdf
       class Santander < Brcobranca::Retorno::RetornoCnab240
         class Line < Brcobranca::Retorno::RetornoCnab240::Line
+
+          REGISTRO_U_FIELDS << 'data_ocorrencia'
+
+
           fixed_width_layout do |parse|
 
             parse.field :nosso_numero, 39..55
@@ -22,6 +26,8 @@ module Brcobranca
             parse.field :agencia_recebedora_com_dv, 95..98
 
             parse.field :valor_tarifa, 193..207
+
+            parse.field :data_ocorrencia, 137..144
 
           end
         end

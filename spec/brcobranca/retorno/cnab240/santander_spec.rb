@@ -27,5 +27,6 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Santander do
     expect(pagamento.outros_recebimento).to eql("000000000000000")
     expect(pagamento.sequencial).to eql("00011")
     expect(pagamento.valor_tarifa).to eql("000000000000600")
+    expect(pagamento.data_ocorrencia).to eql("28042016")
   end
 end
