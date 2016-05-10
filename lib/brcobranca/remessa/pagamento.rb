@@ -73,6 +73,7 @@ module Brcobranca
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
         :documento_sacado, :nome_sacado, :endereco_sacado,
         :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
+      validates_length_of :uf_sacado, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true

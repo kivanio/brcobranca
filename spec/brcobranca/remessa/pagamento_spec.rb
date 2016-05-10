@@ -58,10 +58,18 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       expect(pagamento.errors.full_messages).to include('Cidade sacado não pode estar em branco.')
     end
 
-    it 'deve ser invalido se nao possuir UF do sacado' do
-      pagamento.uf_sacado = nil
-      expect(pagamento.invalid?).to be true
-      expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
+    context '@uf_sacado' do
+      it 'deve ser invalido se nao possuir UF do sacado' do
+        pagamento.uf_sacado = nil
+        expect(pagamento.invalid?).to be true
+        expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
+      end
+
+      it 'deve ser invalido se UF do sacado for maior que 2 caracteres' do
+        pagamento.uf_sacado = "Santa Catarina"
+        expect(pagamento.invalid?).to be true
+        expect(pagamento.errors.full_messages).to include('Uf sacado deve ter 2 dígitos.')
+      end
     end
 
     context '@cep' do
