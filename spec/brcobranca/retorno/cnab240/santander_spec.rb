@@ -9,9 +9,9 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Santander do
     pagamentos = described_class.load_lines(@arquivo)
     expect(pagamentos.size).to eq(6)
     pagamento = pagamentos.last
-    expect(pagamento.agencia_com_dv).to eql("99999")
-    expect(pagamento.cedente_com_dv).to eql("1234567891")
-    expect(pagamento.nosso_numero).to eql("00000000000351")
+    expect(pagamento.agencia_com_dv).to eql("999991")
+    expect(pagamento.nosso_numero_com_dv).to eql("0000000289647")
+    expect(pagamento.nosso_numero).to eql("000000028964")
     expect(pagamento.carteira).to eql("1")
     expect(pagamento.data_vencimento).to eql("28042016")
     expect(pagamento.valor_titulo).to eql("000000000000126")
