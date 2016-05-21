@@ -95,7 +95,7 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
 
   context 'informacoes padrao' do
     it 'data de emissao padrao deve ser o dia corrente' do
-      expect(pagamento.data_emissao).to eq Date.today
+      expect(pagamento.data_emissao).to eq Date.current
     end
 
     it 'nome do avalista padrao deve ser vazio' do

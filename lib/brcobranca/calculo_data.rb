@@ -15,7 +15,7 @@ module Brcobranca
     # Mostra a data em formato <b>dia/mês/ano</b>
     # @return [String]
     # @example
-    #  Date.today.to_s_br #=> 20/01/2010
+    #  Date.current.to_s_br #=> 20/01/2010
     def to_s_br
       strftime('%d/%m/%Y')
     end

@@ -13,7 +13,7 @@ module Brcobranca
         # @return [String]
         #
         def data_geracao
-          Date.today.strftime('%d%m%y')
+          Date.current.strftime('%d%m%y')
         end
 
         # Header do arquivo remessa

@@ -4,7 +4,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.today,
+      data_vencimento: Date.current,
       nosso_numero: 123,
       documento_sacado: '12345678901',
       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
@@ -155,7 +155,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
       it 'informacoes devem estar posicionadas corretamente no detalhe' do
         detalhe = itau.monta_detalhe pagamento, 1
         expect(detalhe[62..69]).to eq '00000123' # nosso numero
-        expect(detalhe[120..125]).to eq Date.today.strftime('%d%m%y') # data de vencimento
+        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990' # valor do titulo
         expect(detalhe[142..146]).to eq '00000' # agência cobradora
         expect(detalhe[156..157]).to eq '00' # instrução 1
