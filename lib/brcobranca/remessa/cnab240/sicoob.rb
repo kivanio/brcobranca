@@ -89,7 +89,7 @@ module Brcobranca
         end
 
         def complemento_trailer
-          ''.rjust(217, ' ')
+          ''.rjust(117, ' ')
         end
 
         def monta_segmento_p(pagamento, nro_lote, sequencial)
@@ -144,6 +144,78 @@ module Brcobranca
           # digito agencia/conta    1
           # ident. titulo no banco  20
           "#{conta_corrente.rjust(12, '0')}#{digito_conta} #{formata_nosso_numero(pagamento)}"
+        end
+
+        # Monta o registro trailer do lote
+        #
+        # @param nro_lote [Integer]
+        #   numero do lote no arquivo (iterar a cada novo lote)
+        #
+        # @param nro_registros [Integer]
+        #   numero de registros(linhas) no lote (contando header e trailer)
+        #
+        # @return [String]
+        #
+        def monta_trailer_lote(nro_lote, nro_registros)
+          total_titulos = pagamentos.map(&:valor).inject(:+)
+
+          # CAMPO                                           # TAMANHO
+          trailer_lote = ''
+          # codigo banco                                    3
+          trailer_lote << cod_banco
+          # lote de servico                                 4
+          trailer_lote << nro_lote.to_s.rjust(4, '0')
+          # tipo de servico                                 1
+          trailer_lote << '5'
+          # uso exclusivo                                   9
+          trailer_lote << ''.rjust(9, ' ')
+          # qtde de registros lote                          6
+          trailer_lote << nro_registros.to_s.rjust(6, '0')
+          
+          # qtde de Títulos em Cobrança Simples             6
+          trailer_lote << pagamentos.count.to_s.rjust(6, '0') 
+          # Valor Total dos Títulos em Carteiras Simples    15 2
+          trailer_lote << sprintf('%.2f', total_titulos).delete('.').rjust(17, '0')
+          # qtde de Títulos em Cobrança Vinculada           6
+          trailer_lote << ''.rjust(6, '0')
+          # Valor Total dos Títulos em Carteiras Vinculada  15 2
+          trailer_lote << ''.rjust(17, '0')
+          # qtde de Títulos em Cobrança Caucionada          6
+          trailer_lote << ''.rjust(6, '0')
+          # Valor Total dos Títulos em Carteiras Caucionada 15 2
+          trailer_lote << ''.rjust(17, '0')
+          # qtde de Títulos em Cobrança Descontada          6
+          trailer_lote << ''.rjust(6, '0')
+          # Valor Total dos Títulos em Carteiras Descontada 15 2
+          trailer_lote << ''.rjust(17, '0')
+          # Número do Aviso de Lançamento                   8
+          trailer_lote << ''.rjust(8, ' ')
+          
+          # uso exclusivo                                   117
+          trailer_lote << complemento_trailer
+          trailer_lote
+        end
+
+        # Monta o registro trailer do arquivo
+        #
+        # @param nro_lotes [Integer]
+        #   numero de lotes no arquivo
+        # @param sequencial [Integer]
+        #   numero de registros(linhas) no arquivo
+        #
+        # @return [String]
+        #
+        def monta_trailer_arquivo(nro_lotes, sequencial)
+          # CAMPO                     TAMANHO
+          # codigo banco                    3
+          # lote de servico                 4
+          # tipo de registro                1
+          # uso FEBRABAN                    9
+          # nro de lotes                    6
+          # nro de registros(linhas)        6
+          # qtde de Contas p/ Conc. (Lotes) 6
+          # Uso FEBRABAN/CNAB               205
+          "#{cod_banco}99999#{''.rjust(9, ' ')}#{nro_lotes.to_s.rjust(6, '0')}#{sequencial.to_s.rjust(6, '0')}#{''.rjust(6, '0')}#{''.rjust(205, ' ')}"
         end
 
         # Retorna o nosso numero

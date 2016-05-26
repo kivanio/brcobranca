@@ -142,6 +142,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
+    
+    context 'trailer lote' do
+      it 'trailer lote deve ter o complemento_trailer na posicao correta' do
+        trailer = caixa.monta_trailer_lote 1, 4
+        expect(trailer[23..239]).to eq caixa.complemento_trailer # complemento do registro trailer
+      end
+    end
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
