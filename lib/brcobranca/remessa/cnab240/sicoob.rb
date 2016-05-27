@@ -157,8 +157,6 @@ module Brcobranca
         # @return [String]
         #
         def monta_trailer_lote(nro_lote, nro_registros)
-          total_titulos = pagamentos.map(&:valor).inject(:+)
-
           # CAMPO                                           # TAMANHO
           trailer_lote = ''
           # codigo banco                                    3
@@ -175,7 +173,7 @@ module Brcobranca
           # qtde de Títulos em Cobrança Simples             6
           trailer_lote << pagamentos.count.to_s.rjust(6, '0') 
           # Valor Total dos Títulos em Carteiras Simples    15 2
-          trailer_lote << sprintf('%.2f', total_titulos).delete('.').rjust(17, '0')
+          trailer_lote << valor_total_titulos(17)
           # qtde de Títulos em Cobrança Vinculada           6
           trailer_lote << ''.rjust(6, '0')
           # Valor Total dos Títulos em Carteiras Vinculada  15 2

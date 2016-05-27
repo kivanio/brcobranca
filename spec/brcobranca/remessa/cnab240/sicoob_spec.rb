@@ -141,25 +141,25 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       it 'trailer lote deve ter as informacoes nas posicoes corretas' do
         trailer = sicoob.monta_trailer_lote 1, 4
         expect(trailer[0..2]).to eq sicoob.cod_banco # cod. do banco
-        expect(trailer[3..6]).to eq '0001' # numero do lote
-        expect(trailer[17..22]).to eq '000004' # qtde de registros no lote
+        expect(trailer[3..6]).to eq "0001" # numero do lote
+        expect(trailer[17..22]).to eq "000004" # qtde de registros no lote
         # qtde de Títulos em Cobrança Simples 6
         # Valor Total dos Títulos em Carteiras Simples 15 2
-        expect(trailer[23..28]).to eq '000001' 
-        expect(trailer[29..45]).to eq '00000000000005000' 
+        expect(trailer[23..28]).to eq "000001" 
+        expect(trailer[29..45]).to eq "00000000000005000" 
 
         # qtde de Títulos em Cobrança Vinculada 6
         # Valor Total dos Títulos em Carteiras Vinculada 15 2
-        expect(trailer[46..51]).to eq '000000' 
-        expect(trailer[52..68]).to eq '00000000000000000' 
+        expect(trailer[46..51]).to eq "000000" 
+        expect(trailer[52..68]).to eq "00000000000000000" 
         # qtde de Títulos em Cobrança Caucionada 6
         # Valor Total dos Títulos em Carteiras Caucionada 15 2
-        expect(trailer[69..74]).to eq '000000' 
-        expect(trailer[75..91]).to eq '00000000000000000' 
+        expect(trailer[69..74]).to eq "000000" 
+        expect(trailer[75..91]).to eq "00000000000000000" 
         # qtde de Títulos em Cobrança Descontada 6
         # Valor Total dos Títulos em Carteiras Descontada 15 2
-        expect(trailer[92..97]).to eq '000000' 
-        expect(trailer[98..114]).to eq '00000000000000000' 
+        expect(trailer[92..97]).to eq "000000" 
+        expect(trailer[98..114]).to eq "00000000000000000" 
         # Número do Aviso de Lançamento 8
         expect(trailer[115..122]).to eq ''.rjust(8, ' ')
         # CNAB Uso Exclusivo FEBRABAN/CNAB 117
