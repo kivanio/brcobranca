@@ -140,7 +140,6 @@ shared_examples_for 'cnab240' do
       expect(trailer[0..2]).to eq objeto.cod_banco # cod. do banco
       expect(trailer[3..6]).to eq '0001' # numero do lote
       expect(trailer[17..22]).to eq '000004' # qtde de registros no lote
-      expect(trailer[23..239]).to eq objeto.complemento_trailer # complemento do registro trailer
     end
   end
 

@@ -57,6 +57,14 @@ module Brcobranca
 
         yield self if block_given?
       end
+
+      # Soma de todos os boletos
+      #
+      # @return [String]
+      def valor_total_titulos(tamanho=13)
+        value = pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor }
+        sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
+      end
     end
   end
 end
