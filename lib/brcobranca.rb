@@ -5,7 +5,6 @@ require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
 require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
-require 'brcobranca/currency'
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.

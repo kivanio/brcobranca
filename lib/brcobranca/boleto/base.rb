@@ -5,6 +5,9 @@ module Brcobranca
     # Classe base para todas as classes de boletos
     class Base
       extend Template::Base
+      BRL = { delimiter: '.', separator: ',', unit: 'R$', precision: 2, position: 'before' }
+      USD = { delimiter: ',', separator: '.', unit: 'US$', precision: 2, position: 'before' }
+      DEFAULT_CURR = BRL.merge(unit: '')
 
       # Configura gerador de arquivo de boleto e código de barras.
       define_template(Brcobranca.configuration.gerador).each do |klass|
@@ -151,10 +154,18 @@ module Brcobranca
         fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
       end
 
-      # Valor total do documento: <b>quantidate * valor</b>
+      # Valor total do documento: <b>quantidade * valor</b>
       # @return [Float]
       def valor_documento
         quantidade.to_f * valor.to_f
+      end
+
+      def valor_print
+        to_currency valor
+      end
+
+      def valor_documento_print
+        to_currency valor_documento
       end
 
       # Fator de vencimento calculado com base na data de vencimento do boleto.
@@ -208,6 +219,38 @@ module Brcobranca
       end
 
       private
+
+      def to_currency(number, options = {})
+        default = DEFAULT_CURR
+        options = default.merge(options)
+        precision = options[:precision] || default[:precision]
+        unit = options[:unit] || default[:unit]
+        position = options[:position] || default[:position]
+        separator = precision > 0 ? options[:separator] || default[:separator] : ""
+        delimiter = options[:delimiter] || default[:delimiter]
+
+        begin
+          parts = with_precision(number, precision).split('.')
+          number = with_delimiter(parts[0].to_i, delimiter) + separator + parts[1].to_s
+          position == 'before' ? unit + number : number + unit
+        rescue
+          number
+        end
+      end
+
+      def with_delimiter(number, delimiter = ',', separator = '.')
+        begin
+          parts = number.to_s.split(separator)
+          parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{delimiter}")
+          parts.join separator
+        rescue
+          number
+        end
+      end
+
+      def with_precision(number, precision = 3)
+        "%01.#{precision}f" % number
+      end
 
       # Monta a primeira parte do código de barras, que é a mesma para todos bancos.
       # @return [String] 18 caracteres numéricos.

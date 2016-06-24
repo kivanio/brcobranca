@@ -154,7 +154,7 @@ module Brcobranca
           doc.moveto x: '16.5 cm', y: '23 cm'
           doc.show boleto.nosso_numero_boleto
           doc.moveto x: '16.5 cm', y: '22.2 cm'
-          doc.show boleto.valor_documento.to_currency
+          doc.show boleto.valor_documento_print
           doc.moveto x: '1.5 cm', y: '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
           doc.moveto x: '1.5 cm', y: '20.6 cm'
@@ -210,7 +210,7 @@ module Brcobranca
           # doc.moveto :x => '11 cm' , :y => '13.5 cm'
           # doc.show boleto.valor.to_currency
           doc.moveto x: '16.5 cm', y: '13.5 cm'
-          doc.show boleto.valor_documento.to_currency
+          doc.show boleto.valor_documento_print
           doc.moveto x: '0.7 cm', y: '12.7 cm'
           doc.show boleto.instrucao1
           doc.moveto x: '0.7 cm', y: '12.3 cm'
