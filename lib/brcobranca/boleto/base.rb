@@ -5,9 +5,9 @@ module Brcobranca
     # Classe base para todas as classes de boletos
     class Base
       extend Template::Base
-      BRL = {:delimiter => ".", :separator => ",", :unit => "R$", :precision => 2, :position => "before"}
-      USD = {:delimiter => ',', :separator => ".", :unit => "US$", :precision => 2, :position => "before"}
-      DEFAULT_CURR = BRL.merge(:unit => "")
+      BRL = { delimiter: '.', separator: ',', unit: 'R$', precision: 2, position: 'before' }
+      USD = { delimiter: ',', separator: '.', unit: 'US$', precision: 2, position: 'before' }
+      DEFAULT_CURR = BRL.merge(unit: '')
 
       # Configura gerador de arquivo de boleto e código de barras.
       define_template(Brcobranca.configuration.gerador).each do |klass|
@@ -230,27 +230,25 @@ module Brcobranca
         delimiter = options[:delimiter] || default[:delimiter]
 
         begin
-          parts = number.with_precision(precision).split('.')
-          number = parts[0].to_i.with_delimiter(delimiter) + separator + parts[1].to_s
-          position == "before" ? unit + number : number + unit
+          parts = with_precision(number, precision).split('.')
+          number = with_delimiter(parts[0].to_i, delimiter) + separator + parts[1].to_s
+          position == 'before' ? unit + number : number + unit
         rescue
           number
         end
       end
 
-      def with_delimiter(delimiter=",", separator=".")
-        number = self
+      def with_delimiter(number, delimiter = ',', separator = '.')
         begin
           parts = number.to_s.split(separator)
           parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{delimiter}")
           parts.join separator
         rescue
-          self
+          number
         end
       end
 
-      def with_precision(precision=3)
-        number = self
+      def with_precision(number, precision = 3)
         "%01.#{precision}f" % number
       end
 
