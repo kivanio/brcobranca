@@ -4,7 +4,7 @@ module Brcobranca
   module Retorno
     module Cnab240
       # Formato de Retorno CNAB 240
-      # Baseado em: http://www.caixa.gov.br/downloads/cobranca-caixa-manuais/LEIAUTE_CNAB_240_SIGCB_COBRANCA_CAIXA.pdf
+      # Baseado em: http://www.wmcsistemas.com/instalar/Layouts%20-%20Boletos_Cheques_Integracoes/Layout%20Santander/Santander%20-%20CNAB%20240.pdf
       class Santander < Brcobranca::Retorno::Cnab240::Base
         # Regex para remoção de headers e trailers além de registros diferentes de T ou U
         REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/
