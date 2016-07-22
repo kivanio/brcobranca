@@ -54,7 +54,7 @@ module Brcobranca
             soma = parte_1.to_i + conta_corrente.to_i + data.to_i
             "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
           else
-            self.errors[:data_vencimento] = 'não é uma data.'
+            self.errors.add(:data_vencimento, "não é uma data.")
             fail Brcobranca::BoletoInvalido.new(self)
           end
         when 'CSB'

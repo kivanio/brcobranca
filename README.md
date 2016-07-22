@@ -32,6 +32,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | 399 - HSBC            | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
 | 748 - Sicredi         | C (03)            |                |
 | 756 - Sicoob          | Todas as carteiras presentes na documentação |                |
+| 756 - Unicred         | 03 |                |
 
 ### Retornos Disponíveis
 
