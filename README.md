@@ -4,7 +4,8 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 [![Build Status](http://img.shields.io/travis/kivanio/brcobranca.svg)][travis]
 [![Dependency Status](http://img.shields.io/gemnasium/kivanio/brcobranca.svg)][gemnasium]
 [![Code Climate](http://img.shields.io/codeclimate/github/kivanio/brcobranca.svg)][codeclimate]
-[![Coverage Status](http://img.shields.io/coveralls/kivanio/brcobranca.svg)][coveralls]
+[![Test Coverage](https://codeclimate.com/github/kivanio/brcobranca/badges/coverage.svg)](https://codeclimate.com/github/kivanio/brcobranca/coverage)
+[![Coverage Status](https://coveralls.io/repos/kivanio/brcobranca/badge.svg)](https://coveralls.io/r/kivanio/brcobranca)
 
 [gem]: https://rubygems.org/gems/brcobranca
 [travis]: http://travis-ci.org/kivanio/brcobranca
@@ -16,46 +17,43 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
 - https://brcobranca.herokuapp.com
 - http://github.com/kivanio/brcobranca_exemplo
+- https://github.com/thiagoc7/brcobranca_app
 
 ### Bancos Disponíveis
 
-* Banco do Brasil
-  * Todas as carteiras presentes na documentação
-
-* Banco Itaú
-  * Todas as carteiras presentes na documentação
-
-* Banco HSBC
-  * CNR
-  * CSB - [Rafael DL](https://github.com/rafaeldl)
-
-* Banco Bradesco
-  * Todas as carteiras presentes na documentação
-
-* Banco Caixa
-  * Sem registro - [Túlio Ornelas](https://github.com/tulios)
-
-* Banco SICREDI
-
-* Banco Santander - [Ronaldo Araujo](https://github.com/ronaldoaraujo)
-  * Sem registro
-  * Com registro
+| Bancos                | Carteiras         | Documentações  |
+|-----------------------|-------------------|----------------|
+| 001 - Banco do Brasil | Todas as carteiras presentes na documentação | [pdf](http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc5175Bloqueto.pdf) |
+| 021 - Banestes        | Todas as carteiras presentes na documentação  | | 
+| 033 - Santander       | Todas as carteiras presentes na documentação - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
+| 104 - Caixa           | Todas as carteiras presentes na documentação - [Túlio Ornelas](https://github.com/tulios) | [pdf](http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF) |
+| 237 - Bradesco        | Todas as carteiras presentes na documentação | [pdf](http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf) |
+| 341 - Itaú            | Todas as carteiras presentes na documentação | [CNAB240](http://download.itau.com.br/bankline/cobranca_cnab240.pdf), [CNAB400](http://download.itau.com.br/bankline/layout_cobranca_400bytes_cnab_itau_mensagem.pdf) |
+| 399 - HSBC            | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
+| 748 - Sicredi         | C (03)            |                |
+| 756 - Sicoob          | Todas as carteiras presentes na documentação |                |
+| 756 - Unicred         | 03 |                |
 
 ### Retornos Disponíveis
 
 * CBR643
 * CNAB240
+* CNAB400
+
+Para CNABs do tipo 240 indico usar a gem [cnab240](https://github.com/eduardordm/cnab240) que é muito completa.
 
 ### Remessas Disponíveis
 
-* Banco do Brasil (CNAB240)
-* Caixa Economica Federal (CNAB240)
-* Bradesco (CNAB400)
-* Itaú (CNAB400)
+* Banco do Brasil (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+* Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+* Bradesco (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+* Itaú (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+* Citibank (CNAB400)
+* Santander (CNAB400)
 
-### Documentação dos boletos
+### Documentação
 
-Caso queira verificar(ou adicionar) alguma documentação sobre os boletos, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki/Especifica%C3%A7%C3%A3o-dos-Boletos).
+Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki).
 
 ### Rubydoc
 
@@ -66,7 +64,8 @@ Caso queira verificar(ou adicionar) alguma documentação sobre os boletos, aces
 
 [![RubyMine](http://www.jetbrains.com/ruby/features/ruby_banners/ruby1/ruby468x60_rubin.gif)](http://www.jetbrains.com/ruby/features?utm_source=RubyMineUser&utm_medium=Banner&utm_campaign=RubyMine)
 
+[Boleto Simples](https://wwww.boletosimples.com.br)
+
 ### Licença
 
-- BSD
-- Copyleft 2009 [Kivanio Barbosa](http://www.workingwithrails.com/recommendation/new/person/5679-kivanio-pereira-barbosa)
+* BSD

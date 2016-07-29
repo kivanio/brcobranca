@@ -7,8 +7,10 @@ module Brcobranca
       extend Template::Base
 
       # Configura gerador de arquivo de boleto e código de barras.
-      extend define_template(Brcobranca.configuration.gerador)
-      include define_template(Brcobranca.configuration.gerador)
+      define_template(Brcobranca.configuration.gerador).each do |klass|
+        extend klass
+        include klass
+      end
 
       # Validações do Rails 3
       include ActiveModel::Validations
@@ -23,8 +25,6 @@ module Brcobranca
       attr_accessor :variacao
       # <b>OPCIONAL</b>: Data de processamento do boleto, geralmente igual a data_documento
       attr_accessor :data_processamento
-      # <b>REQUERIDO</b>: Número de dias a vencer
-      attr_accessor :dias_vencimento
       # <b>REQUERIDO</b>: Quantidade de boleto(padrão = 1)
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
@@ -45,6 +45,8 @@ module Brcobranca
       attr_accessor :especie_documento
       # <b>REQUERIDO</b>: Data em que foi emitido o boleto
       attr_accessor :data_documento
+      # <b>REQUERIDO</b>: Data de vencimento do boleto
+      attr_accessor :data_vencimento
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
@@ -86,7 +88,7 @@ module Brcobranca
       # @param [Hash] campos
       def initialize(campos = {})
         padrao = {
-          moeda: '9', data_documento: Date.today, dias_vencimento: 1, quantidade: 1,
+          moeda: '9', data_documento: Date.current, data_vencimento: Date.current, quantidade: 1,
           especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
           local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }
@@ -102,7 +104,11 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        if Brcobranca.configuration.gerador == :rghost_carne
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}_carne.eps")
+        else
+          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+        end
       end
 
       # Dígito verificador do banco
@@ -149,16 +155,6 @@ module Brcobranca
       # @return [Float]
       def valor_documento
         quantidade.to_f * valor.to_f
-      end
-
-      # Data de vencimento baseado na <b>data_documento + dias_vencimento</b>
-      #
-      # @return [Date]
-      # @raise [ArgumentError] Caso {#data_documento} esteja em branco.
-      def data_vencimento
-        fail ArgumentError, 'data_documento não pode estar em branco.' unless data_documento
-        return data_documento unless dias_vencimento
-        (data_documento + dias_vencimento.to_i)
       end
 
       # Fator de vencimento calculado com base na data de vencimento do boleto.

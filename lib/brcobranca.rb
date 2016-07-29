@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$LOAD_PATH.push File.join(File.dirname(__FILE__))
+require 'active_model'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
@@ -7,25 +7,12 @@ require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 
-begin
-  require 'date'
-rescue LoadError
-  require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'date'
-  require 'date'
-end
-
-begin
-  require 'active_model'
-rescue LoadError
-  require 'rubygems' unless ENV['NO_RUBYGEMS']
-  gem 'active_model', '>= 3.0.0'
-  require 'active_model'
-end
-
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
   class NaoImplementado < NotImplementedError
+  end
+
+  class ValorInvalido < StandardError
   end
 
   # Exception lançada quando os dados informados para o boleto estão inválidos.
@@ -49,7 +36,7 @@ module Brcobranca
   class RemessaInvalida < StandardError
     # Atribui o objeto boleto e pega seus erros de validação
     def initialize(remessa)
-      errors = remessa.errors.full_messages
+      errors = remessa.errors.full_messages.join(', ')
       super(errors)
     end
   end
@@ -108,28 +95,49 @@ module Brcobranca
   # Módulo para classes de boletos
   module Boleto
     autoload :Base,          'brcobranca/boleto/base'
+    autoload :BancoNordeste, 'brcobranca/boleto/banco_nordeste'
     autoload :BancoBrasil,   'brcobranca/boleto/banco_brasil'
     autoload :Itau,          'brcobranca/boleto/itau'
     autoload :Hsbc,          'brcobranca/boleto/hsbc'
     autoload :Bradesco,      'brcobranca/boleto/bradesco'
     autoload :Caixa,         'brcobranca/boleto/caixa'
+    autoload :Sicoob,        'brcobranca/boleto/sicoob'
     autoload :Sicredi,       'brcobranca/boleto/sicredi'
+    autoload :Unicred,       'brcobranca/boleto/unicred'
     autoload :Santander,     'brcobranca/boleto/santander'
+    autoload :Banestes,      'brcobranca/boleto/banestes'
 
     # Módulos para classes de template
     module Template
-      autoload :Base,   'brcobranca/boleto/template/base'
-      autoload :Rghost, 'brcobranca/boleto/template/rghost'
+      autoload :Base,        'brcobranca/boleto/template/base'
+      autoload :Rghost,      'brcobranca/boleto/template/rghost'
       autoload :RghostCarne, 'brcobranca/boleto/template/rghost_carne'
     end
   end
 
   # Módulos para classes de retorno bancário
   module Retorno
-    autoload :Base,           'brcobranca/retorno/base'
-    autoload :RetornoCbr643,  'brcobranca/retorno/retorno_cbr643'
-    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
-    autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400'
+    autoload :Base,            'brcobranca/retorno/base'
+    autoload :RetornoCbr643,   'brcobranca/retorno/retorno_cbr643'
+    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240' # DEPRECATED
+    autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400' # DEPRECATED
+
+    module Cnab240
+      autoload :Base,  'brcobranca/retorno/cnab240/base'
+      autoload :Caixa, 'brcobranca/retorno/cnab240/caixa'
+    end
+
+    module Cnab400
+      autoload :Base, 'brcobranca/retorno/cnab400/base'
+      autoload :Bradesco, 'brcobranca/retorno/cnab400/bradesco'
+      autoload :Itau, 'brcobranca/retorno/cnab400/itau'
+    end
+
+    module Cnab240
+      autoload :Base, 'brcobranca/retorno/cnab240/base'
+      autoload :Sicoob, 'brcobranca/retorno/cnab240/sicoob'
+      autoload :Santander, 'brcobranca/retorno/cnab240/santander'
+    end
   end
 
   # Módulos para as classes que geram os arquivos remessa
@@ -141,12 +149,21 @@ module Brcobranca
       autoload :Base,      'brcobranca/remessa/cnab400/base'
       autoload :Bradesco,  'brcobranca/remessa/cnab400/bradesco'
       autoload :Itau,      'brcobranca/remessa/cnab400/itau'
+      autoload :Citibank,  'brcobranca/remessa/cnab400/citibank'
+      autoload :Santander, 'brcobranca/remessa/cnab400/santander'
+      autoload :Sicoob,    'brcobranca/remessa/cnab400/sicoob'
     end
 
     module Cnab240
       autoload :Base,         'brcobranca/remessa/cnab240/base'
       autoload :Caixa,        'brcobranca/remessa/cnab240/caixa'
       autoload :BancoBrasil,  'brcobranca/remessa/cnab240/banco_brasil'
+      autoload :Sicoob,       'brcobranca/remessa/cnab240/sicoob'
     end
+  end
+
+  # Módulos para classes de utilidades
+  module Util
+    autoload :Empresa, 'brcobranca/util/empresa'
   end
 end

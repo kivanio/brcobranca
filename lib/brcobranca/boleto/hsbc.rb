@@ -42,24 +42,25 @@ module Brcobranca
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR/CSB.
       def nosso_numero
         case carteira
-          when 'CNR' then
-            if data_vencimento.is_a?(Date)
-              self.codigo_servico = '4'
-              dia = data_vencimento.day.to_s.rjust(2, '0')
-              mes = data_vencimento.month.to_s.rjust(2, '0')
-              ano = data_vencimento.year.to_s[2..3]
-              data = "#{dia}#{mes}#{ano}"
+        when 'CNR' then
+          if data_vencimento.is_a?(Date)
+            self.codigo_servico = '4'
+            dia = data_vencimento.day.to_s.rjust(2, '0')
+            mes = data_vencimento.month.to_s.rjust(2, '0')
+            ano = data_vencimento.year.to_s[2..3]
+            data = "#{dia}#{mes}#{ano}"
 
-              parte_1 = "#{numero_documento}#{numero_documento.modulo11(mapeamento: { 10 => 0 })}#{codigo_servico}"
-              soma = parte_1.to_i + conta_corrente.to_i + data.to_i
-              "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
-            else
-              fail 'data_vencimento não é uma data.'
-            end
-          when 'CSB'
-            @nosso_numero
+            parte_1 = "#{numero_documento}#{numero_documento.modulo11(mapeamento: { 10 => 0 })}#{codigo_servico}"
+            soma = parte_1.to_i + conta_corrente.to_i + data.to_i
+            "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
           else
-            fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
+            self.errors.add(:data_vencimento, "não é uma data.")
+            fail Brcobranca::BoletoInvalido.new(self)
+          end
+        when 'CSB'
+          @nosso_numero
+        else
+          fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
           # TODO - Verificar outras carteiras.
           # self.codigo_servico = "5"
           # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11(mapeamento: { 10 => 0 })}#{self.codigo_servico}"
@@ -94,14 +95,14 @@ module Brcobranca
       # @raise  [Brcobranca::NaoImplementado] Caso a carteira informada não for CNR/CSB.
       def codigo_barras_segunda_parte
         case carteira
-          when 'CNR'
-            dias_julianos = data_vencimento.to_juliano
-            "#{conta_corrente}#{numero_documento}#{dias_julianos}2"
-          when 'CSB'
-            fail Brcobranca::NaoImplementado.new('Nosso número não definido.') unless @nosso_numero
-            "#{nosso_numero}#{agencia}#{conta_corrente}001"
-          else
-            fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
+        when 'CNR'
+          dias_julianos = data_vencimento.to_juliano
+          "#{conta_corrente}#{numero_documento}#{dias_julianos}2"
+        when 'CSB'
+          fail Brcobranca::NaoImplementado.new('Nosso número não definido.') unless @nosso_numero
+          "#{nosso_numero}#{agencia}#{conta_corrente}001"
+        else
+          fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
         end
       end
     end

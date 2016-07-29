@@ -3,7 +3,6 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Caixa < Brcobranca::Remessa::Cnab240::Base
-
         # digito da agencia
         attr_accessor :digito_agencia
         # versao do aplicativo da CAIXA
@@ -30,6 +29,7 @@ module Brcobranca
         #     ‘4’ = Sacado via SMS
 
         validates_presence_of :versao_aplicativo, :digito_agencia, message: 'não pode estar em branco.'
+        validates_presence_of :convenio, message: 'não pode estar em branco.'
         validates_length_of :convenio, maximum: 6, message: 'não deve ter mais de 6 dígitos.'
         validates_length_of :versao_aplicativo, maximum: 4, message: 'não deve ter mais de 4 dígitos.'
         validates_length_of :digito_agencia, is: 1, message: 'deve ter 1 dígito.'
@@ -60,8 +60,12 @@ module Brcobranca
           'CAIXA ECONOMICA FEDERAL'.ljust(30, ' ')
         end
 
-        def versao_layout
+        def versao_layout_arquivo
           '050'
+        end
+
+        def versao_layout_lote
+          '030'
         end
 
         def codigo_convenio
@@ -90,13 +94,13 @@ module Brcobranca
           "#{''.rjust(69, '0')}#{''.rjust(148, ' ')}"
         end
 
-        def complemento_p pagamento
+        def complemento_p(pagamento)
           # CAMPO                 TAMANHO
           # convenio              6
           # uso CAIXA             11
           # modalidade carteira   2
           # ident. titulo         15
-          "#{convenio.rjust(6, '0')}#{''.rjust(11, '0')}#{modalidade_carteira.to_s}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
+          "#{convenio.rjust(6, '0')}#{''.rjust(11, '0')}#{modalidade_carteira}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
         end
       end
     end

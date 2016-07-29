@@ -3,10 +3,10 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Bradesco < Brcobranca::Remessa::Cnab400::Base
-
         # codigo da empresa (informado pelo Bradesco no cadastramento)
         attr_accessor :codigo_empresa
 
+        validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :codigo_empresa, :sequencial_remessa,
                               :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :codigo_empresa, maximum: 20, message: 'deve ser menor ou igual a 20 dígitos.'
@@ -14,6 +14,7 @@ module Brcobranca
         validates_length_of :conta_corrente, maximum: 7, message: 'deve ter 7 dígitos.'
         validates_length_of :sequencial_remessa, maximum: 7, message: 'deve ter 7 dígitos.'
         validates_length_of :carteira, maximum: 2, message: 'deve ter no máximo 2 dígitos.'
+        validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         def agencia=(valor)
           @agencia = valor.to_s.rjust(5, '0') if valor
@@ -56,10 +57,10 @@ module Brcobranca
           identificacao << digito_conta                  # digito da conta             [1]
         end
 
-        def digito_nosso_numero nosso_numero
+        def digito_nosso_numero(nosso_numero)
           "#{carteira}#{nosso_numero.to_s.rjust(11, '0')}".modulo11(
-              multiplicador: [2, 3, 4, 5, 6, 7],
-              mapeamento: { 10 => 'P', 11 => 0 }
+            multiplicador: [2, 3, 4, 5, 6, 7],
+            mapeamento: { 10 => 'P', 11 => 0 }
           ) { |total| 11 - (total % 11) }
         end
 
@@ -67,10 +68,10 @@ module Brcobranca
         # de acordo com os caracteres disponiveis (40)
         # concatenando o endereco, cidade e uf
         #
-        def formata_endereco_sacado pgto
-          ret = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}".ljust(40, ' ')
-          return ret if ret.size == 40
-          "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".ljust(40, ' ')
+        def formata_endereco_sacado(pgto)
+          endereco = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}"
+          return endereco.ljust(40, ' ') if endereco.size <= 40
+          "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".format_size(40)
         end
 
         def monta_detalhe(pagamento, sequencial)
@@ -84,20 +85,20 @@ module Brcobranca
           detalhe << ''.rjust(1, '0')                                 # digito da conta corrente (op)               X[01]       020 a 020
           detalhe << identificacao_empresa                            # identficacao da empresa                     X[17]       021 a 037
           detalhe << ''.rjust(25, ' ')                                # num. controle                               X[25]       038 a 062
-          detalhe << cod_banco                                        # codigo do banco                             9[03]       063 a 065
+          detalhe << ''.rjust(3, '0')                                 # codigo do banco (debito automatico apenas)  9[03]       063 a 065
           detalhe << ''.rjust(1, '0')                                 # campo da multa                              9[01]       066 a 066 *
           detalhe << ''.rjust(4, '0')                                 # percentual multa                            9[04]       067 a 070 *
           detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')       # identificacao do titulo (nosso numero)      9[11]       071 a 081
-          detalhe << digito_nosso_numero(pagamento.nosso_numero)      # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
+          detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
           detalhe << ''.rjust(10, '0')                                # desconto por dia                            9[10]       083 a 092
           detalhe << '2'                                              # condicao emissao boleto (2 = cliente)       9[01]       093 a 093
           detalhe << 'N'                                              # emite boleto para debito                    X[01]       094 a 094
           detalhe << ''.rjust(10, ' ')                                # operacao no banco (brancos)                 X[10]       095 a 104
           detalhe << ' '                                              # indicador rateio                            X[01]       105 a 105
-          detalhe << ' '                                              # endereco para aviso debito (op)             9[01]       106 a 106
+          detalhe << '2'                                              # endereco para aviso debito (op 2 = ignora)  9[01]       106 a 106
           detalhe << ''.rjust(2, ' ')                                 # brancos                                     X[02]       107 a 108
-          detalhe << '01'                                             # identif. da ocorrencia                      9[02]       109 a 110
-          detalhe << pagamento.nosso_numero.to_s.rjust(10, ' ')       # numero do documento alfanum.                X[10]       111 a 120
+          detalhe << pagamento.identificacao_ocorrencia               # identificacao ocorrencia              9[02]
+          detalhe << pagamento.numero_documento.to_s.rjust(10, ' ')   # numero do documento alfanum.                X[10]       111 a 120
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')     # data de vencimento                          9[06]       121 a 126
           detalhe << pagamento.formata_valor                          # valor do titulo                             9[13]       127 a 139
           detalhe << ''.rjust(3, '0')                                 # banco encarregado (zeros)                   9[03]       140 a 142
@@ -121,7 +122,7 @@ module Brcobranca
           detalhe << pagamento.cep_sacado[5..7]                       # sufixo do cep do pagador                    9[03]       332 a 334
           detalhe << ''.rjust(60, ' ')                                # sacador/2a mensagem - verificar             X[60]       335 a 394
           detalhe << sequencial.to_s.rjust(6, '0')                    # numero do registro do arquivo               9[06]       395 a 400
-          detalhe.upcase
+          detalhe
         end
       end
     end

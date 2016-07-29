@@ -11,19 +11,17 @@ module Brcobranca
         valor_tamanho = value.to_s.size
         registro_tamanho = record.convenio.to_s.size
         quantidade = case
-        when (valor_tamanho > 9) && (registro_tamanho == 8)
-          '9'
-        when (valor_tamanho > 10) && (registro_tamanho == 7)
-          '10'
-        when (valor_tamanho > 7) && (registro_tamanho == 4)
-          '7'
-        when (valor_tamanho > 5) && (registro_tamanho == 6) && (!record.codigo_servico)
-          '5'
-        when (valor_tamanho > 17) && (registro_tamanho == 6) && (record.codigo_servico)
-          '17'
-        else
-          nil
-        end
+                     when (valor_tamanho > 9) && (registro_tamanho == 8)
+                       '9'
+                     when (valor_tamanho > 10) && (registro_tamanho == 7)
+                       '10'
+                     when (valor_tamanho > 7) && (registro_tamanho == 4)
+                       '7'
+                     when (valor_tamanho > 5) && (registro_tamanho == 6) && (!record.codigo_servico)
+                       '5'
+                     when (valor_tamanho > 17) && (registro_tamanho == 6) && (record.codigo_servico)
+                       '17'
+                     end
         record.errors.add attr, "deve ser menor ou igual a #{quantidade} dígitos." if quantidade
       end
 
@@ -95,16 +93,16 @@ module Brcobranca
       #   @return [String] 17 caracteres numéricos.
       def numero_documento
         quantidade = case @convenio.to_s.size
-        when 8
-          9
-        when 7
-          10
-        when 4
-          7
-        when 6
-          codigo_servico ? 17 : 5
-        else
-          fail Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
+                     when 8
+                       9
+                     when 7
+                       10
+                     when 4
+                       7
+                     when 6
+                       codigo_servico ? 17 : 5
+                     else
+                       fail Brcobranca::NaoImplementado.new('Tipo de convênio não implementado.')
         end
         quantidade ? @numero_documento.to_s.rjust(quantidade, '0') : @numero_documento
       end
@@ -121,7 +119,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "12387989000004042-4"
       def nosso_numero_boleto
-        "#{convenio}#{numero_documento}-#{nosso_numero_dv}"
+        "#{convenio}#{numero_documento}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.

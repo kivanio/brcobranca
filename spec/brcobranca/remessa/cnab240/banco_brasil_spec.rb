@@ -1,32 +1,35 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
-require 'shared_examples/cnab240'
 
-describe Brcobranca::Remessa::Cnab240::BancoBrasil do
-  let(:pagamento) { Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                                       data_vencimento: Date.today,
-                                                       nosso_numero: 123,
-                                                       documento_sacado: '12345678901',
-                                                       nome_sacado: 'nome',
-                                                       endereco_sacado: 'endereco',
-                                                       bairro_sacado: 'bairro',
-                                                       cep_sacado: '12345678',
-                                                       cidade_sacado: 'cidade',
-                                                       uf_sacado: 'SP') }
-  let(:params) { {empresa_mae: 'teste',
-                  agencia: '1234',
-                  conta_corrente: '12345',
-                  documento_cedente: '12345678901',
-                  convenio: '1234567',
-                  carteira: '12',
-                  variacao: '123',
-                  pagamentos: [pagamento]} }
+RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
+  let(:pagamento) do
+    Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+      data_vencimento: Date.current,
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      uf_sacado: 'SP')
+  end
+  let(:params) do
+    { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
+      agencia: '1234',
+      conta_corrente: '12345',
+      documento_cedente: '12345678901',
+      convenio: '1234567',
+      carteira: '12',
+      variacao: '123',
+      pagamentos: [pagamento] }
+  end
   let(:banco_brasil) { subject.class.new(params) }
 
   context 'validacoes' do
     context '@carteira' do
       it 'deve ser invalido se nao possuir a carteira' do
-        objeto = subject.class.new(params.merge!({carteira: nil}))
+        objeto = subject.class.new(params.merge!(carteira: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Carteira não pode estar em branco.')
       end
@@ -40,7 +43,7 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
 
     context '@variacao' do
       it 'deve ser invalido se nao possuir a variacao da carteira' do
-        objeto = subject.class.new(params.merge!({variacao: nil}))
+        objeto = subject.class.new(params.merge!(variacao: nil))
         expect(objeto.invalid?).to be true
         expect(objeto.errors.full_messages).to include('Variacao não pode estar em branco.')
       end
@@ -53,26 +56,32 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
     end
 
     context '@convenio' do
+      it 'deve ser invalido se nao possuir o convenio' do
+        objeto = subject.class.new(params.merge!(convenio: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Convenio não pode estar em branco.')
+      end
+
       it 'deve ser invalido se o convenio nao tiver entre 4 e 7 digitos' do
         banco_brasil.convenio = '12345678'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Convenio não existente para este banco.')
+        expect(banco_brasil.errors.full_messages).to include('Convenio deve ter de 4 a 7 dígitos.')
       end
     end
 
     context '@agencia' do
-      it 'deve ser invalido se a agencia tiver mais de 4 digitos' do
-        banco_brasil.agencia = '12345'
+      it 'deve ser invalido se a agencia tiver mais de 5 digitos' do
+        banco_brasil.agencia = '123456'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Agencia deve ter 4 dígitos.')
+        expect(banco_brasil.errors.full_messages).to include('Agencia deve ter 5 dígitos.')
       end
     end
 
     context '@conta_corrente' do
-      it 'deve ser invalido se a conta corrente tiver mais de 5 digitos' do
-        banco_brasil.conta_corrente = '123456'
+      it 'deve ser invalido se a conta corrente tiver mais de 12 digitos' do
+        banco_brasil.conta_corrente = '1234567890123'
         expect(banco_brasil.invalid?).to be true
-        expect(banco_brasil.errors.full_messages).to include('Conta corrente deve ter 5 dígitos.')
+        expect(banco_brasil.errors.full_messages).to include('Conta corrente deve ter 12 dígitos.')
       end
     end
   end
@@ -88,8 +97,12 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       expect(nome_banco[0..19]).to eq 'BANCO DO BRASIL S.A.'
     end
 
-    it 'versao layout deve ser zerada' do
-      expect(banco_brasil.versao_layout).to eq '000'
+    it 'versao do layout do arquivo deve ser 083' do
+      expect(banco_brasil.versao_layout_arquivo).to eq '083'
+    end
+
+    it 'versao do layout do lote deve ser 040' do
+      expect(banco_brasil.versao_layout_lote).to eq '042'
     end
 
     it 'deve calcular o digito da agencia' do
@@ -136,7 +149,7 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
     end
 
     it 'complemento trailer deve retornar espacos em branco' do
-      expect(banco_brasil.complemento_trailer).to eq ''.rjust(217, ' ')
+      expect(banco_brasil.complemento_trailer).to eq ''.rjust(217, '0')
     end
 
     context 'formatacao nosso numero' do
@@ -192,5 +205,19 @@ describe Brcobranca::Remessa::Cnab240::BancoBrasil do
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
+
+    context 'trailer lote' do
+      it 'trailer lote deve ter o complemento_trailer na posicao correta' do
+        trailer = banco_brasil.monta_trailer_lote 1, 4
+        expect(trailer[23..239]).to eq banco_brasil.complemento_trailer # complemento do registro trailer
+      end
+    end
+
+    context 'arquivo' do
+      before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+      after { Timecop.return }
+
+      it { expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240.rem', banco_brasil.gera_arquivo)) }
+    end
   end
 end

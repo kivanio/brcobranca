@@ -1,8 +1,11 @@
 # -*- encoding: utf-8 -*-
+require 'unidecoder'
+require 'active_support/core_ext/date/calculations'
+require 'active_support/core_ext/time/calculations'
+
 module Brcobranca
   module Remessa
     class Base
-
       # pagamentos da remessa (cada pagamento representa um registro detalhe no arquivo)
       attr_accessor :pagamentos
       # empresa mae (razao social)
@@ -23,8 +26,7 @@ module Brcobranca
       # Validações do Rails 3
       include ActiveModel::Validations
 
-      validates_presence_of :empresa_mae, :agencia, :conta_corrente, message: 'não pode estar em branco.'
-      validates_length_of :empresa_mae, maximum: 30, message: 'deve ser menor ou igual a 30 caracteres.'
+      validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
 
       validates_each :pagamentos do |record, attr, value|
         if value.is_a? Array
@@ -48,7 +50,7 @@ module Brcobranca
       # @param campos [Hash]
       #
       def initialize(campos = {})
-        campos = { aceite: 'N', pagamentos: [] }.merge!(campos)
+        campos = { aceite: 'N' }.merge!(campos)
         campos.each do |campo, valor|
           send "#{campo}=", valor
         end
@@ -56,6 +58,13 @@ module Brcobranca
         yield self if block_given?
       end
 
+      # Soma de todos os boletos
+      #
+      # @return [String]
+      def valor_total_titulos(tamanho=13)
+        value = pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor }
+        sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
+      end
     end
   end
 end

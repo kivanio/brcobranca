@@ -1,5 +1,10 @@
 # -*- encoding: utf-8 -*-
-
+#
+# DEPRECATED
+#
+# Classe original desenvolvida a partir do layout do Itau.
+# Movido para: cnab400/itau.rb
+#
 require 'parseline'
 module Brcobranca
   module Retorno

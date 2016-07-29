@@ -1,17 +1,19 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Brcobranca::Remessa::Pagamento do
-  let(:pagamento) { subject.class.new(valor: 199.9,
-                                      data_vencimento: Date.parse('2015-06-25'),
-                                      nosso_numero: 123,
-                                      documento_sacado: '12345678901',
-                                      nome_sacado: 'nome',
-                                      endereco_sacado: 'endereco',
-                                      bairro_sacado: 'bairro',
-                                      cep_sacado: '12345678',
-                                      cidade_sacado: 'cidade',
-                                      uf_sacado: 'SP') }
+RSpec.describe Brcobranca::Remessa::Pagamento do
+  let(:pagamento) do
+    subject.class.new(valor: 199.9,
+      data_vencimento: Date.parse('2015-06-25'),
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      uf_sacado: 'SP')
+  end
 
   context 'validacoes' do
     it 'deve ser invalido se nao possuir nosso numero' do
@@ -56,10 +58,18 @@ describe Brcobranca::Remessa::Pagamento do
       expect(pagamento.errors.full_messages).to include('Cidade sacado não pode estar em branco.')
     end
 
-    it 'deve ser invalido se nao possuir UF do sacado' do
-      pagamento.uf_sacado = nil
-      expect(pagamento.invalid?).to be true
-      expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
+    context '@uf_sacado' do
+      it 'deve ser invalido se nao possuir UF do sacado' do
+        pagamento.uf_sacado = nil
+        expect(pagamento.invalid?).to be true
+        expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
+      end
+
+      it 'deve ser invalido se UF do sacado for maior que 2 caracteres' do
+        pagamento.uf_sacado = "Santa Catarina"
+        expect(pagamento.invalid?).to be true
+        expect(pagamento.errors.full_messages).to include('Uf sacado deve ter 2 dígitos.')
+      end
     end
 
     context '@cep' do
@@ -85,7 +95,7 @@ describe Brcobranca::Remessa::Pagamento do
 
   context 'informacoes padrao' do
     it 'data de emissao padrao deve ser o dia corrente' do
-      expect(pagamento.data_emissao).to eq Date.today
+      expect(pagamento.data_emissao).to eq Date.current
     end
 
     it 'nome do avalista padrao deve ser vazio' do
@@ -110,7 +120,6 @@ describe Brcobranca::Remessa::Pagamento do
   end
 
   context 'formatacoes dos valores' do
-
     context 'formata data do desconto' do
       it 'formata data limite do desconto de acordo com o formato passado' do
         pagamento.data_desconto = Date.parse('2015-06-25')
@@ -170,17 +179,15 @@ describe Brcobranca::Remessa::Pagamento do
         # pessoa juridica
         pagamento.documento_sacado = '123456789101112'
         expect(pagamento.identificacao_sacado).to eq '02'
-      end
-
-      it 'formata a identificacao com o numero de caracteres informados' do
-        expect(pagamento.identificacao_sacado(4)).to eq '0001'
+        pagamento.documento_sacado = '123456789101112'
+        expect(pagamento.identificacao_sacado(false)).to eq '2'
       end
     end
 
     context 'identificacao avalista' do
       it 'verifica a identificacao do avalista (pessoa fisica ou juridica)' do
         # pessoa fisica
-        pagamento.documento_avalista = '123456789101'
+        pagamento.documento_avalista = '12345678901'
         expect(pagamento.identificacao_avalista).to eq '01'
         # pessoa juridica
         pagamento.documento_avalista = '123456789101112'
@@ -188,8 +195,8 @@ describe Brcobranca::Remessa::Pagamento do
       end
 
       it 'formata a identificacao com o numero de caracteres informados' do
-        pagamento.documento_avalista = '123456789101'
-        expect(pagamento.identificacao_avalista(1)).to eq '1'
+        pagamento.documento_avalista = '12345678901'
+        expect(pagamento.identificacao_avalista(false)).to eq '1'
       end
     end
   end

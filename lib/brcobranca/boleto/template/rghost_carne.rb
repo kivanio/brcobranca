@@ -30,7 +30,7 @@ module Brcobranca
         # @return [Stream]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
         # @see Rghost#modelo_carne Recebe os mesmos parâmetros do Rghost#modelo_carne.
-        def to(formato, options = {})
+        def to_carne(formato, options = {})
           modelo_carne(self, options.merge!(formato: formato))
         end
 
@@ -39,7 +39,7 @@ module Brcobranca
         # @return [Stream]
         # @see http://wiki.github.com/shairontoledo/rghost/supported-devices-drivers-and-formats Veja mais formatos na documentação do rghost.
         # @see Rghost#modelo_carne Recebe os mesmos parâmetros do Rghost#modelo_carne.
-        def lote(boletos, options = {})
+        def lote_carne(boletos, options = {})
           modelo_carne_multipage(boletos, options)
         end
 
@@ -172,7 +172,7 @@ module Brcobranca
         # aplica dados do lado esquerdo
         def modelo_carne_build_data_left(doc, boleto, colunas, linhas)
           # LOGOTIPO do BANCO
-          doc.image(boleto.logotipo, x: (colunas[0] - 0.1), y: linhas[0], zoom: 50)
+          doc.image boleto.logotipo, x: (colunas[0] - 0.11), y: linhas[0]
 
           # Dados
 
@@ -208,7 +208,7 @@ module Brcobranca
         # aplica dados do lado direito
         def modelo_carne_build_data_right(doc, boleto, colunas, linhas)
           # LOGOTIPO do BANCO
-          doc.image(boleto.logotipo, x: colunas[2], y: linhas[0], zoom: 50)
+          doc.image boleto.logotipo, x: (colunas[2] - 0.11), y: linhas[0]
 
           # Numero do banco
           doc.moveto x: colunas[4], y: linhas[0]
@@ -244,7 +244,7 @@ module Brcobranca
 
           # especie doc.
           doc.moveto x: colunas[8], y: linhas[3]
-          doc.show boleto.especie
+          doc.show boleto.especie_documento
 
           # aceite
           doc.moveto x: colunas[9], y: linhas[3]
@@ -267,7 +267,7 @@ module Brcobranca
 
           # especie
           doc.moveto x: colunas[5], y: linhas[4]
-          doc.show boleto.moeda
+          doc.show boleto.especie
 
           # quantidade
           doc.moveto x: colunas[7], y: linhas[4]
