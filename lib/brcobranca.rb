@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'active_model'
+require 'active_support/core_ext/date/calculations'
+require 'active_support/core_ext/time/calculations'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
