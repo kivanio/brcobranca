@@ -13,7 +13,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
       sacado_documento: '12345678900',
       agencia: '4042',
       conta_corrente: '61900',
-      convenio: 12_387_989,
+      convenio: 12345,
       numero_documento: '00168',
       posto: '1',
       byte_idt: '7'
@@ -33,7 +33,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
     expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
-    expect(boleto_novo.carteira).to eql('03')
+    expect(boleto_novo.carteira).to eql('3')
   end
 
   it 'Criar nova instancia com atributos válidos' do
@@ -55,9 +55,9 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.conta_corrente).to eql('61900')
     expect(boleto_novo.agencia).to eql('4042')
-    expect(boleto_novo.convenio).to eql(12_387_989)
+    expect(boleto_novo.convenio).to eql("12345")
     expect(boleto_novo.numero_documento).to eql('00168')
-    expect(boleto_novo.carteira).to eql('03')
+    expect(boleto_novo.carteira).to eql('3')
   end
 
   it 'Montar código de barras para carteira número 03' do
@@ -67,7 +67,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     @valid_attributes[:numero_documento] = '13871'
     @valid_attributes[:conta_corrente] = '12345'
     @valid_attributes[:agencia] = '1234'
-    @valid_attributes[:carteira] = '03'
+    @valid_attributes[:carteira] = '3'
     @valid_attributes[:posto] = '8'
     @valid_attributes[:aceite] = 'N'
     @valid_attributes[:byte_idt] = '2'
@@ -91,7 +91,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     boleto_novo.posto = '18'
     boleto_novo.conta_corrente = '12345'
     boleto_novo.numero_documento = '13871'
-    boleto_novo.carteira = '03'
+    boleto_novo.carteira = '3'
     expect(boleto_novo.nosso_numero_boleto).to eql('12/213871-5')
     expect(boleto_novo.nosso_numero_dv).to eql(5)
   end
@@ -143,25 +143,5 @@ RSpec.describe Brcobranca::Boleto::Unicred do
       expect(File.delete(tmp_file.path)).to eql(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
-  end
-
-  it "quando dígito verificador for 10 deve ser mapeado para 0" do
-    attributes = {
-      convenio: "2442725",
-      agencia: "0217",
-      conta_corrente: "42725",
-      byte_idt: 1,
-      posto: "24",
-      numero_documento: 25,
-      valor: 20.00,
-      data_documento: Date.parse("2015-01-18")
-    }
-    attributes = @valid_attributes.merge(attributes)
-    boleto_novo = described_class.new(attributes)
-
-    result = boleto_novo.nosso_numero_dv
-
-    expect("#{boleto_novo.agencia_posto_conta}#{boleto_novo.numero_documento_with_byte_idt}".modulo11).to eq(10)
-    expect(result).to eq(0)
   end
 end

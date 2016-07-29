@@ -7,7 +7,7 @@ module Brcobranca
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = {
-          carteira: '03',
+          carteira: '3',
           especie_documento: 'DM',
           local_pagamento: 'PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED'
         }.merge!(campos)
