@@ -117,6 +117,10 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
     it 'valor do abatimento padrao deve ser zero' do
       expect(pagamento.valor_abatimento).to eq 0.0
     end
+
+    it 'numero da parcela deve ser 01' do
+      expect(pagamento.parcela).to eq '01'
+    end
   end
 
   context 'formatacoes dos valores' do

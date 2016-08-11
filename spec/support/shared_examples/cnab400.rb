@@ -50,6 +50,18 @@ shared_examples_for 'cnab400' do
         documento_cedente: '12345678910',
         convenio: '123456789',
         pagamentos: [pagamento] }
+    elsif subject.class == Brcobranca::Remessa::Cnab400::BancoBrasil
+      { carteira: '12',
+        agencia: '1234',
+        variacao_carteira: '123',
+        convenio: '1234567',
+        convenio_lider: '7654321',
+        conta_corrente: '1234',
+        empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
+        documento_cedente: '12345678910',
+        sequencial_remessa: '1',
+        pagamentos: [pagamento]
+      }
     else
       { carteira: '123',
         agencia: '4327',
@@ -81,7 +93,7 @@ shared_examples_for 'cnab400' do
 
     it 'informacoes devem estar posicionadas corretamente no trailer' do
       trailer = objeto.monta_trailer 3
-      expect(trailer[0]).to eq '9' # identificacao registro
+      expect(trailer[0]).to eq '9'             # identificacao registro
       expect(trailer[394..399]).to eq '000003' # numero sequencial do registro
     end
   end
