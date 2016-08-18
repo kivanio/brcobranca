@@ -81,7 +81,7 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, message: 'não pode estar em branco.'
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :sacado, :sacado_documento, message: 'não pode estar em branco.'
       validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, message: 'não é um número.', allow_nil: true
 
       # Nova instancia da classe Base
