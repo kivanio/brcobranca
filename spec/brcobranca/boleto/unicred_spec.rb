@@ -80,7 +80,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(4)
+    expect(boleto_novo.errors.count).to eql(6)
   end
 
   it 'Montar nosso_numero_boleto' do
