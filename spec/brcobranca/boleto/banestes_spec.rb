@@ -62,6 +62,16 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
     expect(boleto_novo.errors.count).to eql(5)
   end
+  
+  it "Montar nosso_numero_boleto" do
+    valid_attributes[:numero_documento] = "00000337"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000337-90")
+    
+    valid_attributes[:numero_documento] = "96656701"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("96656701-37")
+  end
 
   it "Montar agencia_conta_boleto" do
     boleto_novo = described_class.new(valid_attributes)
