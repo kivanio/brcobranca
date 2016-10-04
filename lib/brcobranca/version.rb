@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
 
 module Brcobranca
-  VERSION = '6.7.0'
+  VERSION = '6.8.0'
 end
