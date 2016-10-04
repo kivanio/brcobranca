@@ -64,6 +64,26 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
   end
 
   it "Montar nosso_numero_boleto" do
+    valid_attributes[:numero_documento] = "00000040"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000040-06")
+
+    valid_attributes[:numero_documento] = "00000068"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000068-07")
+
+    valid_attributes[:numero_documento] = "00000006"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000006-04")
+
+    valid_attributes[:numero_documento] = "00000281"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000281-00")
+
+    valid_attributes[:numero_documento] = "00000023"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000023-05")
+
     valid_attributes[:numero_documento] = "00000337"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql("00000337-90")
