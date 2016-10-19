@@ -107,7 +107,11 @@ module Brcobranca
             modelo_generico_rodape(doc, boleto)
 
             # Gerando codigo de barra com rghost_barcode
-            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm", y: "#{@y - 1.67} cm") if boleto.codigo_barras
+            doc.barcode_interleaved2of5(boleto.codigo_barras,
+              width: "10.3 cm",
+              height: "1.3 cm",
+              x: "#{@x - 1.7} cm",
+              y: "#{@y - 1.67} cm") if boleto.codigo_barras
 
             # Cria nova página se não for o último boleto
             doc.next_page unless index == boletos.length - 1
@@ -182,7 +186,12 @@ module Brcobranca
           move_more(doc, 0, -0.3)
           doc.show "#{boleto.sacado_endereco}"
           if boleto.demonstrativo
-            doc.text_area boleto.demonstrativo, width: '18.5 cm', text_align: :left, x: "#{@x - 0.8} cm", y: "#{@y - 0.9} cm", row_height: '0.4 cm'
+            doc.text_area boleto.demonstrativo,
+              width: "18.5 cm",
+              text_align: :left,
+              x: "#{@x - 0.8} cm",
+              y: "#{@y - 0.9} cm",
+              row_height: "0.4 cm"
           end
           # FIM Primeira parte do BOLETO
         end
@@ -221,7 +230,7 @@ module Brcobranca
           move_more(doc, 15.8, 0)
           doc.show boleto.agencia_conta_boleto
 
-          move_more(doc, -15.8 , -0.8)
+          move_more(doc, -15.8, -0.8)
           doc.show boleto.data_documento.to_s_br if boleto.data_documento
 
           move_more(doc, 3.5, 0)
