@@ -155,6 +155,26 @@ module Brcobranca
           doc.show boleto.nosso_numero_boleto, align: :show_right
           doc.moveto x: '20.3 cm', y: '22.2 cm'
           doc.show boleto.valor_documento.to_currency, align: :show_right
+          if boleto.desconto
+            doc.moveto x: '0.7 cm', y: '21.4 cm'
+            doc.show boleto.desconto.to_currency
+          end
+          if boleto.deducao
+            doc.moveto x: '4.3 cm', y: '21.4 cm'
+            doc.show boleto.deducao.to_currency
+          end
+          if boleto.multa
+            doc.moveto x: '8.0 cm', y: '21.4 cm'
+            doc.show boleto.multa.to_currency
+          end
+          if boleto.acrescimo
+            doc.moveto x: '11.7 cm', y: '21.4 cm'
+            doc.show boleto.acrescimo.to_currency
+          end
+          if boleto.valor_cobrado
+            doc.moveto x: '16.5 cm', y: '21.4 cm'
+            doc.show boleto.valor_cobrado.to_currency
+          end
           doc.moveto x: '1.5 cm', y: '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
           doc.moveto x: '1.5 cm', y: '20.6 cm'
@@ -217,6 +237,26 @@ module Brcobranca
           # doc.show boleto.valor.to_currency
           doc.moveto x: '20.3 cm', y: '13.5 cm'
           doc.show boleto.valor_documento.to_currency, align: :show_right
+          if boleto.desconto
+            doc.moveto x: '16.5 cm', y: '12.7 cm'
+            doc.show boleto.desconto.to_currency
+          end
+          if boleto.deducao
+            doc.moveto x: '16.5 cm', y: '11.9 cm'
+            doc.show boleto.deducao.to_currency
+          end
+          if boleto.multa
+            doc.moveto x: '16.5 cm', y: '11.15 cm'
+            doc.show boleto.multa.to_currency
+          end
+          if boleto.acrescimo
+            doc.moveto x: '16.5 cm', y: '10.35 cm'
+            doc.show boleto.acrescimo.to_currency
+          end
+          if boleto.valor_cobrado
+            doc.moveto x: '16.5 cm', y: '9.56 cm'
+            doc.show boleto.valor_cobrado.to_currency
+          end
           doc.moveto x: '0.7 cm', y: '12.7 cm'
           doc.show boleto.instrucao1
           doc.moveto x: '0.7 cm', y: '12.3 cm'

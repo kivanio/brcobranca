@@ -29,6 +29,16 @@ module Brcobranca
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
+      # <b>OPCIONAL</b>: Descontos
+      attr_accessor :desconto
+      # <b>OPCIONAL</b>: Deduções
+      attr_accessor :deducao
+      # <b>OPCIONAL</b>: Multa
+      attr_accessor :multa
+      # <b>OPCIONAL</b>: Acréscimos
+      attr_accessor :acrescimo
+      # <b>OPCIONAL</b>: Valor final cobrado
+      attr_accessor :valor_cobrado
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
@@ -94,9 +104,9 @@ module Brcobranca
       # @param [Hash] campos
       def initialize(campos = {})
         padrao = {
-          moeda: '9', data_documento: Date.current, data_vencimento: Date.current, quantidade: 1,
-          especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
-          local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
+            moeda: '9', data_documento: Date.current, data_vencimento: Date.current, quantidade: 1,
+            especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
+            local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }
 
         campos = padrao.merge!(campos)
@@ -195,8 +205,8 @@ module Brcobranca
         if codigo =~ /^(\d{4})(\d{39})$/
 
           codigo_dv = codigo.modulo11(
-            multiplicador: (2..9).to_a,
-            mapeamento: { 0 => 1, 10 => 1, 11 => 1 }
+              multiplicador: (2..9).to_a,
+              mapeamento: { 0 => 1, 10 => 1, 11 => 1 }
           ) { |t| 11 - (t % 11) }
 
           codigo = "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
@@ -224,7 +234,7 @@ module Brcobranca
       # Valor total do documento
       # @return [String] 10 caracteres numéricos.
       def valor_documento_formatado
-        valor_documento.round(2).limpa_valor_moeda.to_s.rjust(10, '0')
+        (valor_cobrado || valor_documento).round(2).limpa_valor_moeda.to_s.rjust(10, '0')
       end
 
       # Nome da classe do boleto
