@@ -60,7 +60,57 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(3)
+    expect(boleto_novo.errors.count).to eql(5)
+  end
+
+  it "Montar nosso_numero_boleto" do
+    valid_attributes[:numero_documento] = "00000040"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000040-06")
+
+    valid_attributes[:numero_documento] = "00000068"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000068-07")
+
+    valid_attributes[:numero_documento] = "00000006"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000006-04")
+
+    valid_attributes[:numero_documento] = "00000281"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000281-00")
+
+    valid_attributes[:numero_documento] = "00000023"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000023-05")
+
+    valid_attributes[:numero_documento] = "00000337"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000337-90")
+
+    valid_attributes[:numero_documento] = "96656701"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("96656701-37")
+
+    valid_attributes[:numero_documento] = "00000484"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000484-70")
+
+    valid_attributes[:numero_documento] = "514"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000514-20")
+
+    valid_attributes[:numero_documento] = "565"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000565-70")
+
+    valid_attributes[:numero_documento] = "573"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000573-80")
+
+    valid_attributes[:numero_documento] = "00000603"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql("00000603-30")
   end
 
   it "Montar agencia_conta_boleto" do

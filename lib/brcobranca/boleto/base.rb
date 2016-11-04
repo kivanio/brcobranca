@@ -50,6 +50,12 @@ module Brcobranca
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      attr_accessor :demonstrativo1
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      attr_accessor :demonstrativo2
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      attr_accessor :demonstrativo3
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
       attr_accessor :instrucao1
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
       attr_accessor :instrucao2
@@ -81,7 +87,7 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, message: 'não pode estar em branco.'
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :sacado, :sacado_documento, message: 'não pode estar em branco.'
       validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, message: 'não é um número.', allow_nil: true
 
       # Nova instancia da classe Base

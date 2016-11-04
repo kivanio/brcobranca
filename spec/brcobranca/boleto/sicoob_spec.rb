@@ -65,7 +65,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(3)
+    expect(boleto_novo.errors.count).to eql(5)
   end
 
   it "Montar agencia_conta_boleto" do
@@ -82,23 +82,23 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     valid_attributes[:numero_documento] = "2"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(4)
-    
+
     valid_attributes[:numero_documento] = "3"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(1)
-    
+
     valid_attributes[:numero_documento] = "4"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(9)
-    
+
     valid_attributes[:numero_documento] = "5"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(6)
-    
+
     valid_attributes[:numero_documento] = "6"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(3)
-    
+
     valid_attributes[:numero_documento] = "7"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(0)
@@ -106,36 +106,53 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     valid_attributes[:numero_documento] = "8"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(8)
-    
+
     valid_attributes[:numero_documento] = "9"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(5)
-    
+
     valid_attributes[:numero_documento] = "10"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(3)
-    
+
     valid_attributes[:numero_documento] = "11"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(0)
-    
+
     valid_attributes[:numero_documento] = "12"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(8)
-    
+
     valid_attributes[:numero_documento] = "13"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to eql(5)
   end
 
 
-  it 'Montar código de barras' do
+  it 'Montar código de barras modalidade 01' do
     boleto_novo = described_class.new(valid_attributes)
 
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('75691.43279 01022.938508 00000.240010 2 67080000005000')
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1432701022938500000024001')
     expect(boleto_novo.codigo_barras_segunda_parte.size).to eql(25)
 
+  end
+
+  it 'Montar código de barras modalidade 05' do
+    valid_attributes[:data_documento] = Date.parse("2017-04-15")
+    valid_attributes[:data_vencimento] = Date.parse("2017-04-15")
+    valid_attributes[:valor] = 235.00
+    valid_attributes[:agencia] = "4134"
+    valid_attributes[:conta_corrente] = "10333"
+    valid_attributes[:convenio] = "148180"
+    valid_attributes[:numero_documento] = "110"
+    valid_attributes[:variacao] = "05"
+
+    boleto_novo = described_class.new(valid_attributes)
+
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('75691.41349 05014.818008 00011.040011 4 71300000023500')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('1413405014818000001104001')
+    expect(boleto_novo.codigo_barras_segunda_parte.size).to eql(25)
   end
 
   describe 'Busca logotipo do banco' do

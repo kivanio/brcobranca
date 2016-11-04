@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 require 'unidecoder'
-require 'active_support/core_ext/date/calculations'
-require 'active_support/core_ext/time/calculations'
 
 module Brcobranca
   module Remessa
