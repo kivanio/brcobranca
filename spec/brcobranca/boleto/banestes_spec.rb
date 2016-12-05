@@ -11,7 +11,8 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
     sacado: "Claudio Pozzebom",
     sacado_documento: "12345678900",
     agencia: "274",
-    conta_corrente: "14542047",
+    conta_corrente: "1454204",
+    digito_conta_corrente: "7",
     numero_documento: "69240101"
   } }
 
@@ -48,7 +49,8 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
     expect(boleto_novo.documento_cedente).to eql("12345678912")
     expect(boleto_novo.sacado).to eql("Claudio Pozzebom")
     expect(boleto_novo.sacado_documento).to eql("12345678900")
-    expect(boleto_novo.conta_corrente).to eql("00014542047")
+    expect(boleto_novo.conta_corrente).to eql("0001454204")
+    expect(boleto_novo.digito_conta_corrente).to eql("7")
     expect(boleto_novo.agencia).to eql("0274")
     expect(boleto_novo.numero_documento).to eql("69240101")
     expect(boleto_novo.nosso_numero_boleto).to eql("69240101-68")
@@ -60,7 +62,7 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
   it "Não permitir gerar boleto com atributos inválido" do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(5)
+    expect(boleto_novo.errors.count).to eql(6)
   end
 
   it "Montar nosso_numero_boleto" do
@@ -116,7 +118,7 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
   it "Montar agencia_conta_boleto" do
     boleto_novo = described_class.new(valid_attributes)
 
-    expect(boleto_novo.agencia_conta_boleto).to eql("0274 / 00014542047")
+    expect(boleto_novo.agencia_conta_boleto).to eql("274 / 14542047")
   end
 
   describe 'Busca logotipo do banco' do
