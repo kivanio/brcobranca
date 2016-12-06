@@ -96,7 +96,7 @@ module Brcobranca
       fail ArgumentError, 'Número inválido' unless self.is_number?
 
       digito_1 = self.modulo10
-      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| 11 - (total % 11) }
+      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total % 11) }
 
       while digito_2 == 1
         if digito_1 == 9

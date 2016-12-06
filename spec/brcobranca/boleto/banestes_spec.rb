@@ -55,8 +55,8 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
     expect(boleto_novo.numero_documento).to eql("69240101")
     expect(boleto_novo.nosso_numero_boleto).to eql("69240101-68")
     expect(boleto_novo.carteira).to eql("11")
-    expect(boleto_novo.codigo_barras).to eql("02191647100001278906924010100014542047202198")
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("02196.92407 10100.014546 20472.021987 1 64710000127890")
+    expect(boleto_novo.codigo_barras).to eql("02199647100001278906924010100014542047202193")
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql("02196.92407 10100.014546 20472.021938 9 64710000127890")
   end
 
   it "Não permitir gerar boleto com atributos inválido" do
@@ -113,6 +113,30 @@ RSpec.describe Brcobranca::Boleto::Banestes do #:nodoc:[all]
     valid_attributes[:numero_documento] = "00000603"
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql("00000603-30")
+  end
+  
+  it "Montar codio de barras" do
+    valid_attributes[:numero_documento] = "00000032"
+    valid_attributes[:data_vencimento] = Date.parse("2016-12-26")
+    valid_attributes[:valor] = 80.0
+    valid_attributes[:agencia] = "274"
+    valid_attributes[:conta_corrente] = "2720129"
+    valid_attributes[:digito_conta_corrente] = "2"
+    valid_attributes[:carteira] = "11"
+    valid_attributes[:variacao] = "4"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.codigo_barras).to eql("02191702000000080000000003200027201292402179")
+    
+    valid_attributes[:numero_documento] = "00000033"
+    valid_attributes[:data_vencimento] = Date.parse("2016-12-16")
+    valid_attributes[:valor] = 99.99
+    valid_attributes[:agencia] = "274"
+    valid_attributes[:conta_corrente] = "2720129"
+    valid_attributes[:digito_conta_corrente] = "2"
+    valid_attributes[:carteira] = "11"
+    valid_attributes[:variacao] = "4"
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.codigo_barras).to eql("02199701000000099990000003300027201292402165")
   end
 
   it "Montar agencia_conta_boleto" do
