@@ -24,7 +24,7 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | Bancos                 | Carteiras         | Documentações  |
 |------------------------|-------------------|----------------|
 | 001 - Banco do Brasil  | Todas as carteiras presentes na documentação | [pdf](http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc5175Bloqueto.pdf) |
-| 004 - Banbo do Nordeste| Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)| |
+| 004 - Banco do Nordeste| Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)| |
 | 021 - Banestes         | Todas as carteiras presentes na documentação  | |
 | 033 - Santander        | Todas as carteiras presentes na documentação - [Ronaldo Araujo](https://github.com/ronaldoaraujo) | [pdf](http://177.69.143.161:81/Treinamento/SisMoura/Documentação%20Boleto%20Remessa/Documentacao_SANTANDER/Layout%20de%20Cobrança%20-%20Código%20de%20Barras%20Santander%20Setembro%202012%20v%202%203.pdf) |
 | 041 - Banrisul         | Todas as carteiras presentes na documentação | |
