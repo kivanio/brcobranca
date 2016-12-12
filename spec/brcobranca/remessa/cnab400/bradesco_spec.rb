@@ -1,18 +1,20 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Bradesco do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     { carteira: '01',

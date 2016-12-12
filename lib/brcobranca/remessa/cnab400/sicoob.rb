@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab400
@@ -127,7 +128,7 @@ module Brcobranca
         # @return [String]
         #
         def monta_detalhe(pagamento, sequencial)
-          fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
           detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
@@ -162,13 +163,13 @@ module Brcobranca
           # "Tipo de Emissão:
           # 1 - Cooperativa
           # 2 - Cliente"
-          detalhe << modalidade_carteira                                    # Tipo de Emissão                       9[01]
+          detalhe << modalidade_carteira # Tipo de Emissão                       9[01]
 
           # "Carteira/Modalidade:
           # 01 = Simples Com Registro
           # 02 = Simples Sem Registro
           # 03 = Garantida Caucionada "
-          detalhe << carteira                                               # codigo da carteira                    9[02]
+          detalhe << carteira # codigo da carteira                    9[02]
 
           # "Comando/Movimento:
           # 01 = Registro de Títulos
@@ -248,7 +249,7 @@ module Brcobranca
           detalhe << pagamento.identificacao_sacado.rjust(2, '0')           # identificacao do pagador              9[02]
           detalhe << pagamento.documento_sacado.to_s.rjust(14, '0')         # documento do pagador                  9[14]
           detalhe << pagamento.nome_sacado.format_size(40).ljust(40, ' ')   # nome do pagador                       X[40]
-          detalhe << pagamento.endereco_sacado.format_size(37).ljust(37, ' ')# endereco do pagador                  X[37]
+          detalhe << pagamento.endereco_sacado.format_size(37).ljust(37, ' ') # endereco do pagador                  X[37]
           detalhe << pagamento.bairro_sacado.format_size(15).ljust(15, ' ') # bairro do pagador                     X[15]
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
@@ -260,7 +261,7 @@ module Brcobranca
           # no Recibo do Sacado e na Ficha de Compensação do boleto de cobrança.
           # Quando o SEQ 14 – Indicativo de Mensagem ou Sacador/Avalista - for preenchido com “A” ,
           # este campo deverá ser preenchido com o nome/razão social do Sacador/Avalista"
-          detalhe << ''.rjust(40, ' ')                                      #                                       X[40]
+          detalhe << ''.rjust(40, ' ') #                                       X[40]
 
           # "Número de Dias Para Protesto:
           # Quantidade dias para envio protesto. Se = ""0"",

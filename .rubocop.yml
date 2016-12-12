@@ -11,3 +11,6 @@ Style/Documentation:
 
 Metrics/LineLength:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: when_needed

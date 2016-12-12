@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab400
@@ -15,7 +16,7 @@ module Brcobranca
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
 
         def initialize(campos = {})
-          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5'}.merge!(campos)
+          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5' }.merge!(campos)
           super(campos)
         end
 
@@ -86,7 +87,7 @@ module Brcobranca
         # @return [String]
         #
         def monta_detalhe(pagamento, sequencial)
-          fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
           detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
@@ -110,7 +111,7 @@ module Brcobranca
           # 5 = RÁPIDA COM REGISTRO
           # (BLOQUETE EMITIDO PELO CLIENTE) 6 = CAUCIONADA RAPIDA
           # 7 = DESCONTADA ELETRÔNICA
-          detalhe << codigo_carteira                                        # codigo da carteira                    9[01]
+          detalhe << codigo_carteira # codigo da carteira                    9[01]
 
           # Código da ocorrência:
           # 01 = ENTRADA DE TÍTULO
@@ -130,7 +131,7 @@ module Brcobranca
           # Código da agência cobradora do Banco Santander,
           # opcional informar somente se carteira for igual a 5,
           # caso contrário, informar zeros.
-          detalhe << agencia.rjust(5, '0')                                  # agencia cobradora..............       9[05]
+          detalhe << agencia.rjust(5, '0') # agencia cobradora..............       9[05]
 
           # Espécie de documento:
           # 01 = DUPLICATA
@@ -161,7 +162,7 @@ module Brcobranca
           detalhe << pagamento.identificacao_sacado.rjust(2, '0')           # identificacao do pagador              9[02]
           detalhe << pagamento.documento_sacado.to_s.rjust(14, '0')         # documento do pagador                  9[14]
           detalhe << pagamento.nome_sacado.format_size(40).ljust(40, ' ')   # nome do pagador                       X[40]
-          detalhe << pagamento.endereco_sacado.format_size(40).ljust(40, ' ')# endereco do pagador                   X[40]
+          detalhe << pagamento.endereco_sacado.format_size(40).ljust(40, ' ') # endereco do pagador                   X[40]
           detalhe << pagamento.bairro_sacado.format_size(12).ljust(12, ' ') # bairro do pagador                     X[12]
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
@@ -198,6 +199,7 @@ module Brcobranca
         end
 
         private
+
         # Complemento de remessa
         #
         # @return [String]

@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 
 begin
   require 'rghost'
@@ -22,7 +23,7 @@ module Brcobranca
       # Templates para usar com Rghost
       module Rghost
         extend self
-        include RGhost unless self.include?(RGhost)
+        include RGhost unless include?(RGhost)
         RGhost::Config::GS[:external_encoding] = Brcobranca.configuration.external_encoding
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
@@ -72,7 +73,7 @@ module Brcobranca
 
           template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico.eps')
 
-          fail 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
+          raise 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           modelo_generico_template(doc, boleto, template_path)
           modelo_generico_cabecalho(doc, boleto)
@@ -99,7 +100,7 @@ module Brcobranca
 
           template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico.eps')
 
-          fail 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
+          raise 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           boletos.each_with_index do |boleto, index|
             modelo_generico_template(doc, boleto, template_path)
@@ -148,7 +149,7 @@ module Brcobranca
           doc.moveto x: '0.7 cm', y: '22.2 cm'
           doc.show boleto.numero_documento
           doc.moveto x: '7 cm', y: '22.2 cm'
-          doc.show "#{boleto.documento_cedente.formata_documento}"
+          doc.show boleto.documento_cedente.formata_documento.to_s
           doc.moveto x: '12 cm', y: '22.2 cm'
           doc.show boleto.data_vencimento.to_s_br
           doc.moveto x: '20.3 cm', y: '23 cm'
@@ -158,7 +159,7 @@ module Brcobranca
           doc.moveto x: '1.5 cm', y: '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
           doc.moveto x: '1.5 cm', y: '20.6 cm'
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
           doc.moveto x: '0.7 cm', y: '19.8 cm'
           doc.show boleto.demonstrativo1
           doc.moveto x: '0.7 cm', y: '19.4 cm'
@@ -232,7 +233,7 @@ module Brcobranca
           doc.moveto x: '1.2 cm', y: '8.8 cm'
           doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
           doc.moveto x: '1.2 cm', y: '8.4 cm'
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
 
           if boleto.avalista && boleto.avalista_documento
             doc.moveto x: '2.4 cm', y: '7.47 cm'

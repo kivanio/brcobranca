@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab240
       class Sicoob < Brcobranca::Remessa::Cnab240::Base
-
         attr_accessor :modalidade_carteira
         # identificacao da emissao do boleto (attr na classe base)
         #   opcoes:
@@ -31,10 +31,10 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = { emissao_boleto: '2',
-            distribuicao_boleto: '2',
-            tipo_formulario: '4',
-            modalidade_carteira: '01',
-            forma_cadastramento: '0' }.merge!(campos)
+                     distribuicao_boleto: '2',
+                     tipo_formulario: '4',
+                     modalidade_carteira: '01',
+                     forma_cadastramento: '0' }.merge!(campos)
           super(campos)
         end
 
@@ -72,7 +72,7 @@ module Brcobranca
           ''.rjust(20, ' ')
         end
 
-        alias_method :convenio_lote, :codigo_convenio
+        alias convenio_lote codigo_convenio
 
         def info_conta
           # CAMPO                  TAMANHO
@@ -169,9 +169,9 @@ module Brcobranca
           trailer_lote << ''.rjust(9, ' ')
           # qtde de registros lote                          6
           trailer_lote << nro_registros.to_s.rjust(6, '0')
-          
+
           # qtde de Títulos em Cobrança Simples             6
-          trailer_lote << pagamentos.count.to_s.rjust(6, '0') 
+          trailer_lote << pagamentos.count.to_s.rjust(6, '0')
           # Valor Total dos Títulos em Carteiras Simples    15 2
           trailer_lote << valor_total_titulos(17)
           # qtde de Títulos em Cobrança Vinculada           6
@@ -188,7 +188,7 @@ module Brcobranca
           trailer_lote << ''.rjust(17, '0')
           # Número do Aviso de Lançamento                   8
           trailer_lote << ''.rjust(8, ' ')
-          
+
           # uso exclusivo                                   117
           trailer_lote << complemento_trailer
           trailer_lote

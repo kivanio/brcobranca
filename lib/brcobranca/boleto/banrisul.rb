@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Boleto
     class Banrisul < Base # Banrisul
-      validates_length_of :agencia, maximum: 4, message: "deve ser menor ou igual a 4 dígitos."
-      validates_length_of :conta_corrente, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
-      validates_length_of :numero_documento, maximum: 8, message: "deve ser menor ou igual a 8 dígitos."
+      validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
+      validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
 
@@ -47,7 +48,6 @@ module Brcobranca
       def numero_documento=(valor)
         @numero_documento = valor.to_s.rjust(8, '0') if valor
       end
-
 
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 7 caracteres numéricos.

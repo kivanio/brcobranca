@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 # @author Kivanio Barbosa
 module Brcobranca
   # Métodos auxiliares de cálculos envolvendo Datas.
@@ -19,6 +20,7 @@ module Brcobranca
     def to_s_br
       strftime('%d/%m/%Y')
     end
+
     # Calcula número de dias julianos.
     #
     # O cálculo é feito subtraindo-se a data atual, pelo último dia válido do ano anterior,

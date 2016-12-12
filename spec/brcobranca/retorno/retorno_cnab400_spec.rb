@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::RetornoCnab400 do

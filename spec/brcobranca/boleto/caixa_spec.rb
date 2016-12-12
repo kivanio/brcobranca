@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
@@ -26,9 +28,9 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     expect(boleto_novo.codigo_servico).to be_falsey
     expect(boleto_novo.carteira).to eql('2')
@@ -129,12 +131,12 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
@@ -147,12 +149,12 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end

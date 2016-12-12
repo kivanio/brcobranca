@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     class Pagamento
@@ -73,8 +74,8 @@ module Brcobranca
       attr_accessor :dias_protesto
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
-        :documento_sacado, :nome_sacado, :endereco_sacado,
-        :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
+                            :documento_sacado, :nome_sacado, :endereco_sacado,
+                            :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :uf_sacado, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
@@ -181,7 +182,6 @@ module Brcobranca
         format_value(percentual_multa, tamanho)
       end
 
-
       # Formata o campo valor do desconto
       #
       # @param tamanho [Integer]
@@ -238,7 +238,7 @@ module Brcobranca
       private
 
       def format_value(value, tamanho)
-        raise ValorInvalido.new('Deve ser um Float') if !(value.to_s =~ /\./)
+        raise ValorInvalido, 'Deve ser um Float' unless value.to_s =~ /\./
 
         sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
       end

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 #
+#
 # A Caixa tem dois padrões para a geração de boleto: SIGCB e SICOB.
 # O SICOB foi substiuido pelo SIGCB que é implementado por esta classe.
 # http://downloads.caixa.gov.br/_arquivos/cobranca_caixa_sigcb/manuais/CODIGO_BARRAS_SIGCB.PDF
@@ -9,9 +10,9 @@ module Brcobranca
     class Caixa < Base # Caixa
       # <b>REQUERIDO</b>: Emissão do boleto
       attr_accessor :emissao
-      
+
       # Validações
-      #Modalidade/Carteira de Cobrança (1-Registrada | 2-Sem Registro)
+      # Modalidade/Carteira de Cobrança (1-Registrada | 2-Sem Registro)
       validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígitos.'
       # Emissão do boleto (4-Beneficiário)
       validates_length_of :emissao, is: 1, message: 'deve possuir 1 dígitos.'
@@ -26,7 +27,7 @@ module Brcobranca
           emissao: '4'
         }.merge!(campos)
 
-        campos.merge!(local_pagamento: 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
+        campos[:local_pagamento] = 'PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE'
 
         super(campos)
       end
@@ -68,7 +69,7 @@ module Brcobranca
       def nosso_numero
         "#{carteira}#{emissao}#{numero_documento}"
       end
-      
+
       # Dígito verificador do Nosso Número
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
@@ -115,7 +116,7 @@ module Brcobranca
         "#{nosso_numero[1..1]}" \
         "#{nosso_numero[8..16]}"
 
-        "#{campo_livre}" +
+        campo_livre.to_s +
           campo_livre.modulo11(
             multiplicador: (2..9).to_a,
             mapeamento: { 10 => 0, 11 => 0 }

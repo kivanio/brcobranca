@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab400
@@ -57,14 +58,14 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def monta_detalhe(_pagamento, _sequencial)
-          fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Gera o arquivo com os registros
         #
         # @return [String]
         def gera_arquivo
-          fail Brcobranca::RemessaInvalida.new(self) unless self.valid?
+          raise Brcobranca::RemessaInvalida, self unless valid?
 
           # contador de registros no arquivo
           contador = 1
@@ -78,7 +79,7 @@ module Brcobranca
           remittance = ret.join("\n").to_ascii.upcase
           remittance << "\n"
 
-          remittance.encode(remittance.encoding, :universal_newline => true).encode(remittance.encoding, :crlf_newline => true)
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
         end
 
         # Informacoes referentes a conta do cedente
@@ -86,7 +87,7 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def info_conta
-          fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Numero do banco na camara de compensacao
@@ -94,7 +95,7 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def cod_banco
-          fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Nome por extenso do banco cobrador
@@ -102,7 +103,7 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def nome_banco
-          fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Complemento do registro header
@@ -110,7 +111,7 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def complemento
-          fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
       end
     end

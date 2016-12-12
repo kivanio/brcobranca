@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Boleto
     class Itau < Base # Banco Itaú

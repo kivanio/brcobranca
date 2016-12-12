@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 # @author Kivanio Barbosa
 # @author Ronaldo Araujo
 module Brcobranca

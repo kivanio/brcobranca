@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 #
+#
 # Sicredi
 # Documentação: Maio 2016
 #

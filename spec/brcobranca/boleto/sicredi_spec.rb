@@ -1,23 +1,27 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Sicredi do
-  let(:valid_attributes) { {
-    data_documento: Date.parse('2016-08-22'),
-    data_vencimento: Date.parse('2016-08-22'),
-    valor: 195.57,
-    cedente: 'Kivanio Barbosa',
-    documento_cedente: '12345678912',
-    sacado: 'Claudio Pozzebom',
-    sacado_documento: '12345678900',
-    agencia: '0710',
-    conta_corrente: '61900',
-    convenio: '129',
-    numero_documento: '8879',
-    posto: '65',
-    byte_idt: '2',
-    carteira: '1'
-  } }
+  let(:valid_attributes) do
+    {
+      data_documento: Date.parse('2016-08-22'),
+      data_vencimento: Date.parse('2016-08-22'),
+      valor: 195.57,
+      cedente: 'Kivanio Barbosa',
+      documento_cedente: '12345678912',
+      sacado: 'Claudio Pozzebom',
+      sacado_documento: '12345678900',
+      agencia: '0710',
+      conta_corrente: '61900',
+      convenio: '129',
+      numero_documento: '8879',
+      posto: '65',
+      byte_idt: '2',
+      carteira: '1'
+    }
+  end
 
   it 'Criar nova instancia com atributos padrões' do
     boleto_novo = described_class.new
@@ -28,9 +32,9 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.carteira).to eql('3')
   end
@@ -44,9 +48,9 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     expect(boleto_novo.data_documento).to eql(Date.parse('2016-08-22'))
     expect(boleto_novo.data_vencimento).to eql(Date.parse('2016-08-22'))
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(195.57)
-    expect(boleto_novo.valor_documento).to eql(195.57)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(195.57)
+    expect(boleto_novo.valor_documento).to be(195.57)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -118,13 +122,13 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(6)
+    expect(boleto_novo.errors.count).to be(6)
   end
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql('16/208879-3')
-    expect(boleto_novo.nosso_numero_dv).to eql(3)
+    expect(boleto_novo.nosso_numero_dv).to be(3)
   end
 
   it 'Montar agencia_conta_boleto' do
@@ -141,12 +145,12 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
@@ -162,12 +166,12 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end

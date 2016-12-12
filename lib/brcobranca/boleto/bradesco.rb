@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Boleto
     class Bradesco < Base # Banco BRADESCO
@@ -12,7 +13,7 @@ module Brcobranca
       def initialize(campos = {})
         campos = { carteira: '06' }.merge!(campos)
 
-        campos.merge!(local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
+        campos[:local_pagamento] = 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso'
 
         super(campos)
       end

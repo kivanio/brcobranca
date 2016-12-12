@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab400
       class BancoBrasil < Brcobranca::Remessa::Cnab400::Base
-
         #
         # Documentacao para a geracao do arquivo pode ser encontrada em:
         # http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc2627CBR641Pos7.pdf
@@ -95,7 +95,7 @@ module Brcobranca
         end
 
         def monta_detalhe(pagamento, sequencial)
-          fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '7'                                                       # identificacao do registro         9[1]  001 a 001
           detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo    # tipo de identificacao da empresa  9[02] 002 a 003
@@ -149,7 +149,6 @@ module Brcobranca
           detalhe << ' '                                                      # complemento (brancos)             X[01] 394 a 394
           detalhe << sequencial.to_s.rjust(6, '0')                            # sequencial do registro            9[06] 395 a 400
         end
-
       end
     end
   end

@@ -1,18 +1,20 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Pagamento do
   let(:pagamento) do
     subject.class.new(valor: 199.9,
-      data_vencimento: Date.parse('2015-06-25'),
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                      data_vencimento: Date.parse('2015-06-25'),
+                      nosso_numero: 123,
+                      documento_sacado: '12345678901',
+                      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                      bairro_sacado: 'São josé dos quatro apostolos magros',
+                      cep_sacado: '12345678',
+                      cidade_sacado: 'Santa rita de cássia maria da silva',
+                      uf_sacado: 'SP')
   end
 
   context 'validacoes' do
@@ -66,7 +68,7 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       end
 
       it 'deve ser invalido se UF do sacado for maior que 2 caracteres' do
-        pagamento.uf_sacado = "Santa Catarina"
+        pagamento.uf_sacado = 'Santa Catarina'
         expect(pagamento.invalid?).to be true
         expect(pagamento.errors.full_messages).to include('Uf sacado deve ter 2 dígitos.')
       end

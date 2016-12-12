@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
+#
 
-require "parseline"
+require 'parseline'
 
 module Brcobranca
   module Retorno
@@ -21,13 +22,13 @@ module Brcobranca
         def self.generate_retorno_based_on_cnab_lines(cnab_lines)
           retorno = new
           cnab_lines.each do |line|
-            if line.tipo_registro == "T"
+            if line.tipo_registro == 'T'
               Line::REGISTRO_T_FIELDS.each do |attr|
-                retorno.send(attr + "=", line.send(attr))
+                retorno.send(attr + '=', line.send(attr))
               end
             else
               Line::REGISTRO_U_FIELDS.each do |attr|
-                retorno.send(attr + "=", line.send(attr))
+                retorno.send(attr + '=', line.send(attr))
               end
             end
           end
@@ -41,8 +42,8 @@ module Brcobranca
         class Line < Base
           extend ParseLine::FixedWidth # Extendendo parseline
 
-          REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa)
-          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito)
+          REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa).freeze
+          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito).freeze
 
           attr_accessor :tipo_registro
 

@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasil do
@@ -135,7 +137,6 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasil do
       expect(info_conta[5..12]).to eq '00001234'                         # num. da conta corrente
       expect(info_conta[13]).to eq banco_brasil.conta_corrente_dv.to_s   # digito da conta corrente
     end
-
   end
 
   context 'monta remessa' do

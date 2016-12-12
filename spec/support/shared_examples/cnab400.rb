@@ -1,17 +1,18 @@
 # -*- encoding: utf-8 -*-
+#
 shared_examples_for 'cnab400' do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      nome_avalista: 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUELA GABRIELA RAFAELA GONZAGA DE BRAGANÇA E BOURBON',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       nome_avalista: 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUELA GABRIELA RAFAELA GONZAGA DE BRAGANÇA E BOURBON',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     if subject.class == Brcobranca::Remessa::Cnab400::Bradesco
@@ -60,8 +61,7 @@ shared_examples_for 'cnab400' do
         empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
         documento_cedente: '12345678910',
         sequencial_remessa: '1',
-        pagamentos: [pagamento]
-      }
+        pagamentos: [pagamento] }
     else
       { carteira: '123',
         agencia: '4327',

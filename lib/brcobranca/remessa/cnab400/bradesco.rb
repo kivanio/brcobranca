@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Remessa
     module Cnab400
@@ -75,7 +76,7 @@ module Brcobranca
         end
 
         def monta_detalhe(pagamento, sequencial)
-          fail Brcobranca::RemessaInvalida.new(pagamento) if pagamento.invalid?
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                               # identificacao do registro                   9[01]       001 a 001
           detalhe << ''.rjust(5, '0')                                 # agencia de debito (op)                      9[05]       002 a 006

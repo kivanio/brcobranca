@@ -1,19 +1,23 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Bradesco do
-  let(:valid_attributes) {{
-    valor: 0.0,
-    local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
-    cedente: 'Kivanio Barbosa',
-    documento_cedente: '12345678912',
-    sacado: 'Claudio Pozzebom',
-    sacado_documento: '12345678900',
-    agencia: '4042',
-    conta_corrente: '61900',
-    convenio: 12_387_989,
-    numero_documento: '777700168'
-  }}
+  let(:valid_attributes) do
+    {
+      valor: 0.0,
+      local_pagamento: 'Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso',
+      cedente: 'Kivanio Barbosa',
+      documento_cedente: '12345678912',
+      sacado: 'Claudio Pozzebom',
+      sacado_documento: '12345678900',
+      agencia: '4042',
+      conta_corrente: '61900',
+      convenio: 12_387_989,
+      numero_documento: '777700168'
+    }
+  end
 
   it 'Criar nova instancia com atributos padrões' do
     boleto_novo = described_class.new
@@ -24,9 +28,9 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.carteira).to eql('06')
   end
@@ -40,9 +44,9 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -50,7 +54,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.conta_corrente).to eql('0061900')
     expect(boleto_novo.agencia).to eql('4042')
-    expect(boleto_novo.convenio).to eql(12_387_989)
+    expect(boleto_novo.convenio).to be(12_387_989)
     expect(boleto_novo.numero_documento).to eql('00777700168')
     expect(boleto_novo.carteira).to eql('06')
   end
@@ -87,7 +91,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(5)
+    expect(boleto_novo.errors.count).to be(5)
   end
 
   it 'Montar nosso_numero_boleto' do
@@ -101,17 +105,17 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     boleto_novo.numero_documento = '00000000001'
     boleto_novo.carteira = '09'
     expect(boleto_novo.nosso_numero_boleto).to eql('09/00000000001-1')
-    expect(boleto_novo.nosso_numero_dv).to eql(1)
+    expect(boleto_novo.nosso_numero_dv).to be(1)
 
     boleto_novo.numero_documento = '00000000002'
     boleto_novo.carteira = '19'
     expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000002-8')
-    expect(boleto_novo.nosso_numero_dv).to eql(8)
+    expect(boleto_novo.nosso_numero_dv).to be(8)
 
     boleto_novo.numero_documento = 6
     boleto_novo.carteira = '19'
     expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000006-0')
-    expect(boleto_novo.nosso_numero_dv).to eql(0)
+    expect(boleto_novo.nosso_numero_dv).to be(0)
 
     boleto_novo.numero_documento = '00000000001'
     boleto_novo.carteira = '19'
@@ -145,12 +149,12 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
@@ -166,42 +170,42 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
 
-  describe "#agencia_dv" do
-    it { expect(described_class.new(agencia: "0255").agencia_dv).to eq(0) }
-    it { expect(described_class.new(agencia: "0943").agencia_dv).to eq(1) }
-    it { expect(described_class.new(agencia: "1467").agencia_dv).to eq(2) }
-    it { expect(described_class.new(agencia: "0794").agencia_dv).to eq(3) }
-    it { expect(described_class.new(agencia: "0155").agencia_dv).to eq(4) }
-    it { expect(described_class.new(agencia: "0650").agencia_dv).to eq(5) }
-    it { expect(described_class.new(agencia: "0199").agencia_dv).to eq(6) }
-    it { expect(described_class.new(agencia: "1425").agencia_dv).to eq(7) }
-    it { expect(described_class.new(agencia: "2839").agencia_dv).to eq(8) }
-    it { expect(described_class.new(agencia: "2332").agencia_dv).to eq(9) }
-    it { expect(described_class.new(agencia: "0121").agencia_dv).to eq("P") }
+  describe '#agencia_dv' do
+    it { expect(described_class.new(agencia: '0255').agencia_dv).to eq(0) }
+    it { expect(described_class.new(agencia: '0943').agencia_dv).to eq(1) }
+    it { expect(described_class.new(agencia: '1467').agencia_dv).to eq(2) }
+    it { expect(described_class.new(agencia: '0794').agencia_dv).to eq(3) }
+    it { expect(described_class.new(agencia: '0155').agencia_dv).to eq(4) }
+    it { expect(described_class.new(agencia: '0650').agencia_dv).to eq(5) }
+    it { expect(described_class.new(agencia: '0199').agencia_dv).to eq(6) }
+    it { expect(described_class.new(agencia: '1425').agencia_dv).to eq(7) }
+    it { expect(described_class.new(agencia: '2839').agencia_dv).to eq(8) }
+    it { expect(described_class.new(agencia: '2332').agencia_dv).to eq(9) }
+    it { expect(described_class.new(agencia: '0121').agencia_dv).to eq('P') }
   end
 
-  describe "#conta_corrente_dv" do
-    it { expect(described_class.new(conta_corrente: "0325620").conta_corrente_dv).to eq(0) }
-    it { expect(described_class.new(conta_corrente: "0284025").conta_corrente_dv).to eq(1) }
-    it { expect(described_class.new(conta_corrente: "0238069").conta_corrente_dv).to eq(2) }
-    it { expect(described_class.new(conta_corrente: "0135323").conta_corrente_dv).to eq(3) }
-    it { expect(described_class.new(conta_corrente: "0010667").conta_corrente_dv).to eq(4) }
-    it { expect(described_class.new(conta_corrente: "0420571").conta_corrente_dv).to eq(5) }
-    it { expect(described_class.new(conta_corrente: "0510701").conta_corrente_dv).to eq(6) }
-    it { expect(described_class.new(conta_corrente: "0420536").conta_corrente_dv).to eq(7) }
-    it { expect(described_class.new(conta_corrente: "0012500").conta_corrente_dv).to eq(8) }
-    it { expect(described_class.new(conta_corrente: "0010673").conta_corrente_dv).to eq(9) }
-    it { expect(described_class.new(conta_corrente: "0019669").conta_corrente_dv).to eq("P") }
-    it { expect(described_class.new(conta_corrente: "0301357").conta_corrente_dv).to eq("P") }
+  describe '#conta_corrente_dv' do
+    it { expect(described_class.new(conta_corrente: '0325620').conta_corrente_dv).to eq(0) }
+    it { expect(described_class.new(conta_corrente: '0284025').conta_corrente_dv).to eq(1) }
+    it { expect(described_class.new(conta_corrente: '0238069').conta_corrente_dv).to eq(2) }
+    it { expect(described_class.new(conta_corrente: '0135323').conta_corrente_dv).to eq(3) }
+    it { expect(described_class.new(conta_corrente: '0010667').conta_corrente_dv).to eq(4) }
+    it { expect(described_class.new(conta_corrente: '0420571').conta_corrente_dv).to eq(5) }
+    it { expect(described_class.new(conta_corrente: '0510701').conta_corrente_dv).to eq(6) }
+    it { expect(described_class.new(conta_corrente: '0420536').conta_corrente_dv).to eq(7) }
+    it { expect(described_class.new(conta_corrente: '0012500').conta_corrente_dv).to eq(8) }
+    it { expect(described_class.new(conta_corrente: '0010673').conta_corrente_dv).to eq(9) }
+    it { expect(described_class.new(conta_corrente: '0019669').conta_corrente_dv).to eq('P') }
+    it { expect(described_class.new(conta_corrente: '0301357').conta_corrente_dv).to eq('P') }
   end
 end

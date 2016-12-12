@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 # @author Kivanio Barbosa
 module Brcobranca
   # Métodos auxiliares de formatação
@@ -91,7 +92,7 @@ module Brcobranca
         linha << Regexp.last_match[3]
         linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/, '\1.\2 \3.\4 \5.\6 \7 \8')
       else
-        fail ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
+        raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
     end
   end

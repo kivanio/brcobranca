@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Santander do
@@ -25,9 +27,9 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.carteira).to eql('102')
   end
@@ -41,9 +43,9 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.data_documento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(25.0)
-    expect(boleto_novo.valor_documento).to eql(25.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(25.0)
+    expect(boleto_novo.valor_documento).to be(25.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -76,21 +78,21 @@ RSpec.describe Brcobranca::Boleto::Santander do
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(5)
+    expect(boleto_novo.errors.count).to be(5)
   end
 
   it 'Montar nosso_numero_dv' do
     @valid_attributes[:numero_documento] = '566612457800'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(2)
+    expect(boleto_novo.nosso_numero_dv).to be(2)
 
     @valid_attributes[:numero_documento] = '90002720'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(7)
+    expect(boleto_novo.nosso_numero_dv).to be(7)
 
     @valid_attributes[:numero_documento] = '1961005'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(0)
+    expect(boleto_novo.nosso_numero_dv).to be(0)
   end
 
   it 'Montar nosso_numero_boleto' do
@@ -113,12 +115,12 @@ RSpec.describe Brcobranca::Boleto::Santander do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end
@@ -129,12 +131,12 @@ RSpec.describe Brcobranca::Boleto::Santander do
 
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)
-      tmp_file = Tempfile.new('foobar.' << format)
+      tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
       expect(File.exist?(tmp_file.path)).to be_truthy
       expect(File.stat(tmp_file.path).zero?).to be_falsey
-      expect(File.delete(tmp_file.path)).to eql(1)
+      expect(File.delete(tmp_file.path)).to be(1)
       expect(File.exist?(tmp_file.path)).to be_falsey
     end
   end

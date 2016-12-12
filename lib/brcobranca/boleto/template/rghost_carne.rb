@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 
 begin
   require 'rghost'
@@ -22,7 +23,7 @@ module Brcobranca
       # Templates para usar com Rghost
       module RghostCarne
         extend self
-        include RGhost unless self.include?(RGhost)
+        include RGhost unless include?(RGhost)
         RGhost::Config::GS[:external_encoding] = Brcobranca.configuration.external_encoding
 
         # Gera o boleto em usando o formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
@@ -116,12 +117,11 @@ module Brcobranca
             modelo_carne_build_data_left(doc, boleto, colunas, linhas)
             modelo_carne_build_data_right(doc, boleto, colunas, linhas)
 
-            if curr_page_position >= max_per_page # maximo 3 boletos por pagina
-              # Cria nova página se não for o último boleto
-              doc.next_page unless index == boletos.length - 1
+            next unless curr_page_position >= max_per_page # maximo 3 boletos por pagina
+            # Cria nova página se não for o último boleto
+            doc.next_page unless index == boletos.length - 1
 
-              curr_page_position = 0 # reinicia contador por página
-            end
+            curr_page_position = 0 # reinicia contador por página
           end
 
           # Gerando stream
@@ -134,7 +134,7 @@ module Brcobranca
         # carrega background do boleto
         def modelo_carne_load_background(doc, margin_bottom)
           template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_carne.eps')
-          fail 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
+          raise 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           doc.image template_path, x: 1, y: margin_bottom
         end
@@ -202,7 +202,7 @@ module Brcobranca
 
           # sacado
           doc.moveto x: colunas[0], y: linhas[13]
-          doc.show "#{boleto.sacado}"
+          doc.show boleto.sacado.to_s
         end
 
         # aplica dados do lado direito
@@ -301,7 +301,7 @@ module Brcobranca
 
           # Sacado endereço
           doc.moveto x: colunas[2], y: linhas[12]
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
 
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode

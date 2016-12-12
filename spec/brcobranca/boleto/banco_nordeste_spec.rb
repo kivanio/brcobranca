@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
@@ -26,9 +28,9 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
     expect(boleto_novo.data_documento).to eql(Date.today)
     expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.carteira).to eql('21')
   end
@@ -42,9 +44,9 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
     expect(boleto_novo.data_documento).to eql(Date.today)
     expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(25.0)
-    expect(boleto_novo.valor_documento).to eql(25.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(25.0)
+    expect(boleto_novo.valor_documento).to be(25.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -76,26 +78,25 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to eql(5)
+    expect(boleto_novo.errors.count).to be(5)
   end
 
   it 'Montar nosso_numero_dv' do
     @valid_attributes[:numero_documento] = '0000010'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(8)
+    expect(boleto_novo.nosso_numero_dv).to be(8)
 
     @valid_attributes[:numero_documento] = '0020572'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(9)
+    expect(boleto_novo.nosso_numero_dv).to be(9)
 
     @valid_attributes[:numero_documento] = '1961005'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(0)
+    expect(boleto_novo.nosso_numero_dv).to be(0)
 
     @valid_attributes[:numero_documento] = '0000053'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_dv).to eql(1)
-
+    expect(boleto_novo.nosso_numero_dv).to be(1)
   end
 
   it 'Montar nosso_numero_boleto' do

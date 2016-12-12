@@ -1,24 +1,26 @@
 # -*- encoding: utf-8 -*-
+#
+
 shared_examples_for 'cnab240' do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP',
-      valor_iof: 9.9,
-      valor_abatimento: 24.35,
-      documento_avalista: '12345678901',
-      nome_avalista: 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUELA GABRIELA RAFAELA GONZAGA DE BRAGANÇA E BOURBON',
-      numero_documento: '00000000123')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP',
+                                       valor_iof: 9.9,
+                                       valor_abatimento: 24.35,
+                                       documento_avalista: '12345678901',
+                                       nome_avalista: 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUELA GABRIELA RAFAELA GONZAGA DE BRAGANÇA E BOURBON',
+                                       numero_documento: '00000000123')
   end
   let(:params) do
-    p = {
+    params = {
       empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '1234',
       conta_corrente: '12345',
@@ -30,13 +32,13 @@ shared_examples_for 'cnab240' do
       pagamentos: [pagamento]
     }
     if subject.class == Brcobranca::Remessa::Cnab240::Caixa
-      p.merge!(versao_aplicativo: '1234',
-        digito_agencia: '1')
+      params[:versao_aplicativo] = '1234'
+      params[:digito_agencia] = '1'
     elsif subject.class == Brcobranca::Remessa::Cnab240::BancoBrasil
-      p.merge!(carteira: '12',
-        variacao: '123')
+      params[:carteira] = '12'
+      params[:variacao] = '123'
     end
-    p
+    params
   end
   let(:objeto) { subject.class.new(params) }
 

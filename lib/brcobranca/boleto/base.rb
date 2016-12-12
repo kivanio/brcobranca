@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 # @author Kivanio Barbosa
 module Brcobranca
   module Boleto
@@ -149,12 +150,12 @@ module Brcobranca
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def nosso_numero_boleto
-        fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.
       def agencia_conta_boleto
-        fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
       end
 
       # Valor total do documento: <b>quantidate * valor</b>
@@ -189,7 +190,7 @@ module Brcobranca
       # @raise [Brcobranca::BoletoInvalido] Caso as informações fornecidas não sejam suficientes ou sejam inválidas.
       # @return [String] código de barras formado por 44 caracteres numéricos.
       def codigo_barras
-        fail Brcobranca::BoletoInvalido.new(self) unless self.valid?
+        raise Brcobranca::BoletoInvalido, self unless valid?
         codigo = codigo_barras_primeira_parte # 18 digitos
         codigo << codigo_barras_segunda_parte # 25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
@@ -202,7 +203,7 @@ module Brcobranca
           codigo = "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
           codigo
         else
-          fail Brcobranca::BoletoInvalido.new(self)
+          raise Brcobranca::BoletoInvalido, self
         end
       end
 
@@ -210,7 +211,7 @@ module Brcobranca
       #
       # @abstract Deverá ser sobreescrito para cada banco.
       def codigo_barras_segunda_parte
-        fail Brcobranca::NaoImplementado.new('Sobreescreva este método na classe referente ao banco que você esta criando')
+        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
       end
 
       private

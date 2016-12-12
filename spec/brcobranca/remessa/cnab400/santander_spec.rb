@@ -1,18 +1,20 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -38,7 +40,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       it 'deve ser invalido' do
         object = subject.class.new
         expect(object.invalid?).to be true
-        expect(object.errors.full_messages).to eq(["Pagamentos não pode estar em branco.", "Pagamentos deve ser uma coleção (Array).", "Empresa mae não pode estar em branco.", "Documento cedente não pode estar em branco.", "Documento cedente deve ter entre 11 e 14 dígitos.", "Codigo transmissao não pode estar em branco.", "Agencia não pode estar em branco.", "Conta corrente não pode estar em branco.", "Digito conta não pode estar em branco."])
+        expect(object.errors.full_messages).to eq(['Pagamentos não pode estar em branco.', 'Pagamentos deve ser uma coleção (Array).', 'Empresa mae não pode estar em branco.', 'Documento cedente não pode estar em branco.', 'Documento cedente deve ter entre 11 e 14 dígitos.', 'Codigo transmissao não pode estar em branco.', 'Agencia não pode estar em branco.', 'Conta corrente não pode estar em branco.', 'Digito conta não pode estar em branco.'])
       end
 
       it 'deve ser invalido se a carteira tiver mais de 3 digitos' do

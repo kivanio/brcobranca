@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Currency::String do
@@ -33,11 +34,11 @@ RSpec.describe Brcobranca::Currency::String do
   end
 
   it 'converts value seted to valid ruby number' do
-    expect('1234'.to_number).to eql(1234.0)
-    expect('123.4'.to_number).to eql(123.4)
-    expect('123,4'.to_number).to eql(123.4)
-    expect('1234.03'.to_number).to eql(1234.03)
-    expect('1234,03'.to_number).to eql(1234.03)
+    expect('1234'.to_number).to be(1234.0)
+    expect('123.4'.to_number).to be(123.4)
+    expect('123,4'.to_number).to be(123.4)
+    expect('1234.03'.to_number).to be(1234.03)
+    expect('1234,03'.to_number).to be(1234.03)
   end
 
   it 'returns nil when is not possible convert value seted' do

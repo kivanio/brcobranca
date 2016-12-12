@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Boleto
     class Hsbc < Base # Banco HSBC
-      validates_inclusion_of :carteira, in: %w( CNR CSB ), message: 'não existente para este banco.'
+      validates_inclusion_of :carteira, in: %w(CNR CSB), message: 'não existente para este banco.'
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :numero_documento, maximum: 13, message: 'deve ser menor ou igual a 13 dígitos.'
       validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
@@ -54,13 +55,13 @@ module Brcobranca
             soma = parte_1.to_i + conta_corrente.to_i + data.to_i
             "#{parte_1}#{soma.to_s.modulo11(mapeamento: { 10 => 0 })}"
           else
-            self.errors.add(:data_vencimento, "não é uma data.")
-            fail Brcobranca::BoletoInvalido.new(self)
+            errors.add(:data_vencimento, 'não é uma data.')
+            raise Brcobranca::BoletoInvalido, self
           end
         when 'CSB'
           @nosso_numero
         else
-          fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
+          raise Brcobranca::NaoImplementado, 'Tipo de carteira não implementado.'
           # TODO - Verificar outras carteiras.
           # self.codigo_servico = "5"
           # parte_1 = "#{self.numero_documento}#{self.numero_documento.modulo11(mapeamento: { 10 => 0 })}#{self.codigo_servico}"
@@ -99,10 +100,10 @@ module Brcobranca
           dias_julianos = data_vencimento.to_juliano
           "#{conta_corrente}#{numero_documento}#{dias_julianos}2"
         when 'CSB'
-          fail Brcobranca::NaoImplementado.new('Nosso número não definido.') unless @nosso_numero
+          raise Brcobranca::NaoImplementado, 'Nosso número não definido.' unless @nosso_numero
           "#{nosso_numero}#{agencia}#{conta_corrente}001"
         else
-          fail Brcobranca::NaoImplementado.new('Tipo de carteira não implementado.')
+          raise Brcobranca::NaoImplementado, 'Tipo de carteira não implementado.'
         end
       end
     end

@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+#
+
 require 'coveralls'
 Coveralls.wear!
 
@@ -30,9 +32,7 @@ RSpec.configure do |config|
     mocks.syntax = :expect
     mocks.verify_partial_doubles = true
   end
-  if config.files_to_run.one?
-    config.default_formatter = 'doc'
-  end
+  config.default_formatter = 'doc' if config.files_to_run.one?
 end
 
 RGhost::Config.config_platform

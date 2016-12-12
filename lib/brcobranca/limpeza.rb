@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 module Brcobranca
   module Limpeza
     # Transforma Float em String preservando o zero a direita.

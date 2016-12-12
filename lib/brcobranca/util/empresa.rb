@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
+#
 # @author Kivanio Barbosa
 module Brcobranca
   # Métodos auxiliares
   module Util
     class Empresa
-
-      def initialize(documento, zero=true)
+      def initialize(documento, zero = true)
         @documento = documento
         @zero = zero
       end
@@ -26,4 +26,3 @@ module Brcobranca
     end
   end
 end
-
