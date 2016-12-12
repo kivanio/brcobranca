@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.0.0
+- Adicionado Banrisul
+- Rubocop styles
+
 ## 6.1.0
 - Adicionado Banestes
 - Limpeza e formatação de strings de acordo com o tamanho permitido por cada banco
