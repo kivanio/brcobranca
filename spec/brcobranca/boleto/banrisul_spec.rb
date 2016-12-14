@@ -111,6 +111,17 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.codigo_barras).to eql('04198100100000550002111029000150000091944023')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.11107 29000.150002 00919.440230 8 10010000055000')
+  
+    valid_attributes[:numero_documento] = '03408099'
+    valid_attributes[:data_vencimento] = Date.parse('2017-01-12')
+    valid_attributes[:valor] = 1216.00
+    valid_attributes[:agencia] = '0016'
+    valid_attributes[:conta_corrente] = '00099999'
+    valid_attributes[:convenio] = '0164640'
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.codigo_barras).to eql('04192703700001216002100160164640034080994027')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.10018 60164.640033 40809.940279 2 70370000121600')
+  
   end
 
   it 'Montar agencia_conta_boleto' do
