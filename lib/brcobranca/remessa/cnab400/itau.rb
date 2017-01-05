@@ -95,7 +95,7 @@ module Brcobranca
           detalhe << digito_conta                                           # dac                                   9[01]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro (brancos)     X[04]
           detalhe << ''.rjust(4, '0')                                       # codigo cancelamento (zeros)           9[04]
-          detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.uso_da_empresa.to_s.rjust(25, ' ')           # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[08]
           detalhe << ''.rjust(13, '0')                                      # quantidade de moeda variavel          9[13]
           detalhe << carteira                                               # carteira                              9[03]
