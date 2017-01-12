@@ -11,6 +11,7 @@ module Brcobranca
       attr_accessor :nosso_numero
       attr_accessor :nosso_numero_com_dv
       attr_accessor :cod_de_ocorrencia
+      attr_accessor :data_de_ocorrencia
       attr_accessor :tipo_cobranca
       attr_accessor :tipo_cobranca_anterior
       attr_accessor :natureza_recebimento

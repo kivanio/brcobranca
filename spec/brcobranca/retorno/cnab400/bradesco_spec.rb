@@ -37,6 +37,7 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Bradesco do
     expect(pagamento.data_credito).to eql('150515')
     expect(pagamento.sequencial).to eql('000002')
     expect(pagamento.cod_de_ocorrencia).to eql('02')
+    expect(pagamento.data_de_ocorrencia).to eql('150515')
 
     # Campos da classe base que não encontrei a relação com CNAB400
     # parse.field :tipo_cobranca,80..80
