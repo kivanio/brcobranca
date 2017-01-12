@@ -72,6 +72,10 @@ module Brcobranca
       attr_accessor :parcela
       # <b>OPCIONAL</b>: Dias para o protesto
       attr_accessor :dias_protesto
+      # <b>OPCIONAL</b>: de livre utilização pela empresa, cuja informação não é consistida pelo Itaú, e não
+      # sai no aviso de cobrança, retornando ao beneficiário no arquivo retorno em qualquer movimento do título
+      # (baixa, liquidação, confirmação de protesto, etc.) com o mesmo conteúdo da entrada.
+      attr_accessor :uso_da_empresa
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
@@ -81,6 +85,7 @@ module Brcobranca
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
       validates_length_of :identificacao_ocorrencia, is: 2, message: 'deve ter 2 dígitos.'
+      validates_length_of :uso_da_empresa, maximum: 25, message: 'deve ter no máximo 25 dígitos.', allow_blank: true, default: ''
 
       # Nova instancia da classe Pagamento
       #
