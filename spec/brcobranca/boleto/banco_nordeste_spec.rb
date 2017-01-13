@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
       sacado_documento: '12345678900',
       agencia: '0016',
       conta_corrente: '0001193',
-      convenio: '0001193',
+      digito_conta_corrente: '2',
       numero_documento: '0000053'
     }
   end
@@ -53,7 +53,6 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
     expect(boleto_novo.sacado).to eql('Claudio Pozzebom')
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.agencia).to eql('0016')
-    expect(boleto_novo.convenio).to eql('0001193')
     expect(boleto_novo.numero_documento).to eql('0000053')
     expect(boleto_novo.carteira).to eql('21')
   end
@@ -73,15 +72,41 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('0016000119320002720021000')
     expect(boleto_novo.codigo_barras).to eql('00497545000000054000016000119320002720021000')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('00490.01605 00119.320000 27200.210006 7 54500000005400')
+
+    @valid_attributes[:agencia] = '0259'
+    @valid_attributes[:conta_corrente] = '0008549'
+    @valid_attributes[:digito_conta_corrente] = '3'
+    @valid_attributes[:valor] = 1.01
+    @valid_attributes[:numero_documento] = '0000001'
+    @valid_attributes[:data_vencimento] = Date.parse('2017/01/17')
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('0259000854930000001921000')
+    expect(boleto_novo.codigo_barras).to eql('00492704200000001010259000854930000001921000')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('00490.25901 00854.930005 00019.210004 2 70420000000101')
+
+    @valid_attributes[:agencia] = '0275'
+    @valid_attributes[:conta_corrente] = '0000253'
+    @valid_attributes[:digito_conta_corrente] = '5'
+    @valid_attributes[:valor] = 2807.75
+    @valid_attributes[:numero_documento] = '0000005'
+    @valid_attributes[:data_vencimento] = Date.parse('2016/07/28')
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('0275000025350000005121000')
+    expect(boleto_novo.codigo_barras).to eql('00491686900002807750275000025350000005121000')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('00490.27501 00025.350000 00051.210003 1 68690000280775')
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to be(5)
+    expect(boleto_novo.errors.count).to be(6)
   end
 
   it 'Montar nosso_numero_dv' do
+    @valid_attributes[:numero_documento] = '9061138'
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.nosso_numero_dv).to be(1)
+
     @valid_attributes[:numero_documento] = '0000010'
     boleto_novo = described_class.new(@valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(8)

@@ -3,8 +3,12 @@
 module Brcobranca
   module Boleto
     class BancoNordeste < Base # Banco do Nordeste
+      # <b>REQUERIDO</b>: digito verificador da conta corrente
+      attr_accessor :digito_conta_corrente
+
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
-      validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :digito_conta_corrente, is: 1, message: 'deve ser igual a 1 dígitos.'
       validates_length_of :carteira, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :numero_documento, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
 
@@ -28,14 +32,8 @@ module Brcobranca
         @conta_corrente = valor.to_s.rjust(7, '0') if valor
       end
 
-      # Número do convênio/contrato do cliente junto ao banco.
-      # @return [String] 7 caracteres numéricos.
-      def convenio=(valor)
-        @convenio = valor.to_s.rjust(7, '0') if valor
-      end
-
       # Número sequencial utilizado para identificar o boleto.
-      # @return [String] 8 caracteres numéricos.
+      # @return [String] 7 caracteres numéricos.
       def numero_documento=(valor)
         @numero_documento = valor.to_s.rjust(7, '0') if valor
       end
@@ -64,29 +62,19 @@ module Brcobranca
       # @example
       #  boleto.agencia_conta_boleto #=> "0059/1899775"
       def agencia_conta_boleto
-        "#{agencia}/#{convenio_com_dv}"
-      end
-
-      # Dígito verificador da convênio
-      # @return [Integer] 1 caracteres numéricos.
-      def convenio_dv
-        convenio.modulo11
-      end
-
-      def convenio_com_dv
-        "#{convenio}-#{convenio_dv}"
+        "#{agencia}/#{conta_corrente}#{digito_conta_corrente}"
       end
 
       # Segunda parte do código de barras.
       # 9(04) | Agência <br/>
-      # 9(08) | Convenio com DV <br/>
+      # 9(08) | Conta corrente com DV <br/>
       # 9(08) | Nosso Numero Com DV<br/>
       # 9(02) | Carteira<br/>
       # 9(03) | Zeros<br/>
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "#{agencia}#{convenio}#{convenio_dv}#{numero_documento}#{nosso_numero_dv}#{carteira}000"
+        "#{agencia}#{conta_corrente}#{digito_conta_corrente}#{numero_documento}#{nosso_numero_dv}#{carteira}000"
       end
     end
   end
