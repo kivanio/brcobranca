@@ -26,6 +26,18 @@ module Brcobranca
         #   - Brancos
         #
         attr_accessor :tipo_cobranca
+        # 04DSC:   Solicitação de registro na Modalidade Descontada
+        # 08VDR:   Solicitação de registro na Modalidade BBVendor
+        # 02VIN:   solicitação de registro na Modalidade Vinculada
+        # BRANCOS: Registro na Modalidade Simples
+
+        attr_accessor :aceite
+        # 'A' – para sim, ou 'N' – para não
+
+        attr_accessor :comando
+        # Para Comando "01" - Registro de Título (posição 109-110)
+        # Para Comando "02" - Solicitação de Baixa (posição 109-110)
+        # Para Comando "09" – Instrução para Protestar (posição 109-110
 
         validates_presence_of :agencia, :conta_corrente, :convenio, :variacao_carteira, :documento_cedente, message: 'não pode estar em branco.'
 
@@ -34,6 +46,11 @@ module Brcobranca
         validates_length_of :variacao_carteira, is: 3, message: 'deve ser igual a 3 digítos.'
         validates_length_of :carteira, is: 2, message: 'deve ser igual a 2 digítos.'
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
+
+        def initialize(campos = {})
+          campos = { tipo_cobranca: '04DSC', aceite: 'A', comando: '01' }.merge!(campos)
+          super(campos)
+        end
 
         # Conta corrente
         #
@@ -118,7 +135,7 @@ module Brcobranca
           detalhe << '000000'                                                 # numero do bordero (zeros)         9[06] 096 a 101
           detalhe << tipo_cobranca.to_s.ljust(5, ' ')                         # tipo de cobranca                  9[05] 102 a 106
           detalhe << carteira                                                 # carteira                          9[02] 107 a 108
-          detalhe << '01'                                                     # comando (01 = registro de titulo) 9[02] 109 a 110
+          detalhe << comando                                                  # comando (01 = registro de titulo) 9[02] 109 a 110
           detalhe << pagamento.nosso_numero.to_s.rjust(10, '0')               # numero atribuido pela empresa     X[10] 111 a 120
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')             # data de vencimento                9[06] 121 a 126
           detalhe << pagamento.formata_valor                                  # valor do titulo                   9[13] 127 a 139

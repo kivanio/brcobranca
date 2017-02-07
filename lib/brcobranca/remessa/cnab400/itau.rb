@@ -4,6 +4,30 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Itau < Brcobranca::Remessa::Cnab400::Base
+
+        attr_accessor :aceite
+        # 'A' – para sim, ou 'N' – para não
+
+        attr_accessor :especie_titulo
+        # 01 DUPLICATA MERCANTIL
+        # 02 NOTA PROMISSÓRIA
+        # 03 NOTA DE SEGURO
+        # 04 MENSALIDADE ESCOLAR
+        # 05 RECIBO
+        # 06 CONTRATO
+        # 07 COSSEGUROS
+        # 08 DUPLICATA DE SERVIÇO
+        # 09 LETRA DE CÂMBIO
+        # 13 NOTA DE DÉBITOS
+        # 15 DOCUMENTO DE DÍVIDA
+        # 16 ENCARGOS CONDOMINIAIS
+        # 17 CONTA DE PRESTAÇÃO DE SERVIÇOS
+        # 99 DIVERSOS
+
+        attr_accessor :instrucao_cobranca
+        # 03 DEVOLVERAPÓS 30 DIAS DO VENCIMENTO
+        # Demais revisar documentação
+
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
@@ -14,7 +38,7 @@ module Brcobranca
 
         # Nova instancia do Itau
         def initialize(campos = {})
-          campos = { aceite: 'N' }.merge!(campos)
+          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '03' }.merge!(campos)
           super(campos)
         end
 
@@ -107,7 +131,7 @@ module Brcobranca
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
           detalhe << ''.rjust(5, '0')                                       # agencia cobradora - deixar zero       9[05]
-          detalhe << '99'                                                   # especie  do titulo                    X[02]
+          detalhe << especie_titulo                                         # especie  do titulo                    X[02]
           detalhe << aceite                                                 # aceite (A/N)                          X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
           detalhe << ''.rjust(2, '0')                                       # 1a instrucao - deixar zero            X[02]
@@ -129,7 +153,7 @@ module Brcobranca
           detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
           detalhe << ''.rjust(6, '0')                                       # data da mora                          9[06] *
-          detalhe << '03'                                                   # quantidade de dias do prazo           9[02] *
+          detalhe << instrucao_cobranca                                     # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe
