@@ -7,6 +7,30 @@ module Brcobranca
         # codigo da empresa (informado pelo Bradesco no cadastramento)
         attr_accessor :codigo_empresa
 
+        attr_accessor :condicao_emissao
+        # 1 Banco emite e Processa o registro
+        # 2 Cliente emite e o Banco somente processa o registro
+
+        attr_accessor :identificacao_emissao
+        # N Não registra na cobrança
+        # Diferente de N registra e emite Boleto
+
+        attr_accessor :aviso_debito
+        # 1 emite aviso,e assume o endereço do Pagadorconstante do Arquivo-Remessa
+        # 2 não emite aviso
+
+        attr_accessor :especie_titulo
+        # 01 Duplicata
+        # 02 Nota Promissória
+        # 03 Nota de Seguro
+        # 04 Cobrança Seriada
+        # 05 Recibo
+        # 10 Letras de Câmbio
+        # 11 Nota de Débito
+        # 12 Duplicata de Serv
+        # 30 Boleto de Proposta
+        # 99 Outros
+
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :codigo_empresa, :sequencial_remessa,
                               :digito_conta, message: 'não pode estar em branco.'
@@ -16,6 +40,12 @@ module Brcobranca
         validates_length_of :sequencial_remessa, maximum: 7, message: 'deve ter 7 dígitos.'
         validates_length_of :carteira, maximum: 2, message: 'deve ter no máximo 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
+
+
+        def initialize(campos = {})
+          campos = { identificacao_Registro: 'N', aviso_debito: '2', especie_titulo: '99' }.merge!(campos)
+          super(campos)
+        end
 
         def agencia=(valor)
           @agencia = valor.to_s.rjust(5, '0') if valor
@@ -92,11 +122,11 @@ module Brcobranca
           detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')       # identificacao do titulo (nosso numero)      9[11]       071 a 081
           detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
           detalhe << ''.rjust(10, '0')                                # desconto por dia                            9[10]       083 a 092
-          detalhe << '2'                                              # condicao emissao boleto (2 = cliente)       9[01]       093 a 093
-          detalhe << 'N'                                              # emite boleto para debito                    X[01]       094 a 094
+          detalhe << condicao_emissao                                 # condicao emissao boleto (1 Banco |2 cliente)9[01]       093 a 093
+          detalhe << identificacao_registro                           # emite boleto para debito                    X[01]       094 a 094
           detalhe << ''.rjust(10, ' ')                                # operacao no banco (brancos)                 X[10]       095 a 104
           detalhe << ' '                                              # indicador rateio                            X[01]       105 a 105
-          detalhe << '2'                                              # endereco para aviso debito (op 2 = ignora)  9[01]       106 a 106
+          detalhe << aviso_debito                                     # endereco para aviso debito (op 2 = ignora)  9[01]       106 a 106
           detalhe << ''.rjust(2, ' ')                                 # brancos                                     X[02]       107 a 108
           detalhe << pagamento.identificacao_ocorrencia               # identificacao ocorrencia              9[02]
           detalhe << pagamento.numero_documento.to_s.rjust(10, ' ')   # numero do documento alfanum.                X[10]       111 a 120
@@ -104,7 +134,7 @@ module Brcobranca
           detalhe << pagamento.formata_valor                          # valor do titulo                             9[13]       127 a 139
           detalhe << ''.rjust(3, '0')                                 # banco encarregado (zeros)                   9[03]       140 a 142
           detalhe << ''.rjust(5, '0')                                 # agencia depositaria (zeros)                 9[05]       143 a 147
-          detalhe << '99'                                             # especie do titulo                           9[02]       148 a 149
+          detalhe << especie_titulo                                   # especie do titulo                           9[02]       148 a 149
           detalhe << 'N'                                              # identificacao (sempre N)                    X[01]       150 a 150
           detalhe << pagamento.data_emissao.strftime('%d%m%y')        # data de emissao                             9[06]       151 a 156
           detalhe << ''.rjust(2, '0')                                 # 1a instrucao                                9[02]       157 a 158
