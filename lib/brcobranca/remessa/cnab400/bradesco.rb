@@ -11,7 +11,7 @@ module Brcobranca
         # 1 Banco emite e Processa o registro
         # 2 Cliente emite e o Banco somente processa o registro
 
-        attr_accessor :identificacao_emissao
+        attr_accessor :identificacao_registro
         # N Não registra na cobrança
         # Diferente de N registra e emite Boleto
 
@@ -43,7 +43,7 @@ module Brcobranca
 
 
         def initialize(campos = {})
-          campos = { identificacao_registro: 'N', aviso_debito: '2', especie_titulo: '99' }.merge!(campos)
+          campos = { aviso_debito: '2', identificacao_registro: 'N', especie_titulo: '99' }.merge!(campos)
           super(campos)
         end
 
@@ -107,7 +107,6 @@ module Brcobranca
 
         def monta_detalhe(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
-
           detalhe = '1'                                               # identificacao do registro                   9[01]       001 a 001
           detalhe << ''.rjust(5, '0')                                 # agencia de debito (op)                      9[05]       002 a 006
           detalhe << ''.rjust(1, '0')                                 # digito da agencia de debito (op)            X[01]       007 a 007
