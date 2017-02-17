@@ -10,6 +10,21 @@ module Brcobranca
       class Itau < Brcobranca::Retorno::Cnab400::Base
         extend ParseLine::FixedWidth # Extendendo parseline
 
+        attr_accessor :tipo_de_registro
+        attr_accessor :codigo_de_inscricao
+        attr_accessor :numero_de_inscricao
+        attr_accessor :conta
+        attr_accessor :uso_da_empresa
+        attr_accessor :numero_carteira
+        attr_accessor :cod_carteira
+        attr_accessor :cod_de_ocorrencia
+        attr_accessor :data_de_ocorrencia
+        attr_accessor :n_do_documento
+        attr_accessor :boleto_dda
+        attr_accessor :instr_cancelada
+        attr_accessor :erros_msg
+        attr_accessor :cod_de_liquidacao
+
         # Load lines
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header
@@ -19,21 +34,21 @@ module Brcobranca
 
         fixed_width_layout do |parse|
           # Todos os campos descritos no documento em ordem
-          # :tipo_de_registro, 0..0 # identificacao do registro transacao
-          # :codigo_de_inscricao, 1..2 # identificacao do tipo de inscrica/empresa
-          # :numero_de_inscricao, 3..16 #numero de inscricao da empresa (cpf/cnpj)
+          parse.field :tipo_de_registro, 0..0 # identificacao do registro transacao
+          parse.field :codigo_de_inscricao, 1..2 # identificacao do tipo de inscrica/empresa
+          parse.field :numero_de_inscricao, 3..16 #numero de inscricao da empresa (cpf/cnpj)
 
           # :agencia, 17..20 #agencia mantenedora da conta
           parse.field :agencia_com_dv, 17..20 # FIXME - SEM DIV
 
           # :zeros, 21..22 # complemento de registro
 
-          # :conta, 23..27 #numero da conta corrente da empresa
+          parse.field :conta, 23..27 #numero da conta corrente da empresa
           # :dac, 28..28 #digito de auto conferencia ag/conta empresa
           parse.field :cedente_com_dv, 23..28
 
           # :brancos, 29..36 #complemento de registro
-          # :uso_da_empresa, 37..61 #identificacao do titulo na empresa
+          parse.field :uso_da_empresa, 37..61 #identificacao do titulo na empresa
 
           # :nosso_numero,62..69 # identificacao do titulo no banco
           parse.field :nosso_numero, 62..69
@@ -42,6 +57,7 @@ module Brcobranca
 
           # :carteira, 82..84 #numero da carteira
           parse.field :carteira_variacao, 82..84
+          parse.field :numero_carteira, 82..84
 
           # :nosso_numero, 85..92 #identificacao do titulo no banco (novamente?)
           # :dac_nosso_numero, 93..93 #dac nosso numero
@@ -49,10 +65,11 @@ module Brcobranca
 
           # :carteira, 107..107 #código da carteira
           parse.field :carteira, 107..107
+          parse.field :cod_carteira, 107..107
 
-          # :cod_de_ocorrencia, 108..109 # código de ocorrencia
-          # :data_de_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
-          # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
+          parse.field :cod_de_ocorrencia, 108..109 # código de ocorrencia
+          parse.field :data_de_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
+          parse.field :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 #complemento de registro
 
@@ -96,20 +113,20 @@ module Brcobranca
           # :outros_creditos, 279..291 #valor de outros creditos (ultimos 2 digitos, virgula decimal assumida)
           parse.field :outros_recebimento, 279..291
 
-          # :boleto_dda, 292..292 #indicador de boleto dda
+          parse.field :boleto_dda, 292..292 #indicador de boleto dda
           # :brancos, 293..294 #complemento de registro
 
           # :data_credito, 295..300 #data de credito desta liquidacao
           parse.field :data_credito, 295..300
 
-          # :instr_cancelada, 301..304 # codigo da instrucao cancelada
+          parse.field :instr_cancelada, 301..304 # codigo da instrucao cancelada
           # :brancos , 305..310 # complemento de registro
           # :zeros, 311..323 #complemento de registro
           # :nome_do_sacado, 324..353, #nome do sacado
           # :brancos , 354..376 # complemento de registro
-          # :erros_msg, 377..384 #registros rejeitados ou laegacao do sacado ou registro de mensagem informativa
+          parse.field :erros_msg, 377..384 #registros rejeitados ou laegacao do sacado ou registro de mensagem informativa
           # :brancos, 385..391 #complemento de registro
-          # :cod_de_liquidacao, 392..393 #meio pelo qual o título foi liquidado
+          parse.field :cod_de_liquidacao, 392..393 #meio pelo qual o título foi liquidado
 
           # :numero_sequencial, 394..399 #numero sequencial no arquivo
           parse.field :sequencial, 394..399
