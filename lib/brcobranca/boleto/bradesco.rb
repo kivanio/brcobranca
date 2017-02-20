@@ -45,7 +45,6 @@ module Brcobranca
         @nosso_numero = valor.to_s.rjust(11, '0') if valor
       end
 
-
       # Número utilizado para identificar o boleto.
       # @return [String] 10 caracteres numéricos.
       def numero_documento=(valor)
