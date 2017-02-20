@@ -19,7 +19,7 @@ RSpec.describe 'Muúltiplos boletos' do #:nodoc:[all]
 
   it 'imprimir múltiplos boleto em lote' do
     boleto_1 = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
-    boleto_2 = Brcobranca::Boleto::Bradesco.new(@valid_attributes)
+    boleto_2 = Brcobranca::Boleto::Bradesco.new(@valid_attributes.merge(nosso_numero: '777700168', numero_documento: '1234566'))
     boleto_3 = Brcobranca::Boleto::BancoBrasil.new(@valid_attributes)
 
     boletos = [boleto_1, boleto_2, boleto_3]
