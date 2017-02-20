@@ -24,6 +24,7 @@ module Brcobranca
         attr_accessor :instr_cancelada
         attr_accessor :erros_msg
         attr_accessor :cod_de_liquidacao
+        attr_accessor :nome_do_sacado
 
         # Load lines
         def self.load_lines(file, options = {})
@@ -122,7 +123,7 @@ module Brcobranca
           parse.field :instr_cancelada, 301..304 # codigo da instrucao cancelada
           # :brancos , 305..310 # complemento de registro
           # :zeros, 311..323 #complemento de registro
-          # :nome_do_sacado, 324..353, #nome do sacado
+          parse.field :nome_do_sacado, 324..353 #nome do sacado
           # :brancos , 354..376 # complemento de registro
           parse.field :erros_msg, 377..384 #registros rejeitados ou laegacao do sacado ou registro de mensagem informativa
           # :brancos, 385..391 #complemento de registro
