@@ -127,11 +127,23 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
   it 'Montar nosso_numero_boleto' do
     @valid_attributes[:numero_documento] = '0000010'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_boleto).to eql('0000010-8   21')
+    expect(boleto_novo.nosso_numero_boleto).to eql('0000010-8')
 
     @valid_attributes[:numero_documento] = '0020572'
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.nosso_numero_boleto).to eql('0020572-9   21')
+    expect(boleto_novo.nosso_numero_boleto).to eql('0020572-9')
+
+    @valid_attributes[:numero_documento] = '1297105'
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql('1297105-7')
+
+    @valid_attributes[:numero_documento] = '0000005'
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql('0000005-1')
+
+    @valid_attributes[:numero_documento] = '0020572'
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.nosso_numero_boleto).to eql('0020572-9')
   end
 
   describe 'Busca logotipo do banco' do

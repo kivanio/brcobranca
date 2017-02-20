@@ -54,7 +54,7 @@ module Brcobranca
       #  boleto.nosso_numero_boleto #=> "0020572-9"
       def nosso_numero_boleto
         nosso_numero = numero_documento.to_s.rjust(7, '0') unless numero_documento.nil?
-        "#{nosso_numero}-#{nosso_numero_dv}   #{carteira}"
+        "#{nosso_numero}-#{nosso_numero_dv}"
       end
 
       # Agência + codigo do cedente do cliente para exibir no boleto.
