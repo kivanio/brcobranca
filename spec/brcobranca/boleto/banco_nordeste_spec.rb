@@ -146,6 +146,11 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
     expect(boleto_novo.nosso_numero_boleto).to eql('0020572-9')
   end
 
+  it 'Montar agencia_conta_boleto' do
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.agencia_conta_boleto).to eql('0016/0001193-2')
+  end
+
   describe 'Busca logotipo do banco' do
     it_behaves_like 'busca_logotipo'
   end

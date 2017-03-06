@@ -60,9 +60,9 @@ module Brcobranca
       # Agência + codigo do cedente do cliente para exibir no boleto.
       # @return [String]
       # @example
-      #  boleto.agencia_conta_boleto #=> "0059/1899775"
+      #  boleto.agencia_conta_boleto #=> "0059/189977-5"
       def agencia_conta_boleto
-        "#{agencia}/#{conta_corrente}#{digito_conta_corrente}"
+        "#{agencia}/#{conta_corrente}-#{digito_conta_corrente}"
       end
 
       # Segunda parte do código de barras.
