@@ -127,8 +127,20 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(valid_attributes)
-    expect(boleto_novo.nosso_numero_boleto).to eql('16/208879-3')
     expect(boleto_novo.nosso_numero_dv).to be(3)
+    expect(boleto_novo.nosso_numero_boleto).to eql('16/208879-3')
+
+    valid_attributes[:posto] = '02'
+    valid_attributes[:byte_idt] = '2'
+    valid_attributes[:numero_documento] = '00003'
+    valid_attributes[:agencia] = '0165'
+    valid_attributes[:convenio] = '00623'
+    valid_attributes[:data_vencimento] = Date.parse('2007-08-26')
+    valid_attributes[:data_documento] = Date.parse('2007-08-26')
+
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.nosso_numero_dv).to be(1)
+    expect(boleto_novo.nosso_numero_boleto).to eql('07/200003-1')
   end
 
   it 'Montar agencia_conta_boleto' do
