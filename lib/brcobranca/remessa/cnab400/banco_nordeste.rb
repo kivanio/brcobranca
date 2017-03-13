@@ -116,7 +116,7 @@ module Brcobranca
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]
           detalhe << conta_corrente                                         # conta corrente                        9[07]
           detalhe << digito_conta                                           # dac                                   9[01]
-          detalhe << pagamento.percentual_multa.to_s.rjust(2, '0')          # taxa - multa                           [02]
+          detalhe << pagamento.percentual_multa.to_s.delete('.').rjust(2, '0') # taxa - multa                           [02]
           detalhe << ''.rjust(4, ' ')                                       # filler                                 [04]
           detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(7, '0')              # nosso numero                          9[07]
