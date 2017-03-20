@@ -41,7 +41,7 @@ module Brcobranca
 
         # Nova instancia do Itau
         def initialize(campos = {})
-          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '05', primeira_instrucao: '42', segunda_instrucao'09' }.merge!(campos)
+          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '05', primeira_instrucao: '42', segunda_instrucao: '09' }.merge!(campos)
           super(campos)
         end
 
