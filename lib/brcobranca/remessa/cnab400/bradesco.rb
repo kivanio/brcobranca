@@ -152,7 +152,7 @@ module Brcobranca
           detalhe << pagamento.documento_sacado.to_s.rjust(14, '0')   # cpf/cnpj do pagador                         9[14]       221 a 234
           detalhe << pagamento.nome_sacado.format_size(40)            # nome do pagador                             9[40]       235 a 274
           detalhe << formata_endereco_sacado(pagamento)               # endereco do pagador                         X[40]       275 a 314
-          detalhe << mensagem.rjust(12, ' ')                          # 1a mensagem                                 X[12]       315 a 326
+          detalhe << ''.rjust(12, ' ')                                # 1a mensagem                                 X[12]       315 a 326
           detalhe << pagamento.cep_sacado[0..4]                       # cep do pagador                              9[05]       327 a 331
           detalhe << pagamento.cep_sacado[5..7]                       # sufixo do cep do pagador                    9[03]       332 a 334
           detalhe << ''.rjust(60, ' ')                                # sacador/2a mensagem - verificar             X[60]       335 a 394
