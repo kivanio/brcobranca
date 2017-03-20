@@ -28,6 +28,9 @@ module Brcobranca
         # 03 DEVOLVERAPÓS 30 DIAS DO VENCIMENTO
         # Demais revisar documentação
 
+        attr_accessor :primeira_instrucao
+        attr_accessor :segunda_instrucao
+
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
@@ -38,7 +41,7 @@ module Brcobranca
 
         # Nova instancia do Itau
         def initialize(campos = {})
-          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '03' }.merge!(campos)
+          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '05', primeira_instrucao: '42', segunda_instrucao'09' }.merge!(campos)
           super(campos)
         end
 
@@ -134,8 +137,8 @@ module Brcobranca
           detalhe << especie_titulo                                         # especie  do titulo                    X[02]
           detalhe << aceite                                                 # aceite (A/N)                          X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
-          detalhe << ''.rjust(2, '0')                                       # 1a instrucao - deixar zero            X[02]
-          detalhe << ''.rjust(2, '0')                                       # 2a instrucao - deixar zero            X[02]
+          detalhe << primeira_instrucao.rjust(2, '0')                        # 1a instrucao - deixar zero           X[02]
+          detalhe << segunda_instrucao.rjust(2, '0')                        # 2a instrucao - deixar zero            X[02]
           detalhe << pagamento.formata_valor_mora                           # valor mora ao dia                     9[13]
           detalhe << pagamento.formata_data_desconto                        # data limite para desconto             9[06]
           detalhe << pagamento.formata_valor_desconto                       # valor do desconto                     9[13]
@@ -152,8 +155,8 @@ module Brcobranca
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
           detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
-          detalhe << ''.rjust(6, '0')                                       # data da mora                          9[06] *
-          detalhe << instrucao_cobranca                                     # quantidade de dias do prazo           9[02] *
+          detalhe << pagamento.data_multa.rjust(6, '0')                     # data da mora                          9[06] *
+          detalhe << instrucao_cobranca.rjust(2, '0')                       # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe
