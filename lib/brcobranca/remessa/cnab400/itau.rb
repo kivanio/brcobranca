@@ -41,8 +41,28 @@ module Brcobranca
 
         # Nova instancia do Itau
         def initialize(campos = {})
-          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '05', primeira_instrucao: '42', segunda_instrucao: '09' }.merge!(campos)
+          campos = { aceite: 'A', especie_titulo: '99', instrucao_cobranca: '05', primeira_instrucao: '00', segunda_instrucao: '00' }.merge!(campos)
           super(campos)
+        end
+
+        def gera_arquivo
+          raise Brcobranca::RemessaInvalida, self unless valid?
+
+          # contador de registros no arquivo
+          contador = 1
+          ret = [monta_header]
+          pagamentos.each do |pagamento|
+            contador += 1
+            ret << monta_detalhe(pagamento, contador)
+            contador += 1
+            ret << monta_detalhe_multa(pagamento, contador)
+          end
+          ret << monta_trailer(contador + 1)
+
+          remittance = ret.join("\n").to_ascii.upcase
+          remittance << "\n"
+
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
         end
 
         def agencia=(valor)
@@ -152,12 +172,27 @@ module Brcobranca
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
-          detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
-          detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
-          detalhe << pagamento.formata_data_multa.rjust(6, '0')             # data da mora                          9[06] *
+          if primeira_instrucao == "94" || segunda_instrucao == "94"
+            detalhe << pagamento.mensagem_40.format_size(40)                # mensagem 40                           X[30]
+          else
+            detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
+            detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
+            detalhe << pagamento.formata_data_multa.rjust(6, '0')             # data da mora                          9[06] *
+          end
           detalhe << instrucao_cobranca.rjust(2, '0')                       # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
+          detalhe
+        end
+
+        def monta_detalhe_multa(pagamento, sequencial)
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
+          detalhe = '2'                                                     # TIPO DE REGISTRO001               001 9[01]
+          detalhe << pagamento.codigo_multa.to_s                            # COD. MULTA CODIGO DA MULTA 002 - 002 X[001]
+          detalhe << pagamento.formata_data_multa('%d%m%Y')                 # DATA DA MULTA              003 - 010 9[008]
+          detalhe << pagamento.percentual_multa.rjust(13, '0')              # MULTA VALOR/PERCENTUAL     011 - 023 9[013]
+          detalhe << ' '.rjust(371, ' ')                                    # BRANCOS                    024 - 394 X[371]
+          detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro   arquivo395 - 400 9[06]
           detalhe
         end
       end

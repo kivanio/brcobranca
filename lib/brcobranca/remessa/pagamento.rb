@@ -77,6 +77,8 @@ module Brcobranca
       # (baixa, liquidação, confirmação de protesto, etc.) com o mesmo conteúdo da entrada.
       attr_accessor :uso_da_empresa
 
+      attr_accessor :mensagem_40
+
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
                             :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'

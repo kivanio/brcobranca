@@ -34,7 +34,6 @@ module Brcobranca
         attr_accessor :primeira_instrucao
         attr_accessor :instrucao_cobranca
         attr_accessor :campo_multa
-        attr_accessor :percentual_multa
 
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :codigo_empresa, :sequencial_remessa,
@@ -46,9 +45,8 @@ module Brcobranca
         validates_length_of :carteira, maximum: 2, message: 'deve ter no máximo 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
-
         def initialize(campos = {})
-          campos = { condicao_emissao: '1', aviso_debito: '2', identificacao_registro: 'N', especie_titulo: '99', primeira_instrucao: '05', instrucao_cobranca: '05', campo_multa: '2', percentual_multa: "0000" }.merge!(campos)
+          campos = { condicao_emissao: '1', aviso_debito: '2', identificacao_registro: 'N', especie_titulo: '99', primeira_instrucao: '00', instrucao_cobranca: '05', campo_multa: '2' }.merge!(campos)
           super(campos)
         end
 
@@ -122,7 +120,7 @@ module Brcobranca
           detalhe << ''.rjust(25, ' ')                                # num. controle                               X[25]       038 a 062
           detalhe << ''.rjust(3, '0')                                 # codigo do banco (debito automatico apenas)  9[03]       063 a 065
           detalhe << campo_multa.rjust(1, '0')                        # campo da multa                              9[01]       066 a 066 *
-          detalhe << percentual_multa.rjust(4, '0')                   # percentual multa  00,00                     9[04]       067 a 070 *
+          detalhe << pagamento.percentual_multa.rjust(4, '0')         # percentual multa  00,00                     9[04]       067 a 070 *
           detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')       # identificacao do titulo (nosso numero)      9[11]       071 a 081
           detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s # digito de conferencia do nosso numero (dv)  X[01]       082 a 082
           detalhe << ''.rjust(10, '0')                                # desconto por dia                            9[10]       083 a 092
