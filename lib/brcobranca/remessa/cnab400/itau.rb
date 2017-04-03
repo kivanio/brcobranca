@@ -56,6 +56,8 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
             contador += 1
             ret << monta_detalhe_multa(pagamento, contador)
+            contador += 1
+            ret << monta_detalhe_avalista(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
 
@@ -193,6 +195,23 @@ module Brcobranca
           detalhe << pagamento.percentual_multa.rjust(13, '0')              # MULTA VALOR/PERCENTUAL     011 - 023 9[013]
           detalhe << ' '.rjust(371, ' ')                                    # BRANCOS                    024 - 394 X[371]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro   arquivo395 - 400 9[06]
+          detalhe
+        end
+
+        def monta_detalhe_avalista(pagamento, sequencial)
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
+          byebug
+          detalhe = '5'                                                         # TIPO DE REGISTRO001               001 9[001]
+          detalhe << ' '.rjust(120, ' ')                                        # BRANCOS                    002 - 121 X[120]
+          detalhe << Brcobranca::Util::Empresa.new(pagamento.documento_avalista).tipo  # tipo de identificacao da empresa   122 - 123 9[002]
+          detalhe << pagamento.documento_avalista.format_size(14).rjust(14, ' ')#                             124 - 137 9[014]
+          detalhe << pagamento.endereco_avalista.format_size(40).rjust(40, ' ') #                             138 - 177  9[040]
+          detalhe << pagamento.bairro_avalista.format_size(12).rjust(12, ' ')   #                             178 - 189  9[012]
+          detalhe << pagamento.cep_avalista.format_size(8).rjust(8, ' ')        #                             190 - 197  9[008]
+          detalhe << pagamento.cidade_avalista.format_size(15).rjust(15, ' ')   #                             198 - 212  9[015]
+          detalhe << pagamento.uf_avalista.format_size(2).rjust(2, ' ')         #                             213 - 214  9[002]
+          detalhe << ' '.rjust(180, ' ')                                        # BRANCOS                     215 - 394 9[180]
+          detalhe << sequencial.to_s.rjust(6, '0')                              # numero do registro   arquivo395 - 400 9[006]
           detalhe
         end
       end

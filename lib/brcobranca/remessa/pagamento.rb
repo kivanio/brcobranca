@@ -34,6 +34,16 @@ module Brcobranca
       attr_accessor :nome_avalista
       # <b>OPCIONAL</b>: documento do avalista
       attr_accessor :documento_avalista
+      # <b>REQUERIDO</b>: endereco do sacado (cliente)
+      attr_accessor :endereco_avalista
+      # <b>REQUERIDO</b>: bairro do sacado (cliente)
+      attr_accessor :bairro_avalista
+      # <b>REQUERIDO</b>: CEP do sacado (cliente)
+      attr_accessor :cep_avalista
+      # <b>REQUERIDO</b>: cidade do sacado (cliente)
+      attr_accessor :cidade_avalista
+      # <b>REQUERIDO</b>: UF do sacado (cliente)
+      attr_accessor :uf_avalista
       # <b>OPCIONAL</b>: codigo da 1a instrucao
       attr_accessor :cod_primeira_instrucao
       # <b>OPCIONAL</b>: codigo da 2a instrucao
