@@ -200,7 +200,6 @@ module Brcobranca
 
         def monta_detalhe_avalista(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
-          byebug
           detalhe = '5'                                                         # TIPO DE REGISTRO001               001 9[001]
           detalhe << ' '.rjust(120, ' ')                                        # BRANCOS                    002 - 121 X[120]
           detalhe << Brcobranca::Util::Empresa.new(pagamento.documento_avalista).tipo  # tipo de identificacao da empresa   122 - 123 9[002]
