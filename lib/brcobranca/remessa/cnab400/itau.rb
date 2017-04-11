@@ -135,8 +135,8 @@ module Brcobranca
         def monta_detalhe(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(pagamento.documento_avalista).tipo  # tipo de identificacao da empresa      9[02]
-          detalhe << pagamento.documento_avalista.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
+          detalhe << pagamento.tipo_empresa                                 # tipo de identificacao da empresa      9[02]
+          detalhe << pagamento.documento_empresa.to_s.rjust(14, '0')        # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]
           detalhe << conta_corrente                                         # conta corrente                        9[05]

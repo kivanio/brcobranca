@@ -30,6 +30,10 @@ module Brcobranca
       attr_accessor :uf_sacado
       # <b>REQUERIDO</b>: Código da ocorrência
       attr_accessor :identificacao_ocorrencia
+      # <b>OPCIONAL</b>: Tipo Empresa
+      attr_accessor :tipo_empresa
+      # <b>OPCIONAL</b>: documento empresa
+      attr_accessor :documento_empresa
       # <b>OPCIONAL</b>: nome do avalista
       attr_accessor :nome_avalista
       # <b>OPCIONAL</b>: documento do avalista
