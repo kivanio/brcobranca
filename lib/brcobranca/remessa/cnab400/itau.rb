@@ -55,9 +55,9 @@ module Brcobranca
             contador += 1
             ret << monta_detalhe(pagamento, contador)
             contador += 1
-            ret << monta_detalhe_avalista(pagamento, contador)
-            contador += 1
             ret << monta_detalhe_multa(pagamento, contador)
+            contador += 1
+            ret << monta_detalhe_avalista(pagamento, contador)
           end
           ret << monta_trailer(contador + 1)
 
