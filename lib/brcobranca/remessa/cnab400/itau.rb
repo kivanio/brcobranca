@@ -56,8 +56,10 @@ module Brcobranca
             ret << monta_detalhe(pagamento, contador)
             contador += 1
             ret << monta_detalhe_multa(pagamento, contador)
-            contador += 1
-            ret << monta_detalhe_avalista(pagamento, contador)
+            if pagamento.tipo_empresa == "03" || pagamento.tipo_empresa == "04"
+              contador += 1
+              ret << monta_detalhe_avalista(pagamento, contador)
+            end
           end
           ret << monta_trailer(contador + 1)
 
