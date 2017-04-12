@@ -208,7 +208,13 @@ module Brcobranca
           if boleto.variacao
             doc.show "#{boleto.carteira}-#{boleto.variacao}"
           else
-            doc.show boleto.carteira
+            if boleto.carteira == "1"
+              doc.show "RG"
+            elsif boleto.carteira == "2"
+              doc.show "SR"
+            else
+              doc.show boleto.carteira
+            end
           end
           doc.moveto x: '6.4 cm', y: '13.5 cm'
           doc.show boleto.especie
