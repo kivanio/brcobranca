@@ -3,11 +3,15 @@
 module Brcobranca
   module Boleto
     class Banrisul < Base # Banrisul
+      # <b>REQUERIDO</b>: digito verificador do convenio
+      attr_accessor :digito_convenio
+
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :digito_convenio, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
 
       def initialize(campos = {})
         campos = { carteira: '2' }.merge!(campos)
@@ -49,10 +53,16 @@ module Brcobranca
         @numero_documento = valor.to_s.rjust(8, '0') if valor
       end
 
-      # Número do convênio/contrato do cliente junto ao banco.
+      # Número do convênio do cliente junto ao banco.
       # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
         @convenio = valor.to_s.rjust(7, '0') if valor
+      end
+
+      # Digito do convênio do cliente junto ao banco.
+      # @return [String] 2 caracteres numéricos.
+      def digito_convenio=(valor)
+        @digito_convenio = valor.to_s.rjust(2, '0') if valor
       end
 
       # Nosso número para exibição no boleto.
@@ -63,7 +73,7 @@ module Brcobranca
       end
 
       def agencia_conta_boleto
-        "#{agencia} / #{convenio}"
+        "#{agencia} / #{convenio[0..5]}.#{convenio[6]}.#{digito_convenio}"
       end
 
       # Posições 20 a 20 - Produto:

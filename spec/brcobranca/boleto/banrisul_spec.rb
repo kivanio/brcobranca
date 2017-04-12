@@ -15,7 +15,8 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
       agencia: '1102',
       conta_corrente: '1454204',
       numero_documento: '22832563',
-      convenio: '9000150'
+      convenio: '9000150',
+      digito_convenio: '46'
     }
   end
 
@@ -125,9 +126,14 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
   end
 
   it 'Montar agencia_conta_boleto' do
+    valid_attributes[:convenio] = '9000150'
     boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.agencia_conta_boleto).to eql('1102 / 900015.0.46')
 
-    expect(boleto_novo.agencia_conta_boleto).to eql('1102 / 9000150')
+    valid_attributes[:convenio] = '8505610'
+    valid_attributes[:digito_convenio] = '99'
+    boleto_novo = described_class.new(valid_attributes)
+    expect(boleto_novo.agencia_conta_boleto).to eql('1102 / 850561.0.99')
   end
 
   describe 'Busca logotipo do banco' do
