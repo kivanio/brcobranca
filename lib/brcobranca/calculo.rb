@@ -52,19 +52,13 @@ module Brcobranca
     # @return [Integer]
     # @example
     #  1 #=> 1
-    #  11 (1+1) #=> 2
-    #  13 (1+3) #=> 4
+    #  11 (-9 ) #=> 2
+    #  13 (-9 ) #=> 4
+    #  18 (-9 ) #=> 9
     def soma_digitos
-      total = case to_i
-              when (0..9)
-                self
-              else
-                numero = to_s
-                total = 0
-                0.upto(numero.size - 1) { |digito| total += numero[digito, 1].to_i }
-                total
-              end
-      total.to_i
+      total = self.to_i 
+      total = total - 9 if total > 9
+      total
     end
 
     # Faz a multiplicação de um número pelos fatores passados como parâmetro.
