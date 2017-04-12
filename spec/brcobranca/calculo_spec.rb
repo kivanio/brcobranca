@@ -180,5 +180,6 @@ RSpec.describe Brcobranca::Calculo do
     it { expect(19_669.duplo_digito).to eql('28') }
     it { expect('00000032000272012924021'.duplo_digito).to eql('79') }
     it { expect('00000033000272012924021'.duplo_digito).to eql('65') }
+    it { expect('9194'.duplo_digito).to eql('38') }
   end
 end
