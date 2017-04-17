@@ -153,7 +153,7 @@ module Brcobranca
           detalhe << ''.rjust(12, ' ')                                # 1a mensagem                                 X[12]       315 a 326
           detalhe << pagamento.cep_sacado[0..4]                       # cep do pagador                              9[05]       327 a 331
           detalhe << pagamento.cep_sacado[5..7]                       # sufixo do cep do pagador                    9[03]       332 a 334
-          detalhe << pagamento.mensagem_40.format_size(40).rjust(60, ' ')# sacador/2a mensagem - verificar             X[60]       335 a 394
+          detalhe << ''.rjust(60, ' ')                                # 2a mensagem - verificar                     X[60]       335 a 394
           detalhe << sequencial.to_s.rjust(6, '0')                    # numero do registro do arquivo               9[06]       395 a 400
           detalhe
         end
