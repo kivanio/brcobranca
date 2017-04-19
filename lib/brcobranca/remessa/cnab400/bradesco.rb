@@ -72,13 +72,13 @@ module Brcobranca
           remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
         end
 
-        def monta_documento_avalista
-          case Brcobranca::Util::Empresa.new(pagamento.documento_avalista).tipo
+        def monta_documento_avalista(documento)
+          case Brcobranca::Util::Empresa.new(documento).tipo
           when "01"
             length = pagamento.documento_avalista.length
-            "#{pagamento.documento_avalista[0..length-3]}0000#{pagamento.documento_avalista[length-2..length-0]}"
+            "#{documento[0..length-3]}0000#{documento[length-2..length-0]}"
           when "02"
-            pagamento.documento_avalista.rjust(15, '0')
+            documento.rjust(15, '0')
           end
         end
 
@@ -186,7 +186,7 @@ module Brcobranca
           detalhe << pagamento.cep_sacado[0..4]                       # cep do pagador                              9[05]       327 a 331
           detalhe << pagamento.cep_sacado[5..7]                       # sufixo do cep do pagador                    9[03]       332 a 334
           if pagamento.nome_avalista.present? && pagamento.documento_avalista.present?
-            detalhe << monta_documento_avalista
+            detalhe << monta_documento_avalista(pagamento.documento_avalista)
             detalhe << ''.rjust(2, ' ')
             detalhe << pagamento.nome_avalista.ljust(43, '0')
           else
@@ -199,7 +199,7 @@ module Brcobranca
         def monta_detalhe_avalista(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
           detalhe = '7'                                                         # Tipo Registro              9[001]    001 - 001
-          detalhe << pagamento.endereco_avalista.format_size(40).rjust(45, ' ') # Endereço Sacador/Avalista  A[045]    002 - 046
+          detalhe << pagamento.endereco_avalista.format_size(45).rjust(45, ' ') # Endereço Sacador/Avalista  A[045]    002 - 046
           detalhe << pagamento.cep_avalista.format_size(8).rjust(8, ' ')        # CEP                        9[008]    047 - 054
           detalhe << pagamento.cidade_avalista.format_size(20)                  # Cidade                     A[020]    055 - 074
           detalhe << pagamento.uf_avalista.format_size(2)                       # UF                         A[002]    075 - 076
