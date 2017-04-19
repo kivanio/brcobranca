@@ -217,17 +217,3 @@ module Brcobranca
     end
   end
 end
-
-Tipo Registro             001 - 001  9[001]
-Endereço Sacador/Avalista 002 - 046  A[045]
-CEP                       047 - 054  9[008]
-Cidade                    055 - 074  A[020]
-UF                        075 - 076  A[002]
-Reserva                   077 - 366  A[290]
-Carteira                  367 - 369  9[003]
-Agência                   370 - 374  9[005]
-Conta Corrente            375 - 381  9[007]
-Dígito C/C                382 - 382  A[001]
-Nosso Número              383 - 393  9[011]
-DAC Nosso Número          394 - 394  A[001]
-Nº Seqüencial de Registro 395 - 400  9[006]
