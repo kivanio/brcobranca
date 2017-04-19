@@ -176,12 +176,12 @@ module Brcobranca
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
-          if primeira_instrucao == "94" || segunda_instrucao == "94"
-            detalhe << pagamento.mensagem_40.format_size(40)                # mensagem 40                           X[30]
-          else
+          if pagamento.tipo_empresa == "03" || pagamento.tipo_empresa == "04"
             detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
             detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
             detalhe << pagamento.formata_data_multa.rjust(6, '0')             # data da mora                          9[06] *
+          else
+            detalhe << pagamento.mensagem_40.format_size(40)                # mensagem 40                           X[40]
           end
           detalhe << instrucao_cobranca.rjust(2, '0')                       # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
