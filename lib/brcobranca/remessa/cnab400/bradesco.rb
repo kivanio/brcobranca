@@ -50,6 +50,38 @@ module Brcobranca
           super(campos)
         end
 
+        def gera_arquivo
+          raise Brcobranca::RemessaInvalida, self unless valid?
+
+          # contador de registros no arquivo
+          contador = 1
+          ret = [monta_header]
+          pagamentos.each do |pagamento|
+            contador += 1
+            ret << monta_detalhe(pagamento, contador)
+            if pagamento.nome_avalista.present? && pagamento.documento_avalista.present?
+              contador += 1
+              ret << monta_detalhe_avalista(pagamento, contador)
+            end
+          end
+          ret << monta_trailer(contador + 1)
+
+          remittance = ret.join("\n").to_ascii.upcase
+          remittance << "\n"
+
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
+        end
+
+        def monta_documento_avalista
+          case Brcobranca::Util::Empresa.new(pagamento.documento_avalista).tipo
+          when "01"
+            length = pagamento.documento_avalista.length
+            "#{pagamento.documento_avalista[0..length-3]}0000#{pagamento.documento_avalista[length-2..length-0]}"
+          when "02"
+            pagamento.documento_avalista.rjust(15, '0')
+          end
+        end
+
         def agencia=(valor)
           @agencia = valor.to_s.rjust(5, '0') if valor
         end
@@ -153,11 +185,49 @@ module Brcobranca
           detalhe << ''.rjust(12, ' ')                                # 1a mensagem                                 X[12]       315 a 326
           detalhe << pagamento.cep_sacado[0..4]                       # cep do pagador                              9[05]       327 a 331
           detalhe << pagamento.cep_sacado[5..7]                       # sufixo do cep do pagador                    9[03]       332 a 334
-          detalhe << ''.rjust(60, ' ')                                # 2a mensagem - verificar                     X[60]       335 a 394
+          if pagamento.nome_avalista.present? && pagamento.documento_avalista.present?
+            detalhe << monta_documento_avalista
+            detalhe << ''.rjust(2, ' ')
+            detalhe << pagamento.nome_avalista.ljust(43, '0')
+          else
+            detalhe << ''.rjust(60, ' ')                                # 2a mensagem - verificar                     X[60]       335 a 394
+          end
           detalhe << sequencial.to_s.rjust(6, '0')                    # numero do registro do arquivo               9[06]       395 a 400
+          detalhe
+        end
+
+        def monta_detalhe_avalista(pagamento, sequencial)
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
+          detalhe = '7'                                                         # Tipo Registro              9[001]    001 - 001
+          detalhe << pagamento.endereco_avalista.format_size(40).rjust(45, ' ') # Endereço Sacador/Avalista  A[045]    002 - 046
+          detalhe << pagamento.cep_avalista.format_size(8).rjust(8, ' ')        # CEP                        9[008]    047 - 054
+          detalhe << pagamento.cidade_avalista.format_size(20)                  # Cidade                     A[020]    055 - 074
+          detalhe << pagamento.uf_avalista.format_size(2)                       # UF                         A[002]    075 - 076
+          detalhe << ' '.rjust(290, ' ')                                        # BRANCO                     A[290]    077 - 366
+          detalhe << carteira.to_s.rjust(3, '0')                                # Carteira                   9[003]    367 - 369
+          detalhe << agencia                                                    # Agência                    9[005]    370 - 374
+          detalhe << conta_corrente                                             # Conta Corrente             9[007]    375 - 381
+          detalhe << digito_conta                                               # Dígito C/C                 A[001]    382 - 382
+          detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')                 # Nosso Número               9[011]    383 - 393
+          detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s           # DAC Nosso Número           A[001]    394 - 394
+          detalhe << sequencial.to_s.rjust(6, '0')                              # Nº Seqüencial de Registro  9[006]    395 - 400
           detalhe
         end
       end
     end
   end
 end
+
+Tipo Registro             001 - 001  9[001]
+Endereço Sacador/Avalista 002 - 046  A[045]
+CEP                       047 - 054  9[008]
+Cidade                    055 - 074  A[020]
+UF                        075 - 076  A[002]
+Reserva                   077 - 366  A[290]
+Carteira                  367 - 369  9[003]
+Agência                   370 - 374  9[005]
+Conta Corrente            375 - 381  9[007]
+Dígito C/C                382 - 382  A[001]
+Nosso Número              383 - 393  9[011]
+DAC Nosso Número          394 - 394  A[001]
+Nº Seqüencial de Registro 395 - 400  9[006]
