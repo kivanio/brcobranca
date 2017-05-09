@@ -23,6 +23,8 @@ module Brcobranca
       # <b>REQUERIDO</b>: Carteira utilizada
       attr_accessor :carteira
       # <b>OPCIONAL</b>: Variacao da carteira(opcional para a maioria dos bancos)
+      attr_accessor :carteira_label
+      # <b>OPCIONAL</b>: Rótulo da Carteira, RG ou SR, somente para impressão no boleto.
       attr_accessor :variacao
       # <b>OPCIONAL</b>: Data de processamento do boleto, geralmente igual a data_documento
       attr_accessor :data_processamento

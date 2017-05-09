@@ -205,10 +205,14 @@ module Brcobranca
           doc.moveto x: '20.3 cm', y: '14.4 cm'
           doc.show boleto.nosso_numero_boleto, align: :show_right
           doc.moveto x: '4.4 cm', y: '13.5 cm'
-          if boleto.variacao
-            doc.show "#{boleto.carteira}-#{boleto.variacao}"
+          if boleto.carteira_label
+            doc.show boleto.carteira_label
           else
-            doc.show boleto.carteira
+            if boleto.variacao
+              doc.show "#{boleto.carteira}-#{boleto.variacao}"
+            else
+              doc.show boleto.carteira
+            end
           end
           doc.moveto x: '6.4 cm', y: '13.5 cm'
           doc.show boleto.especie

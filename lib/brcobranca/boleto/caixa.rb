@@ -10,10 +10,11 @@ module Brcobranca
     class Caixa < Base # Caixa
       # <b>REQUERIDO</b>: Emissão do boleto
       attr_accessor :emissao
-
+  
       # Validações
       # Modalidade/Carteira de Cobrança (1-Registrada | 2-Sem Registro)
       validates_length_of :carteira, is: 1, message: 'deve possuir 1 dígitos.'
+      #validates_length_of :carteira_label, is: 2, message: 'deve possuir 2 dígitos.' # "RG"-Registrada | "SR"-Sem Registro
       # Emissão do boleto (4-Beneficiário)
       validates_length_of :emissao, is: 1, message: 'deve possuir 1 dígitos.'
       validates_length_of :convenio, is: 6, message: 'deve possuir 6 dígitos.'
