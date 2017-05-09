@@ -33,7 +33,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     expect(boleto_novo.codigo_servico).to be_falsey
-    expect(boleto_novo.carteira).to eql('2')
+    expect(boleto_novo.carteira).to eql('1')
     expect(boleto_novo.emissao).to eql('4')
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo = described_class.new @valid_attributes
     expect { boleto_novo.codigo_barras }.not_to raise_error
     expect(boleto_novo.codigo_barras_segunda_parte).not_to be_blank
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('2452740000200040000000010')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('2452740000100040000000017')
   end
 
   it 'Não permitir gerar boleto com atributos inválidos' do
@@ -103,7 +103,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new @valid_attributes
-    expect(boleto_novo.nosso_numero_boleto).to eq('24000000000000001-2')
+    expect(boleto_novo.nosso_numero_boleto).to eq('14000000000000001-4')
   end
 
   it 'Montar agencia_conta_boleto' do
