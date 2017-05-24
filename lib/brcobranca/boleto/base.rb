@@ -205,6 +205,7 @@ module Brcobranca
           codigo = "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
           codigo
         else
+          self.errors.add(:base, :too_long, message: "tamanho(#{codigo.size}) prévio do código de barras(#{codigo}) inválido, deveria ser 43 dígitos")
           raise Brcobranca::BoletoInvalido, self
         end
       end
