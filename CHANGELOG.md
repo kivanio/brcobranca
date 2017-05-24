@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.0.0
+
+- Corrige erro no cálculo do fator de vencimento
+- Boleto da Caixa passa a ser no formato registrado por padrão.
+
 ## 7.0.0
 - Adicionado Banrisul
 - Rubocop styles
