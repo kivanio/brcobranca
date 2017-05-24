@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 #
+require 'active_support/core_ext/object/with_options'
+
 module Brcobranca
   module Boleto
     class Itau < Base # Banco Itaú
@@ -10,8 +12,9 @@ module Brcobranca
       validates_length_of :convenio, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
       validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :conta_corrente, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
-      validates_length_of :seu_numero, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
-
+      with_options if: :usa_seu_numero? do |v|
+        v.validates_length_of :seu_numero, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      end
       # Nova instancia do Itau
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
@@ -48,6 +51,10 @@ module Brcobranca
       # @return [String] 7 caracteres numéricos.
       def seu_numero=(valor)
         @seu_numero = valor.to_s.rjust(7, '0') if valor
+      end
+
+      def usa_seu_numero?
+        %w(198 106 107 122 142 143 195 196).include?(carteira.to_s)
       end
 
       # Dígito verificador do nosso número.

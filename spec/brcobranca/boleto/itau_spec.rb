@@ -57,6 +57,16 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.numero_documento).to eql('12345678')
     expect(boleto_novo.carteira).to eql('175')
   end
+  
+  it '#usa_seu_numero?' do
+    @valid_attributes[:carteira] = 198
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.usa_seu_numero?).to be_truthy
+
+    @valid_attributes[:carteira] = 109
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.usa_seu_numero?).to be_falsey
+  end
 
   it 'Gerar boleto' do
     @valid_attributes[:data_vencimento] = Date.parse('2009/08/14')
@@ -117,9 +127,24 @@ RSpec.describe Brcobranca::Boleto::Itau do
     @valid_attributes[:seu_numero] = '123456'
     boleto_novo = described_class.new(@valid_attributes)
 
+    expect(boleto_novo.send(:codigo_barras_primeira_parte)).to eql('341925250000013500')
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1960025828101234560123440')
     expect(boleto_novo.codigo_barras).to eql('34192252500000135001960025828101234560123440')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.101235 45601.234409 2 25250000013500')
+
+    @valid_attributes[:numero_documento] = '00010152'
+    @valid_attributes[:data_vencimento] = Date.parse('2029/05/20')
+    @valid_attributes[:carteira] = 109
+    @valid_attributes[:valor] = 6757.87
+    @valid_attributes[:seu_numero] = '00010152'
+    @valid_attributes[:agencia] = '1248'
+    @valid_attributes[:conta_corrente] = '02124'
+    boleto_novo = described_class.new(@valid_attributes)
+
+    expect(boleto_novo.send(:codigo_barras_primeira_parte)).to eql('341925480000675787')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('1090001015271248021246000')
+    expect(boleto_novo.codigo_barras).to eql('34194254800006757871090001015271248021246000')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.09008 01015.271248 80212.460002 4 25480000675787')
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
