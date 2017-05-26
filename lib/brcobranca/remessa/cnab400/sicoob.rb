@@ -30,6 +30,9 @@ module Brcobranca
         # convenio do cedente
         attr_accessor :convenio
 
+        attr_accessor :aceite
+        # aceite (A=1/N=0)
+
         validates_presence_of :agencia, :conta_corrente, :carteira, :convenio, :modalidade_carteira, :tipo_formulario, :digito_conta, :sequencial_remessa, :documento_cedente, message: 'não pode estar em branco.'
         # Remessa 400 - 8 digitos
         # Remessa 240 - 12 digitos
@@ -50,7 +53,8 @@ module Brcobranca
             tipo_formulario: '4',
             modalidade_carteira: '2',
             sequencial_remessa: '0000001',
-            carteira: '01'
+            carteira: '01',
+            aceite: '1'
           }.merge!(campos)
           super(campos)
         end
@@ -186,7 +190,7 @@ module Brcobranca
           # 34 = Baixa - Pagamento Direto ao Beneficiário
 
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero_documento.to_s.rjust(10, ' ')         # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -212,7 +216,7 @@ module Brcobranca
           # 22 = Parcela de Consórcio
           # 99 = Outros"
           detalhe << pagamento.especie_titulo                               # Espécie de documento                  9[02]
-          detalhe << '0'                                                    # aceite (A=1/N=0)                      X[01]
+          detalhe << aceite                                                 # aceite (A=1/N=0)                      X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
 
           # "Primeira instrução codificada:

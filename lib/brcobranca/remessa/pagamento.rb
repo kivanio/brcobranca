@@ -30,10 +30,24 @@ module Brcobranca
       attr_accessor :uf_sacado
       # <b>REQUERIDO</b>: Código da ocorrência
       attr_accessor :identificacao_ocorrencia
+      # <b>OPCIONAL</b>: Tipo Empresa
+      attr_accessor :tipo_empresa
+      # <b>OPCIONAL</b>: documento empresa
+      attr_accessor :documento_empresa
       # <b>OPCIONAL</b>: nome do avalista
       attr_accessor :nome_avalista
       # <b>OPCIONAL</b>: documento do avalista
       attr_accessor :documento_avalista
+      # <b>REQUERIDO</b>: endereco do sacado (cliente)
+      attr_accessor :endereco_avalista
+      # <b>REQUERIDO</b>: bairro do sacado (cliente)
+      attr_accessor :bairro_avalista
+      # <b>REQUERIDO</b>: CEP do sacado (cliente)
+      attr_accessor :cep_avalista
+      # <b>REQUERIDO</b>: cidade do sacado (cliente)
+      attr_accessor :cidade_avalista
+      # <b>REQUERIDO</b>: UF do sacado (cliente)
+      attr_accessor :uf_avalista
       # <b>OPCIONAL</b>: codigo da 1a instrucao
       attr_accessor :cod_primeira_instrucao
       # <b>OPCIONAL</b>: codigo da 2a instrucao
@@ -76,6 +90,8 @@ module Brcobranca
       # sai no aviso de cobrança, retornando ao beneficiário no arquivo retorno em qualquer movimento do título
       # (baixa, liquidação, confirmação de protesto, etc.) com o mesmo conteúdo da entrada.
       attr_accessor :uso_da_empresa
+
+      attr_accessor :mensagem_40
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,

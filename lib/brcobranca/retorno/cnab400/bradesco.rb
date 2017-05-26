@@ -9,6 +9,14 @@ module Brcobranca
       class Bradesco < Brcobranca::Retorno::Cnab400::Base
         extend ParseLine::FixedWidth # Extendendo parseline
 
+        attr_accessor :tipo_de_registro
+        attr_accessor :codigo_de_inscricao
+        attr_accessor :numero_de_inscricao
+        attr_accessor :numero_controle_empresa
+        attr_accessor :n_do_documento
+        attr_accessor :motivo_do_codigo_de_ocorrencia
+        attr_accessor :motivo_rejeicao
+
         # Load lines
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header
@@ -19,9 +27,9 @@ module Brcobranca
         # Fixed width layout for Bradesco
         fixed_width_layout do |parse|
           # Todos os campos descritos no documento em ordem
-          # :tipo_de_registro, 0..0 # identificacao do registro transacao
-          # :codigo_de_inscricao, 1..2 # identificacao do tipo de inscricao/empresa
-          # :numero_de_inscricao, 3..16 # numero de inscricao da empresa (cpf/cnpj)
+          parse.field :tipo_de_registro, 0..0 # identificacao do registro transacao
+          parse.field :codigo_de_inscricao, 1..2 # identificacao do tipo de inscricao/empresa
+          parse.field :numero_de_inscricao, 3..16 # numero de inscricao da empresa (cpf/cnpj)
           # :zeros, 17..19
 
           # Identificacao da empresa no banco
@@ -33,7 +41,7 @@ module Brcobranca
           parse.field :agencia_sem_dv, 24..28
           parse.field :cedente_com_dv, 29..36
 
-          # :numero_controle_empresa, 37..61, # numero de controle da empresa
+          parse.field :numero_controle_empresa, 37..61 # numero de controle da empresa
           # :zeros, 62..69
 
           # :nosso_numero, 70..81 # identificacao do titulo no banco
@@ -46,7 +54,7 @@ module Brcobranca
           # :carteira, 107..107 # de novo?
           parse.field :cod_de_ocorrencia, 108..109
           parse.field :data_de_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
-          # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
+          parse.field :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 # complemento de registro
 
@@ -91,7 +99,7 @@ module Brcobranca
           parse.field :outros_recebimento, 279..291
 
           # :brancos, 292..293
-          # :motivo_do_codigo_de_ocorrencia, 294..294
+          parse.field :motivo_do_codigo_de_ocorrencia, 294..294
 
           # :data_credito, 295..300 # data de credito desta liquidacao
           parse.field :data_credito, 295..300
@@ -99,7 +107,7 @@ module Brcobranca
           # :origem_pagamento, 301..303
           # :brancos, 304..313
           # :cheque_bradesco, 314..317
-          # :motivo_rejeicao, 318..327
+          parse.field :motivo_rejeicao, 318..327
           # :brancos, 328..367
           # :numero_do_cartorio, 368..369
           # :numero_do_protocolo, 370..379

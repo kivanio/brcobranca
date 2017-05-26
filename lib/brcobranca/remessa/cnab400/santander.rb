@@ -10,13 +10,19 @@ module Brcobranca
 
         attr_accessor :codigo_carteira
 
+        attr_accessor :aceite
+        # 'A' – para sim, ou 'N' – para não
+
+        attr_accessor :identificador_complemento
+        # INFORMAR NESTE CAMPO CARACTERE 'I' (i maiúsculo)
+
         validates_presence_of :documento_cedente, :codigo_transmissao, :agencia, :conta_corrente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 3, message: 'deve ter no máximo 3 dígitos.'
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
 
         def initialize(campos = {})
-          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5' }.merge!(campos)
+          campos = { aceite: 'A', carteira: '101', codigo_carteira: '5', identificador_complemento: 'I' }.merge!(campos)
           super(campos)
         end
 
@@ -92,7 +98,7 @@ module Brcobranca
           detalhe = '1'                                                     # identificacao transacao               9[01]
           detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
-          detalhe << codigo_transmissao                                     # Código de Transmissão                 9[20]
+          detalhe << codigo_transmissao.ljust(20, ' ')                      # Código de Transmissão                 9[20]
           detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[08]
           detalhe << ''.rjust(6, '0')                                       # data limite para o segundo desconto   9[06]
@@ -124,7 +130,7 @@ module Brcobranca
           # 09 = PROTESTAR
           # 18 = SUSTAR PROTESTO
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero_documento.to_s.rjust(10, ' ')         # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -171,7 +177,7 @@ module Brcobranca
           detalhe << ''.rjust(30, ' ')                                      # Sacador                              X[30]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           # INFORMAR NESTE CAMPO CARACTERE 'I' (i maiúsculo)
-          detalhe << 'I'                                                    # Identificador do Complemento          X[1]
+          detalhe << identificador_complemento                              # Identificador do Complemento          X[1]
           detalhe << complemento_remessa                                    # Complemento                           9[2]
           detalhe << ''.rjust(6, ' ')                                       # Brancos                               X[06]
           # Se identificacao_ocorrencia = 06

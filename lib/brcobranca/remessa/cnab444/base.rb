@@ -4,7 +4,7 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
-        # documento do cedente
+
         attr_accessor :documento_cedente
 
         validates_presence_of :carteira, message: 'não pode estar em branco.'
@@ -50,7 +50,7 @@ module Brcobranca
           # identificacao registro  [1]      9
           # complemento             [393]
           # num. sequencial         [6]
-          "9#{''.rjust(393, ' ')}#{sequencial.to_s.rjust(6, '0')}"
+          "9#{''.rjust(437, ' ')}#{sequencial.to_s.rjust(6, '0')}"
         end
 
         # Registro detalhe do arquivo remessa
