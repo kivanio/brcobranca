@@ -141,6 +141,14 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       end
     end
 
+    it 'formata juros de mora em branco por nao estar implementado' do
+      pagamento.valor_mora = 0
+      expect(pagamento.formata_mora).to eq '000000000000000000000000'
+
+      pagamento.valor_mora = 0.134
+      expect(pagamento.formata_mora).to eq '000000000000000000000000'
+    end
+
     it 'formata valor com o numero de posicoes passadas' do
       # padrao com 13 posicoes
       expect(pagamento.formata_valor).to eq '0000000019990'

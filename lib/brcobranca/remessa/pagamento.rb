@@ -121,13 +121,7 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_desconto(formato = '%d%m%y')
-        data_desconto.strftime(formato)
-      rescue
-        if formato == '%d%m%y'
-          '000000'
-        else
-          '00000000'
-        end
+        formata_data(data_desconto, formato)
       end
 
       # Formata a data de segundo desconto de acordo com o formato passado
@@ -135,13 +129,7 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_segundo_desconto(formato = '%d%m%y')
-        data_segundo_desconto.strftime(formato)
-      rescue
-        if formato == '%d%m%y'
-          '000000'
-        else
-          '00000000'
-        end
+        formata_data(data_segundo_desconto, formato)
       end
 
       # Formata a data de cobrança da multa
@@ -149,7 +137,15 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_multa(formato = '%d%m%y')
-        data_multa.strftime(formato)
+        formata_data(data_multa, formato)
+      end
+
+      # Formata a data
+      #
+      # @return [String]
+      #
+      def formata_data(data, formato = '%d%m%y')
+        data.strftime(formato)
       rescue
         if formato == '%d%m%y'
           '000000'
@@ -221,6 +217,24 @@ module Brcobranca
       #
       def formata_valor_abatimento(tamanho = 13)
         format_value(valor_abatimento, tamanho)
+      end
+
+      # Formata o juros de mora.
+      # <b>Não implementado</b>
+      #
+      # Para utilização do juros de mora para Cnab240 utilizar:
+      # Brcobranca::Remessa::Cnab240::Pagamento
+      #
+      # @return [String]
+      #
+      def formata_mora
+        mora_formatada = ''
+
+        mora_formatada << '0'                # código juros               1   *
+        mora_formatada << ''.rjust(8, '0')   # data juros                 8   *
+        mora_formatada << ''.rjust(15, '0')  # valor juros                15  *
+
+        mora_formatada
       end
 
       # Retorna a identificacao do pagador
