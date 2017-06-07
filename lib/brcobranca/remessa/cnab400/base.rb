@@ -73,6 +73,11 @@ module Brcobranca
           pagamentos.each do |pagamento|
             contador += 1
             ret << monta_detalhe(pagamento, contador)
+            next unless respond_to?(:monta_detalhe_multa)
+
+            contador += 1
+            linha = monta_detalhe_multa(pagamento, contador)
+            linha ? ret << linha : contador -= 1
           end
           ret << monta_trailer(contador + 1)
 

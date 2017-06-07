@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'active_model'
 require 'active_support/core_ext/date/calculations'
 require 'active_support/core_ext/time/calculations'

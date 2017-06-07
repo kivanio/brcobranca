@@ -46,6 +46,8 @@ module Brcobranca
       attr_accessor :valor_desconto
       # <b>OPCIONAL</b>: codigo do desconto (para CNAB240)
       attr_accessor :cod_desconto
+      # <b>OPCIONAL</b>: codigo do protesto
+      attr_accessor :cod_protesto
       # <b>OPCIONAL</b>: valor do IOF
       attr_accessor :valor_iof
       # <b>OPCIONAL</b>: valor do abatimento
@@ -82,7 +84,7 @@ module Brcobranca
                             :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :uf_sacado, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
-      validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
+      validates_length_of :cod_desconto, :cod_protesto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
       validates_length_of :identificacao_ocorrencia, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :uso_da_empresa, maximum: 25, message: 'deve ter no máximo 25 dígitos.', allow_blank: true, default: ''
@@ -101,6 +103,7 @@ module Brcobranca
           valor_abatimento: 0.0,
           nome_avalista: '',
           cod_desconto: '0',
+          cod_protesto: '0',
           especie_titulo: '01',
           identificacao_ocorrencia: '01',
           codigo_multa: '0',
