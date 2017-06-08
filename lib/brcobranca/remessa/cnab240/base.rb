@@ -217,6 +217,44 @@ module Brcobranca
           segmento_q
         end
 
+        # Monta o registro segmento R do arquivo
+        #
+        # @param pagamento [Brcobranca::Remessa::Pagamento]
+        #   objeto contendo os detalhes do boleto (valor, vencimento, sacado, etc)
+        # @param nro_lote [Integer]
+        #   numero do lote que o segmento esta inserido
+        # @param sequencial [Integer]
+        #   numero sequencial do registro no lote
+        #
+        # @return [String]
+        #
+        def monta_segmento_r(pagamento, nro_lote, sequencial)
+          return false if pagamento.codigo_multa == '0'
+          segmento_q = ''                                                 # CAMPO                                TAMANHO
+          segmento_q << cod_banco                                         # codigo banco                         3
+          segmento_q << nro_lote.to_s.rjust(4, '0')                       # lote de servico                      4
+          segmento_q << '3'                                               # tipo de registro                     1
+          segmento_q << sequencial.to_s.rjust(5, '0')                     # num. sequencial do registro no lote  5
+          segmento_q << 'R'                                               # cod. segmento                        1
+          segmento_q << ' '                                               # uso exclusivo                        1
+          segmento_q << '01'                                              # cod. movimento remessa               2
+          segmento_q << pagamento.cod_desconto                            # Código do Desconto 2                 1
+          segmento_q << pagamento.formata_data_desconto('%d%m%Y')         # Data do Desconto 2                   8
+          segmento_q << pagamento.formata_valor_desconto(15)              # Valor/Percentual a ser Concedido     15
+          segmento_q << pagamento.cod_desconto                            # Código do Desconto 3                 1
+          segmento_q << pagamento.formata_data_segundo_desconto('%d%m%Y') # Data do Desconto 3                   8
+          segmento_q << pagamento.formata_valor_desconto(15)              # Valor/Percentual a Ser Concedido     15
+          segmento_q << pagamento.codigo_multa                            # Código da Multa                      1
+          segmento_q << pagamento.formata_data_multa('%d%m%Y')            # Data da Multa                        8
+          segmento_q << pagamento.formata_valor_multa(15)                 # Valor/Percentual a Ser Aplicado      15
+          segmento_q << ''.rjust(10, ' ')                                 # Informação ao Pagador                10
+          segmento_q << ''.rjust(40, ' ')                                 # Mensagem 3                           40
+          segmento_q << ''.rjust(40, ' ')                                 # Mensagem 4                           40
+          segmento_q << ''.rjust(50, ' ')                                 # Uso Exclusivo CAIXA                  50
+          segmento_q << ''.rjust(11, ' ')                                 # CNAB                                 11
+          segmento_q
+        end
+
         # Monta o registro trailer do lote
         #
         # @param nro_lote [Integer]
@@ -282,6 +320,9 @@ module Brcobranca
             contador += 1
             lote << monta_segmento_q(pagamento, nro_lote, contador)
             contador += 1
+            linha_multa = monta_segmento_r(pagamento, nro_lote, contador)
+            contador += 1
+            linha_multa ? lote << linha_multa : contador -= 1
           end
           contador += 1 # trailer
 

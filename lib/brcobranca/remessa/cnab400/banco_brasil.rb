@@ -158,7 +158,7 @@ module Brcobranca
           detalhe << '99'                                                # Tipo de Serviço: “99” (Cobrança de Multa)   9[02]       002 a 003
           detalhe << '2'                                                 # código da multa                             9[01]       004 a 004
           detalhe << pagamento.formata_data_multa                        # Data de Inicio da Cobrança da Multa         9[06]       005 a 010
-          detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[04]       011 a 022
+          detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[12]       011 a 022
           detalhe << ''.rjust(372, ' ')                                  # brancos                                     9[372]      023 a 394
           detalhe << sequencial.to_s.rjust(6, '0')                       # numero do registro do arquivo               9[06]       395 a 400
           detalhe

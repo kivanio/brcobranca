@@ -70,6 +70,8 @@ module Brcobranca
       attr_accessor :percentual_multa
       # <b>OPCIONAL</b>: Data para cobrança de multa
       attr_accessor :data_multa
+      # <b>OPCIONAL</b>: Data para cobrança de juros mora
+      attr_accessor :data_mora
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
       # <b>OPCIONAL</b>: Dias para o protesto
@@ -153,6 +155,20 @@ module Brcobranca
       #
       def formata_data_multa(formato = '%d%m%y')
         data_multa.strftime(formato)
+      rescue
+        if formato == '%d%m%y'
+          '000000'
+        else
+          '00000000'
+        end
+      end
+
+      # Formata a data de cobrança da mora
+      #
+      # @return [String]
+      #
+      def formata_data_mora(formato = '%d%m%y')
+        data_mora.strftime(formato)
       rescue
         if formato == '%d%m%y'
           '000000'

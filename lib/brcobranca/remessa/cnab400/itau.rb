@@ -128,10 +128,23 @@ module Brcobranca
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
           detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
-          detalhe << pagamento.formata_data_multa                           # data da mora                          9[06] *
+          detalhe << pagamento.formata_data_mora                            # data da mora                          9[06] *
           detalhe << '03'                                                   # quantidade de dias do prazo           9[02] *
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
+          detalhe
+        end
+
+        def monta_detalhe_multa(pagamento, sequencial)
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
+          return false if pagamento.codigo_multa == '0'
+
+          detalhe = '2'
+          detalhe << '2'                                                 # código da multa                             9[01]       002 a 002
+          detalhe << pagamento.formata_data_multa('%d%m%Y')              # Data de Inicio da Cobrança da Multa         9[08]       003 a 010
+          detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[13]       011 a 023
+          detalhe << ''.rjust(370, ' ')                                  # brancos                                     9[370]      024 a 394
+          detalhe << sequencial.to_s.rjust(6, '0')                       # numero do registro do arquivo               9[06]       395 a 400
           detalhe
         end
       end
