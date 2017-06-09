@@ -142,8 +142,8 @@ module Brcobranca
           detalhe = '2'
           detalhe << '2'                                                 # código da multa                             9[01]       002 a 002
           detalhe << pagamento.formata_data_multa('%d%m%Y')              # Data de Inicio da Cobrança da Multa         9[08]       003 a 010
-          detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[13]       011 a 023
-          detalhe << ''.rjust(370, ' ')                                  # brancos                                     9[370]      024 a 394
+          detalhe << pagamento.formata_valor_multa(13)                   # percentual multa                            9[13]       011 a 023
+          detalhe << ''.rjust(371, ' ')                                  # brancos                                     9[371]      024 a 395
           detalhe << sequencial.to_s.rjust(6, '0')                       # numero do registro do arquivo               9[06]       395 a 400
           detalhe
         end
