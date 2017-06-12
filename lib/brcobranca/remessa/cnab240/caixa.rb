@@ -91,6 +91,13 @@ module Brcobranca
           "#{versao_aplicativo.rjust(4, '0')}#{''.rjust(25, ' ')}"
         end
 
+        def complemento_r
+          string_formatada = ''
+          string_formatada << ''.rjust(50, ' ')  # Uso Exclusivo CAIXA     50
+          string_formatada << ''.rjust(11, ' ')  # exclusivo FEBRABAN      11
+          string_formatada
+        end
+
         def complemento_trailer
           "#{''.rjust(69, '0')}#{''.rjust(148, ' ')}"
         end

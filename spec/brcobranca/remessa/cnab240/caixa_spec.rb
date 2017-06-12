@@ -140,6 +140,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       expect(comp_p[17..18]).to eq '14' # modalidade carteira
       expect(comp_p[19..33]).to eq '000000000000123' # nosso numero
     end
+
+    it 'complemento R deve retornar as informacoes em branco' do
+      comp_r = caixa.complemento_r
+
+      expect(comp_r).to eq(' ' * 61)
+    end
   end
 
   context 'geracao remessa' do

@@ -62,12 +62,31 @@ module Brcobranca
       attr_accessor :valor_segundo_desconto
       # <b>OPCIONAL</b>: espécie do título
       attr_accessor :especie_titulo
+
       # <b>OPCIONAL</b>: código da multa
+      #
+      # Código adotado pela FEBRABAN para identificação do critério de
+      # pagamento de pena pecuniária, a ser aplicada pelo atraso do pagamento
+      # do Título.
+      #
+      # Domínio:
+      # '1' = Valor Fixo
+      # '2' = Percentual
       attr_accessor :codigo_multa
-      # <b>OPCIONAL</b>: Percentual multa por atraso %
+
+      # <b>OPCIONAL</b>: Valor/Percentual de multa por atraso
+      #
+      # Valor ou percentual de multa a ser aplicado sobre o valor do Título,
+      # por atraso no pagamento.
       attr_accessor :percentual_multa
-      # <b>OPCIONAL</b>: Data para cobrança de multa
+      alias_attribute :valor_multa, :percentual_multa
+
+      # <b>OPCIONAL</b>: data da multa
+      #
+      # Data a partir da qual a multa deverá ser cobrada. Na ausência, será considerada a data de
+      # vencimento.
       attr_accessor :data_multa
+
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
       # <b>OPCIONAL</b>: Dias para o protesto
@@ -228,13 +247,19 @@ module Brcobranca
       # @return [String]
       #
       def formata_mora
-        mora_formatada = ''
+        formata_campo_de_codigo_data_valor
+      end
 
-        mora_formatada << '0'                # código juros               1   *
-        mora_formatada << ''.rjust(8, '0')   # data juros                 8   *
-        mora_formatada << ''.rjust(15, '0')  # valor juros                15  *
-
-        mora_formatada
+      # Formata a multa
+      # <b>Não implementado</b>
+      #
+      # Para utilização da multa para Cnab240 utilizar:
+      # Brcobranca::Remessa::Cnab240::Pagamento
+      #
+      # @return [String]
+      #
+      def formata_multa
+        formata_campo_de_codigo_data_valor
       end
 
       # Retorna a identificacao do pagador
@@ -255,6 +280,15 @@ module Brcobranca
       end
 
       private
+      def formata_campo_de_codigo_data_valor
+        campo_formatada = ''
+
+        campo_formatada << '0'                # código                1   *
+        campo_formatada << ''.rjust(8, '0')   # data                  8   *
+        campo_formatada << ''.rjust(15, '0')  # valor                 15  *
+
+        campo_formatada
+      end
 
       def format_value(value, tamanho)
         raise ValorInvalido, 'Deve ser um Float' unless value.to_s =~ /\./

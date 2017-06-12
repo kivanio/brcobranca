@@ -59,6 +59,48 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Pagamento do
         expect(pagamento.valid?).to be false
         expect(pagamento.errors[:data_juros_mora]).to eq ["não pode ser menor que data de vencimento"]
       end
+
+      it "codigo mora pode ser nulo" do
+        pagamento.codigo_multa = nil
+        expect(pagamento.valid?).to be true
+      end
+
+      it "codigo da multa deve ser 1, 2" do
+        pagamento.codigo_multa = '0'
+        expect(pagamento.valid?).to be false
+
+        pagamento.codigo_multa = '1'
+        expect(pagamento.valid?).to be true
+
+        pagamento.codigo_multa = '2'
+        expect(pagamento.valid?).to be true
+
+        pagamento.codigo_multa = '3'
+        expect(pagamento.valid?).to be false
+
+      end
+
+      it "codigo da multa nao pode ter um valor fora da lista" do
+        pagamento.codigo_multa = '3'
+        expect(pagamento.valid?).to be false
+        expect(pagamento.errors[:codigo_multa]).to eq ["3 não é um valor válido"]
+
+        pagamento.codigo_multa = 2
+        expect(pagamento.valid?).to be false
+        expect(pagamento.errors[:codigo_multa]).to eq ["2 não é um valor válido"]
+      end
+
+      it "a data da multa pode ser nula" do
+        pagamento.data_multa = nil
+        expect(pagamento.valid?).to be true
+      end
+
+      it "a data da multa nao pode ser menor que a data de vencimento" do
+        pagamento.data_multa = Date.new 2017, 1, 1
+        pagamento.data_vencimento = Date.new 2017, 1, 2
+        expect(pagamento.valid?).to be false
+        expect(pagamento.errors[:data_multa]).to eq ["não pode ser menor que data de vencimento"]
+      end
     end
   end
 

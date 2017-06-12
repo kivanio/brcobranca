@@ -217,6 +217,40 @@ module Brcobranca
           segmento_q
         end
 
+        # Monta o registro segmento R do arquivo
+        #
+        # @param pagamento [Brcobranca::Remessa::Cnab240::Pagamento]
+        #   objeto contendo os detalhes do boleto (valor, vencimento, sacado, etc)
+        # @param nro_lote [Integer]
+        #   numero do lote que o segmento esta inserido
+        # @param sequencial [Integer]
+        #   numero sequencial do registro no lote
+        #
+        # @return [String]
+        #
+        def monta_segmento_r(pagamento, nro_lote, sequencial)
+          segmento_r = ''                                               # CAMPO                                TAMANHO
+          segmento_r << cod_banco                                       # codigo banco                         3
+          segmento_r << nro_lote.to_s.rjust(4, '0')                     # lote de servico                      4
+          segmento_r << '3'                                             # tipo do registro                     1
+          segmento_r << sequencial.to_s.rjust(5, '0')                   # num. sequencial do registro no lote  5
+          segmento_r << 'R'                                             # cod. segmento                        1
+          segmento_r << ' '                                             # uso exclusivo                        1
+          segmento_r << '01'                                            # cod. movimento remessa               2
+          segmento_r << "0"                                             # cod. desconto 2                      1
+          segmento_r << "".rjust(8,  '0')                               # data desconto 2                      8
+          segmento_r << "".rjust(15,  '0')                              # valor desconto 2                     15
+          segmento_r << "0"                                             # cod. desconto 3                      1
+          segmento_r << "".rjust(8,  '0')                               # data desconto 3                      8
+          segmento_r << "".rjust(15,  '0')                              # valor desconto 3                     15
+          segmento_r << pagamento.formata_multa                         # codigo multa + data + valor          24
+          segmento_r << ''.rjust(10, ' ')                               # info pagador                         10
+          segmento_r << ''.rjust(40, ' ')                               # mensagem 3                           40
+          segmento_r << ''.rjust(40, ' ')                               # mensagem 4                           40
+          segmento_r << complemento_r                                   # complemento de acordo com o banco    61
+          segmento_r
+        end
+
         # Monta o registro trailer do lote
         #
         # @param nro_lote [Integer]
@@ -282,6 +316,8 @@ module Brcobranca
             contador += 1
             lote << monta_segmento_q(pagamento, nro_lote, contador)
             contador += 1
+            lote << monta_segmento_r(pagamento, nro_lote, contador)
+            contador += 1
           end
           contador += 1 # trailer
 
@@ -317,6 +353,27 @@ module Brcobranca
         def complemento_header
           raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
+
+        # Complemento do Segmento R
+        #
+        # Este metodo deve ser sobrescrevido na classe do banco caso haja
+        # particularidades
+        #
+        def complemento_r
+          segmento_r = ''
+          segmento_r << ''.rjust(20, ' ')                               # Exclusivo FEBRABAN                   20
+          segmento_r << ''.rjust(8, '0')                                # Cod. Ocor do Pagador                 8
+          segmento_r << ''.rjust(3, '0')                                # Cod. do Banco conta débito           3
+          segmento_r << ''.rjust(5, '0')                                # Cod. da Agencia do débito            5
+          segmento_r << ' '                                             # Cod. verificador da agencia          1
+          segmento_r << ''.rjust(12, '0')                               # Conta corrente para débito           12
+          segmento_r << ' '                                             # Cod. verificador da conta            1
+          segmento_r << ' '                                             # Cod. verificador da Ag/Conta         1
+          segmento_r << '0'                                             # Aviso débito automático              1
+          segmento_r << ''.rjust(9, ' ')                                # Uso FEBRABAN                         9
+          segmento_r
+        end
+
 
         # Numero da versao do layout do arquivo
         #

@@ -237,8 +237,11 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
         pagamento240.cod_juros_mora = '1'
         pagamento240.data_juros_mora = Date.new 2015,7,15
         pagamento240.valor_mora = 2.25
+        pagamento240.codigo_multa = '2'
+        pagamento240.data_multa = Date.new 2015,7,15
+        pagamento240.valor_multa = 10.30
         banco_brasil.pagamentos = [pagamento240]
-        expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240-com_juros.rem', banco_brasil.gera_arquivo))
+        expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240-com_juros_e_multa.rem', banco_brasil.gera_arquivo))
       end
     end
   end
