@@ -44,6 +44,34 @@ module Brcobranca
       attr_accessor :valor_ajuste
       attr_accessor :sequencial
       attr_accessor :arquivo
+
+      ###############
+      # CNAB 240
+      ###############
+
+      # Código de Movimento Retorno (C044)
+      #
+      # Código adotado pela FEBRABAN, para identificar o tipo de movimentação
+      # enviado nos registros do arquivo de retorno.
+      #
+      # Os códigos de movimento '02', '03', '26' e '30' estão relacionados com
+      # a descrição C047-A.
+      #
+      # O código de movimento '28' está relacionado com a descrição C047-B.
+      #
+      # Os códigos de movimento '06', '09' e '17' estão relacionados com
+      # a descrição C047-C.
+      attr_accessor :cod_movimento_ret
+
+      # Motivo da Ocorrência (C047)
+      #
+      # Código adotado pela FEBRABAN para identificar as ocorrências
+      # (rejeições, tarifas, custas, liquidação e baixas) em registros detalhe
+      # de títulos de cobrança.
+      #
+      # Poderão ser informados até cinco ocorrências distintas, incidente
+      # sobre o título.
+      attr_accessor :motivo_ocorrencia
     end
   end
 end
