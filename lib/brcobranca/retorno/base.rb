@@ -10,6 +10,15 @@ module Brcobranca
       attr_accessor :convenio
       attr_accessor :nosso_numero
       attr_accessor :nosso_numero_com_dv
+
+      # Número do Documento de Cobrança (C011)
+      #
+      # Número adotado e controlado pelo Cliente, para identificar o título de
+      # cobrança.
+      # Informação utilizada pelos Bancos para referenciar a identificação do
+      # documento objeto de cobrança.
+      attr_accessor :numero_documento
+
       attr_accessor :cod_de_ocorrencia
       attr_accessor :data_de_ocorrencia
       attr_accessor :tipo_cobranca

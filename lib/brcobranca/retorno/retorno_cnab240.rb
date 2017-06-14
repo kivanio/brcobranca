@@ -41,7 +41,7 @@ module Brcobranca
       class Line < Base
         extend ParseLine::FixedWidth # Extendendo parseline
 
-        REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa cod_movimento_ret motivos_ocorrencia).freeze
+        REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa cod_movimento_ret motivos_ocorrencia numero_documento).freeze
         REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito data_ocorrencia).freeze
 
         attr_accessor :tipo_registro
@@ -54,6 +54,7 @@ module Brcobranca
           parse.field :cedente_com_dv, 23..35
           parse.field :nosso_numero, 46..56
           parse.field :carteira, 57..57
+          parse.field :numero_documento, 58..72
           parse.field :data_vencimento, 73..80
           parse.field :valor_titulo, 81..95
           parse.field :banco_recebedor, 96..98
