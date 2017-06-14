@@ -10,15 +10,13 @@ module Brcobranca
         def self.load_lines(file, options = {})
           return nil if file.blank?
 
-          codigo_banco = codigo_banco_do_arquivo(file)
-
-          case codigo_banco
+          case codigo_banco_do_arquivo(file)
+          when '001'
+            Brcobranca::Retorno::Cnab400::BancoBrasil.load_lines(file, options)
           when '237'
             Brcobranca::Retorno::Cnab400::Bradesco.load_lines(file, options)
-
           when '341'
             Brcobranca::Retorno::Cnab400::Itau.load_lines(file, options)
-
           else
             Brcobranca::Retorno::RetornoCnab400.load_lines(file, options)
           end
