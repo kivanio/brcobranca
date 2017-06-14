@@ -99,7 +99,9 @@ module Brcobranca
           # :origem_pagamento, 301..303
           # :brancos, 304..313
           # :cheque_bradesco, 314..317
-          # :motivo_rejeicao, 318..327
+
+          parse.field :motivos_de_ocorrencia, 318..327, ->(motivos) { motivos.scan(/../).reject { |n| n.to_i.zero? } }
+
           # :brancos, 328..367
           # :numero_do_cartorio, 368..369
           # :numero_do_protocolo, 370..379

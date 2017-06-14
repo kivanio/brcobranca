@@ -106,8 +106,8 @@ module Brcobranca
           # :brancos , 305..310 # complemento de registro
           # :zeros, 311..323 #complemento de registro
           # :nome_do_sacado, 324..353, #nome do sacado
-          # :brancos , 354..376 # complemento de registro
-          # :erros_msg, 377..384 #registros rejeitados ou laegacao do sacado ou registro de mensagem informativa
+          # :brancos , 354..376 # complemento de
+          parse.field :motivos_de_ocorrencia, 377..384, ->(motivos) { motivos.scan(/../).reject { |n| n.to_i.zero? } }
           # :brancos, 385..391 #complemento de registro
           # :cod_de_liquidacao, 392..393 #meio pelo qual o título foi liquidado
 
