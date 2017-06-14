@@ -71,7 +71,7 @@ module Brcobranca
       #
       # Poderão ser informados até cinco ocorrências distintas, incidente
       # sobre o título.
-      attr_accessor :motivo_ocorrencia
+      attr_accessor :motivos_ocorrencia
     end
   end
 end

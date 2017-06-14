@@ -56,14 +56,18 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
 
     pagamento = pagamentos[0]
     expect(pagamento.cod_movimento_ret).to eql('06')
-    expect(pagamento.motivo_ocorrencia).to eql('A9A4152216')
+    expect(pagamento.motivos_ocorrencia).to eql(['A9','A4','15','22','16'])
 
     pagamento = pagamentos[1]
     expect(pagamento.cod_movimento_ret).to eql('02')
-    expect(pagamento.motivo_ocorrencia).to eql('0311')
+    expect(pagamento.motivos_ocorrencia).to eql(['03','11'])
 
     pagamento = pagamentos[2]
     expect(pagamento.cod_movimento_ret).to eql('17')
-    expect(pagamento.motivo_ocorrencia).to eql('02')
+    expect(pagamento.motivos_ocorrencia).to eql(['02'])
+
+    pagamento = pagamentos[3]
+    expect(pagamento.cod_movimento_ret).to eql('17')
+    expect(pagamento.motivos_ocorrencia).to eql([])
   end
 end
