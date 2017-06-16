@@ -230,29 +230,29 @@ module Brcobranca
         #
         def monta_segmento_r(pagamento, nro_lote, sequencial)
           return false if pagamento.codigo_multa == '0'
-          segmento_q = ''                                                 # CAMPO                                TAMANHO
-          segmento_q << cod_banco                                         # codigo banco                         3
-          segmento_q << nro_lote.to_s.rjust(4, '0')                       # lote de servico                      4
-          segmento_q << '3'                                               # tipo de registro                     1
-          segmento_q << sequencial.to_s.rjust(5, '0')                     # num. sequencial do registro no lote  5
-          segmento_q << 'R'                                               # cod. segmento                        1
-          segmento_q << ' '                                               # uso exclusivo                        1
-          segmento_q << '01'                                              # cod. movimento remessa               2
-          segmento_q << pagamento.cod_desconto                            # Código do Desconto 2                 1
-          segmento_q << pagamento.formata_data_desconto('%d%m%Y')         # Data do Desconto 2                   8
-          segmento_q << pagamento.formata_valor_desconto(15)              # Valor/Percentual a ser Concedido     15
-          segmento_q << pagamento.cod_desconto                            # Código do Desconto 3                 1
-          segmento_q << pagamento.formata_data_segundo_desconto('%d%m%Y') # Data do Desconto 3                   8
-          segmento_q << pagamento.formata_valor_desconto(15)              # Valor/Percentual a Ser Concedido     15
-          segmento_q << pagamento.codigo_multa                            # Código da Multa                      1
-          segmento_q << pagamento.formata_data_multa('%d%m%Y')            # Data da Multa                        8
-          segmento_q << pagamento.formata_valor_multa(15)                 # Valor/Percentual a Ser Aplicado      15
-          segmento_q << ''.rjust(10, ' ')                                 # Informação ao Pagador                10
-          segmento_q << ''.rjust(40, ' ')                                 # Mensagem 3                           40
-          segmento_q << ''.rjust(40, ' ')                                 # Mensagem 4                           40
-          segmento_q << ''.rjust(50, ' ')                                 # Uso Exclusivo CAIXA                  50
-          segmento_q << ''.rjust(11, ' ')                                 # CNAB                                 11
-          segmento_q
+          segmento_r = ''                                                 # CAMPO                                TAMANHO
+          segmento_r << cod_banco                                         # codigo banco                         3
+          segmento_r << nro_lote.to_s.rjust(4, '0')                       # lote de servico                      4
+          segmento_r << '3'                                               # tipo de registro                     1
+          segmento_r << sequencial.to_s.rjust(5, '0')                     # num. sequencial do registro no lote  5
+          segmento_r << 'R'                                               # cod. segmento                        1
+          segmento_r << ' '                                               # uso exclusivo                        1
+          segmento_r << '01'                                              # cod. movimento remessa               2
+          segmento_r << pagamento.cod_desconto                            # Código do Desconto 2                 1
+          segmento_r << pagamento.formata_data_desconto('%d%m%Y')         # Data do Desconto 2                   8
+          segmento_r << pagamento.formata_valor_desconto(15)              # Valor/Percentual a ser Concedido     15
+          segmento_r << pagamento.cod_desconto                            # Código do Desconto 3                 1
+          segmento_r << pagamento.formata_data_segundo_desconto('%d%m%Y') # Data do Desconto 3                   8
+          segmento_r << pagamento.formata_valor_desconto(15)              # Valor/Percentual a Ser Concedido     15
+          segmento_r << pagamento.codigo_multa                            # Código da Multa                      1
+          segmento_r << pagamento.formata_data_multa('%d%m%Y')            # Data da Multa                        8
+          segmento_r << pagamento.formata_valor_multa(15)                 # Valor/Percentual a Ser Aplicado      15
+          segmento_r << ''.rjust(10, ' ')                                 # Informação ao Pagador                10
+          segmento_r << ''.rjust(40, ' ')                                 # Mensagem 3                           40
+          segmento_r << ''.rjust(40, ' ')                                 # Mensagem 4                           40
+          segmento_r << ''.rjust(50, ' ')                                 # Uso Exclusivo CAIXA                  50
+          segmento_r << ''.rjust(11, ' ')                                 # CNAB                                 11
+          segmento_r
         end
 
         # Monta o registro trailer do lote
