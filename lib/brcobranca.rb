@@ -134,12 +134,15 @@ module Brcobranca
 
     module Cnab400
       autoload :Base, 'brcobranca/retorno/cnab400/base'
+      autoload :BancoBrasil, 'brcobranca/retorno/cnab400/banco_brasil'
       autoload :Bradesco, 'brcobranca/retorno/cnab400/bradesco'
+      autoload :Santander, 'brcobranca/retorno/cnab400/santander'
       autoload :Itau, 'brcobranca/retorno/cnab400/itau'
     end
 
     module Cnab240
       autoload :Base, 'brcobranca/retorno/cnab240/base'
+      autoload :Caixa, 'brcobranca/retorno/cnab240/caixa'
       autoload :Sicoob, 'brcobranca/retorno/cnab240/sicoob'
       autoload :Santander, 'brcobranca/retorno/cnab240/santander'
     end
