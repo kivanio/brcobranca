@@ -49,9 +49,7 @@ module Brcobranca
           # :nosso_numero, 126..133 # nosso numero de novo?
           # :codigo_original_remessa, 134..135 # codigo original da remessa
 
-          parse.field :motivos_de_ocorrencia, 136..144, lambda do |motivos|
-            motivos.scan(/.../).reject { |n| n.to_i.zero? }
-          end
+          parse.field :motivos_de_ocorrencia, 134..144, ->(motivos) { motivos.scan(/.../).reject { |n| n.to_i.zero? } }
 
           # :brancos, 145..145 #complemento de registro
 
