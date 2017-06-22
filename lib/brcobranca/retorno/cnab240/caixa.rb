@@ -22,8 +22,9 @@ module Brcobranca
             # parse.field :valor_tarifa, 198..212
             # parse.field :agencia_com_dv, 17..22
 
-            parse.field :nosso_numero, 39..55
-            parse.field :agencia_recebedora_com_dv, 99..103
+            parse.field :cod_de_ocorrencia, 15..16
+            parse.field :motivos_de_ocorrencia, 213..222
+            parse.field :nosso_numero, 41..55
 
             # REGISTRO_U_FIELDS
 
