@@ -5,7 +5,7 @@ module Brcobranca
     module Cnab240
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
         # variacao da carteira
-        attr_accessor :variacao
+        attr_accessor :variacao, :digito_agencia, :digito_conta
         attr_accessor :codigo_movimento_remessa
         # identificacao da emissao do boleto (attr na classe base)
         #   campo nao tratado pelo sistema do Banco do Brasil
