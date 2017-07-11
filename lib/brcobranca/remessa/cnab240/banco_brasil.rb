@@ -162,7 +162,7 @@ module Brcobranca
           segmento_p << codigo_movimento_remessa                        # cod. movimento remessa                2
           segmento_p << agencia.to_s.rjust(5, '0')                      # agencia                               5
           segmento_p << digito_agencia.to_s                             # dv agencia                            1
-          segmento_p << complemento_p(pagamento)                        # informacoes da conta                  34
+          segmento_p << "".rjust(20, '')                        # informacoes da conta                  34
           # Informar:
           # 1 – para carteira 11/12 na modalidade Simples;
           # 2 ou 3 – para carteira 11/17 modalidade Vinculada/Caucionada e carteira 31;

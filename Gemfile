@@ -7,7 +7,6 @@ group :development do
   gem 'pry'
   gem 'rubocop'
   gem 'rubocop-rspec'
-  gem 'byebug'
 end
 
 group :test do
