@@ -20,6 +20,7 @@ module Brcobranca
         validates_length_of :convenio, in: 4..7, message: 'deve ter de 4 a 7 dígitos.'
 
         def initialize(campos = {})
+          puts '<>' * 200
           campos = { emissao_boleto: '0',
                      distribuicao_boleto: '0',
                      especie_titulo: '02',

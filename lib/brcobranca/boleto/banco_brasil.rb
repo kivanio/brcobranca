@@ -28,7 +28,6 @@ module Brcobranca
       # Nova instancia do BancoBrasil
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
-        puts '<>' * 200
         campos = { carteira: '18', codigo_servico: false }.merge!(campos)
         super(campos)
       end
