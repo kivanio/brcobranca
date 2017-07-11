@@ -44,17 +44,17 @@ module Brcobranca
           '042'
         end
 
-        def digito_agencia
-          # utilizando a agencia com 4 digitos
-          # para calcular o digito
-          agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
-        end
+        # def digito_agencia
+        #   # utilizando a agencia com 4 digitos
+        #   # para calcular o digito
+        #   agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
+        # end
 
-        def digito_conta
-          # utilizando a conta corrente com 5 digitos
-          # para calcular o digito
-          conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
-        end
+        # def digito_conta
+        #   # utilizando a conta corrente com 5 digitos
+        #   # para calcular o digito
+        #   conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
+        # end
 
         def codigo_convenio
           # CAMPO                TAMANHO
