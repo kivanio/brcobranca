@@ -6,7 +6,6 @@ module Brcobranca
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
         # variacao da carteira
         attr_accessor :variacao, :digito_agencia, :digito_conta
-        attr_accessor :codigo_movimento_remessa
         # identificacao da emissao do boleto (attr na classe base)
         #   campo nao tratado pelo sistema do Banco do Brasil
         # identificacao da distribuicao do boleto (attr na classe base)
@@ -159,7 +158,7 @@ module Brcobranca
           # 40 – Alteração de Modalidade.
           puts '<>' * 100
           p codigo_movimento_remessa
-          segmento_p << codigo_movimento_remessa                        # cod. movimento remessa                2
+          segmento_p << pagamento.identificacao_ocorrencia || '01'      # cod. movimento remessa                2
           segmento_p << agencia.to_s.rjust(5, '0')                      # agencia                               5
           segmento_p << digito_agencia.to_s                             # dv agencia                            1
           segmento_p << complemento_p(pagamento)                        # informacoes da conta                  34
