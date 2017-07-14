@@ -156,8 +156,6 @@ module Brcobranca
           # 30 – Recusa da Alegação do Sacado,
           # 31 – Alteração de Outros Dados,
           # 40 – Alteração de Modalidade.
-          puts '<>' * 100
-          p pagamento.identificacao_ocorrencia
           segmento_p << pagamento.identificacao_ocorrencia || '01'      # cod. movimento remessa                2
           segmento_p << agencia.to_s.rjust(5, '0')                      # agencia                               5
           segmento_p << digito_agencia.to_s                             # dv agencia                            1
