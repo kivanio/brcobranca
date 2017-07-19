@@ -70,6 +70,8 @@ module Brcobranca
       attr_accessor :data_multa
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
+      # <b>OPCIONAL</b>: Código de protesto
+      attr_accessor :codigo_protesto
       # <b>OPCIONAL</b>: Dias para o protesto
       attr_accessor :dias_protesto
       # <b>OPCIONAL</b>: de livre utilização pela empresa, cuja informação não é consistida pelo Itaú, e não
