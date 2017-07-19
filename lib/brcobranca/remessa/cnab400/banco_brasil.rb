@@ -83,7 +83,7 @@ module Brcobranca
           # digito da conta  1
           # numero convenio  6
           cc = conta_corrente.to_s.rjust(8, '0')
-          "#{agencia}#{agencia_dv}#{cc}#{conta_corrente_dv}#{''.rjust(6, '0')}"
+          "#{agencia}#{agencia_dv}#{cc}#{conta_corrente_dv}#{convenio.rjust(7, '0')}"
         end
 
         def complemento
