@@ -3,6 +3,7 @@
 RSpec.describe Brcobranca::Retorno::Cnab240::Sicoob do
   before do
     @arquivo = File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB240SICOOB.RET')
+    @arquivo_com_cod = File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB240SICOOB_COM_CODIGOS.RET')
   end
 
   it 'Transforma arquivo de retorno em objetos de retorno retornando somente as linhas de pagamentos de titulos sem registro' do
@@ -12,6 +13,7 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Sicoob do
     expect(pagamento.agencia_com_dv).to eql('030390')
     expect(pagamento.cedente_com_dv).to eql('0000000489816')
     expect(pagamento.nosso_numero).to eql('0000000083')
+    expect(pagamento.numero_documento).to eql('000000000123456')
     expect(pagamento.carteira).to eql('1')
     expect(pagamento.data_vencimento).to eql('13082015')
     expect(pagamento.valor_titulo).to eql('000000000000200')
@@ -46,4 +48,21 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Sicoob do
     # pagamento.indicador_valor.should eql("")
     # pagamento.valor_ajuste.should eql("")
   end
+
+  it 'configura codigos de movimento de retorno e motivo da ocorrencia' do
+    pagamentos = described_class.load_lines(@arquivo_com_cod)
+
+    pagamento = pagamentos[0]
+    expect(pagamento.cod_movimento_ret).to eql('06')
+    expect(pagamento.motivos_ocorrencia).to eql(['A9','A4','15','22','16'])
+
+    pagamento = pagamentos[1]
+    expect(pagamento.cod_movimento_ret).to eql('02')
+    expect(pagamento.motivos_ocorrencia).to eql(['03','11'])
+
+    pagamento = pagamentos[2]
+    expect(pagamento.cod_movimento_ret).to eql('17')
+    expect(pagamento.motivos_ocorrencia).to eql([])
+  end
 end
+

@@ -10,6 +10,15 @@ module Brcobranca
       attr_accessor :convenio
       attr_accessor :nosso_numero
       attr_accessor :nosso_numero_com_dv
+
+      # Número do Documento de Cobrança (C011)
+      #
+      # Número adotado e controlado pelo Cliente, para identificar o título de
+      # cobrança.
+      # Informação utilizada pelos Bancos para referenciar a identificação do
+      # documento objeto de cobrança.
+      attr_accessor :numero_documento
+
       attr_accessor :cod_de_ocorrencia
       attr_accessor :data_de_ocorrencia
       attr_accessor :tipo_cobranca
@@ -44,6 +53,34 @@ module Brcobranca
       attr_accessor :valor_ajuste
       attr_accessor :sequencial
       attr_accessor :arquivo
+
+      ###############
+      # CNAB 240
+      ###############
+
+      # Código de Movimento Retorno (C044)
+      #
+      # Código adotado pela FEBRABAN, para identificar o tipo de movimentação
+      # enviado nos registros do arquivo de retorno.
+      #
+      # Os códigos de movimento '02', '03', '26' e '30' estão relacionados com
+      # a descrição C047-A.
+      #
+      # O código de movimento '28' está relacionado com a descrição C047-B.
+      #
+      # Os códigos de movimento '06', '09' e '17' estão relacionados com
+      # a descrição C047-C.
+      attr_accessor :cod_movimento_ret
+
+      # Motivo da Ocorrência (C047)
+      #
+      # Código adotado pela FEBRABAN para identificar as ocorrências
+      # (rejeições, tarifas, custas, liquidação e baixas) em registros detalhe
+      # de títulos de cobrança.
+      #
+      # Poderão ser informados até cinco ocorrências distintas, incidente
+      # sobre o título.
+      attr_accessor :motivos_ocorrencia
     end
   end
 end

@@ -16,6 +16,19 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
                                        cidade_sacado: 'Santa rita de cássia maria da silva',
                                        uf_sacado: 'SP')
   end
+  let(:pagamento240) do
+    Brcobranca::Remessa::Cnab240::Pagamento.new(valor: 199.9,
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
+  end
+
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '1234',
@@ -220,6 +233,16 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       after { Timecop.return }
 
       it { expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240.rem', banco_brasil.gera_arquivo)) }
+      it "deve gerar arquivo com juros" do
+        pagamento240.cod_juros_mora = '1'
+        pagamento240.data_juros_mora = Date.new 2015,7,15
+        pagamento240.valor_mora = 2.25
+        pagamento240.codigo_multa = '2'
+        pagamento240.data_multa = Date.new 2015,7,15
+        pagamento240.valor_multa = 10.30
+        banco_brasil.pagamentos = [pagamento240]
+        expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240-com_juros_e_multa.rem', banco_brasil.gera_arquivo))
+      end
     end
   end
 end
