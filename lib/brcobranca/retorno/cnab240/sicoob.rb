@@ -42,7 +42,7 @@ module Brcobranca
         class Line < Base
           extend ParseLine::FixedWidth # Extendendo parseline
 
-          REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa).freeze
+          REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa cod_movimento_ret motivos_ocorrencia numero_documento).freeze
           REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito).freeze
 
           attr_accessor :tipo_registro
@@ -50,10 +50,12 @@ module Brcobranca
           fixed_width_layout do |parse|
             parse.field :tipo_registro, 13..13
             parse.field :sequencial, 8..12
+            parse.field :cod_movimento_ret, 15..16
             parse.field :agencia_com_dv, 17..22
             parse.field :cedente_com_dv, 23..35
             parse.field :nosso_numero, 37..46
             parse.field :carteira, 57..57
+            parse.field :numero_documento, 58..72
             parse.field :data_vencimento, 73..80
             parse.field :valor_titulo, 81..95
             parse.field :banco_recebedor, 96..98
@@ -68,6 +70,12 @@ module Brcobranca
             parse.field :juros_mora, 17..31
             parse.field :outros_recebimento, 122..136
             parse.field :valor_tarifa, 198..212
+            parse.field :motivos_ocorrencia, 213..222, ->(motivos) do
+              motivos.scan(/.{2}/).reject do |motivo|
+                motivo.blank? || motivo == '00'
+              end
+            end
+
 
             # Dados que não consegui extrair dos registros T e U
             # parse.field :convenio,31..37
