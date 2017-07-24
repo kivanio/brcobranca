@@ -90,7 +90,7 @@ module Brcobranca
           ret = ''
           ret << sequencial_remessa.to_s.rjust(7, '0')       # sequencial da remessa (nao controlado pelo banco)  9[007]
           ret << ''.ljust(22, ' ')                           # complemento (brancos)                              X[022]
-          ret << convenio_lider.to_s.rjust(7, '0')           # numero do convenio lider (opcional)                9[007]
+          ret << convenio.to_s.rjust(7, '0')           # numero do convenio lider (opcional)                9[007]
           ret << ''.ljust(258, ' ')                          # complemento (brancos)                              X[258]
         end
 

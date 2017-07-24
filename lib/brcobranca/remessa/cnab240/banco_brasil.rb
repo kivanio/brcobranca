@@ -5,7 +5,7 @@ module Brcobranca
     module Cnab240
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
         # variacao da carteira
-        attr_accessor :variacao
+        attr_accessor :variacao, :digito_agencia, :digito_conta
         # identificacao da emissao do boleto (attr na classe base)
         #   campo nao tratado pelo sistema do Banco do Brasil
         # identificacao da distribuicao do boleto (attr na classe base)
@@ -43,17 +43,17 @@ module Brcobranca
           '042'
         end
 
-        def digito_agencia
-          # utilizando a agencia com 4 digitos
-          # para calcular o digito
-          agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
-        end
+        # def digito_agencia
+        #   # utilizando a agencia com 4 digitos
+        #   # para calcular o digito
+        #   agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
+        # end
 
-        def digito_conta
-          # utilizando a conta corrente com 5 digitos
-          # para calcular o digito
-          conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
-        end
+        # def digito_conta
+        #   # utilizando a conta corrente com 5 digitos
+        #   # para calcular o digito
+        #   conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
+        # end
 
         def codigo_convenio
           # CAMPO                TAMANHO
@@ -156,7 +156,7 @@ module Brcobranca
           # 30 – Recusa da Alegação do Sacado,
           # 31 – Alteração de Outros Dados,
           # 40 – Alteração de Modalidade.
-          segmento_p << '01'                                            # cod. movimento remessa                2
+          segmento_p << pagamento.identificacao_ocorrencia || '01'      # cod. movimento remessa                2
           segmento_p << agencia.to_s.rjust(5, '0')                      # agencia                               5
           segmento_p << digito_agencia.to_s                             # dv agencia                            1
           segmento_p << complemento_p(pagamento)                        # informacoes da conta                  34
@@ -226,12 +226,12 @@ module Brcobranca
           # No caso de carteira 31 ou carteira 11/17 modalidade Vinculada,
           # se não informado nenhum código,
           # o sistema assume automaticamente Protesto em 3 dias úteis.
-          segmento_p << '3' # cod. para protesto                    1   *
+          segmento_p << pagamento.codigo_protesto                       # cod. para protesto                    1   *
           # Preencher de acordo com o código informado na posição 221.
           # Para código '1' – é possível, de 6 a 29 dias, 35o, 40o, dia corrido.
           # Para código '2' – é possível, 3o, 4o ou 5o dia útil.
           # Para código '3' preencher com Zeros.
-          segmento_p << '00'                                            # dias para protesto                    2   *
+          segmento_p << pagamento.dias_protesto                         # dias para protesto                    2   *
           segmento_p << '0'                                             # cod. para baixa                       1   *'1' = Protestar Dias Corridos, '2' = Protestar Dias Úteis, '3' = Não Protestar
           segmento_p << '000'                                           # dias para baixa                       2   *
           segmento_p << '09'                                            # cod. da moeda                         2
