@@ -13,8 +13,8 @@ module Brcobranca
         include klass
       end
 
-      # Validações do Rails 3
-      include ActiveModel::Validations
+      # Validações
+      include Brcobranca::Validations
 
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor
       attr_accessor :convenio
@@ -97,7 +97,7 @@ module Brcobranca
       # @param [Hash] campos
       def initialize(campos = {})
         padrao = {
-          moeda: '9', data_documento: Date.current, data_vencimento: Date.current, quantidade: 1,
+          moeda: '9', data_documento: Date.today, data_vencimento: Date.today, quantidade: 1,
           especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
           local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }

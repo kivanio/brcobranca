@@ -1,7 +1,4 @@
 #
-require 'active_support/core_ext/string/filters'
-require 'active_support/inflector/transliterate'
-
 module Brcobranca
   # Métodos auxiliares de formatação de strings
   module FormatacaoString
@@ -12,11 +9,33 @@ module Brcobranca
     #
     def format_size(size)
       if self.size > size
-        ActiveSupport::Inflector.transliterate(truncate(size, omission: ''))
+        remove_accents(truncate(size, omission: ''))
       else
-        ActiveSupport::Inflector.transliterate(ljust(size, ' '))
+        remove_accents(ljust(size, ' '))
       end
     end
+
+    def truncate(truncate_at, options = {})
+      return dup unless length > truncate_at
+
+      omission = options[:omission] || '...'
+      length_with_room_for_omission = truncate_at - omission.length
+      stop =        if options[:separator]
+          rindex(options[:separator], length_with_room_for_omission) || length_with_room_for_omission
+        else
+          length_with_room_for_omission
+        end
+
+      "#{self[0, stop]}#{omission}"
+    end
+
+    def remove_accents(string)
+      string.tr(
+        "ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž",
+        "AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz"
+      )
+    end
+
   end
 end
 

@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 #
+require 'date'
 require 'active_model'
-require 'active_support/core_ext/date/calculations'
-require 'active_support/core_ext/time/calculations'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
 require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
+require 'brcobranca/validations'
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
@@ -171,5 +171,6 @@ module Brcobranca
   # Módulos para classes de utilidades
   module Util
     autoload :Empresa, 'brcobranca/util/empresa'
+    autoload :Errors, 'brcobranca/util/errors'
   end
 end

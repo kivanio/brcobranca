@@ -3,8 +3,8 @@
 module Brcobranca
   module Remessa
     class Pagamento
-      # Validações do Rails 3
-      include ActiveModel::Validations
+
+      include Brcobranca::Validations
 
       # <b>REQUERIDO</b>: nosso numero
       attr_accessor :nosso_numero
@@ -93,7 +93,7 @@ module Brcobranca
       #
       def initialize(campos = {})
         padrao = {
-          data_emissao: Date.current,
+          data_emissao: Date.today,
           valor_mora: 0.0,
           valor_desconto: 0.0,
           valor_segundo_desconto: 0.0,

@@ -27,8 +27,8 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
-    expect(boleto_novo.data_vencimento).to eql(Date.current)
+    expect(boleto_novo.data_documento).to eql(Date.today)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
     expect(boleto_novo.valor).to be(0.0)
@@ -42,8 +42,8 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
-    expect(boleto_novo.data_vencimento).to eql(Date.current)
+    expect(boleto_novo.data_documento).to eql(Date.today)
+    expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
     expect(boleto_novo.valor).to be(0.0)
@@ -58,6 +58,14 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.convenio).to be(12_387_989)
     expect(boleto_novo.numero_documento).to eql('777700168')
     expect(boleto_novo.valid?).to be_truthy
+  end
+
+  it 'Criar nova instancia com agencia não numérica' do
+    boleto_novo = described_class.new(@valid_attributes)
+    boleto_novo.agencia = 'XXXX'
+    expect(boleto_novo.valid?).to be_falsey
+    expect(boleto_novo.errors.size).to be(1)
+    expect(boleto_novo.errors.messages[:agencia][0]).to eql("Agencia não é um número.")
   end
 
   it 'Calcula agencia_dv' do

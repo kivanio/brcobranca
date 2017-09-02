@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.name        = 'brcobranca'
   gem.version     = Brcobranca::VERSION
   gem.authors = ['Kivanio Barbosa']
-  gem.description = 'Gem para emissao de bloquetos de cobranca de bancos brasileiros.'
+  gem.description = 'Gem para emissao de bloquetos de cobranca de bancos brasileiros (sem ActiveModel).'
   gem.summary = 'Gem que permite trabalhar com bloquetos de cobranca para bancos brasileiros.'
   gem.email = 'kivanio@gmail.com'
   gem.homepage = 'http://rubygems.org/gems/brcobranca'
@@ -25,7 +25,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'rghost', '~> 0.9'
   gem.add_dependency 'rghost_barcode', '~> 0.9'
   gem.add_dependency 'parseline', '~> 1.0.3'
-  gem.add_dependency 'activemodel', '>= 3'
-  gem.add_dependency 'activesupport', '>= 3'
   gem.add_dependency 'unidecoder', '>= 1.1.2'
 end
