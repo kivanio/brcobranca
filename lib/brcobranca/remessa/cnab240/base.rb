@@ -60,7 +60,7 @@ module Brcobranca
         # @return [String]
         #
         def hora_geracao
-          Time.now.strftime('%H%M%S')
+          Time.current.strftime('%H%M%S')
         end
 
         # Monta o registro header do arquivo
