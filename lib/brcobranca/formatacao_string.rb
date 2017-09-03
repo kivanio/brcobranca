@@ -9,28 +9,19 @@ module Brcobranca
     #
     def format_size(size)
       if self.size > size
-        remove_accents(truncate(size, omission: ''))
+        truncate(size).remove_accents
       else
-        remove_accents(ljust(size, ' '))
+        ljust(size, ' ').remove_accents
       end
     end
 
-    def truncate(truncate_at, options = {})
+    def truncate(truncate_at)
       return dup unless length > truncate_at
-
-      omission = options[:omission] || '...'
-      length_with_room_for_omission = truncate_at - omission.length
-      stop =        if options[:separator]
-          rindex(options[:separator], length_with_room_for_omission) || length_with_room_for_omission
-        else
-          length_with_room_for_omission
-        end
-
-      "#{self[0, stop]}#{omission}"
+      "#{self[0, truncate_at]}"
     end
 
-    def remove_accents(string)
-      string.tr(
+    def remove_accents
+      self.tr(
         "ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž",
         "AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz"
       )

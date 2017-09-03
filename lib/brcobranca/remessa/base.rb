@@ -29,18 +29,18 @@ module Brcobranca
 
       validates_each :pagamentos do |record, attr, value|
         if value.is_a? Array
-          record.errors.add(attr, "não pode estar vazio.") if value.empty?
+          record.errors.add(attr, 'não pode estar vazio.') if value.empty?
           value.each do |pagamento|
             if pagamento.is_a? Brcobranca::Remessa::Pagamento
               if pagamento.invalid?
                 pagamento.errors.full_messages.each { |msg| record.errors.add(attr, msg) }
               end
             else
-              record.errors.add(attr, "cada item deve ser um objeto Pagamento.")
+              record.errors.add(attr, 'cada item deve ser um objeto Pagamento.')
             end
           end
         else
-          record.errors.add(attr, "deve ser uma coleção (Array).")
+          record.errors.add(attr, 'deve ser uma coleção (Array).')
         end
       end
 
