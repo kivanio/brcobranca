@@ -60,14 +60,6 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.valid?).to be_truthy
   end
 
-  it 'Criar nova instancia com agencia não numérica' do
-    boleto_novo = described_class.new(@valid_attributes)
-    boleto_novo.agencia = 'XXXX'
-    expect(boleto_novo.valid?).to be_falsey
-    expect(boleto_novo.errors.size).to be(1)
-    expect(boleto_novo.errors.messages[:agencia][0]).to eql("Agencia não é um número.")
-  end
-
   it 'Calcula agencia_dv' do
     boleto_novo = described_class.new(@valid_attributes)
     boleto_novo.agencia = '85068014982'
