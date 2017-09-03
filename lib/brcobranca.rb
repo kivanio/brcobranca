@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 #
-require 'date'
-require 'active_model'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
@@ -9,6 +7,7 @@ require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 require 'brcobranca/validations'
+require 'brcobranca/util/date'
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.

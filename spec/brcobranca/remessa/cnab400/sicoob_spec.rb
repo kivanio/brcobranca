@@ -6,7 +6,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab400::Sicoob do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
+                                       data_vencimento: Date.current,
                                        nosso_numero: 123,
                                        documento_sacado: '12345678901',
                                        nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
@@ -162,7 +162,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Sicoob do
         expect(detalhe[62..72]).to eq '00000000012' # nosso numero
         expect(detalhe[73]).to eq '3' # digito nosso numero
         expect(detalhe[74..75]).to eq '01' # parcela
-        expect(detalhe[120..125]).to eq Date.today.strftime('%d%m%y') # data de vencimento
+        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990' # valor do documento
         expect(detalhe[220..233]).to eq '00012345678901' # documento do pagador
         expect(detalhe[234..273]).to eq 'PABLO DIEGO JOSE FRANCISCO DE PAULA JUAN' # nome do pagador

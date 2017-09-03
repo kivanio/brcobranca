@@ -6,7 +6,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasil do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.today,
+                                       data_vencimento: Date.current,
                                        nosso_numero: 123,
                                        documento_sacado: '12345678901',
                                        nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
@@ -168,7 +168,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasil do
         expect(detalhe[91..93]).to eq '123'                                     # variacao da carteira
         expect(detalhe[101..105]).to eq '04DSC'                                 # tipo de cobranca
         expect(detalhe[106..107]).to eq '12'                                    # carteira
-        expect(detalhe[120..125]).to eq Date.today.strftime('%d%m%y')         # data de vencimento
+        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y')         # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990'                         # valor do titulo
         expect(detalhe[156..157]).to eq '00'                                    # primeira instrucao
         expect(detalhe[158..159]).to eq '00'                                    # segunda instrucao
