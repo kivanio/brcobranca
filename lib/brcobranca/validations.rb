@@ -1,8 +1,9 @@
+# coding: utf-8
 require 'brcobranca/util/errors'
 
 module Brcobranca
 
-  # Métodos auxiliares de validação para evitar ActiveSupport e ActiveModel com 
+  # Métodos auxiliares de validação para evitar ActiveSupport e ActiveModel com
   # mínimo de impacto nas definições das validações existentes
 
   module Validations
@@ -19,7 +20,7 @@ module Brcobranca
       attr_reader :inclusions
       attr_reader :eachs
 
-      def validates_presence_of(*attr_names)       
+      def validates_presence_of(*attr_names)
         @presences ||= []
         @presences = @presences << attr_names
       end
@@ -71,7 +72,7 @@ module Brcobranca
       !valid?
     end
 
-    private 
+    private
 
       def check_eachs
         eachs = {}
@@ -110,7 +111,7 @@ module Brcobranca
         all_present = true
         presences.each do |presence|
           presence.select { |p| p.is_a? Symbol}.each do |variable|
-            if self.send(variable).blank?
+            if blank?(self.send(variable))
               all_present = false
               errors.add variable, presence[-1][:message]
             end
@@ -222,5 +223,9 @@ module Brcobranca
         symbol.to_s.tr("_", " ").capitalize
       end
 
+      def blank?(obj)
+        self !~ /\S/ if obj.is_a? String
+        obj.respond_to?(:empty?) ? obj.empty? : !obj
+      end
   end
 end
