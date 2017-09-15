@@ -224,7 +224,7 @@ module Brcobranca
       end
 
       def blank?(obj)
-        self !~ /\S/ if obj.is_a? String
+        obj !~ /\S/ if obj.is_a? String
         obj.respond_to?(:empty?) ? obj.empty? : !obj
       end
   end
