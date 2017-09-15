@@ -3,8 +3,8 @@
 module Brcobranca
   module Remessa
     class Pagamento
-      # Validações do Rails 3
-      include ActiveModel::Validations
+
+      include Brcobranca::Validations
 
       # <b>REQUERIDO</b>: nosso numero
       attr_accessor :nosso_numero

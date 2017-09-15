@@ -40,7 +40,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
       it 'deve ser invalido' do
         object = subject.class.new
         expect(object.invalid?).to be true
-        expect(object.errors.full_messages).to eq(['Pagamentos não pode estar em branco.', 'Pagamentos deve ser uma coleção (Array).', 'Empresa mae não pode estar em branco.', 'Documento cedente não pode estar em branco.', 'Documento cedente deve ter entre 11 e 14 dígitos.', 'Codigo transmissao não pode estar em branco.', 'Agencia não pode estar em branco.', 'Conta corrente não pode estar em branco.', 'Digito conta não pode estar em branco.'])
+        expect(object.errors.full_messages.sort).to eq(['Pagamentos não pode estar em branco.', 'Pagamentos deve ser uma coleção (Array).', 'Empresa mae não pode estar em branco.', 'Documento cedente não pode estar em branco.', 'Documento cedente deve ter entre 11 e 14 dígitos.', 'Codigo transmissao não pode estar em branco.', 'Agencia não pode estar em branco.', 'Conta corrente não pode estar em branco.', 'Digito conta não pode estar em branco.'].sort)
       end
 
       it 'deve ser invalido se a carteira tiver mais de 3 digitos' do
