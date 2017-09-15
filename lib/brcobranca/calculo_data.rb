@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 #
 # @author Kivanio Barbosa
+
+require 'date'
+
 module Brcobranca
   # Métodos auxiliares de cálculos envolvendo Datas.
   module CalculoData
