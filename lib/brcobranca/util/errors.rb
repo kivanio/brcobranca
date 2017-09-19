@@ -13,7 +13,7 @@ module Brcobranca
         @base     = base
         @messages = apply_default_array({})
         @details = apply_default_array({})
-      end      
+      end
 
       def add(attribute, message = :invalid, options = {})
         message = message.call if message.respond_to?(:call)
@@ -37,7 +37,7 @@ module Brcobranca
       end
       alias :to_a :full_messages
 
-      private 
+      private
 
         def apply_default_array(hash)
           hash.default_proc = proc { |h, key| h[key] = [] }
