@@ -13,8 +13,8 @@ module Brcobranca
         include klass
       end
 
-      # Validações do Rails 3
-      include ActiveModel::Validations
+      # Validações
+      include Brcobranca::Validations
 
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor
       attr_accessor :convenio

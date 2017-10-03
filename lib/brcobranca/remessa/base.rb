@@ -22,8 +22,8 @@ module Brcobranca
       # aceite (A = ACEITO/N = NAO ACEITO)
       attr_accessor :aceite
 
-      # Validações do Rails 3
-      include ActiveModel::Validations
+      # Validações
+      include Brcobranca::Validations
 
       validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
 
