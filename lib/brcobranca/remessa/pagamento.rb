@@ -62,12 +62,31 @@ module Brcobranca
       attr_accessor :valor_segundo_desconto
       # <b>OPCIONAL</b>: espécie do título
       attr_accessor :especie_titulo
+
       # <b>OPCIONAL</b>: código da multa
+      #
+      # Código adotado pela FEBRABAN para identificação do critério de
+      # pagamento de pena pecuniária, a ser aplicada pelo atraso do pagamento
+      # do Título.
+      #
+      # Domínio:
+      # '1' = Valor Fixo
+      # '2' = Percentual
       attr_accessor :codigo_multa
-      # <b>OPCIONAL</b>: Percentual multa por atraso %
+
+      # <b>OPCIONAL</b>: Valor/Percentual de multa por atraso
+      #
+      # Valor ou percentual de multa a ser aplicado sobre o valor do Título,
+      # por atraso no pagamento.
       attr_accessor :percentual_multa
-      # <b>OPCIONAL</b>: Data para cobrança de multa
+      alias_attribute :valor_multa, :percentual_multa
+
+      # <b>OPCIONAL</b>: data da multa
+      #
+      # Data a partir da qual a multa deverá ser cobrada. Na ausência, será considerada a data de
+      # vencimento.
       attr_accessor :data_multa
+
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
       # <b>OPCIONAL</b>: Dias para o protesto
@@ -121,13 +140,7 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_desconto(formato = '%d%m%y')
-        data_desconto.strftime(formato)
-      rescue
-        if formato == '%d%m%y'
-          '000000'
-        else
-          '00000000'
-        end
+        formata_data(data_desconto, formato)
       end
 
       # Formata a data de segundo desconto de acordo com o formato passado
@@ -135,13 +148,7 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_segundo_desconto(formato = '%d%m%y')
-        data_segundo_desconto.strftime(formato)
-      rescue
-        if formato == '%d%m%y'
-          '000000'
-        else
-          '00000000'
-        end
+        formata_data(data_segundo_desconto, formato)
       end
 
       # Formata a data de cobrança da multa
@@ -149,7 +156,15 @@ module Brcobranca
       # @return [String]
       #
       def formata_data_multa(formato = '%d%m%y')
-        data_multa.strftime(formato)
+        formata_data(data_multa, formato)
+      end
+
+      # Formata a data
+      #
+      # @return [String]
+      #
+      def formata_data(data, formato = '%d%m%y')
+        data.strftime(formato)
       rescue
         if formato == '%d%m%y'
           '000000'
@@ -223,6 +238,30 @@ module Brcobranca
         format_value(valor_abatimento, tamanho)
       end
 
+      # Formata o juros de mora.
+      # <b>Não implementado</b>
+      #
+      # Para utilização do juros de mora para Cnab240 utilizar:
+      # Brcobranca::Remessa::Cnab240::Pagamento
+      #
+      # @return [String]
+      #
+      def formata_mora
+        formata_campo_de_codigo_data_valor
+      end
+
+      # Formata a multa
+      # <b>Não implementado</b>
+      #
+      # Para utilização da multa para Cnab240 utilizar:
+      # Brcobranca::Remessa::Cnab240::Pagamento
+      #
+      # @return [String]
+      #
+      def formata_multa
+        formata_campo_de_codigo_data_valor
+      end
+
       # Retorna a identificacao do pagador
       # Se for pessoa fisica (CPF com 11 digitos) é 1
       # Se for juridica (CNPJ com 14 digitos) é 2
@@ -241,6 +280,15 @@ module Brcobranca
       end
 
       private
+      def formata_campo_de_codigo_data_valor
+        campo_formatada = ''
+
+        campo_formatada << '0'                # código                1   *
+        campo_formatada << ''.rjust(8, '0')   # data                  8   *
+        campo_formatada << ''.rjust(15, '0')  # valor                 15  *
+
+        campo_formatada
+      end
 
       def format_value(value, tamanho)
         raise ValorInvalido, 'Deve ser um Float' unless value.to_s =~ /\./

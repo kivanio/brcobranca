@@ -210,9 +210,7 @@ module Brcobranca
           segmento_p << especie_titulo                                  # especie do titulo                     2
           segmento_p << aceite                                          # aceite                                1
           segmento_p << pagamento.data_emissao.strftime('%d%m%Y')       # data de emissao titulo                8
-          segmento_p << '0'                                             # cod. do juros                         1   *
-          segmento_p << ''.rjust(8, '0')                                # data juros                            8   *
-          segmento_p << ''.rjust(15, '0')                               # valor juros                           15  *
+          segmento_p << pagamento.formata_mora                          # juros de mora                         24 *
           segmento_p << pagamento.cod_desconto                          # cod. do desconto                      1
           segmento_p << pagamento.formata_data_desconto('%d%m%Y')       # data desconto                         8
           segmento_p << pagamento.formata_valor_desconto(15)            # valor desconto                        15
