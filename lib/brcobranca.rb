@@ -109,6 +109,7 @@ module Brcobranca
     autoload :Santander,     'brcobranca/boleto/santander'
     autoload :Banestes,      'brcobranca/boleto/banestes'
     autoload :Banrisul,      'brcobranca/boleto/banrisul'
+    autoload :Cecred,        'brcobranca/boleto/cecred'
 
     # Módulos para classes de template
     module Template
@@ -128,6 +129,7 @@ module Brcobranca
     module Cnab240
       autoload :Base,  'brcobranca/retorno/cnab240/base'
       autoload :Caixa, 'brcobranca/retorno/cnab240/caixa'
+      autoload :Cecred, 'brcobranca/retorno/cnab240/cecred'
     end
 
     module Cnab400
