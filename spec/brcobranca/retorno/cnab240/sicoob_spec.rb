@@ -27,6 +27,9 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Sicoob do
     expect(pagamento.outros_recebimento).to eql('000000000000000')
     expect(pagamento.sequencial).to eql('00001')
     expect(pagamento.valor_tarifa).to eql('000000000000170')
+    expect(pagamento.data_ocorrencia).to eql('10082015')
+    expect(pagamento.codigo_ocorrencia).to eql('06')
+    expect(pagamento.motivo_ocorrencia).to eql('0000000003')
 
     # Dados que não consegui extrair dos registros T e U
     # pagamento.convenio.should eql("")

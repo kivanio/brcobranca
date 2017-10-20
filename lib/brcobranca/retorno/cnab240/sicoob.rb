@@ -42,14 +42,15 @@ module Brcobranca
         class Line < Base
           extend ParseLine::FixedWidth # Extendendo parseline
 
-          REGISTRO_T_FIELDS = %w(agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa).freeze
-          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito).freeze
+          REGISTRO_T_FIELDS = %w(agencia_com_dv codigo_ocorrencia cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia).freeze
+          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito data_ocorrencia).freeze
 
           attr_accessor :tipo_registro
 
           fixed_width_layout do |parse|
             parse.field :tipo_registro, 13..13
             parse.field :sequencial, 8..12
+            parse.field :codigo_ocorrencia, 15..16
             parse.field :agencia_com_dv, 17..22
             parse.field :cedente_com_dv, 23..35
             parse.field :nosso_numero, 37..46
@@ -58,7 +59,7 @@ module Brcobranca
             parse.field :valor_titulo, 81..95
             parse.field :banco_recebedor, 96..98
             parse.field :agencia_recebedora_com_dv, 99..104
-            # parse.field :data_ocorrencia, 137..144
+            parse.field :data_ocorrencia, 137..144
             parse.field :data_credito, 145..152
             parse.field :outras_despesas, 107..121
             parse.field :iof_desconto, 62..76
@@ -68,6 +69,8 @@ module Brcobranca
             parse.field :juros_mora, 17..31
             parse.field :outros_recebimento, 122..136
             parse.field :valor_tarifa, 198..212
+            parse.field :motivo_ocorrencia, 213..222
+
 
             # Dados que não consegui extrair dos registros T e U
             # parse.field :convenio,31..37
