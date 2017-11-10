@@ -69,7 +69,7 @@ module Brcobranca
           parse.field :outros_recebimento, 122..136
           parse.field :valor_tarifa, 198..212
           parse.field :motivo_ocorrencia, 213..222, ->(motivos) do
-            motivos.scan(/.{2}/).reject { |motivo| motivo.blank? }
+            motivos.scan(/.{2}/).reject(&:blank?)
           end
 
           # Dados que não consegui extrair dos registros T e U
