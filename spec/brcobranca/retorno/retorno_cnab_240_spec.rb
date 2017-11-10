@@ -31,7 +31,7 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
     expect(pagamento.valor_tarifa).to eql('000000000000103')
     expect(pagamento.data_ocorrencia).to eql('29122011')
     expect(pagamento.codigo_ocorrencia).to eql('17')
-    expect(pagamento.motivo_ocorrencia).to eql('03')
+    expect(pagamento.motivo_ocorrencia).to eql(['03'])
 
     # Dados que não consegui extrair dos registros T e U
     # pagamento.convenio.should eql('')

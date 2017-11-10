@@ -30,6 +30,6 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Santander do
     expect(pagamento.valor_tarifa).to eql('000000000000600')
     expect(pagamento.data_ocorrencia).to eql('28042016')
     expect(pagamento.codigo_ocorrencia).to eql('17')
-    expect(pagamento.motivo_ocorrencia).to eql('')
+    expect(pagamento.motivo_ocorrencia).to eql([])
   end
 end
