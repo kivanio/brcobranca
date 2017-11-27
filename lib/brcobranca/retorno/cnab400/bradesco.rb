@@ -44,8 +44,8 @@ module Brcobranca
           # :indicador_de_rateio, 104..104 # indicador de rateio de credito
           # :zeros, 105..106
           # :carteira, 107..107 # de novo?
-          parse.field :cod_de_ocorrencia, 108..109
-          parse.field :data_de_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
+          parse.field :codigo_ocorrencia, 108..109
+          parse.field :data_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
           # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 # complemento de registro
