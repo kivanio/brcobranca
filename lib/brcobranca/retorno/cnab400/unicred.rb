@@ -1,21 +1,20 @@
 # -*- encoding: utf-8 -*-
+require 'parseline'
 
 module Brcobranca
   module Retorno
     module Cnab400
       # Formato de Retorno CNAB 400
-      # Baseado em: http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf
-      class Bradesco < Brcobranca::Retorno::Cnab400::Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+      class Unicred < Brcobranca::Retorno::Base
+        extend ParseLine::FixedWidth
 
-        # Load lines
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header
           options = default_options.merge!(options)
+
           super file, options
         end
 
-        # Fixed width layout for Bradesco
         fixed_width_layout do |parse|
           # Todos os campos descritos no documento em ordem
           # :tipo_de_registro, 0..0 # identificacao do registro transacao
@@ -28,25 +27,25 @@ module Brcobranca
           # Identificacao da empresa no banco
           # :zeros, 20..20
           # :carteira, 21..23
+          parse.field :agencia_sem_dv, 17..20
+          parse.field :cedente_com_dv, 21..28
           # :agencia_sem_dv, 24..28
-          # :cedente_com_dv 29..36
-          parse.field :carteira, 21..23
-          parse.field :agencia_sem_dv, 24..28
-          parse.field :cedente_com_dv, 29..36
+          # :cedente_com_dv, 29..36
 
           # :numero_controle_empresa, 37..61, # numero de controle da empresa
           # :zeros, 62..69
 
-          # :nosso_numero, 70..81 # identificacao do titulo no banco
-          parse.field :nosso_numero, 70..81
+          # :nosso_numero, 62..69 # identificacao do titulo no banco
+          parse.field :nosso_numero, 62..69
 
           # :zeros, 82..91 # uso do banco
           # :zeros, 92..103 # uso do banco
           # :indicador_de_rateio, 104..104 # indicador de rateio de credito
           # :zeros, 105..106
-          # :carteira, 107..107 # de novo?
+
+          parse.field :carteira, 107
           parse.field :codigo_ocorrencia, 108..109
-          parse.field :data_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
+          parse.field :data_ocorrencia, 110..115
           # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 # complemento de registro
@@ -106,16 +105,12 @@ module Brcobranca
           # :numero_do_protocolo, 370..379
           # :brancos, 380..393
 
-          parse.field :motivo_ocorrencia, 318..327, ->(motivos) do
+          parse.field :motivo_ocorrencia, 318..319, ->(motivos) do
             motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
           end
 
           # :numero_sequencial, 394..399 # numero sequencial no arquivo
           parse.field :sequencial, 394..399
-        end
-
-        def agencia_com_dv
-          "#{agencia_sem_dv}-#{agencia_sem_dv.modulo11}"
         end
       end
     end

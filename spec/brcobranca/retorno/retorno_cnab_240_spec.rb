@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
@@ -19,6 +18,7 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
     expect(pagamento.valor_titulo).to eql('000000000034400')
     expect(pagamento.banco_recebedor).to eql('001')
     expect(pagamento.agencia_recebedora_com_dv).to eql('020850')
+    # expect(pagamento.data_ocorrencia).to eql('02012012')
     expect(pagamento.data_credito).to eql('02012012')
     expect(pagamento.outras_despesas).to eql('000000000000004')
     expect(pagamento.iof_desconto).to eql('000000000000003')
@@ -29,8 +29,6 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
     expect(pagamento.outros_recebimento).to eql('000000000000005')
     expect(pagamento.sequencial).to eql('00001')
     expect(pagamento.valor_tarifa).to eql('000000000000103')
-    expect(pagamento.data_ocorrencia).to eql('29122011')
-    expect(pagamento.codigo_ocorrencia).to eql('17')
     expect(pagamento.motivo_ocorrencia).to eql(['03'])
 
     # Dados que não consegui extrair dos registros T e U

@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 
 require 'parseline'
 
@@ -42,12 +41,13 @@ module Brcobranca
         class Line < Base
           extend ParseLine::FixedWidth # Extendendo parseline
 
-          REGISTRO_T_FIELDS = %w(agencia_com_dv codigo_ocorrencia cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia).freeze
-          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito data_ocorrencia).freeze
+          REGISTRO_T_FIELDS = %w(codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia)
+          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito data_ocorrencia)
 
           attr_accessor :tipo_registro
 
           fixed_width_layout do |parse|
+            parse.field :codigo_registro, 7..7
             parse.field :tipo_registro, 13..13
             parse.field :sequencial, 8..12
             parse.field :codigo_ocorrencia, 15..16
@@ -70,7 +70,7 @@ module Brcobranca
             parse.field :outros_recebimento, 122..136
             parse.field :valor_tarifa, 198..212
             parse.field :motivo_ocorrencia, 213..222, ->(motivos) do
-              motivos.scan(/.{2}/).reject(&:blank?)
+              motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
             end
 
             # Dados que não consegui extrair dos registros T e U

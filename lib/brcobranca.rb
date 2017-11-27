@@ -123,24 +123,27 @@ module Brcobranca
   module Retorno
     autoload :Base,            'brcobranca/retorno/base'
     autoload :RetornoCbr643,   'brcobranca/retorno/retorno_cbr643'
-    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240' # DEPRECATED
+    autoload :RetornoCnab240,  'brcobranca/retorno/retorno_cnab240'
     autoload :RetornoCnab400,  'brcobranca/retorno/retorno_cnab400' # DEPRECATED
 
-    module Cnab240
-      autoload :Base,  'brcobranca/retorno/cnab240/base'
-      autoload :Caixa, 'brcobranca/retorno/cnab240/caixa'
-    end
-
     module Cnab400
-      autoload :Base, 'brcobranca/retorno/cnab400/base'
-      autoload :Bradesco, 'brcobranca/retorno/cnab400/bradesco'
-      autoload :Itau, 'brcobranca/retorno/cnab400/itau'
+      autoload :Base,          'brcobranca/retorno/cnab400/base'
+      autoload :Bradesco,      'brcobranca/retorno/cnab400/bradesco'
+      autoload :Banrisul,      'brcobranca/retorno/cnab400/banrisul'
+      autoload :Itau,          'brcobranca/retorno/cnab400/itau'
+      autoload :BancoNordeste, 'brcobranca/retorno/cnab400/banco_nordeste'
+      autoload :BancoBrasilia, 'brcobranca/retorno/cnab400/banco_brasilia'
+      autoload :Unicred,       'brcobranca/retorno/cnab400/unicred'
+      autoload :Credisis,      'brcobranca/retorno/cnab400/credisis'
+      autoload :Santander,     'brcobranca/retorno/cnab400/santander'
     end
 
     module Cnab240
-      autoload :Base, 'brcobranca/retorno/cnab240/base'
-      autoload :Sicoob, 'brcobranca/retorno/cnab240/sicoob'
-      autoload :Santander, 'brcobranca/retorno/cnab240/santander'
+      autoload :Base,          'brcobranca/retorno/cnab240/base'
+      autoload :Santander,     'brcobranca/retorno/cnab240/santander'
+      autoload :Cecred,        'brcobranca/retorno/cnab240/cecred'
+      autoload :Sicredi,       'brcobranca/retorno/cnab240/sicredi'
+      autoload :Sicoob,        'brcobranca/retorno/cnab240/sicoob'
     end
   end
 
