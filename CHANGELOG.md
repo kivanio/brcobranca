@@ -1,5 +1,8 @@
 # Changelog
 
+- Renomeado `cod_de_ocorrencia` para `codigo_ocorrencia`
+- Renomeado `data_de_ocorrencia` para `data_ocorrencia`
+
 ## 8.0.0
 
 - Corrige erro no cálculo do fator de vencimento
