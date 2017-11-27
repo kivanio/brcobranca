@@ -36,16 +36,29 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 | 748 - Sicredi          | C (03)            |                |
 | 756 - Sicoob           | Todas as carteiras presentes na documentação |                |
 | 756 - Unicred          | 03 - [Marcelo J. Both](https://github.com/marceloboth) |                |
+| 085 - CECRED           | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)|                |
+| 097 - CREDISIS         | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth) |                |
 
-### Retornos Disponíveis
+### Retornos e Remessas
 
-* CBR643
-* CNAB240
-* CNAB400
-
-Para CNABs do tipo 240 indico usar a gem [cnab240](https://github.com/eduardordm/cnab240) que é muito completa.
-
-### Remessas Disponíveis
+| Banco                   | Retorno | Remessa 
+| ----------------------- | ------- | ------------ 
+| Banco do Brasil         | 400(ou CBR643) | 400 (ou CBR641) e 240
+| Banco do Nordeste       | 400     | 400
+| Banco de Brasília       | Não     | 400
+| Banestes                | Sim     | Não
+| Banrisul                | 400     | 400
+| Bradesco                | 400     | 400
+| Caixa                   | 240     | 240
+| Citibank                | Não     | 400
+| HSBC                    | Não     | Não
+| Itaú                    | 400     | 400
+| Santander               | 240     | 400
+| Sicoob                  | 240     | 400 e 240
+| Sicredi                 | 240     | 240
+| UNICRED                 | 400     | 400 e 240
+| CECRED                  | 240     | 240
+| CREDISIS                | 400     | 400
 
 * Banco do Brasil (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 * Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
@@ -64,8 +77,6 @@ Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](h
 - [versão de desenvolvimento](http://rubydoc.info/github/kivanio/brcobranca/master/frames)
 
 ### Apoio
-
-[![RubyMine](http://www.jetbrains.com/ruby/features/ruby_banners/ruby1/ruby468x60_rubin.gif)](http://www.jetbrains.com/ruby/features?utm_source=RubyMineUser&utm_medium=Banner&utm_campaign=RubyMine)
 
 [Boleto Simples](https://www.boletosimples.com.br)
 
