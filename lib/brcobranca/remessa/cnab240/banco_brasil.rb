@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 module Brcobranca
   module Remessa
     module Cnab240
@@ -21,9 +20,10 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = { emissao_boleto: '0',
-                     distribuicao_boleto: '0',
-                     especie_titulo: '02',
-                     codigo_carteira: '7' }.merge!(campos)
+            distribuicao_boleto: '0',
+            especie_titulo: '02',
+            codigo_baixa: '00',
+            codigo_carteira: '7',}.merge!(campos)
           super(campos)
         end
 
@@ -65,7 +65,7 @@ module Brcobranca
           "#{convenio.rjust(9, '0')}0014#{carteira}#{variacao}  "
         end
 
-        alias convenio_lote codigo_convenio
+        alias_method :convenio_lote, :codigo_convenio
 
         def info_conta
           # CAMPO                  TAMANHO
@@ -156,7 +156,7 @@ module Brcobranca
           # 30 – Recusa da Alegação do Sacado,
           # 31 – Alteração de Outros Dados,
           # 40 – Alteração de Modalidade.
-          segmento_p << '01'                                            # cod. movimento remessa                2
+          segmento_p << pagamento.identificacao_ocorrencia              # cod. movimento remessa                2
           segmento_p << agencia.to_s.rjust(5, '0')                      # agencia                               5
           segmento_p << digito_agencia.to_s                             # dv agencia                            1
           segmento_p << complemento_p(pagamento)                        # informacoes da conta                  34
@@ -170,7 +170,7 @@ module Brcobranca
           segmento_p << tipo_documento                                  # tipo de documento                     1
           segmento_p << emissao_boleto                                  # identificaco emissao                  1
           segmento_p << distribuicao_boleto                             # indentificacao entrega                1
-          segmento_p << pagamento.numero_documento.to_s.rjust(15, '0')  # uso exclusivo                         4
+          segmento_p << numero(pagamento)                               # uso exclusivo                         15
           segmento_p << pagamento.data_vencimento.strftime('%d%m%Y')    # data de venc.                         8
           segmento_p << pagamento.formata_valor(15)                     # valor documento                       15
           segmento_p << ''.rjust(5, '0')                                # agencia cobradora                     5
@@ -210,15 +210,16 @@ module Brcobranca
           segmento_p << especie_titulo                                  # especie do titulo                     2
           segmento_p << aceite                                          # aceite                                1
           segmento_p << pagamento.data_emissao.strftime('%d%m%Y')       # data de emissao titulo                8
-          segmento_p << '0'                                             # cod. do juros                         1   *
-          segmento_p << ''.rjust(8, '0')                                # data juros                            8   *
-          segmento_p << ''.rjust(15, '0')                               # valor juros                           15  *
+          segmento_p << pagamento.tipo_mora                             # cod. do juros                         1
+          segmento_p << data_mora(pagamento)                            # data juros                            8
+          segmento_p << pagamento.formata_valor_mora(15)                # valor juros                           15
           segmento_p << pagamento.cod_desconto                          # cod. do desconto                      1
           segmento_p << pagamento.formata_data_desconto('%d%m%Y')       # data desconto                         8
           segmento_p << pagamento.formata_valor_desconto(15)            # valor desconto                        15
           segmento_p << pagamento.formata_valor_iof(15)                 # valor IOF                             15
           segmento_p << pagamento.formata_valor_abatimento(15)          # valor abatimento                      15
-          segmento_p << ''.rjust(25, ' ')                               # identificacao titulo empresa          25  *
+          segmento_p << identificacao_titulo_empresa(pagamento)         # identificacao documento empresa       25
+
           # O Banco do Brasil trata somente os códigos
           # '1' – Protestar dias corridos,
           # '2' – Protestar dias úteis, e
@@ -226,12 +227,12 @@ module Brcobranca
           # No caso de carteira 31 ou carteira 11/17 modalidade Vinculada,
           # se não informado nenhum código,
           # o sistema assume automaticamente Protesto em 3 dias úteis.
-          segmento_p << '3' # cod. para protesto                    1   *
+          segmento_p << pagamento.codigo_protesto                       # cod. para protesto                    1
           # Preencher de acordo com o código informado na posição 221.
           # Para código '1' – é possível, de 6 a 29 dias, 35o, 40o, dia corrido.
           # Para código '2' – é possível, 3o, 4o ou 5o dia útil.
           # Para código '3' preencher com Zeros.
-          segmento_p << '00'                                            # dias para protesto                    2   *
+          segmento_p << pagamento.dias_protesto.to_s.rjust(2, '0')      # dias para protesto                    2
           segmento_p << '0'                                             # cod. para baixa                       1   *'1' = Protestar Dias Corridos, '2' = Protestar Dias Úteis, '3' = Não Protestar
           segmento_p << '000'                                           # dias para baixa                       2   *
           segmento_p << '09'                                            # cod. da moeda                         2

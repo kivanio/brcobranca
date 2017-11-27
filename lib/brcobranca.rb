@@ -153,21 +153,30 @@ module Brcobranca
     autoload :Pagamento,       'brcobranca/remessa/pagamento'
 
     module Cnab400
-      autoload :Base,        'brcobranca/remessa/cnab400/base'
-      autoload :Bradesco,    'brcobranca/remessa/cnab400/bradesco'
-      autoload :Itau,        'brcobranca/remessa/cnab400/itau'
-      autoload :Citibank,    'brcobranca/remessa/cnab400/citibank'
-      autoload :Santander,   'brcobranca/remessa/cnab400/santander'
-      autoload :Sicoob,      'brcobranca/remessa/cnab400/sicoob'
-      autoload :BancoBrasil, 'brcobranca/remessa/cnab400/banco_brasil'
+      autoload :Base,          'brcobranca/remessa/cnab400/base'
+      autoload :BancoBrasil,   'brcobranca/remessa/cnab400/banco_brasil'
+      autoload :Banrisul,      'brcobranca/remessa/cnab400/banrisul'
+      autoload :Bradesco,      'brcobranca/remessa/cnab400/bradesco'
+      autoload :Itau,          'brcobranca/remessa/cnab400/itau'
+      autoload :Citibank,      'brcobranca/remessa/cnab400/citibank'
+      autoload :Santander,     'brcobranca/remessa/cnab400/santander'
+      autoload :Sicoob,        'brcobranca/remessa/cnab400/sicoob'
       autoload :BancoNordeste, 'brcobranca/remessa/cnab400/banco_nordeste'
+      autoload :BancoBrasilia, 'brcobranca/remessa/cnab400/banco_brasilia'
+      autoload :Unicred,       'brcobranca/remessa/cnab400/unicred'
+      autoload :Credisis,      'brcobranca/remessa/cnab400/credisis'
     end
 
     module Cnab240
-      autoload :Base,         'brcobranca/remessa/cnab240/base'
-      autoload :Caixa,        'brcobranca/remessa/cnab240/caixa'
-      autoload :BancoBrasil,  'brcobranca/remessa/cnab240/banco_brasil'
-      autoload :Sicoob,       'brcobranca/remessa/cnab240/sicoob'
+      autoload :Base,               'brcobranca/remessa/cnab240/base'
+      autoload :BaseCorrespondente, 'brcobranca/remessa/cnab240/base_correspondente'
+      autoload :Caixa,              'brcobranca/remessa/cnab240/caixa'
+      autoload :Cecred,             'brcobranca/remessa/cnab240/cecred'
+      autoload :BancoBrasil,        'brcobranca/remessa/cnab240/banco_brasil'
+      autoload :Sicoob,             'brcobranca/remessa/cnab240/sicoob'
+      autoload :SicoobBancoBrasil,  'brcobranca/remessa/cnab240/sicoob_banco_brasil'
+      autoload :Sicredi,            'brcobranca/remessa/cnab240/sicredi'
+      autoload :Unicred,            'brcobranca/remessa/cnab240/unicred'
     end
   end
 

@@ -1,20 +1,18 @@
 # -*- encoding: utf-8 -*-
-#
-
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Pagamento do
   let(:pagamento) do
     subject.class.new(valor: 199.9,
-                      data_vencimento: Date.parse('2015-06-25'),
-                      nosso_numero: 123,
-                      documento_sacado: '12345678901',
-                      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-                      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-                      bairro_sacado: 'São josé dos quatro apostolos magros',
-                      cep_sacado: '12345678',
-                      cidade_sacado: 'Santa rita de cássia maria da silva',
-                      uf_sacado: 'SP')
+      data_vencimento: Date.parse('2015-06-25'),
+      nosso_numero: 123,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      uf_sacado: 'SP')
   end
 
   context 'validacoes' do
@@ -60,18 +58,10 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       expect(pagamento.errors.full_messages).to include('Cidade sacado não pode estar em branco.')
     end
 
-    context '@uf_sacado' do
-      it 'deve ser invalido se nao possuir UF do sacado' do
-        pagamento.uf_sacado = nil
-        expect(pagamento.invalid?).to be true
-        expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
-      end
-
-      it 'deve ser invalido se UF do sacado for maior que 2 caracteres' do
-        pagamento.uf_sacado = 'Santa Catarina'
-        expect(pagamento.invalid?).to be true
-        expect(pagamento.errors.full_messages).to include('Uf sacado deve ter 2 dígitos.')
-      end
+    it 'deve ser invalido se nao possuir UF do sacado' do
+      pagamento.uf_sacado = nil
+      expect(pagamento.invalid?).to be true
+      expect(pagamento.errors.full_messages).to include('Uf sacado não pode estar em branco.')
     end
 
     context '@cep' do
@@ -118,10 +108,6 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
 
     it 'valor do abatimento padrao deve ser zero' do
       expect(pagamento.valor_abatimento).to eq 0.0
-    end
-
-    it 'numero da parcela deve ser 01' do
-      expect(pagamento.parcela).to eq '01'
     end
   end
 
@@ -176,6 +162,38 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       expect(pagamento.formata_valor_abatimento).to eq '0000000003490'
       # formata com o numero passado
       expect(pagamento.formata_valor_abatimento(10)).to eq '0000003490'
+    end
+
+    it 'formata valor dos juros com o numero de posicoes passadas' do
+      # padrao com 13 posicoes
+      pagamento.valor_mora = 49.2
+      expect(pagamento.formata_valor_mora).to eq '0000000004920'
+      # formata com o tamanho passado
+      expect(pagamento.formata_valor_mora(15)).to eq '000000000004920'
+    end
+
+    context 'formata valor do campo documento' do
+      before { pagamento.documento = '2345' }
+
+      it "deve formatar assumindo os valores padrao para os parametros tamanho e caracter" do
+        expect(pagamento.formata_documento_ou_numero).to eql '2345'.rjust(25, ' ')
+      end
+
+      it "deve formatar com os parametros tamanho e caracter" do
+        expect(pagamento.formata_documento_ou_numero(15, '0')).to eql '2345'.rjust(15, '0')
+      end
+
+      it "deve extrair somente o valor do campo no tamanho informado" do
+        pagamento.documento = '12345678901234567890'
+        expect(pagamento.formata_documento_ou_numero(15, '0')).to eql '123456789012345'
+        expect(pagamento.formata_documento_ou_numero(15, '0').length).to eql 15
+      end
+
+      it 'deve remover caracteres especiais ou acentuação' do
+        pagamento.documento = 'JOÃO DEve R$ 900.00'
+        expect(pagamento.formata_documento_ou_numero).to eql '         JOO DEve R 90000'
+        expect(pagamento.formata_documento_ou_numero.length).to eql 25
+      end
     end
 
     context 'identificacao sacado' do

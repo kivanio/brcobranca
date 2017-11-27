@@ -1,48 +1,40 @@
 # -*- encoding: utf-8 -*-
-#
-
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
+  before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+  after { Timecop.return }
+
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-                                       data_vencimento: Date.current,
-                                       nosso_numero: 123,
-                                       documento_sacado: '12345678901',
-                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-                                       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
-                                       bairro_sacado: 'São josé dos quatro apostolos magros',
-                                       cep_sacado: '12345678',
-                                       cidade_sacado: 'Santa rita de cássia maria da silva',
-                                       uf_sacado: 'SP')
+      data_vencimento: Date.current,
+      nosso_numero: 123,
+      numero: 123,
+      documento: 6969,
+      documento_sacado: '12345678901',
+      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+      endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
+      bairro_sacado: 'São josé dos quatro apostolos magros',
+      cep_sacado: '12345678',
+      cidade_sacado: 'Santa rita de cássia maria da silva',
+      tipo_mora: "1",
+      codigo_multa: "2",
+      uf_sacado: 'SP')
   end
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       agencia: '12345',
       conta_corrente: '1234',
+      versao_aplicativo: '1234',
       documento_cedente: '12345678901',
       convenio: '123456',
-      versao_aplicativo: '1234',
       digito_agencia: '1',
+      sequencial_remessa: '000001',
       pagamentos: [pagamento] }
   end
   let(:caixa) { subject.class.new(params) }
 
   context 'validacoes' do
-    context '@versao_aplicativo' do
-      it 'deve ser invalido se nao possuir a versao do aplicativo' do
-        objeto = subject.class.new(params.merge!(versao_aplicativo: nil))
-        expect(objeto.invalid?).to be true
-        expect(objeto.errors.full_messages).to include('Versao aplicativo não pode estar em branco.')
-      end
-
-      it 'deve ser invalido se a versao do aplicativo tiver mais de 4 digitos' do
-        caixa.versao_aplicativo = '12345'
-        expect(caixa.invalid?).to be true
-        expect(caixa.errors.full_messages).to include('Versao aplicativo não deve ter mais de 4 dígitos.')
-      end
-    end
-
     context '@digito_agencia' do
       it 'deve ser invalido se nao possuir o digito da agencia' do
         objeto = subject.class.new(params.merge!(digito_agencia: nil))
@@ -67,7 +59,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       it 'deve ser invalido se o convenio tiver mais de 6 digitos' do
         caixa.convenio = '1234567'
         expect(caixa.invalid?).to be true
-        expect(caixa.errors.full_messages).to include('Convenio não deve ter mais de 6 dígitos.')
+        expect(caixa.errors.full_messages).to include('Convenio deve ter 6 dígitos.')
       end
     end
 
@@ -110,7 +102,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
     it 'convenio lote deve retornar as informacoes nas posicoes corretas' do
       conv_lote = caixa.convenio_lote
       expect(conv_lote[0..5]).to eq '123456'
-      expect(conv_lote[6..19]).to eq ''.rjust(14, ' ')
+      expect(conv_lote[6..19]).to eq ''.rjust(14, '0')
     end
 
     it 'info_conta deve retornar as informacoes nas posicoes corretas' do
@@ -140,22 +132,31 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       expect(comp_p[17..18]).to eq '14' # modalidade carteira
       expect(comp_p[19..33]).to eq '000000000000123' # nosso numero
     end
+
+    it 'tipo do documento deve ser 2 - Escritural' do
+      expect(caixa.tipo_documento).to eq '2'
+    end
+
+    it 'deve conter a identificacao do titulo da empresa' do
+      segmento_p = caixa.monta_segmento_p(pagamento, 1, 2)
+      expect(segmento_p[195..205]).to eq "00000006969"
+    end
+
+    it 'data da mora deve ser no dia posterior ao vencimento' do
+      segmento_p = caixa.monta_segmento_p(pagamento, 1, 2)
+      expect(segmento_p[118..125]).to eq "15072015"
+    end
+
+    it 'data da multa deve ser no dia posterior ao vencimento' do
+      segmento_r = caixa.monta_segmento_r(pagamento, 1, 4)
+      expect(segmento_r[66..73]).to eq "15072015"
+    end
   end
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
 
-    context 'trailer lote' do
-      it 'trailer lote deve ter o complemento_trailer na posicao correta' do
-        trailer = caixa.monta_trailer_lote 1, 4
-        expect(trailer[23..239]).to eq caixa.complemento_trailer # complemento do registro trailer
-      end
-    end
-
     context 'arquivo' do
-      before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
-      after { Timecop.return }
-
       it { expect(caixa.gera_arquivo).to eq(read_remessa('remessa-caixa-cnab240.rem', caixa.gera_arquivo)) }
     end
   end

@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 module Brcobranca
   module Remessa
     class Pagamento
@@ -55,7 +54,9 @@ module Brcobranca
       # Informação utilizada para referenciar a identificação do documento objeto de cobrança.
       # Poderá conter número de duplicata, no caso de cobrança de duplicatas; número da apólice,
       # no caso de cobrança de seguros, etc
-      attr_accessor :numero_documento
+      attr_accessor :numero
+      # <b>OPCIONAL</b>: Número utilizado para controle do beneficiário/cedente
+      attr_accessor :documento
       # <b>OPCIONAL</b>: data limite para o desconto
       attr_accessor :data_segundo_desconto
       # <b>OPCIONAL</b>: valor a ser concedido de desconto
@@ -68,24 +69,31 @@ module Brcobranca
       attr_accessor :percentual_multa
       # <b>OPCIONAL</b>: Data para cobrança de multa
       attr_accessor :data_multa
+      # <b>OPCIONAL</b>: tipo de mora (diário, mensal)
+      attr_accessor :tipo_mora
+      # <b>OPCIONAL</b>: Data para cobrança de mora
+      attr_accessor :data_mora
+      # <b>OPCIONAL</b>: codigo dos juros
+      attr_accessor :codigo_juros
+      # <b>OPCIONAL</b>: codigo do protesto
+      attr_accessor :codigo_protesto
+      # <b>OPCIONAL</b>: dias para protesto
+      attr_accessor :dias_protesto
+      # <b>OPCIONAL</b>: codigo baixa
+      attr_accessor :codigo_baixa
+      # <b>OPCIONAL</b>: dias para baixa
+      attr_accessor :dias_baixa
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
-      # <b>OPCIONAL</b>: Dias para o protesto
-      attr_accessor :dias_protesto
-      # <b>OPCIONAL</b>: de livre utilização pela empresa, cuja informação não é consistida pelo Itaú, e não
-      # sai no aviso de cobrança, retornando ao beneficiário no arquivo retorno em qualquer movimento do título
-      # (baixa, liquidação, confirmação de protesto, etc.) com o mesmo conteúdo da entrada.
-      attr_accessor :uso_da_empresa
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
-                            :documento_sacado, :nome_sacado, :endereco_sacado,
-                            :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
+        :documento_sacado, :nome_sacado, :endereco_sacado,
+        :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :uf_sacado, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
       validates_length_of :identificacao_ocorrencia, is: 2, message: 'deve ter 2 dígitos.'
-      validates_length_of :uso_da_empresa, maximum: 25, message: 'deve ter no máximo 25 dígitos.', allow_blank: true, default: ''
 
       # Nova instancia da classe Pagamento
       #
@@ -94,6 +102,8 @@ module Brcobranca
       def initialize(campos = {})
         padrao = {
           data_emissao: Date.current,
+          data_segundo_desconto:'00-00-00',
+          tipo_mora: "3",
           valor_mora: 0.0,
           valor_desconto: 0.0,
           valor_segundo_desconto: 0.0,
@@ -105,7 +115,13 @@ module Brcobranca
           identificacao_ocorrencia: '01',
           codigo_multa: '0',
           percentual_multa: 0.0,
-          parcela: '01'
+          parcela: '01',
+          codigo_protesto: '3',
+          dias_protesto: '00',
+          codigo_baixa: '0',
+          dias_baixa: '000',
+          cod_primeira_instrucao: '00',
+          cod_segunda_instrucao: '00'
         }
 
         campos = padrao.merge!(campos)
@@ -144,6 +160,17 @@ module Brcobranca
         end
       end
 
+      # Formata a valor do percentual da multa
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      # @return [String]
+      #
+      def formata_percentual_multa(tamanho = 4)
+        format_value(percentual_multa, tamanho)
+      end
+
       # Formata a data de cobrança da multa
       #
       # @return [String]
@@ -167,6 +194,15 @@ module Brcobranca
       #
       def formata_valor(tamanho = 13)
         format_value(valor, tamanho)
+      end
+
+      def documento_ou_numero
+        documento.present? ? documento : numero
+      end
+
+      def formata_documento_ou_numero(tamanho = 25, caracter = ' ')
+        doc = documento_ou_numero.to_s.gsub(/[^0-9A-Za-z ]/, '')
+        doc.rjust(tamanho, caracter)[0...tamanho]
       end
 
       # Formata o campo valor da mora

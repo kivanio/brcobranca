@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
-
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
@@ -8,14 +6,17 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
     Brcobranca::Remessa::Pagamento.new(
       valor: 50.0,
       data_vencimento: Date.current,
-      nosso_numero: '00000012',
+      nosso_numero: '429715',
+      documento: 6969,
       documento_sacado: '82136760505',
       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
       endereco_sacado: 'RUA RIO GRANDE DO SUL São paulo Minas caçapa da silva junior',
       bairro_sacado: 'São josé dos quatro apostolos magros',
       cep_sacado: '12345678',
       cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'RJ'
+      uf_sacado: 'RJ',
+      tipo_mora: '0',
+      codigo_protesto: '1'
     )
   end
 
@@ -26,6 +27,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       conta_corrente: '03666',
       documento_cedente: '74576177000177',
       modalidade_carteira: '01',
+      convenio: '512231',
       pagamentos: [pagamento]
     }
   end
@@ -49,11 +51,27 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       end
     end
 
+    context '@parcela' do
+      it 'deve ser invalido se nao possuir a parcela' do
+        objeto = subject.class.new(params.merge(parcela: nil))
+        expect(objeto.invalid?).to be true
+        expect(objeto.errors.full_messages).to include('Parcela não pode estar em branco.')
+      end
+    end
+
     context '@agencia' do
       it 'deve ser invalido se a agencia tiver mais de 4 digitos' do
         sicoob.agencia = '12345'
         expect(sicoob.invalid?).to be true
         expect(sicoob.errors.full_messages).to include('Agencia deve ter 4 dígitos.')
+      end
+    end
+
+    context '@convenio' do
+      it 'deve ser invalido se nao possuir o convenio' do
+        sicoob.convenio = nil
+        expect(sicoob.invalid?).to be true
+        expect(sicoob.errors.full_messages).to include('Convenio não pode estar em branco.')
       end
     end
 
@@ -95,6 +113,18 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       # =         36 24 14 6 = 80
       # 80 / 11 = 7 com resto 3
       expect(sicoob.digito_agencia).to eq '3'
+
+      sicoob_2 = subject.class.new(params.merge!(agencia: '3214'))
+      expect(sicoob_2.digito_agencia).to eq '0'
+
+      sicoob_3 = subject.class.new(params.merge!(agencia: '0001'))
+      expect(sicoob_3.digito_agencia).to eq '9'
+
+      sicoob_4 = subject.class.new(params.merge!(agencia: '2006'))
+      expect(sicoob_4.digito_agencia).to eq '0'
+
+      sicoob_5 = subject.class.new(params.merge!(agencia: '3032'))
+      expect(sicoob_5.digito_agencia).to eq '5'
     end
 
     it 'deve calcular  digito da conta' do
@@ -126,48 +156,24 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       expect(sicoob.complemento_header).to eq ''.rjust(29, ' ')
     end
 
-    it 'complemento trailer deve retornar espacos em branco' do
-      expect(sicoob.complemento_trailer).to eq ''.rjust(117, ' ')
+    it 'complemento trailer deve retornar espacos em branco com a totalização das cobranças' do
+      total_cobranca_simples    = "00000100000000000005000"
+      total_cobranca_vinculada  = "".rjust(23, "0")
+      total_cobranca_caucionada = "".rjust(23, "0")
+      total_cobranca_descontada = "".rjust(23, "0")
+
+      expect(sicoob.complemento_trailer).to eq "#{total_cobranca_simples}#{total_cobranca_vinculada}"\
+                            "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
     end
 
     it 'formata o nosso numero' do
-      nosso_numero = sicoob.formata_nosso_numero pagamento
-      expect(nosso_numero).to eq '000000001201014     '
+      nosso_numero = sicoob.formata_nosso_numero 1
+      expect(nosso_numero).to eq "000000000101014     "
     end
   end
 
   context 'geracao remessa' do
     it_behaves_like 'cnab240'
-
-    context 'trailer lote' do
-      it 'trailer lote deve ter as informacoes nas posicoes corretas' do
-        trailer = sicoob.monta_trailer_lote 1, 4
-        expect(trailer[0..2]).to eq sicoob.cod_banco # cod. do banco
-        expect(trailer[3..6]).to eq '0001' # numero do lote
-        expect(trailer[17..22]).to eq '000004' # qtde de registros no lote
-        # qtde de titulos em cobranca simples 6
-        # Valor Total dos titulos em carteiras simples 15 2
-        expect(trailer[23..28]).to eq '000001'
-        expect(trailer[29..45]).to eq '00000000000005000'
-
-        # qtde de titulos em cobranca vinculada 6
-        # Valor Total dos titulos em carteiras vinculada 15 2
-        expect(trailer[46..51]).to eq '000000'
-        expect(trailer[52..68]).to eq '00000000000000000'
-        # qtde de titulos em cobranca caucionada 6
-        # Valor Total dos titulos em carteiras caucionada 15 2
-        expect(trailer[69..74]).to eq '000000'
-        expect(trailer[75..91]).to eq '00000000000000000'
-        # qtde de titulos em cobranca descontada 6
-        # Valor Total dos titulos em carteiras descontada 15 2
-        expect(trailer[92..97]).to eq '000000'
-        expect(trailer[98..114]).to eq '00000000000000000'
-        # numero do aviso de lancamento 8
-        expect(trailer[115..122]).to eq ''.rjust(8, ' ')
-        # CNAB Uso Exclusivo FEBRABAN/CNAB 117
-        expect(trailer[123..239]).to eq sicoob.complemento_trailer
-      end
-    end
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }

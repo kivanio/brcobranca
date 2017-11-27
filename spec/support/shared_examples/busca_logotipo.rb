@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
-
 shared_examples_for 'busca_logotipo' do
   it 'para layout padrão' do
     boleto_novo = described_class.new

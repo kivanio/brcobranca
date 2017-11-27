@@ -48,6 +48,6 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Base do
   end
 
   context '#valor_total_titulos' do
-    it { expect(cnab400.valor_total_titulos(13)).to eq('0000000039980') }
+    it { expect(cnab400.valor_titulos_carteira(13)).to eq('0000000039980') }
   end
 end
