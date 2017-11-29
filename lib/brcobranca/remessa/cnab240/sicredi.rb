@@ -158,6 +158,11 @@ module Brcobranca
           '060'
         end
 
+        def data_mora(pagamento)
+          return "".rjust(8, "0") unless %w( 1 2 ).include? pagamento.tipo_mora
+          pagamento.data_vencimento.next_day.strftime("%d%m%Y")
+        end
+
         private
 
         def mapeamento_para_modulo_11

@@ -6,6 +6,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicredi do
     Brcobranca::Remessa::Pagamento.new(
       valor: 50.0,
       data_vencimento: Date.current,
+      tipo_mora: '1',
       nosso_numero: '072000031',
       numero: '00003',
       documento: 6969,
@@ -180,6 +181,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicredi do
     it 'formata o nosso numero' do
       nosso_numero = sicredi.formata_nosso_numero "072000031"
       expect(nosso_numero.strip).to eq "072000031"
+    end
+
+    it "data de mora deve ser após o vencimento quando informada" do
+      segmento_p = sicredi.monta_segmento_p(pagamento, 1, 2)
+
+      expect(segmento_p[77..84]).to eql '14072007'    # data de vencimento
+      expect(segmento_p[118..125]).to eql '15072007'  # data do juro de mora
     end
   end
 
