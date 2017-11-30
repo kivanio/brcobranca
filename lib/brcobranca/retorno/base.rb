@@ -9,6 +9,7 @@ module Brcobranca
       attr_accessor :cedente_com_dv
       attr_accessor :convenio
       attr_accessor :nosso_numero
+      attr_accessor :documento_numero
       attr_accessor :tipo_cobranca
       attr_accessor :tipo_cobranca_anterior
       attr_accessor :natureza_recebimento
