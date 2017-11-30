@@ -80,7 +80,7 @@ module Brcobranca
         def digito_agencia
           # utilizando a agencia com 4 digitos
           # para calcular o digito
-          agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
+          agencia.modulo11(mapeamento: { 10 => '0' }).to_s
         end
 
         # Complemento do header
