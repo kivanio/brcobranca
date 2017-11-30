@@ -1,5 +1,6 @@
 # Changelog
 
+- Removida dependência do ActiveModel
 - Renomeado `cod_de_ocorrencia` para `codigo_ocorrencia`
 - Renomeado `data_de_ocorrencia` para `data_ocorrencia`
 
