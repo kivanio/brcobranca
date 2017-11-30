@@ -54,19 +54,21 @@ module Brcobranca
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
       attr_accessor :demonstrativo
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
+      attr_accessor :instrucoes
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao1
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao2
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao3
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao4
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao5
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao6
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
+      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao caixa
       attr_accessor :instrucao7
       # <b>REQUERIDO</b>: Informação sobre onde o sacado podera efetuar o pagamento
       attr_accessor :local_pagamento
