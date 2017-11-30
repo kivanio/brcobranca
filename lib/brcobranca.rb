@@ -138,6 +138,7 @@ module Brcobranca
       autoload :Unicred,       'brcobranca/retorno/cnab400/unicred'
       autoload :Credisis,      'brcobranca/retorno/cnab400/credisis'
       autoload :Santander,     'brcobranca/retorno/cnab400/santander'
+      autoload :BancoBrasil,   'brcobranca/retorno/cnab400/banco_brasil'
     end
 
     module Cnab240
@@ -146,6 +147,7 @@ module Brcobranca
       autoload :Cecred,        'brcobranca/retorno/cnab240/cecred'
       autoload :Sicredi,       'brcobranca/retorno/cnab240/sicredi'
       autoload :Sicoob,        'brcobranca/retorno/cnab240/sicoob'
+      autoload :Caixa,         'brcobranca/retorno/cnab240/caixa'
     end
   end
 
