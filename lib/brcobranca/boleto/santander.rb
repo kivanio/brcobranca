@@ -5,6 +5,7 @@
 module Brcobranca
   module Boleto
     class Santander < Base # Banco Santander
+      validates_presence_of :convenio, message: 'não pode estar em branco.'
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :numero_documento, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
