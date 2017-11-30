@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 
 begin
   require 'rghost'
@@ -117,11 +116,12 @@ module Brcobranca
             modelo_carne_build_data_left(doc, boleto, colunas, linhas)
             modelo_carne_build_data_right(doc, boleto, colunas, linhas)
 
-            next unless curr_page_position >= max_per_page # maximo 3 boletos por pagina
-            # Cria nova página se não for o último boleto
-            doc.next_page unless index == boletos.length - 1
+            if curr_page_position >= max_per_page # maximo 3 boletos por pagina
+              # Cria nova página se não for o último boleto
+              doc.next_page unless index == boletos.length - 1
 
-            curr_page_position = 0 # reinicia contador por página
+              curr_page_position = 0 # reinicia contador por página
+            end
           end
 
           # Gerando stream
@@ -202,7 +202,7 @@ module Brcobranca
 
           # sacado
           doc.moveto x: colunas[0], y: linhas[13]
-          doc.show boleto.sacado.to_s
+          doc.show "#{boleto.sacado}"
         end
 
         # aplica dados do lado direito
@@ -301,7 +301,7 @@ module Brcobranca
 
           # Sacado endereço
           doc.moveto x: colunas[2], y: linhas[12]
-          doc.show boleto.sacado_endereco.to_s
+          doc.show "#{boleto.sacado_endereco}"
 
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode
