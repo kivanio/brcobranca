@@ -6,7 +6,7 @@ require 'spec_helper'
 RSpec.describe Brcobranca::Boleto::Sicredi do
   let(:valid_attributes) do
     {
-      data_documento: Date.parse('2016-08-22'),
+      data_processamento: Date.parse('2016-08-22'),
       data_vencimento: Date.parse('2016-08-22'),
       valor: 195.57,
       cedente: 'Kivanio Barbosa',
@@ -29,7 +29,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     expect(boleto_novo.especie_documento).to eql('A')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
@@ -45,7 +45,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     expect(boleto_novo.especie_documento).to eql('A')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.parse('2016-08-22'))
+    expect(boleto_novo.data_processamento).to eql(Date.parse('2016-08-22'))
     expect(boleto_novo.data_vencimento).to eql(Date.parse('2016-08-22'))
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
@@ -136,7 +136,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     valid_attributes[:agencia] = '0165'
     valid_attributes[:convenio] = '00623'
     valid_attributes[:data_vencimento] = Date.parse('2007-08-26')
-    valid_attributes[:data_documento] = Date.parse('2007-08-26')
+    valid_attributes[:data_processamento] = Date.parse('2007-08-26')
 
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(1)

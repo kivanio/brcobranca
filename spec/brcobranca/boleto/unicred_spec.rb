@@ -7,7 +7,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
   before do
     @valid_attributes = {
       especie_documento: 'DM',
-      data_documento: Date.parse('2012-01-18'),
+      data_processamento: Date.parse('2012-01-18'),
       valor: 0.0,
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
@@ -28,7 +28,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
@@ -44,7 +44,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.parse('2012-01-18'))
+    expect(boleto_novo.data_processamento).to eql(Date.parse('2012-01-18'))
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)

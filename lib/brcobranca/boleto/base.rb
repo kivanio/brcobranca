@@ -26,7 +26,7 @@ module Brcobranca
       attr_accessor :carteira_label
       # <b>OPCIONAL</b>: Rótulo da Carteira, RG ou SR, somente para impressão no boleto.
       attr_accessor :variacao
-      # <b>OPCIONAL</b>: Data de processamento do boleto, geralmente igual a data_documento
+      # <b>OPCIONAL</b>: Data de processamento do boleto
       attr_accessor :data_processamento
       # <b>REQUERIDO</b>: Quantidade de boleto(padrão = 1)
       attr_accessor :quantidade
@@ -46,7 +46,7 @@ module Brcobranca
       attr_accessor :especie
       # <b>REQUERIDO</b>: Tipo do documento (Geralmente DM que quer dizer Duplicata Mercantil)
       attr_accessor :especie_documento
-      # <b>REQUERIDO</b>: Data em que foi emitido o boleto
+      # <b>REQUERIDO</b>: Data de pedido, Nota fiscal ou documento que originou o boleto
       attr_accessor :data_documento
       # <b>REQUERIDO</b>: Data de vencimento do boleto
       attr_accessor :data_vencimento
@@ -97,8 +97,14 @@ module Brcobranca
       # @param [Hash] campos
       def initialize(campos = {})
         padrao = {
-          moeda: '9', data_documento: Date.current, data_vencimento: Date.current, quantidade: 1,
-          especie_documento: 'DM', especie: 'R$', aceite: 'S', valor: 0.0,
+          moeda: '9',
+          data_processamento: Date.current,
+          data_vencimento: Date.current,
+          quantidade: 1,
+          especie_documento: 'DM',
+          especie: 'R$',
+          aceite: 'S',
+          valor: 0.0,
           local_pagamento: 'QUALQUER BANCO ATÉ O VENCIMENTO'
         }
 

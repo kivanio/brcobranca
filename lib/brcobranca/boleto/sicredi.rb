@@ -89,7 +89,7 @@ module Brcobranca
       end
 
       def nosso_numero_with_byte_idt
-        "#{data_documento.strftime('%y')}#{byte_idt}#{nosso_numero}"
+        "#{data_processamento.strftime('%y')}#{byte_idt}#{nosso_numero}"
       end
 
       # Número seqüencial utilizado para identificar o boleto.
