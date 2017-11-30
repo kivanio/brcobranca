@@ -8,7 +8,7 @@ module Brcobranca
       validates_presence_of :convenio, message: 'não pode estar em branco.'
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
-      validates_length_of :numero_documento, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :nosso_numero, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
 
       # Nova instancia do Santander
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -39,14 +39,13 @@ module Brcobranca
 
       # Número sequencial utilizado para identificar o boleto.
       # @return [String] 7 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(7, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(7, '0') if valor
       end
 
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        nosso_numero = numero_documento.to_s.rjust(7, '0') unless numero_documento.nil?
         nosso_numero.modulo11(
           multiplicador: (2..9).to_a,
           mapeamento: { 10 => 0, 11 => 0 }
@@ -58,7 +57,6 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "9000272-7"
       def nosso_numero_boleto
-        nosso_numero = numero_documento.to_s.rjust(7, '0') unless numero_documento.nil?
         "#{nosso_numero}-#{nosso_numero_dv}"
       end
 
@@ -79,7 +77,7 @@ module Brcobranca
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "9#{convenio}00000#{numero_documento}#{nosso_numero_dv}0#{carteira}"
+        "9#{convenio}00000#{nosso_numero}#{nosso_numero_dv}0#{carteira}"
       end
     end
   end

@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
       sacado_documento: '12345678900',
       agencia: '1102',
       conta_corrente: '1454204',
-      numero_documento: '22832563',
+      nosso_numero: '22832563',
       convenio: '9000150',
       digito_convenio: '46'
     }
@@ -55,7 +55,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.conta_corrente).to eql('01454204')
     expect(boleto_novo.agencia).to eql('1102')
-    expect(boleto_novo.numero_documento).to eql('22832563')
+    expect(boleto_novo.nosso_numero).to eql('22832563')
     expect(boleto_novo.nosso_numero_boleto).to eql('22832563-51')
     expect(boleto_novo.carteira).to eql('2')
     expect(boleto_novo.codigo_barras).to eql('04191647100001278902111029000150228325634059')
@@ -69,21 +69,21 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
   end
 
   it 'Montar nosso_numero_boleto' do
-    valid_attributes[:numero_documento] = '00009274'
+    valid_attributes[:nosso_numero] = '00009274'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql('00009274-22')
 
-    valid_attributes[:numero_documento] = '00009194'
+    valid_attributes[:nosso_numero] = '00009194'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql('00009194-38')
 
-    valid_attributes[:numero_documento] = '22832563'
+    valid_attributes[:nosso_numero] = '22832563'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_boleto).to eql('22832563-51')
   end
 
   it 'Montar codio de barras' do
-    valid_attributes[:numero_documento] = '22832563'
+    valid_attributes[:nosso_numero] = '22832563'
     valid_attributes[:data_vencimento] = Date.parse('2000-07-04')
     valid_attributes[:valor] = 550.0
     valid_attributes[:agencia] = '1102'
@@ -93,7 +93,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     expect(boleto_novo.codigo_barras).to eql('04198100100000550002111029000150228325634059')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.11107 29000.150226 83256.340593 8 10010000055000')
 
-    valid_attributes[:numero_documento] = '00009274'
+    valid_attributes[:nosso_numero] = '00009274'
     valid_attributes[:data_vencimento] = Date.parse('2000-07-04')
     valid_attributes[:valor] = 550.00
     valid_attributes[:agencia] = '1102'
@@ -103,7 +103,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     expect(boleto_novo.codigo_barras).to eql('04194100100000550002111029000150000092744028')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.11107 29000.150002 00927.440289 4 10010000055000')
 
-    valid_attributes[:numero_documento] = '00009194'
+    valid_attributes[:nosso_numero] = '00009194'
     valid_attributes[:data_vencimento] = Date.parse('2000-07-04')
     valid_attributes[:valor] = 550.00
     valid_attributes[:agencia] = '1102'
@@ -112,8 +112,8 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.codigo_barras).to eql('04198100100000550002111029000150000091944023')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.11107 29000.150002 00919.440230 8 10010000055000')
-  
-    valid_attributes[:numero_documento] = '03408099'
+
+    valid_attributes[:nosso_numero] = '03408099'
     valid_attributes[:data_vencimento] = Date.parse('2017-01-12')
     valid_attributes[:valor] = 1216.00
     valid_attributes[:agencia] = '0016'
@@ -122,7 +122,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.codigo_barras).to eql('04192703700001216002100160164640034080994027')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('04192.10018 60164.640033 40809.940279 2 70370000121600')
-  
+
   end
 
   it 'Montar agencia_conta_boleto' do
@@ -143,7 +143,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos com método to_' do
     valid_attributes[:valor] = 135.00
     valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
-    valid_attributes[:numero_documento] = '240'
+    valid_attributes[:nosso_numero] = '240'
 
     boleto_novo = described_class.new(valid_attributes)
 
@@ -163,7 +163,7 @@ RSpec.describe Brcobranca::Boleto::Banrisul do #:nodoc:[all]
   it 'Gerar boleto nos formatos válidos' do
     valid_attributes[:valor] = 135.00
     valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
-    valid_attributes[:numero_documento] = '240'
+    valid_attributes[:nosso_numero] = '240'
 
     boleto_novo = described_class.new(valid_attributes)
 

@@ -5,7 +5,7 @@ module Brcobranca
     class Sicoob < Base # Sicoob (Bancoob)
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
-      validates_length_of :numero_documento, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :nosso_numero, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :variacao, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :quantidade, maximum: 3, message: 'deve ser menor ou igual a 3 dígitos.'
@@ -46,8 +46,8 @@ module Brcobranca
       # Número documento
       #
       # @return [String] 7 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(7, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(7, '0') if valor
       end
 
       # Quantidade
@@ -61,7 +61,7 @@ module Brcobranca
       #
       # @return [String] 8 caracteres numéricos.
       def nosso_numero_boleto
-        "#{numero_documento}#{nosso_numero_dv}"
+        "#{nosso_numero}#{nosso_numero_dv}"
       end
 
       # 3.13. Nosso número: Código de controle que permite ao Sicoob e à empresa identificar os dados da cobrança que deu origem ao boleto.
@@ -93,7 +93,7 @@ module Brcobranca
       #     Ex.: 11 – 3 = 8, então Nosso Número + DV = 21-8
       #
       def nosso_numero_dv
-        "#{agencia}#{convenio.rjust(10, '0')}#{numero_documento}".modulo11(
+        "#{agencia}#{convenio.rjust(10, '0')}#{nosso_numero}".modulo11(
           reverse: false,
           multiplicador: [3, 1, 9, 7],
           mapeamento: { 10 => 0, 11 => 0 }

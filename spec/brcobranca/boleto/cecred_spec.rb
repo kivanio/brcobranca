@@ -13,7 +13,7 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
       agencia: '0101',
       conta_corrente: '1111111',
       convenio: 000_000,
-      numero_documento: '000000001'
+      nosso_numero: '000000001'
     }
   end
 
@@ -44,16 +44,16 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
   end
 
   it 'Tamanho do número documento deve ser de 9 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '123456789')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '123456789')
     expect(boleto_novo).to be_valid
 
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1234567890')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1234567890')
     expect(boleto_novo).not_to be_valid
   end
 
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 9 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1')
-    expect(boleto_novo.numero_documento).to eq('000000001')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1')
+    expect(boleto_novo.nosso_numero).to eq('000000001')
     expect(boleto_novo).to be_valid
   end
 
@@ -94,7 +94,7 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
     expect(boleto_novo.conta_corrente).to eql('1111111')
     expect(boleto_novo.agencia).to eql('0101')
     expect(boleto_novo.convenio).to eql('000000')
-    expect(boleto_novo.numero_documento).to eql('000000001')
+    expect(boleto_novo.nosso_numero).to eql('000000001')
     expect(boleto_novo.carteira).to eql('01')
     expect(boleto_novo.codigo_servico).to be_falsey
   end
@@ -122,7 +122,7 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
     boleto_novo.conta_corrente = '0357157'
-    boleto_novo.numero_documento = '1'
+    boleto_novo.nosso_numero = '1'
     expect(boleto_novo.nosso_numero_boleto).to eql('03571572000000001')
   end
 

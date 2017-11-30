@@ -8,7 +8,7 @@ module Brcobranca
 
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
-      validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :nosso_numero, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :digito_convenio, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
@@ -49,8 +49,8 @@ module Brcobranca
       # Número documento
       #
       # @return [String] 8 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(8, '0') if valor
       end
 
       # Número do convênio do cliente junto ao banco.
@@ -69,7 +69,7 @@ module Brcobranca
       #
       # @return [String] caracteres numéricos.
       def nosso_numero_boleto
-        "#{numero_documento}-#{numero_documento.duplo_digito}"
+        "#{nosso_numero}-#{nosso_numero.duplo_digito}"
       end
 
       def agencia_conta_boleto
@@ -86,7 +86,7 @@ module Brcobranca
       # Posição 41 a 42 - Constante 40.
       # Posição 43 a 44 - Duplo Dígito referente às posições 20 a 42 (módulos 10 e 11).
       def codigo_barras_segunda_parte
-        campo_livre = "#{carteira}1#{agencia}#{convenio}#{numero_documento}40"
+        campo_livre = "#{carteira}1#{agencia}#{convenio}#{nosso_numero}40"
         campo_livre + campo_livre.duplo_digito
       end
     end

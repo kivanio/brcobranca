@@ -12,7 +12,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
       agencia: '082',
       conta_corrente: '0000528',
       convenio: '0000528',
-      numero_documento: '000001'
+      nosso_numero: '000001'
     }
   end
 
@@ -92,13 +92,13 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
   end
 
   it 'Tamanho do número documento deve ser de 6 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1234567')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1234567')
     expect(boleto_novo).not_to be_valid
   end
 
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1')
-    expect(boleto_novo.numero_documento).to eq('000001')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1')
+    expect(boleto_novo.nosso_numero).to eq('000001')
     expect(boleto_novo).to be_valid
   end
 
@@ -126,7 +126,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
 
   describe 'Formato do boleto' do
     before do
-      @valid_attributes[:numero_documento] = '000168'
+      @valid_attributes[:nosso_numero] = '000168'
     end
 
     it_behaves_like 'formatos_validos'

@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
       agencia: '0001',
       conta_corrente: '0000002',
       convenio: 1_000_000,
-      numero_documento: '000095'
+      nosso_numero: '000095'
     }
   end
 
@@ -42,13 +42,13 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
   end
 
   it 'Tamanho do número documento deve ser de 6 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1234567')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1234567')
     expect(boleto_novo).not_to be_valid
   end
 
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1')
-    expect(boleto_novo.numero_documento).to eq('000001')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1')
+    expect(boleto_novo.nosso_numero).to eq('000001')
     expect(boleto_novo).to be_valid
   end
 
@@ -89,7 +89,7 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
     expect(boleto_novo.conta_corrente).to eql('0000002')
     expect(boleto_novo.agencia).to eql('0001')
     expect(boleto_novo.convenio).to eql(1_000_000)
-    expect(boleto_novo.numero_documento).to eql('000095')
+    expect(boleto_novo.nosso_numero).to eql('000095')
     expect(boleto_novo.carteira).to eql('18')
     expect(boleto_novo.codigo_servico).to be_falsey
   end
@@ -128,7 +128,7 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(@valid_attributes)
-    boleto_novo.numero_documento = '95'
+    boleto_novo.nosso_numero = '95'
     expect(boleto_novo.nosso_numero_boleto).to eql('10000000027000095')
     expect(boleto_novo.nosso_numero_dv).to eql(7)
   end

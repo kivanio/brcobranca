@@ -12,7 +12,7 @@ module Brcobranca
       validates_length_of :carteira, is: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :convenio, is: 7, message: 'deve ser menor ou igual a 7 dígitos.'
 
-      validates_length_of :numero_documento, maximum: 6, message: 'deve ser menor ou igual a 6 dígitos.'
+      validates_length_of :nosso_numero, maximum: 6, message: 'deve ser menor ou igual a 6 dígitos.'
 
 
       # Nova instancia do CrediSIS
@@ -66,18 +66,18 @@ module Brcobranca
       # (Número de dígitos depende do tipo de convênio).
       # @raise  [Brcobranca::NaoImplementado] Caso o tipo de convênio não seja suportado pelo Brcobranca.
       #
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 17 dígitos com Convenio de 7 dígitos e código do cooperado de 4 dígitos. (carteira 18)
       #   @return [String] 17 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(6, '0')
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(6, '0')
       end
 
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
       # @see BancoBrasil#numero
       def nosso_numero_dv
-        "#{numero_documento}".modulo11(mapeamento: { 10 => 'X' })
+        "#{nosso_numero}".modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Nosso número para exibir no boleto.
@@ -85,7 +85,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "10000000027000095-7"
       def nosso_numero_boleto
-        "#{convenio}#{codigo_cedente}#{numero_documento}"
+        "#{convenio}#{codigo_cedente}#{nosso_numero}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
@@ -99,7 +99,7 @@ module Brcobranca
       # Segunda parte do código de barras.
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "00#{convenio}#{codigo_cedente}#{numero_documento}#{carteira}".rjust(25, '0')
+        "00#{convenio}#{codigo_cedente}#{nosso_numero}#{carteira}".rjust(25, '0')
       end
     end
   end

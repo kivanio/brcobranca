@@ -14,7 +14,7 @@ module Brcobranca
       attr_accessor :byte_idt
 
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
-      validates_length_of :numero_documento, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :nosso_numero, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
       validates_length_of :conta_corrente, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
       # Carteira
       # 1 – Com Registro
@@ -81,27 +81,27 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "14/200022-5"
       def nosso_numero_boleto
-        "#{numero_documento_with_byte_idt[0..1]}/#{numero_documento_with_byte_idt[2..-1]}-#{nosso_numero_dv}"
+        "#{nosso_numero_with_byte_idt[0..1]}/#{nosso_numero_with_byte_idt[2..-1]}-#{nosso_numero_dv}"
       end
 
       def nosso_numero_codigo_barra
         nosso_numero_boleto.gsub(/\D/, '')
       end
 
-      def numero_documento_with_byte_idt
-        "#{data_documento.strftime('%y')}#{byte_idt}#{numero_documento}"
+      def nosso_numero_with_byte_idt
+        "#{data_documento.strftime('%y')}#{byte_idt}#{nosso_numero}"
       end
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 5 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(5, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(5, '0') if valor
       end
 
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        "#{agencia_posto_conta}#{numero_documento_with_byte_idt}"
+        "#{agencia_posto_conta}#{nosso_numero_with_byte_idt}"
           .modulo11(mapeamento: mapeamento_para_modulo_11)
       end
 

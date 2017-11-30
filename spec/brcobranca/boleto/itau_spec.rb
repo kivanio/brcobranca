@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
       agencia: '0810',
       conta_corrente: '53678',
       convenio: 12_387,
-      numero_documento: '12345678'
+      nosso_numero: '12345678'
     }
   end
 
@@ -54,10 +54,10 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.conta_corrente).to eql('53678')
     expect(boleto_novo.agencia).to eql('0810')
     expect(boleto_novo.convenio).to eql('12387')
-    expect(boleto_novo.numero_documento).to eql('12345678')
+    expect(boleto_novo.nosso_numero).to eql('12345678')
     expect(boleto_novo.carteira).to eql('175')
   end
-  
+
   it '#usa_seu_numero?' do
     @valid_attributes[:carteira] = 198
     boleto_novo = described_class.new(@valid_attributes)
@@ -77,7 +77,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.75124 34567.840813 05367.890000 1 43290000000000')
 
     @valid_attributes[:valor] = 135.00
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2008/02/02')
     boleto_novo = described_class.new(@valid_attributes)
 
@@ -85,7 +85,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34191377000000135001750025828170810536789000')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.75009 25828.170818 05367.890000 1 37700000013500')
 
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 168
     @valid_attributes[:valor] = 135.00
@@ -95,7 +95,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34194252500000135001680025828120810536789000')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.68004 25828.120813 05367.890000 4 25250000013500')
 
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
@@ -107,7 +107,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34191252500000135001960025828112345671234550')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.112349 56712.345505 1 25250000013500')
 
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
@@ -119,7 +119,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34192252500000135001960025828101234561234550')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.101235 45612.345509 2 25250000013500')
 
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 196
     @valid_attributes[:valor] = 135.00
@@ -132,7 +132,7 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34192252500000135001960025828101234560123440')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.96005 25828.101235 45601.234409 2 25250000013500')
 
-    @valid_attributes[:numero_documento] = '00010152'
+    @valid_attributes[:nosso_numero] = '00010152'
     @valid_attributes[:data_vencimento] = Date.parse('2029/05/20')
     @valid_attributes[:carteira] = 109
     @valid_attributes[:valor] = 6757.87
@@ -198,27 +198,27 @@ RSpec.describe Brcobranca::Boleto::Itau do
   end
 
   it 'Montar nosso_numero_dv' do
-    @valid_attributes[:numero_documento] = '00015448'
+    @valid_attributes[:nosso_numero] = '00015448'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.nosso_numero_dv).to be(6)
 
-    @valid_attributes[:numero_documento] = '15448'
+    @valid_attributes[:nosso_numero] = '15448'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.nosso_numero_dv).to be(6)
 
-    @valid_attributes[:numero_documento] = '12345678'
+    @valid_attributes[:nosso_numero] = '12345678'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.nosso_numero_dv).to be(4)
 
-    @valid_attributes[:numero_documento] = '34230'
+    @valid_attributes[:nosso_numero] = '34230'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.nosso_numero_dv).to be(5)
 
-    @valid_attributes[:numero_documento] = '258281'
+    @valid_attributes[:nosso_numero] = '258281'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.nosso_numero_dv).to be(7)

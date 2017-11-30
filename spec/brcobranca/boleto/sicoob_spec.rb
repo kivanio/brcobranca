@@ -17,7 +17,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
       agencia: '4327',
       conta_corrente: '417270',
       convenio: '229385',
-      numero_documento: '2'
+      nosso_numero: '2'
     }
   end
 
@@ -59,7 +59,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     expect(boleto_novo.conta_corrente).to eql('0417270')
     expect(boleto_novo.agencia).to eql('4327')
     expect(boleto_novo.convenio).to eql('0229385')
-    expect(boleto_novo.numero_documento).to eql('0000002')
+    expect(boleto_novo.nosso_numero).to eql('0000002')
     expect(boleto_novo.carteira).to eql('1')
     expect(boleto_novo.codigo_servico).to be_falsey
   end
@@ -77,55 +77,55 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
   end
 
   it 'Montar nosso numero dv' do
-    valid_attributes[:numero_documento] = '1'
+    valid_attributes[:nosso_numero] = '1'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(7)
 
-    valid_attributes[:numero_documento] = '2'
+    valid_attributes[:nosso_numero] = '2'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(4)
 
-    valid_attributes[:numero_documento] = '3'
+    valid_attributes[:nosso_numero] = '3'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(1)
 
-    valid_attributes[:numero_documento] = '4'
+    valid_attributes[:nosso_numero] = '4'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(9)
 
-    valid_attributes[:numero_documento] = '5'
+    valid_attributes[:nosso_numero] = '5'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(6)
 
-    valid_attributes[:numero_documento] = '6'
+    valid_attributes[:nosso_numero] = '6'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(3)
 
-    valid_attributes[:numero_documento] = '7'
+    valid_attributes[:nosso_numero] = '7'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(0)
 
-    valid_attributes[:numero_documento] = '8'
+    valid_attributes[:nosso_numero] = '8'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(8)
 
-    valid_attributes[:numero_documento] = '9'
+    valid_attributes[:nosso_numero] = '9'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(5)
 
-    valid_attributes[:numero_documento] = '10'
+    valid_attributes[:nosso_numero] = '10'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(3)
 
-    valid_attributes[:numero_documento] = '11'
+    valid_attributes[:nosso_numero] = '11'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(0)
 
-    valid_attributes[:numero_documento] = '12'
+    valid_attributes[:nosso_numero] = '12'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(8)
 
-    valid_attributes[:numero_documento] = '13'
+    valid_attributes[:nosso_numero] = '13'
     boleto_novo = described_class.new(valid_attributes)
     expect(boleto_novo.nosso_numero_dv).to be(5)
   end
@@ -145,7 +145,7 @@ RSpec.describe Brcobranca::Boleto::Sicoob do #:nodoc:[all]
     valid_attributes[:agencia] = '4134'
     valid_attributes[:conta_corrente] = '10333'
     valid_attributes[:convenio] = '148180'
-    valid_attributes[:numero_documento] = '110'
+    valid_attributes[:nosso_numero] = '110'
     valid_attributes[:variacao] = '05'
 
     boleto_novo = described_class.new(valid_attributes)

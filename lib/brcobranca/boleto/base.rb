@@ -41,7 +41,7 @@ module Brcobranca
       # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
-      attr_accessor :numero_documento
+      attr_accessor :nosso_numero
       # <b>REQUERIDO</b>: Símbolo da moeda utilizada (R$ no brasil)
       attr_accessor :especie
       # <b>REQUERIDO</b>: Tipo do documento (Geralmente DM que quer dizer Duplicata Mercantil)
@@ -50,6 +50,8 @@ module Brcobranca
       attr_accessor :data_documento
       # <b>REQUERIDO</b>: Data de vencimento do boleto
       attr_accessor :data_vencimento
+      # <b>OPCIONAL</b>: Número de pedido, Nota fiscal ou documento que originou o boleto
+      attr_accessor :documento_numero
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
@@ -88,8 +90,8 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :sacado, :sacado_documento, message: 'não pode estar em branco.'
-      validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, message: 'não é um número.', allow_nil: true
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, :sacado_documento, message: 'não pode estar em branco.'
+      validates_numericality_of :convenio, :agencia, :conta_corrente, :nosso_numero, message: 'não é um número.', allow_nil: true
 
       # Nova instancia da classe Base
       # @param [Hash] campos
@@ -145,7 +147,7 @@ module Brcobranca
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        numero_documento.modulo11
+        nosso_numero.modulo11(mapeamento: { 10 => 0, 11 => 0 })
       end
 
       # @abstract Deverá ser sobreescrito para cada banco.

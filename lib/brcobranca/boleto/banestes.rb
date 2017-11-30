@@ -8,7 +8,7 @@ module Brcobranca
 
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 10, message: 'deve ser menor ou igual a 10 dígitos.'
-      validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :nosso_numero, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :variacao, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :carteira, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :digito_conta_corrente, is: 1, message: 'deve ser igual a 1 dígitos.'
@@ -49,20 +49,20 @@ module Brcobranca
       # Número documento
       #
       # @return [String] 8 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(8, '0') if valor
       end
 
       # Nosso número para exibição no boleto.
       #
       # @return [String] caracteres numéricos.
       def nosso_numero_boleto
-        "#{numero_documento}-#{nosso_numero_dv}"
+        "#{nosso_numero}-#{nosso_numero_dv}"
       end
 
       def nosso_numero_dv
-        numero_dv_1 = numero_documento.modulo11(mapeamento: { 10 => 0, 11 => 0 })
-        numero_dv_2 = "#{numero_documento}#{numero_dv_1}".modulo11(mapeamento: { 10 => 0, 11 => 0 })
+        numero_dv_1 = nosso_numero.modulo11(mapeamento: { 10 => 0, 11 => 0 })
+        numero_dv_2 = "#{nosso_numero}#{numero_dv_1}".modulo11(mapeamento: { 10 => 0, 11 => 0 })
 
         "#{numero_dv_1}#{numero_dv_2}"
       end
@@ -77,7 +77,7 @@ module Brcobranca
       # Codigo do banco cedente | Código do BANESTES '021'                                         | 03
       # Digitos                 | Dígitos verificadores                                            | 02
       def codigo_barras_segunda_parte
-        campo_livre = "#{numero_documento}#{conta_corrente}#{digito_conta_corrente}#{variacao}021"
+        campo_livre = "#{nosso_numero}#{conta_corrente}#{digito_conta_corrente}#{variacao}021"
         campo_livre + campo_livre.duplo_digito
       end
     end

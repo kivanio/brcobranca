@@ -4,7 +4,7 @@ module Brcobranca
   module Boleto
     class Bradesco < Base # Banco BRADESCO
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
-      validates_length_of :numero_documento, maximum: 11, message: 'deve ser menor ou igual a 11 dígitos.'
+      validates_length_of :nosso_numero, maximum: 11, message: 'deve ser menor ou igual a 11 dígitos.'
       validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :carteira, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
 
@@ -34,8 +34,8 @@ module Brcobranca
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 11 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(11, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(11, '0') if valor
       end
 
       # Nosso número para exibir no boleto.
@@ -43,7 +43,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> ""06/00000004042-8"
       def nosso_numero_boleto
-        "#{carteira}/#{numero_documento}-#{nosso_numero_dv}"
+        "#{carteira}/#{nosso_numero}-#{nosso_numero_dv}"
       end
 
       # Dígito verificador da agência
@@ -58,7 +58,7 @@ module Brcobranca
       # Dígito verificador do nosso número
       # @return [Integer] 1 caracteres numéricos.
       def nosso_numero_dv
-        "#{carteira}#{numero_documento}".modulo11(
+        "#{carteira}#{nosso_numero}".modulo11(
           multiplicador: [2, 3, 4, 5, 6, 7],
           mapeamento: { 10 => 'P', 11 => 0 }
         ) { |total| 11 - (total % 11) }
@@ -92,7 +92,7 @@ module Brcobranca
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "#{agencia}#{carteira}#{numero_documento}#{conta_corrente}0"
+        "#{agencia}#{carteira}#{nosso_numero}#{conta_corrente}0"
       end
     end
   end
