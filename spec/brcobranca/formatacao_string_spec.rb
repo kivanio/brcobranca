@@ -13,7 +13,7 @@ RSpec.describe Brcobranca::FormatacaoString do
   end
 
   context 'above size' do
-    it { expect('SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA'.format_size(30)).to eql('SOCIEDADE BRASILEIRA DE ZOOLOG') }
+    it { expect("SOÇIEDADE,  BRASI@?!+-_LEIR'\"A DE ZÔÔLOGIA LTDA.".format_size(30)).to eql('SOCIEDADE BRASILEIRA DE ZOOLOG') }
     it { expect('pablo diego JOSÉ FRANCISCO DE PAULA JUAN'.format_size(30)).to eql('pablo diego JOSE FRANCISCO DE ') }
   end
 

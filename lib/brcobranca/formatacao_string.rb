@@ -9,9 +9,9 @@ module Brcobranca
     #
     def format_size(size)
       if self.size > size
-        truncate(size).remove_accents
+        remove_accents.strip.gsub(/\s+/, ' ').gsub(/[^A-Za-z0-9[[:space:]]]/, '').truncate(size)
       else
-        ljust(size, ' ').remove_accents
+        remove_accents.strip.gsub(/\s+/, ' ').gsub(/[^A-Za-z0-9[[:space:]]]/, '').ljust(size, ' ')
       end
     end
 
