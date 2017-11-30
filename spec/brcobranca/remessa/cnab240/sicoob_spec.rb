@@ -112,19 +112,32 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       # x         9  8  7  6
       # =         36 24 14 6 = 80
       # 80 / 11 = 7 com resto 3
-      expect(sicoob.digito_agencia).to eq '3'
+      expected_digito_agencia_list = [
+        { agencia: "3214", dv: "0" },
+        { agencia: "2006", dv: "0" },
+        { agencia: "5651", dv: "0" },
+        { agencia: "5691", dv: "0" },
+        { agencia: "5741", dv: "0" },
+        { agencia: "1008", dv: "1" },
+        { agencia: "5681", dv: "2" },
+        { agencia: "5731", dv: "2" },
+        { agencia: "4327", dv: "3" },
+        { agencia: "1001", dv: "4" },
+        { agencia: "5761", dv: "4" },
+        { agencia: "3032", dv: "5" },
+        { agencia: "5671", dv: "5" },
+        { agencia: "5631", dv: "6" },
+        { agencia: "1005", dv: "7" },
+        { agencia: "5661", dv: "8" },
+        { agencia: "0001", dv: "9" },
+        { agencia: "5621", dv: "9" },
+      ]
 
-      sicoob_2 = subject.class.new(params.merge!(agencia: '3214'))
-      expect(sicoob_2.digito_agencia).to eq '0'
-
-      sicoob_3 = subject.class.new(params.merge!(agencia: '0001'))
-      expect(sicoob_3.digito_agencia).to eq '9'
-
-      sicoob_4 = subject.class.new(params.merge!(agencia: '2006'))
-      expect(sicoob_4.digito_agencia).to eq '0'
-
-      sicoob_5 = subject.class.new(params.merge!(agencia: '3032'))
-      expect(sicoob_5.digito_agencia).to eq '5'
+      expected_digito_agencia_list.each do |expected_dv_agencia|
+        remessa_params = params.merge!(agencia: expected_dv_agencia[:agencia])
+        remessa = subject.class.new(remessa_params)
+        expect(remessa.digito_agencia).to eq expected_dv_agencia[:dv]
+      end
     end
 
     it 'deve calcular  digito da conta' do
