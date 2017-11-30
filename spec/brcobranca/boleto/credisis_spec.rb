@@ -88,9 +88,10 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.conta_corrente).to eql('0000002')
     expect(boleto_novo.agencia).to eql('0001')
-    expect(boleto_novo.convenio).to eql(1_000_000)
+    expect(boleto_novo.convenio).to eql('1000000')
     expect(boleto_novo.nosso_numero).to eql('000095')
     expect(boleto_novo.carteira).to eql('18')
+    expect(boleto_novo.codigo_cedente).to eql('0027')
     expect(boleto_novo.codigo_servico).to be_falsey
   end
 

@@ -56,6 +56,24 @@ module Brcobranca
         @conta_corrente = valor.to_s.rjust(7, '0') if valor
       end
 
+      # Carteira
+      # @return [String] 2 caracteres numéricos.
+      def carteira=(valor)
+        @carteira = valor.to_s.rjust(2, '0') if valor
+      end
+
+      # Código cedente
+      # @return [String] 8 caracteres numéricos.
+      def codigo_cedente=(valor)
+        @codigo_cedente = valor.to_s.rjust(4, '0') if valor
+      end
+
+      # Número do convênio/contrato do cliente junto ao banco.
+      # @return [String] 7 caracteres numéricos.
+      def convenio=(valor)
+        @convenio = valor.to_s.rjust(7, '0') if valor
+      end
+
       # Dígito verificador da conta corrente
       # @return [String] 1 caracteres numéricos.
       def conta_corrente_dv
