@@ -53,11 +53,7 @@ module Brcobranca
       # <b>OPCIONAL</b>: Código utilizado para identificar o tipo de serviço cobrado
       attr_accessor :codigo_servico
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
-      attr_accessor :demonstrativo1
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
-      attr_accessor :demonstrativo2
-      # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
-      attr_accessor :demonstrativo3
+      attr_accessor :demonstrativo
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
       attr_accessor :instrucao1
       # <b>OPCIONAL</b>: Utilizado para mostrar alguma informação ao sacado
