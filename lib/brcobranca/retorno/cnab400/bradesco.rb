@@ -48,6 +48,7 @@ module Brcobranca
           parse.field :codigo_ocorrencia, 108..109
           parse.field :data_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
           # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
+          parse.field :documento_numero, 116..125
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 # complemento de registro
 
