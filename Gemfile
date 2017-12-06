@@ -11,9 +11,9 @@ end
 
 group :test do
   gem 'coveralls', require: false
-  gem 'json', '>= 1.8', '< 3'
+  gem 'json'
   gem 'simplecov'
-  gem 'codeclimate-test-reporter', '~> 1.0.0'
+  gem 'codeclimate-test-reporter'
   gem 'rspec'
   gem 'rake'
   gem 'timecop'
