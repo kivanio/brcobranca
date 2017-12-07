@@ -1,3 +1,6 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=69a23bee43b8c53271b1a6fbe18b6167de91a06d66ab19908dd52f73158ab71b
 language: ruby
 sudo: false
 rvm:
@@ -9,9 +12,6 @@ rvm:
 branches:
   only:
     - master
-addons:
-  code_climate:
-    repo_token: 69a23bee43b8c53271b1a6fbe18b6167de91a06d66ab19908dd52f73158ab71b
 matrix:
   allow_failures:
     - rvm: jruby
@@ -20,3 +20,11 @@ matrix:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y ghostscript
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+script:
+  - bundle exec rspec
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
