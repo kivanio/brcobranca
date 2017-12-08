@@ -21,9 +21,9 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 
 ### API Server
 
-API server feita pelo pessoal da [Akretion]: http://www.akretion.com muito TOP \o/
+Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 
-[API server for brcobranca]: https://github.com/akretion/boleto_cnab_api
+[API server for brcobranca](https://github.com/akretion/boleto_cnab_api)
 
 ### Bancos Disponíveis
 
