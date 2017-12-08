@@ -19,6 +19,12 @@ Gem para emissão de bloquetos de cobrança para bancos brasileiros.
 - http://github.com/kivanio/brcobranca_exemplo
 - https://github.com/thiagoc7/brcobranca_app
 
+### API Server
+
+API server feita pelo pessoal da [Akretion]: http://www.akretion.com muito TOP \o/
+
+[API server for brcobranca]: https://github.com/akretion/boleto_cnab_api
+
 ### Bancos Disponíveis
 
 | Bancos                 | Carteiras         | Documentações  |
