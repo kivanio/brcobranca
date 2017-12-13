@@ -45,6 +45,16 @@ RSpec.describe Brcobranca::Boleto::Credisis do #:nodoc:[all]
     expect(boleto_novo).not_to be_valid
   end
 
+  it 'documento_cedente nao pode estar em branco' do
+    boleto_novo = described_class.new @valid_attributes.merge(documento_cedente: nil)
+    expect(boleto_novo).not_to be_valid
+  end
+
+  it 'documento_cedente deve ter somente numeros' do
+    boleto_novo = described_class.new @valid_attributes.merge(documento_cedente: '123.456.789-12')
+    expect(boleto_novo).not_to be_valid
+  end
+
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 6 dígitos' do
     boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1')
     expect(boleto_novo.nosso_numero).to eq('000001')

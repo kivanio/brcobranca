@@ -7,6 +7,8 @@ module Brcobranca
       validates_length_of :carteira, is: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :convenio, is: 6, message: 'deve ser menor ou igual a 6 dígitos.'
       validates_length_of :nosso_numero, maximum: 6, message: 'deve ser menor ou igual a 6 dígitos.'
+      validates_presence_of :documento_cedente, message: 'não pode estar em branco.'
+      validates_numericality_of :documento_cedente, message: 'não é um número.'
 
       # Nova instancia do CrediSIS
       # @param (see Brcobranca::Boleto::Base#initialize)
