@@ -2,23 +2,16 @@
 module Brcobranca
   module Boleto
     class Credisis < Base # CrediSIS
-      attr_accessor :codigo_cedente
-
-      validates_presence_of :codigo_cedente, message: 'não pode estar em branco.'
-
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
-      validates_length_of :codigo_cedente, is: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :carteira, is: 2, message: 'deve ser menor ou igual a 2 dígitos.'
-      validates_length_of :convenio, is: 7, message: 'deve ser menor ou igual a 7 dígitos.'
-
+      validates_length_of :convenio, is: 6, message: 'deve ser menor ou igual a 6 dígitos.'
       validates_length_of :nosso_numero, maximum: 6, message: 'deve ser menor ou igual a 6 dígitos.'
-
 
       # Nova instancia do CrediSIS
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
-        campos = { carteira: '18', codigo_servico: false }.merge!(campos)
+        campos = { carteira: '18' }.merge!(campos)
         super(campos)
       end
 
@@ -30,7 +23,6 @@ module Brcobranca
       end
 
       # Carteira
-      #
       # @return [String] 2 caracteres numéricos.
       def carteira=(valor)
         @carteira = valor.to_s.rjust(2, '0') if valor
@@ -40,7 +32,7 @@ module Brcobranca
       #
       # @return [String] 1 caracteres numéricos.
       def banco_dv
-        banco.modulo11(mapeamento: { 10 => 'X' })
+        '3'
       end
 
       # Retorna dígito verificador da agência
@@ -51,27 +43,15 @@ module Brcobranca
       end
 
       # Conta corrente
-      # @return [String] 8 caracteres numéricos.
+      # @return [String] 7 caracteres numéricos.
       def conta_corrente=(valor)
         @conta_corrente = valor.to_s.rjust(7, '0') if valor
       end
 
-      # Carteira
-      # @return [String] 2 caracteres numéricos.
-      def carteira=(valor)
-        @carteira = valor.to_s.rjust(2, '0') if valor
-      end
-
-      # Código cedente
-      # @return [String] 8 caracteres numéricos.
-      def codigo_cedente=(valor)
-        @codigo_cedente = valor.to_s.rjust(4, '0') if valor
-      end
-
       # Número do convênio/contrato do cliente junto ao banco.
-      # @return [String] 7 caracteres numéricos.
+      # @return [String] 6 caracteres numéricos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(7, '0') if valor
+        @convenio = valor.to_s.rjust(6, '0') if valor
       end
 
       # Dígito verificador da conta corrente
@@ -80,22 +60,10 @@ module Brcobranca
         conta_corrente.modulo11(mapeamento: { 10 => 'X' })
       end
 
-      # Número seqüencial utilizado para identificar o boleto.
-      # (Número de dígitos depende do tipo de convênio).
-      # @raise  [Brcobranca::NaoImplementado] Caso o tipo de convênio não seja suportado pelo Brcobranca.
-      #
-      # @overload nosso_numero
-      #   Nosso Número de 17 dígitos com Convenio de 7 dígitos e código do cooperado de 4 dígitos. (carteira 18)
-      #   @return [String] 17 caracteres numéricos.
+      # Nosso número
+      # @return [String] 6 caracteres numéricos.
       def nosso_numero=(valor)
         @nosso_numero = valor.to_s.rjust(6, '0')
-      end
-
-      # Dígito verificador do nosso número.
-      # @return [String] 1 caracteres numéricos.
-      # @see BancoBrasil#numero
-      def nosso_numero_dv
-        "#{nosso_numero}".modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Nosso número para exibir no boleto.
@@ -103,7 +71,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "10000000027000095-7"
       def nosso_numero_boleto
-        "#{convenio}#{codigo_cedente}#{nosso_numero}"
+        "097#{documento_cedente_dv}#{agencia}#{convenio}#{nosso_numero}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
@@ -114,10 +82,32 @@ module Brcobranca
         "#{agencia}-#{agencia_dv} / #{conta_corrente}-#{conta_corrente_dv}"
       end
 
+      #X – Módulo 11 do CPF/CNPJ (incluindo dígitos verificadores) do Beneficiário emissor
+      # Obs.: Caso for CPF, utilizar 9 como limitador da multiplicação.
+      # Caso for CNPJ, utilizar 8 no limitador da multiplicação.
+      def documento_cedente_dv
+        options = { mapeamento: { 0 => 1, 10 => 1, 11 => 1 } }
+        options.merge(multiplicador: [8, 7, 6, 5, 4, 3, 2]) if documento_cedente.to_s.size > 11
+        documento_cedente.modulo11(options)
+      end
+
       # Segunda parte do código de barras.
       # @return [String] 25 caracteres numéricos.
+      #1. - Número do Banco: “097”
+      # 2. - Moeda: “9”
+      # 3. - DV do Código de Barras, Baseado no Módulo 11 (Vide Anexo X).
+      # 4. - Fator de Vencimento do Boleto (Vide Anexo VII).
+      # 5. - Valor do Título, expresso em Reais, com 02 casas decimais.
+      # 6. - Fixo Zeros: Campo com preenchimento Zerado “00000”
+      # 7. - Composição do Nosso Número: 097XAAAACCCCCCSSSSSS, sendo:
+      #      Composição do Nosso Número
+      #      097    - Fixo
+      #      X      - Módulo 11 do CPF/CNPJ (Incluindo dígitos verificadores) do Beneficiário.
+      #      AAAA   - Código da Agência CrediSIS ao qual o Beneficiário possui Conta.
+      #      CCCCCC - Código de Convênio do Beneficiário no Sistema CrediSIS
+      #      SSSSSS - Sequencial Único do Boleto
       def codigo_barras_segunda_parte
-        "00#{convenio}#{codigo_cedente}#{nosso_numero}#{carteira}".rjust(25, '0')
+        "00000097#{documento_cedente_dv}#{agencia}#{convenio}#{nosso_numero}"
       end
     end
   end
