@@ -36,9 +36,9 @@ module Brcobranca
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
       attr_accessor :conta_corrente
-      # <b>REQUERIDO</b>: Nome do proprietario da conta corrente
+      # <b>REQUERIDO</b>: Nome do beneficiário
       attr_accessor :cedente
-      # <b>REQUERIDO</b>: Documento do proprietario da conta corrente (CPF ou CNPJ)
+      # <b>REQUERIDO</b>: Documento do beneficiário (CPF ou CNPJ)
       attr_accessor :documento_cedente
       # <b>OPCIONAL</b>: Número sequencial utilizado para identificar o boleto
       attr_accessor :nosso_numero
@@ -76,17 +76,17 @@ module Brcobranca
       attr_accessor :local_pagamento
       # <b>REQUERIDO</b>: Informa se o banco deve aceitar o boleto após o vencimento ou não( S ou N, quase sempre S)
       attr_accessor :aceite
-      # <b>REQUERIDO</b>: Nome da pessoa que receberá o boleto
+      # <b>REQUERIDO</b>: Nome do pagador
       attr_accessor :sacado
-      # <b>OPCIONAL</b>: Endereco da pessoa que receberá o boleto
+      # <b>OPCIONAL</b>: Endereco do pagador
       attr_accessor :sacado_endereco
-      # <b>REQUERIDO</b>: Documento da pessoa que receberá o boleto
+      # <b>REQUERIDO</b>: Documento do pagador
       attr_accessor :sacado_documento
       # <b>OPCIONAL</b>: Nome do avalista
       attr_accessor :avalista
       # <b>OPCIONAL</b>: Documento do avalista
       attr_accessor :avalista_documento
-      # <b>OPCIONAL</b>: Endereço da pessoa que envia o boleto
+      # <b>OPCIONAL</b>: Endereço do beneficiário
       attr_accessor :cedente_endereco
 
       # Validações
