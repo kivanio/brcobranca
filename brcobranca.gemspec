@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary = 'Gem que permite trabalhar com bloquetos de cobranca para bancos brasileiros.'
   gem.email = 'kivanio@gmail.com'
   gem.homepage = 'http://rubygems.org/gems/brcobranca'
-  gem.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
+  gem.files         = Dir['Rakefile', '{bin,lib,spec}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*', 'History*'] & `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
