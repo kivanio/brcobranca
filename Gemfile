@@ -7,6 +7,7 @@ group :development do
   gem 'pry'
   gem 'rubocop'
   gem 'rubocop-rspec'
+  gem 'github_changelog_generator'
 end
 
 group :test do
