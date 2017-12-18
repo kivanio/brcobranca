@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/kivanio/brcobranca/tree/HEAD)
-
-[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.1.1...HEAD)
+## [v9.1.2](https://github.com/kivanio/brcobranca/tree/v9.1.2) (18-12-2017)
+[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.1.1...v9.1.2)
 
 **Merged pull requests:**
 
