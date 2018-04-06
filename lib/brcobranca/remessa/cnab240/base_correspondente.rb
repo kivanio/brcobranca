@@ -139,6 +139,12 @@ module Brcobranca
         # @return [String]
         #
         def monta_segmento_q(pagamento, sequencial)
+          pre_nome_sacado = I18n.transliterate(pagamento.nome_sacado.to_s).gsub(/[^0-9A-Za-z ,]/i, '').strip
+          pre_endereco_sacado = I18n.transliterate(pagamento.endereco_sacado.to_s).gsub(/[^0-9A-Za-z ,]/i, '').strip
+          pre_bairro_sacado = I18n.transliterate(pagamento.bairro_sacado.to_s).gsub(/[^0-9A-Za-z ,]/i, '').strip
+          pre_cidade_sacado = I18n.transliterate(pagamento.cidade_sacado.to_s).gsub(/[^0-9A-Za-z ,]/i, '').strip
+          pre_nome_avalista = I18n.transliterate(pagamento.nome_avalista.to_s).gsub(/[^0-9A-Za-z ,]/i, '').strip
+
           segmento_q = ''                                               # CAMPO                         TAMANHO
           segmento_q << ''.rjust(7, '0')                                # zeros                         3
           segmento_q << '3'                                             # registro detalhe              1
@@ -148,16 +154,16 @@ module Brcobranca
           segmento_q << '01'                                            # cod. movimento remessa        2
           segmento_q << identificacao_sacado(pagamento)                 # tipo insc. sacado             2
           segmento_q << pagamento.documento_sacado.to_s.rjust(14, '0')  # documento sacado              14
-          segmento_q << pagamento.nome_sacado.format_size(40)           # nome cliente                  40
-          segmento_q << pagamento.endereco_sacado.format_size(40)       # endereco cliente              40
-          segmento_q << pagamento.bairro_sacado.format_size(15)         # bairro                        15
+          segmento_q << pre_nome_sacado.format_size(40)                 # nome cliente                  40
+          segmento_q << pre_endereco_sacado.format_size(40)             # endereco cliente              40
+          segmento_q << pre_bairro_sacado.format_size(15)               # bairro                        15
           segmento_q << pagamento.cep_sacado[0..4]                      # cep                           5
           segmento_q << pagamento.cep_sacado[5..7]                      # sufixo cep                    3
-          segmento_q << pagamento.cidade_sacado.format_size(15)         # cidade                        15
+          segmento_q << pre_cidade_sacado.format_size(15)               # cidade                        15
           segmento_q << pagamento.uf_sacado                             # uf                            2
           segmento_q << identificacao_avalista(pagamento)               # identificacao do sacador      2
           segmento_q << pagamento.documento_avalista.to_s.rjust(14, '0') # documento sacador            15
-          segmento_q << pagamento.nome_avalista.format_size(40)         # nome avalista                 40
+          segmento_q << pre_nome_avalista.format_size(40)               # nome avalista                 40
           segmento_q << ''.rjust(31, ' ')                               # zeros                         0
           segmento_q
         end
