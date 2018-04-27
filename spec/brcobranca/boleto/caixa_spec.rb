@@ -29,8 +29,8 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     expect(boleto_novo.codigo_servico).to be_falsey
     expect(boleto_novo.carteira).to eql('1')

@@ -32,8 +32,8 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.valid?).to be_falsey
   end
@@ -47,8 +47,8 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.00)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.00)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -122,22 +122,22 @@ RSpec.describe Brcobranca::Boleto::Base do
     boleto_novo = described_class.new(@valid_attributes)
     boleto_novo.quantidade = 1
     boleto_novo.valor = 1
-    expect(boleto_novo.valor_documento).to be(1.0)
+    expect(boleto_novo.valor_documento).to eq(1.0)
     boleto_novo.quantidade = 1
     boleto_novo.valor = 1.0
-    expect(boleto_novo.valor_documento).to be(1.0)
+    expect(boleto_novo.valor_documento).to eq(1.0)
     boleto_novo.quantidade = 100
     boleto_novo.valor = 1
-    expect(boleto_novo.valor_documento).to be(100.0)
+    expect(boleto_novo.valor_documento).to eq(100.0)
     boleto_novo.quantidade = 1
     boleto_novo.valor = 1.2
-    expect(boleto_novo.valor_documento).to be(1.2)
+    expect(boleto_novo.valor_documento).to eq(1.2)
     boleto_novo.quantidade = 1
     boleto_novo.valor = 135.43
-    expect(boleto_novo.valor_documento).to be(135.43)
+    expect(boleto_novo.valor_documento).to eq(135.43)
     boleto_novo.quantidade = 'gh'
     boleto_novo.valor = 135.43
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
   end
 
   it 'Mostrar aviso sobre sobrecarga de métodos padrões' do
