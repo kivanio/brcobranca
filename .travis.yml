@@ -20,7 +20,6 @@ rvm:
   - '2.3.4'
   - '2.2.7'
   - '2.1.10'
-  - '1.9.3'
   - jruby-9.1.16.0
 
 gemfile:
@@ -47,12 +46,7 @@ matrix:
       gemfile: gemfiles/rails_51.gemfile
     - rvm: 2.1.10
       gemfile: gemfiles/rails_52.gemfile
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails_50.gemfile
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails_51.gemfile
-    - rvm: 1.9.3
-      gemfile: gemfiles/rails_52.gemfile
+
 branches:
   only:
     - master
