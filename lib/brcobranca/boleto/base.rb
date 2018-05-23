@@ -88,6 +88,8 @@ module Brcobranca
       attr_accessor :avalista_documento
       # <b>OPCIONAL</b>: Endereço do beneficiário
       attr_accessor :cedente_endereco
+      # <b>OPCIONAL</b>: linha digitável
+      attr_accessor :linha_digitavel
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, :sacado_documento, message: 'não pode estar em branco.'

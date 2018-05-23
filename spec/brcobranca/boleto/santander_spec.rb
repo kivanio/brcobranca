@@ -75,6 +75,12 @@ RSpec.describe Brcobranca::Boleto::Santander do
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('03399.18997 77500.000904 00272.501024 3 54500000005400')
   end
 
+  it 'Usa linha digitavel passada' do
+    @valid_attributes[:linha_digitavel] = '11111.22222 33333.444444 55555.666666 7 888888888888'
+    boleto_novo = described_class.new(@valid_attributes)
+    expect(boleto_novo.linha_digitavel).to eq('11111.22222 33333.444444 55555.666666 7 888888888888')
+  end
+
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
