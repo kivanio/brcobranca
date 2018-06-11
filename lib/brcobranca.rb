@@ -112,6 +112,7 @@ module Brcobranca
     autoload :Banrisul,      'brcobranca/boleto/banrisul'
     autoload :Credisis,      'brcobranca/boleto/credisis'
     autoload :Cecred,        'brcobranca/boleto/cecred'
+    autoload :Safra,         'brcobranca/boleto/safra'
 
     # Módulos para classes de template
     module Template
