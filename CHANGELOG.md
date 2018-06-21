@@ -1,5 +1,8 @@
 # Change Log
 
+## [v9.2.1](https://github.com/kivanio/brcobranca/tree/v9.2.1) (21-06-2018)
+[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.0...v9.2.1)
+
 ## [v9.2.0](https://github.com/kivanio/brcobranca/tree/v9.2.0) (11-06-2018)
 [Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.1.2...v9.2.0)
 
