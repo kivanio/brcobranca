@@ -4,9 +4,17 @@
 module Brcobranca
   module Boleto
     class Safra < Base # Banco Safra
-      validates_length_of :agencia, maximum: 5, message: 'deve ser menor ou igual a 4 dígitos.'
+      # <b>REQUERIDO</b>: Dígito da Agência
+      attr_accessor :agencia_dv
+      # <b>REQUERIDO</b>: Dígito da conta
+      attr_accessor :conta_corrente_dv
+      
+      validates_presence_of :agencia_dv, :conta_corrente_dv, message: 'não pode estar em branco.'
+      validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :nosso_numero, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
-      validates_length_of :conta_corrente, maximum: 9, message: 'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :agencia_dv, is: 1, message: 'deve ser igual a 1 dígitos.'
+      validates_length_of :conta_corrente_dv, is: 1, message: 'deve ser igual a 1 dígitos.'
 
       # Codigo do banco emissor (3 dígitos sempre)
       #
@@ -17,15 +25,15 @@ module Brcobranca
 
       # Agência
       #
-      # @return [String] 5 caracteres numéricos.
+      # @return [String] 4 caracteres numéricos.
       def agencia=(valor)
-        @agencia = valor.to_s.rjust(5, '0') if valor
+        @agencia = valor.to_s.rjust(4, '0') if valor
       end
 
       # Conta corrente
-      # @return [String] 9 caracteres numéricos.
+      # @return [String] 8 caracteres numéricos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(9, '0') if valor
+        @conta_corrente = valor.to_s.rjust(8, '0') if valor
       end
 
       # Número seqüencial utilizado para identificar o boleto.
@@ -55,9 +63,9 @@ module Brcobranca
       # Agência + conta corrente do cliente para exibir no boleto.
       # @return [String]
       # @example
-      #  boleto.agencia_conta_boleto #=> "0811 / 53678-8"
+      #  boleto.agencia_conta_boleto #=> "0811-1 / 53678-8"
       def agencia_conta_boleto
-        "#{agencia} / #{conta_corrente}"
+        "#{agencia}-#{agencia_dv} / #{conta_corrente}-#{conta_corrente_dv}"
       end
 
       # Segunda parte do código de barras.
@@ -137,7 +145,7 @@ module Brcobranca
       #
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "7#{agencia}#{conta_corrente}#{nosso_numero}#{nosso_numero_dv}2"
+        "7#{agencia}#{agencia_dv}#{conta_corrente}#{conta_corrente_dv}#{nosso_numero}#{nosso_numero_dv}2"
       end
     end
   end
