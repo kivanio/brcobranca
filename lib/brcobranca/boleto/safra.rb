@@ -63,9 +63,9 @@ module Brcobranca
       # Agência + conta corrente do cliente para exibir no boleto.
       # @return [String]
       # @example
-      #  boleto.agencia_conta_boleto #=> "0811-1 / 53678-8"
+      #  boleto.agencia_conta_boleto #=> "08111 / 536788"
       def agencia_conta_boleto
-        "#{agencia}-#{agencia_dv} / #{conta_corrente}-#{conta_corrente_dv}"
+        "#{agencia}#{agencia_dv} / #{conta_corrente}#{conta_corrente_dv}"
       end
 
       # Segunda parte do código de barras.

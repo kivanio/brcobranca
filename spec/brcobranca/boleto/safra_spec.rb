@@ -116,12 +116,12 @@ RSpec.describe Brcobranca::Boleto::Safra do
   it 'Montar agencia_conta_boleto' do
     boleto_novo = described_class.new(valid_attributes)
 
-    expect(boleto_novo.agencia_conta_boleto).to eql('4042-8 / 00061900-7')
+    expect(boleto_novo.agencia_conta_boleto).to eql('40428 / 000619007')
     boleto_novo.agencia = '0719'
-    expect(boleto_novo.agencia_conta_boleto).to eql('0719-8 / 00061900-7')
+    expect(boleto_novo.agencia_conta_boleto).to eql('07198 / 000619007')
     boleto_novo.agencia = '0548'
     boleto_novo.conta_corrente = '1448'
-    expect(boleto_novo.agencia_conta_boleto).to eql('0548-8 / 00001448-7')
+    expect(boleto_novo.agencia_conta_boleto).to eql('05488 / 000014487')
   end
 
   describe 'Busca logotipo do banco' do
