@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 require 'parseline'
 
 module Brcobranca
@@ -19,7 +18,8 @@ module Brcobranca
 
         fixed_width_layout do |parse|
           # Todos os campos descritos no documento em ordem
-          # :tipo_de_registro, 0..0 # identificacao do registro transacao
+          # identificacao do registro transacao
+          parse.field :codigo_registro, 0..0
           # :codigo_de_inscricao, 1..2 # identificacao do tipo de inscrica/empresa
           # :numero_de_inscricao, 3..16 #numero de inscricao da empresa (cpf/cnpj)
 
@@ -50,8 +50,10 @@ module Brcobranca
           # :carteira, 107..107 #código da carteira
           parse.field :carteira, 107..107
 
-          # :cod_de_ocorrencia, 108..109 # código de ocorrencia
-          # :data_de_ocorrencia, 110..115 # data de ocorrencia no banco (ddmmaa)
+          parse.field :codigo_ocorrencia, 108..109
+
+          parse.field :data_ocorrencia, 110..115
+
           # :n_do_documento, 116..125 # n umero do documento de cobranca (dupl, np etc)
           # :nosso_numero, 126..133 # confirmacao do numero do titulo no banco
           # :brancos, 134..145 #complemento de registro
@@ -110,6 +112,10 @@ module Brcobranca
           # :erros_msg, 377..384 #registros rejeitados ou laegacao do sacado ou registro de mensagem informativa
           # :brancos, 385..391 #complemento de registro
           # :cod_de_liquidacao, 392..393 #meio pelo qual o título foi liquidado
+
+          parse.field :motivo_ocorrencia, 377..384, ->(motivos) do
+            motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
+          end
 
           # :numero_sequencial, 394..399 #numero sequencial no arquivo
           parse.field :sequencial, 394..399

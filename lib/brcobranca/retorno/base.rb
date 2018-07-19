@@ -1,16 +1,15 @@
 # encoding: utf-8
-#
 
 module Brcobranca
   module Retorno
     class Base # Classe base para retornos bancários
+      attr_accessor :codigo_registro
       attr_accessor :agencia_com_dv
       attr_accessor :agencia_sem_dv
       attr_accessor :cedente_com_dv
       attr_accessor :convenio
       attr_accessor :nosso_numero
-      attr_accessor :nosso_numero_com_dv
-      attr_accessor :cod_de_ocorrencia
+      attr_accessor :documento_numero
       attr_accessor :tipo_cobranca
       attr_accessor :tipo_cobranca_anterior
       attr_accessor :natureza_recebimento
@@ -25,6 +24,8 @@ module Brcobranca
       attr_accessor :banco_recebedor
       attr_accessor :agencia_recebedora_com_dv
       attr_accessor :especie_documento
+      attr_accessor :codigo_ocorrencia
+      attr_accessor :motivo_ocorrencia
       attr_accessor :data_ocorrencia
       attr_accessor :data_credito
       attr_accessor :valor_tarifa

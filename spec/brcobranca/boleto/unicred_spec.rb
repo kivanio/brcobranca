@@ -7,7 +7,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
   before do
     @valid_attributes = {
       especie_documento: 'DM',
-      data_documento: Date.parse('2012-01-18'),
+      data_processamento: Date.parse('2012-01-18'),
       valor: 0.0,
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
@@ -16,7 +16,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
       agencia: '4042',
       conta_corrente: '61900',
       convenio: 12_345,
-      numero_documento: '00168',
+      nosso_numero: '00168',
       posto: '1',
       byte_idt: '7'
     }
@@ -28,12 +28,12 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.today)
-    expect(boleto_novo.data_vencimento).to eql(Date.today)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
+    expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
     expect(boleto_novo.carteira).to eql('3')
   end
@@ -44,12 +44,12 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.parse('2012-01-18'))
-    expect(boleto_novo.data_vencimento).to eql(Date.today)
+    expect(boleto_novo.data_processamento).to eql(Date.parse('2012-01-18'))
+    expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -58,7 +58,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.conta_corrente).to eql('61900')
     expect(boleto_novo.agencia).to eql('4042')
     expect(boleto_novo.convenio).to eql('12345')
-    expect(boleto_novo.numero_documento).to eql('00168')
+    expect(boleto_novo.nosso_numero).to eql('00168')
     expect(boleto_novo.carteira).to eql('3')
   end
 
@@ -66,7 +66,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_vencimento] = Date.parse('2012-01-24')
     @valid_attributes[:data_documento] = Date.parse('2012-01-19')
-    @valid_attributes[:numero_documento] = '13871'
+    @valid_attributes[:nosso_numero] = '13871'
     @valid_attributes[:conta_corrente] = '12345'
     @valid_attributes[:agencia] = '1234'
     @valid_attributes[:carteira] = '3'
@@ -92,7 +92,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     boleto_novo.agencia = '1234'
     boleto_novo.posto = '18'
     boleto_novo.conta_corrente = '12345'
-    boleto_novo.numero_documento = '13871'
+    boleto_novo.nosso_numero = '13871'
     boleto_novo.carteira = '3'
     expect(boleto_novo.nosso_numero_boleto).to eql('12/213871-5')
     expect(boleto_novo.nosso_numero_dv).to be(5)
@@ -130,7 +130,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     @valid_attributes[:valor] = 2952.95
     @valid_attributes[:data_documento] = Date.parse('2009-04-30')
     @valid_attributes[:data_vencimento] = Date.parse('2008-02-01')
-    @valid_attributes[:numero_documento] = '86452'
+    @valid_attributes[:nosso_numero] = '86452'
     @valid_attributes[:conta_corrente] = '03005'
     @valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(@valid_attributes)

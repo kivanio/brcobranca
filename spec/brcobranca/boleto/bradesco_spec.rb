@@ -15,7 +15,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
       agencia: '4042',
       conta_corrente: '61900',
       convenio: 12_387_989,
-      numero_documento: '777700168'
+      nosso_numero: '777700168'
     }
   end
 
@@ -25,12 +25,12 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.carteira).to eql('06')
   end
@@ -41,12 +41,12 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagável preferencialmente na Rede Bradesco ou Bradesco Expresso')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -55,7 +55,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     expect(boleto_novo.conta_corrente).to eql('0061900')
     expect(boleto_novo.agencia).to eql('4042')
     expect(boleto_novo.convenio).to be(12_387_989)
-    expect(boleto_novo.numero_documento).to eql('00777700168')
+    expect(boleto_novo.nosso_numero).to eql('00777700168')
     expect(boleto_novo.carteira).to eql('06')
   end
 
@@ -63,7 +63,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
     valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
-    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:nosso_numero] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)
@@ -77,7 +77,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:valor] = 135.00
     valid_attributes[:data_vencimento] = Date.parse('2008-02-02')
     valid_attributes[:data_documento] = Date.parse('2008-02-01')
-    valid_attributes[:numero_documento] = '777700168'
+    valid_attributes[:nosso_numero] = '777700168'
     valid_attributes[:conta_corrente] = '61900'
     valid_attributes[:agencia] = '4042'
     valid_attributes[:carteira] = '03'
@@ -97,27 +97,27 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new(valid_attributes)
 
-    boleto_novo.numero_documento = '00000000525'
+    boleto_novo.nosso_numero = '00000000525'
     boleto_novo.carteira = '06'
     expect(boleto_novo.nosso_numero_boleto).to eql('06/00000000525-P')
     expect(boleto_novo.nosso_numero_dv).to eql('P')
 
-    boleto_novo.numero_documento = '00000000001'
+    boleto_novo.nosso_numero = '00000000001'
     boleto_novo.carteira = '09'
     expect(boleto_novo.nosso_numero_boleto).to eql('09/00000000001-1')
     expect(boleto_novo.nosso_numero_dv).to be(1)
 
-    boleto_novo.numero_documento = '00000000002'
+    boleto_novo.nosso_numero = '00000000002'
     boleto_novo.carteira = '19'
     expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000002-8')
     expect(boleto_novo.nosso_numero_dv).to be(8)
 
-    boleto_novo.numero_documento = 6
+    boleto_novo.nosso_numero = 6
     boleto_novo.carteira = '19'
     expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000006-0')
     expect(boleto_novo.nosso_numero_dv).to be(0)
 
-    boleto_novo.numero_documento = '00000000001'
+    boleto_novo.nosso_numero = '00000000001'
     boleto_novo.carteira = '19'
     expect(boleto_novo.nosso_numero_boleto).to eql('19/00000000001-P')
     expect(boleto_novo.nosso_numero_dv).to eql('P')
@@ -142,7 +142,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
     valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
-    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:nosso_numero] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)
@@ -163,7 +163,7 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:valor] = 2952.95
     valid_attributes[:data_documento] = Date.parse('2009-04-30')
     valid_attributes[:data_vencimento] = Date.parse('2009-04-30')
-    valid_attributes[:numero_documento] = '75896452'
+    valid_attributes[:nosso_numero] = '75896452'
     valid_attributes[:conta_corrente] = '0403005'
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)

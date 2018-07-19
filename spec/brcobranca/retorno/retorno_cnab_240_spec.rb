@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
@@ -30,6 +29,7 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
     expect(pagamento.outros_recebimento).to eql('000000000000005')
     expect(pagamento.sequencial).to eql('00001')
     expect(pagamento.valor_tarifa).to eql('000000000000103')
+    expect(pagamento.motivo_ocorrencia).to eql(['03'])
 
     # Dados que não consegui extrair dos registros T e U
     # pagamento.convenio.should eql('')

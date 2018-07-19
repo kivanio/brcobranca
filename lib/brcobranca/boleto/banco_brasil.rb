@@ -8,7 +8,7 @@ module Brcobranca
       validates_length_of :carteira, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :convenio, in: 4..8, message: 'não existente para este banco.'
 
-      validates_each :numero_documento do |record, attr, value|
+      validates_each :nosso_numero do |record, attr, value|
         valor_tamanho = value.to_s.size
         registro_tamanho = record.convenio.to_s.size
         quantidade = if (valor_tamanho > 9) && (registro_tamanho == 8)
@@ -76,22 +76,22 @@ module Brcobranca
       # (Número de dígitos depende do tipo de convênio).
       # @raise  [Brcobranca::NaoImplementado] Caso o tipo de convênio não seja suportado pelo Brcobranca.
       #
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 17 dígitos com Convenio de 8 dígitos.
       #   @return [String] 9 caracteres numéricos.
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 17 dígitos com Convenio de 7 dígitos.
       #   @return [String] 10 caracteres numéricos.
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 7 dígitos com Convenio de 4 dígitos.
       #   @return [String] 4 caracteres numéricos.
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 11 dígitos com Convenio de 6 dígitos e {#codigo_servico} false.
       #   @return [String] 5 caracteres numéricos.
-      # @overload numero_documento
+      # @overload nosso_numero
       #   Nosso Número de 17 dígitos com Convenio de 6 dígitos e {#codigo_servico} true. (carteira 16 e 18)
       #   @return [String] 17 caracteres numéricos.
-      def numero_documento
+      def nosso_numero
         quantidade = case @convenio.to_s.size
                      when 8
                        9
@@ -104,14 +104,14 @@ module Brcobranca
                      else
                        raise Brcobranca::NaoImplementado, 'Tipo de convênio não implementado.'
         end
-        quantidade ? @numero_documento.to_s.rjust(quantidade, '0') : @numero_documento
+        quantidade ? @nosso_numero.to_s.rjust(quantidade, '0') : @nosso_numero
       end
 
       # Dígito verificador do nosso número.
       # @return [String] 1 caracteres numéricos.
-      # @see BancoBrasil#numero_documento
+      # @see BancoBrasil#nosso_numero
       def nosso_numero_dv
-        "#{convenio}#{numero_documento}".modulo11(mapeamento: { 10 => 'X' })
+        "#{convenio}#{nosso_numero}".modulo11(mapeamento: { 10 => 'X' })
       end
 
       # Nosso número para exibir no boleto.
@@ -119,7 +119,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "12387989000004042-4"
       def nosso_numero_boleto
-        "#{convenio}#{numero_documento}"
+        "#{convenio}#{nosso_numero}"
       end
 
       # Agência + conta corrente do cliente para exibir no boleto.
@@ -135,21 +135,21 @@ module Brcobranca
       # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
         case convenio.to_s.size
-        when 8 # Nosso Número de 17 dígitos com Convenio de 8 dígitos e numero_documento de 9 dígitos
-          "000000#{convenio}#{numero_documento}#{carteira}"
-        when 7 # Nosso Número de 17 dígitos com Convenio de 7 dígitos e numero_documento de 10 dígitos
-          "000000#{convenio}#{numero_documento}#{carteira}"
+        when 8 # Nosso Número de 17 dígitos com Convenio de 8 dígitos e nosso_numero de 9 dígitos
+          "000000#{convenio}#{nosso_numero}#{carteira}"
+        when 7 # Nosso Número de 17 dígitos com Convenio de 7 dígitos e nosso_numero de 10 dígitos
+          "000000#{convenio}#{nosso_numero}#{carteira}"
         when 6 # Convenio de 6 dígitos
           if codigo_servico == false
-            # Nosso Número de 11 dígitos com Convenio de 6 dígitos e numero_documento de 5 dígitos
-            "#{convenio}#{numero_documento}#{agencia}#{conta_corrente}#{carteira}"
+            # Nosso Número de 11 dígitos com Convenio de 6 dígitos e nosso_numero de 5 dígitos
+            "#{convenio}#{nosso_numero}#{agencia}#{conta_corrente}#{carteira}"
           else
-            # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem numero_documento, carteira 16 e 18
+            # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem nosso_numero, carteira 16 e 18
             raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{carteira}" unless %w(16 18).include?(carteira)
-            "#{convenio}#{numero_documento}21"
+            "#{convenio}#{nosso_numero}21"
           end
-        when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem numero_documento
-          "#{convenio}#{numero_documento}#{agencia}#{conta_corrente}#{carteira}"
+        when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem nosso_numero
+          "#{convenio}#{nosso_numero}#{agencia}#{conta_corrente}#{carteira}"
         end
       end
     end

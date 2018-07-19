@@ -1,17 +1,61 @@
 language: ruby
-sudo: false
+cache: bundler
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y ghostscript
+  - gem update --system # use the very latest Rubygems
+  - gem install bundler # use the very latest Bundler
+dist: trusty
+before_script:
+  - unset _JAVA_OPTIONS
 rvm:
-  - '2.3.3'
-  - '2.2.3'
-  - 'jruby'
-  - 'rbx'
+  - '2.5.0'
+  - '2.4.3'
+  - '2.3.4'
+  - '2.2.7'
+  - '2.1.10'
+  - jruby-9.1.16.0
+
+gemfile:
+  - gemfiles/rails_42.gemfile
+  - gemfiles/rails_50.gemfile
+  - gemfiles/rails_51.gemfile
+  - gemfiles/rails_52.gemfile
+
+env:
+  global:
+    - JRUBY_OPTS="-J-Xmx1024m --dev --debug"
+    - COVERAGE=true
+    - CC_TEST_REPORTER_ID=69a23bee43b8c53271b1a6fbe18b6167de91a06d66ab19908dd52f73158ab71b
+
+matrix:
+  fast_finish: true
+
+  allow_failures:
+    - rvm: jruby-9.1.16.0
+      gemfile: gemfiles/rails_42.gemfile
+    - rvm: jruby-9.1.16.0
+      gemfile: gemfiles/rails_50.gemfile
+    - rvm: jruby-9.1.16.0
+      gemfile: gemfiles/rails_51.gemfile
+    - rvm: jruby-9.1.16.0
+      gemfile: gemfiles/rails_52.gemfile
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails_50.gemfile
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails_51.gemfile
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails_52.gemfile
+
 branches:
   only:
     - master
-addons:
-  code_climate:
-    repo_token: 69a23bee43b8c53271b1a6fbe18b6167de91a06d66ab19908dd52f73158ab71b
-matrix:
-  allow_failures:
-    - rvm: jruby
-    - rvm: rbx
+
+script:
+  - bundle exec rspec

@@ -162,13 +162,13 @@ RSpec.describe Brcobranca::Calculo do
   end
 
   it 'Calcula a soma dos digitos de um número com mais de 1 algarismo' do
-    expect(111.soma_digitos).to be(3)
+    expect(11.soma_digitos).to be(2)
     expect(8.soma_digitos).to be(8)
-    expect('111'.soma_digitos).to be(3)
+    expect('11'.soma_digitos).to be(2)
     expect('8'.soma_digitos).to be(8)
     expect(0.soma_digitos).to be(0)
-    expect(111.soma_digitos).to be_a_kind_of(Integer)
-    expect('111'.soma_digitos).to be_a_kind_of(Integer)
+    expect(11.soma_digitos).to be_a_kind_of(Integer)
+    expect('11'.soma_digitos).to be_a_kind_of(Integer)
   end
 
   describe '#duplo_digito' do
@@ -180,5 +180,6 @@ RSpec.describe Brcobranca::Calculo do
     it { expect(19_669.duplo_digito).to eql('28') }
     it { expect('00000032000272012924021'.duplo_digito).to eql('79') }
     it { expect('00000033000272012924021'.duplo_digito).to eql('65') }
+    it { expect('9194'.duplo_digito).to eql('38') }
   end
 end

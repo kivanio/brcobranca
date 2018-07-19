@@ -80,7 +80,7 @@ module Brcobranca
         def digito_agencia
           # utilizando a agencia com 4 digitos
           # para calcular o digito
-          agencia.modulo11(mapeamento: { 10 => 'X' }).to_s
+          agencia.modulo11(mapeamento: { 10 => '0' }).to_s
         end
 
         # Complemento do header
@@ -186,7 +186,7 @@ module Brcobranca
           # 34 = Baixa - Pagamento Direto ao Beneficiário
 
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]

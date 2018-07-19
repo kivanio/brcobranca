@@ -1,22 +1,23 @@
 # -*- encoding: utf-8 -*-
-#
 module Brcobranca
   module Remessa
     module Cnab400
       class Santander < Brcobranca::Remessa::Cnab400::Base
+
         # Código de Transmissão
         # Consultar seu gerente para pegar esse código. Geralmente está no e-mail enviado pelo banco.
         attr_accessor :codigo_transmissao
 
         attr_accessor :codigo_carteira
 
-        validates_presence_of :documento_cedente, :codigo_transmissao, :agencia, :conta_corrente, :digito_conta, message: 'não pode estar em branco.'
+        validates_presence_of :documento_cedente, :codigo_transmissao, message: 'não pode estar em branco.'
+        validates_presence_of :digito_conta, message: 'não pode estar em branco.', if: :conta_padrao_novo?
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 3, message: 'deve ter no máximo 3 dígitos.'
         validates_length_of :codigo_transmissao, maximum: 20, message: 'deve ter no máximo 20 dígitos.'
 
         def initialize(campos = {})
-          campos = { aceite: 'N', carteira: '101', codigo_carteira: '5' }.merge!(campos)
+          campos = { aceite: 'N', carteira: '101', codigo_carteira: '1' }.merge!(campos)
           super(campos)
         end
 
@@ -28,6 +29,10 @@ module Brcobranca
           'SANTANDER'.format_size(15)
         end
 
+        def codigo_transmissao=(valor)
+          @codigo_transmissao = valor.to_s.strip.rjust(20, '0') if valor
+        end
+
         # Informacoes do Código de Transmissão
         #
         # @return [String]
@@ -35,29 +40,34 @@ module Brcobranca
         def info_conta
           # CAMPO                     TAMANHO
           # codigo_transmissao        20
-          codigo_transmissao.rjust(20, ' ')
+          codigo_transmissao
         end
+
+        # Zeros do header
+        #
+        # @return [String]
+        #
+        def zeros
+          "".ljust(16, "0")
+        end
+
 
         # Complemento do header
         #
         # @return [String]
         #
         def complemento
-          ''.rjust(275, ' ')
+          "".ljust(275, " ")
         end
 
-        # Complemento zeros do header
-        #
-        # @return [Integer]
-        #
-        def complemento_zeros
-          '0'.rjust(16, '0')
-        end
-
-        # Header do arquivo remessa
+        # Numero da versão da remessa
         #
         # @return [String]
         #
+        def versao
+          "058"
+        end
+
         def monta_header
           # CAMPO                 TAMANHO    VALOR
           # tipo do registro      [1]        0
@@ -70,11 +80,11 @@ module Brcobranca
           # cod. banco            [3]
           # nome banco            [15]
           # data geracao          [6]        formato DDMMAA
-          # Zeros.................[16]
-          # complemento registro  [274] Brancos
-          # Versao da remessa.....[3] Numero da versao da remessa opcional, se informada, sera controlada pelo sistema (opcional = 000)
+          # zeros                 [16]
+          # complemento registro  [275]
+          # versao                [3]
           # num. sequencial       [6]        000001
-          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae.format_size(30)}#{cod_banco}#{nome_banco}#{data_geracao}#{complemento_zeros}#{complemento}000000001"
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae[0..29].to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{zeros}#{complemento}#{versao}000001"
         end
 
         # Detalhe do arquivo
@@ -93,16 +103,16 @@ module Brcobranca
           detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << codigo_transmissao                                     # Código de Transmissão                 9[20]
-          detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
-          detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[08]
-          detalhe << ''.rjust(6, '0')                                       # data limite para o segundo desconto   9[06]
-          detalhe << ' '                                                    # brancos                               X[01]
-          detalhe << pagamento.codigo_multa                                 # Com multa = 4, Sem multa = 0          9[01]
-          detalhe << pagamento.formata_valor_multa(4)                       # Percentual multa por atraso %         9[04]
-          detalhe << '00'                                                   # Unidade de valor moeda corrente = 00  9[02]
-          detalhe << '0'.rjust(13, '0')                                     # Valor do título em outra unidade      9[13]
-          detalhe << ''.rjust(4, ' ')                                       # brancos                               X[04]
-          detalhe << pagamento.formata_data_multa                           # Data para cobrança de multa           9[06]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[8]
+          detalhe << pagamento.formata_data_segundo_desconto                # data limite para o segundo desconto   9[06]
+          detalhe << ''.rjust(1, ' ')                                       # brancos                               X[1]
+          detalhe << pagamento.codigo_multa                                 # Com multa = 4, Sem multa = 0          9[1]
+          detalhe << pagamento.formata_percentual_multa                     # Percentual multa por atraso %         9[6]
+          detalhe << '00'                                                   # Unidade de valor moeda corrente = 00  9[2]
+          detalhe << '0'.rjust(13, '0')                                     # Valor do título em outra unidade      9[15]
+          detalhe << ''.rjust(4, ' ')                                       # brancos                               X[4]
+          detalhe << pagamento.formata_data_multa                           # Data para cobrança de multa           9[6]
 
           # codigo da carteira
           # 1 = ELETRÔNICA COM REGISTRO
@@ -111,7 +121,7 @@ module Brcobranca
           # 5 = RÁPIDA COM REGISTRO
           # (BLOQUETE EMITIDO PELO CLIENTE) 6 = CAUCIONADA RAPIDA
           # 7 = DESCONTADA ELETRÔNICA
-          detalhe << codigo_carteira # codigo da carteira                    9[01]
+          detalhe << codigo_carteira                                        # codigo da carteira                    9[01]
 
           # Código da ocorrência:
           # 01 = ENTRADA DE TÍTULO
@@ -124,14 +134,11 @@ module Brcobranca
           # 09 = PROTESTAR
           # 18 = SUSTAR PROTESTO
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
-          # Código da agência cobradora do Banco Santander,
-          # opcional informar somente se carteira for igual a 5,
-          # caso contrário, informar zeros.
-          detalhe << agencia.rjust(5, '0') # agencia cobradora..............       9[05]
+          detalhe << ''.rjust(5, '0')                                       # agencia cobradora - deixar zero       9[05]
 
           # Espécie de documento:
           # 01 = DUPLICATA
@@ -141,7 +148,7 @@ module Brcobranca
           # 06 = DUPLICATA DE SERVIÇO
           # 07 = LETRA DE CAMBIO
           detalhe << pagamento.especie_titulo                               # Espécie de documento                  9[02]
-          detalhe << 'N'                                                    # aceite (A/N)                          X[01]
+          detalhe << aceite                                                 # aceite (A/N)                          X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
 
           # Instrução cobrança
@@ -152,63 +159,71 @@ module Brcobranca
           # 06 = PROTESTAR (VIDE POSIÇÃO392/393)
           # 07 = NÃO PROTESTAR
           # 08 = NÃO COBRAR JUROS DE MORA
-          detalhe << '00'                                                   # Instrução para o título               9[02]
-          detalhe << '00'                                                   # Número de dias válidos para instrução 9[02]
+          detalhe << pagamento.cod_primeira_instrucao                       # primeira instrução                    9[02]
+          detalhe << pagamento.cod_segunda_instrucao                        # segunda instrução                     9[02]
           detalhe << pagamento.formata_valor_mora                           # valor mora ao dia                     9[13]
           detalhe << pagamento.formata_data_desconto                        # data limite para desconto             9[06]
           detalhe << pagamento.formata_valor_desconto                       # valor do desconto                     9[13]
           detalhe << pagamento.formata_valor_iof                            # valor do iof                          9[13]
           detalhe << pagamento.formata_valor_abatimento                     # valor do abatimento                   9[13]
-          detalhe << pagamento.identificacao_sacado.rjust(2, '0')           # identificacao do pagador              9[02]
+          detalhe << pagamento.identificacao_sacado                         # identificacao do pagador              9[02]
           detalhe << pagamento.documento_sacado.to_s.rjust(14, '0')         # documento do pagador                  9[14]
-          detalhe << pagamento.nome_sacado.format_size(40).ljust(40, ' ')   # nome do pagador                       X[40]
-          detalhe << pagamento.endereco_sacado.format_size(40).ljust(40, ' ') # endereco do pagador                   X[40]
-          detalhe << pagamento.bairro_sacado.format_size(12).ljust(12, ' ') # bairro do pagador                     X[12]
+          detalhe << pagamento.nome_sacado.format_size(40)                  # nome do pagador                       X[40]
+          detalhe << pagamento.endereco_sacado.format_size(40)              # endereco do pagador                   X[40]
+          detalhe << pagamento.bairro_sacado.format_size(12)                # bairro do pagador                     X[12]
           detalhe << pagamento.cep_sacado                                   # cep do pagador                        9[08]
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
-          # SE O CEDENTE FOR PESSOA JURÍDICA, O MESMO NÃO PODE TER SACADOR AVALISTA. DEIXAR CAMPO EM BRANCO
-          detalhe << ''.rjust(30, ' ')                                      # Sacador                              X[30]
+          detalhe << pagamento.nome_avalista.format_size(30)                # Sacador/Mensagens                     X[30]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
-          # INFORMAR NESTE CAMPO CARACTERE 'I' (i maiúsculo)
-          detalhe << 'I'                                                    # Identificador do Complemento          X[1]
-          detalhe << complemento_remessa                                    # Complemento                           9[2]
+          detalhe << identificador_movimento_complemento                    # Identificador do Complemento          X[1]
+          detalhe << movimento_complemento                                  # Complemento                           9[2]
           detalhe << ''.rjust(6, ' ')                                       # Brancos                               X[06]
           # Se identificacao_ocorrencia = 06
-          detalhe << '00'.rjust(2, ' ')                                     # Número de dias para protesto          9[02]
+          detalhe << pagamento.dias_protesto.rjust(2, '0')                  # Número de dias para protesto          9[02]
           detalhe << ''.rjust(1, ' ')                                       # Brancos                               X[1]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe
         end
 
+        def identificador_movimento_complemento
+          return 'I' if conta_padrao_novo?
+          ''.rjust(1, ' ')
+        end
+
+        def movimento_complemento
+          return "#{conta_corrente[8]}#{digito_conta}" if conta_padrao_novo?
+          ''.rjust(2, ' ')
+        end
+
+        def conta_padrao_novo?
+          conta_corrente.present? && conta_corrente.length > 8
+        end
+
+        # Valor total de todos os títulos
+        #
+        # @return [String]
+        #
+        def total_titulos
+          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
+          total.to_s.somente_numeros.rjust(13, "0")
+        end
+
         # Trailer do arquivo remessa
         #
         # @param sequencial
-        #   num. sequencial do registro no arquivo
+        #        num. sequencial do registro no arquivo
         #
         # @return [String]
         #
         def monta_trailer(sequencial)
-          # CAMPO                                 TAMANHO  VALOR
-          # identificacao registro                [1]      9
-          # Quantidade total de linhas no arquivo [6]
-          # Valor total dos títulos               [13]
-          # zeros                                 [374]
-          # num. sequencial                       [6]
-          "9#{sequencial.to_s.rjust(6, '0')}#{valor_total_titulos(13)}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
-        end
-
-        private
-
-        # Complemento de remessa
-        #
-        # @return [String]
-        #
-        def complemento_remessa
-          # [99]
-          # ultimo digito da conta corrente
-          # digito da conta corrente
-          "#{conta_corrente[-1]}#{digito_conta}"
+          # CAMPO               TAMANHO   VALOR
+          # código registro     [1]       9
+          # quant. documentos   [6]
+          # valor total titulos [13]
+          # zeros               [374]     0
+          # num. sequencial     [6]
+          "9#{sequencial.to_s.rjust(6, '0')}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, "0")}"
         end
       end
     end

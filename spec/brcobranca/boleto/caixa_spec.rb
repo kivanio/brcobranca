@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
       agencia: '1825',
       conta_corrente: '0000528',
       convenio: '245274',
-      numero_documento: '000000000000001'
+      nosso_numero: '000000000000001'
     }
   end
 
@@ -25,15 +25,15 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
-    expect(boleto_novo.data_documento).to eql(Date.current)
+    expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
     expect(boleto_novo.quantidade).to be(1)
-    expect(boleto_novo.valor).to be(0.0)
-    expect(boleto_novo.valor_documento).to be(0.0)
+    expect(boleto_novo.valor).to eq(0.0)
+    expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('PREFERENCIALMENTE NAS CASAS LOTÉRICAS ATÉ O VALOR LIMITE')
     expect(boleto_novo.codigo_servico).to be_falsey
-    expect(boleto_novo.carteira).to eql('2')
+    expect(boleto_novo.carteira).to eql('1')
     expect(boleto_novo.emissao).to eql('4')
   end
 
@@ -55,7 +55,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     boleto_novo = described_class.new @valid_attributes
     expect { boleto_novo.codigo_barras }.not_to raise_error
     expect(boleto_novo.codigo_barras_segunda_parte).not_to be_blank
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('2452740000200040000000010')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('2452740000100040000000017')
   end
 
   it 'Não permitir gerar boleto com atributos inválidos' do
@@ -91,19 +91,19 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
   end
 
   it 'Tamanho do número documento deve ser de 15 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1234567891234567')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1234567891234567')
     expect(boleto_novo).not_to be_valid
   end
 
   it 'Número do documento deve ser preenchido com zeros à esquerda quando menor que 15 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(numero_documento: '1')
-    expect(boleto_novo.numero_documento).to eq('000000000000001')
+    boleto_novo = described_class.new @valid_attributes.merge(nosso_numero: '1')
+    expect(boleto_novo.nosso_numero).to eq('000000000000001')
     expect(boleto_novo).to be_valid
   end
 
   it 'Montar nosso_numero_boleto' do
     boleto_novo = described_class.new @valid_attributes
-    expect(boleto_novo.nosso_numero_boleto).to eq('24000000000000001-2')
+    expect(boleto_novo.nosso_numero_boleto).to eq('14000000000000001-4')
   end
 
   it 'Montar agencia_conta_boleto' do
@@ -127,7 +127,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
     @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
-    @valid_attributes[:numero_documento] = '000000077700168'
+    @valid_attributes[:nosso_numero] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
@@ -145,7 +145,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')
     @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
-    @valid_attributes[:numero_documento] = '000000077700168'
+    @valid_attributes[:nosso_numero] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
     %w(pdf jpg tif png).each do |format|
       file_body = boleto_novo.to(format)

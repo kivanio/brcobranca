@@ -3,11 +3,15 @@
 module Brcobranca
   module Boleto
     class Banrisul < Base # Banrisul
+      # <b>REQUERIDO</b>: digito verificador do convenio
+      attr_accessor :digito_convenio
+
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
-      validates_length_of :numero_documento, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
+      validates_length_of :nosso_numero, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
+      validates_length_of :digito_convenio, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
 
       def initialize(campos = {})
         campos = { carteira: '2' }.merge!(campos)
@@ -45,25 +49,31 @@ module Brcobranca
       # Número documento
       #
       # @return [String] 8 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(8, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(8, '0') if valor
       end
 
-      # Número do convênio/contrato do cliente junto ao banco.
+      # Número do convênio do cliente junto ao banco.
       # @return [String] 7 caracteres numéricos.
       def convenio=(valor)
         @convenio = valor.to_s.rjust(7, '0') if valor
+      end
+
+      # Digito do convênio do cliente junto ao banco.
+      # @return [String] 2 caracteres numéricos.
+      def digito_convenio=(valor)
+        @digito_convenio = valor.to_s.rjust(2, '0') if valor
       end
 
       # Nosso número para exibição no boleto.
       #
       # @return [String] caracteres numéricos.
       def nosso_numero_boleto
-        "#{numero_documento}-#{numero_documento.duplo_digito}"
+        "#{nosso_numero}-#{nosso_numero.duplo_digito}"
       end
 
       def agencia_conta_boleto
-        "#{agencia} / #{convenio}"
+        "#{agencia} / #{convenio[0..5]}.#{convenio[6]}.#{digito_convenio}"
       end
 
       # Posições 20 a 20 - Produto:
@@ -76,7 +86,7 @@ module Brcobranca
       # Posição 41 a 42 - Constante 40.
       # Posição 43 a 44 - Duplo Dígito referente às posições 20 a 42 (módulos 10 e 11).
       def codigo_barras_segunda_parte
-        campo_livre = "#{carteira}1#{agencia}#{convenio}#{numero_documento}40"
+        campo_livre = "#{carteira}1#{agencia}#{convenio}#{nosso_numero}40"
         campo_livre + campo_livre.duplo_digito
       end
     end

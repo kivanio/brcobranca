@@ -52,19 +52,13 @@ module Brcobranca
     # @return [Integer]
     # @example
     #  1 #=> 1
-    #  11 (1+1) #=> 2
-    #  13 (1+3) #=> 4
+    #  11 (-9 ) #=> 2
+    #  13 (-9 ) #=> 4
+    #  18 (-9 ) #=> 9
     def soma_digitos
-      total = case to_i
-              when (0..9)
-                self
-              else
-                numero = to_s
-                total = 0
-                0.upto(numero.size - 1) { |digito| total += numero[digito, 1].to_i }
-                total
-              end
-      total.to_i
+      total = self.to_i
+      total = total - 9 if total > 9
+      total
     end
 
     # Faz a multiplicação de um número pelos fatores passados como parâmetro.
@@ -97,7 +91,7 @@ module Brcobranca
       raise ArgumentError, 'Número inválido' unless is_number?
 
       digito_1 = modulo10
-      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total % 11) }
+      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total < 11 ? total : total % 11) }
 
       while digito_2 == 1
         digito_1 = if digito_1 == 9
@@ -106,7 +100,7 @@ module Brcobranca
                      digito_1 + 1
                    end
 
-        digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7])
+        digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total < 11 ? total : total % 11) }
       end
 
       digito_2 = 11 - digito_2 if digito_2 != 0

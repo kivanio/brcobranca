@@ -1,12 +1,8 @@
 # -*- encoding: utf-8 -*-
-#
 module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
-        # documento do cedente
-        attr_accessor :documento_cedente
-
         validates_presence_of :carteira, message: 'não pode estar em branco.'
 
         # Data da geracao do arquivo seguindo o padrao DDMMAA
@@ -73,6 +69,10 @@ module Brcobranca
           pagamentos.each do |pagamento|
             contador += 1
             ret << monta_detalhe(pagamento, contador)
+            if pagamento.codigo_multa.to_i > 0 && self.respond_to?(:monta_detalhe_multa)
+              contador += 1
+              ret << monta_detalhe_multa(pagamento, contador)
+            end
           end
           ret << monta_trailer(contador + 1)
 

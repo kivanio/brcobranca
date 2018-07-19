@@ -17,13 +17,14 @@ module Brcobranca
       # Emissão do boleto (4-Beneficiário)
       validates_length_of :emissao, is: 1, message: 'deve possuir 1 dígitos.'
       validates_length_of :convenio, is: 6, message: 'deve possuir 6 dígitos.'
-      validates_length_of :numero_documento, is: 15, message: 'deve possuir 15 dígitos.'
+      validates_length_of :nosso_numero, is: 15, message: 'deve possuir 15 dígitos.'
 
       # Nova instância da CaixaEconomica
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = {
-          carteira: '2',
+          carteira: '1',
+          carteira_label: 'RG',
           emissao: '4'
         }.merge!(campos)
 
@@ -53,28 +54,21 @@ module Brcobranca
 
       # Número seqüencial utilizado para identificar o boleto.
       # @return [String] 15 caracteres numéricos.
-      def numero_documento=(valor)
-        @numero_documento = valor.to_s.rjust(15, '0') if valor
+      def nosso_numero=(valor)
+        @nosso_numero = valor.to_s.rjust(15, '0') if valor
       end
 
       # Nosso número, 17 dígitos
       # @return [String]
       def nosso_numero_boleto
-        "#{nosso_numero}-#{nosso_numero_dv}"
-      end
-
-      # Nosso número, 17 dígitos
-      #  1 à 2: carteira
-      #  3 à 17: campo_livre
-      def nosso_numero
-        "#{carteira}#{emissao}#{numero_documento}"
+        "#{carteira}#{emissao}#{nosso_numero}-#{nosso_numero_dv}"
       end
 
       # Dígito verificador do Nosso Número
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
       def nosso_numero_dv
-        nosso_numero.modulo11(
+        "#{carteira}#{emissao}#{nosso_numero}".modulo11(
           multiplicador: (2..9).to_a,
           mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s
@@ -110,11 +104,11 @@ module Brcobranca
       def codigo_barras_segunda_parte
         campo_livre = "#{convenio}" \
         "#{convenio_dv}" \
-        "#{nosso_numero[2..4]}" \
-        "#{nosso_numero[0..0]}" \
-        "#{nosso_numero[5..7]}" \
-        "#{nosso_numero[1..1]}" \
-        "#{nosso_numero[8..16]}"
+        "#{nosso_numero_boleto[2..4]}" \
+        "#{nosso_numero_boleto[0..0]}" \
+        "#{nosso_numero_boleto[5..7]}" \
+        "#{nosso_numero_boleto[1..1]}" \
+        "#{nosso_numero_boleto[8..16]}"
 
         campo_livre.to_s +
           campo_livre.modulo11(

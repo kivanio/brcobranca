@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
 require 'unidecoder'
 
 module Brcobranca
@@ -21,9 +20,11 @@ module Brcobranca
       attr_accessor :sequencial_remessa
       # aceite (A = ACEITO/N = NAO ACEITO)
       attr_accessor :aceite
+      # documento do cedente (CPF/CNPJ)
+      attr_accessor :documento_cedente
 
-      # Validações do Rails 3
-      include ActiveModel::Validations
+      # Validações
+      include Brcobranca::Validations
 
       validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
 
@@ -57,13 +58,19 @@ module Brcobranca
         yield self if block_given?
       end
 
-      # Soma de todos os boletos
-      #
-      # @return [String]
-      def valor_total_titulos(tamanho = 13)
-        value = pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor }
-        sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
+      def quantidade_titulos_cobranca
+        pagamentos.length.to_s.rjust(6, "0")
       end
+
+      def totaliza_valor_titulos
+        pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor.to_f }
+      end
+
+      def valor_titulos_carteira(tamanho = 17)
+        total = sprintf "%.2f", totaliza_valor_titulos
+        total.somente_numeros.rjust(tamanho, "0")
+      end
+
     end
   end
 end

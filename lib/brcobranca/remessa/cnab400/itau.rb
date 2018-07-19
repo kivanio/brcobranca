@@ -1,9 +1,11 @@
 # -*- encoding: utf-8 -*-
-#
 module Brcobranca
   module Remessa
     module Cnab400
       class Itau < Brcobranca::Remessa::Cnab400::Base
+        VALOR_EM_REAIS = "1"
+        VALOR_EM_PERCENTUAL = "2"
+
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
@@ -95,14 +97,14 @@ module Brcobranca
           detalhe << digito_conta                                           # dac                                   9[01]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro (brancos)     X[04]
           detalhe << ''.rjust(4, '0')                                       # codigo cancelamento (zeros)           9[04]
-          detalhe << ''.rjust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25)           # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[08]
           detalhe << ''.rjust(13, '0')                                      # quantidade de moeda variavel          9[13]
           detalhe << carteira                                               # carteira                              9[03]
           detalhe << ''.rjust(21, ' ')                                      # identificacao da operacao no banco    X[21]
           detalhe << codigo_carteira                                        # codigo da carteira                    X[01]
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero_documento.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0')                   # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -110,8 +112,8 @@ module Brcobranca
           detalhe << '99'                                                   # especie  do titulo                    X[02]
           detalhe << aceite                                                 # aceite (A/N)                          X[01]
           detalhe << pagamento.data_emissao.strftime('%d%m%y')              # data de emissao                       9[06]
-          detalhe << ''.rjust(2, '0')                                       # 1a instrucao - deixar zero            X[02]
-          detalhe << ''.rjust(2, '0')                                       # 2a instrucao - deixar zero            X[02]
+          detalhe << pagamento.cod_primeira_instrucao                       # 1a instrucao - deixar zero            X[02]
+          detalhe << pagamento.cod_segunda_instrucao                        # 2a instrucao - deixar zero            X[02]
           detalhe << pagamento.formata_valor_mora                           # valor mora ao dia                     9[13]
           detalhe << pagamento.formata_data_desconto                        # data limite para desconto             9[06]
           detalhe << pagamento.formata_valor_desconto                       # valor do desconto                     9[13]
@@ -129,9 +131,24 @@ module Brcobranca
           detalhe << pagamento.nome_avalista.format_size(30)                # nome do sacador/avalista              X[30]
           detalhe << ''.rjust(4, ' ')                                       # complemento do registro               X[04]
           detalhe << ''.rjust(6, '0')                                       # data da mora                          9[06] *
-          detalhe << '03'                                                   # quantidade de dias do prazo           9[02] *
+          detalhe << prazo_instrucao(pagamento)                             # prazo para a instrução          9[02]
           detalhe << ''.rjust(1, ' ')                                       # complemento do registro (brancos)     X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
+          detalhe
+        end
+
+        def prazo_instrucao(pagamento)
+          return '03' unless pagamento.cod_primeira_instrucao == '09'
+          pagamento.dias_protesto.rjust(2, '0')
+        end
+
+        def monta_detalhe_multa(pagamento, sequencial)
+          detalhe = '2'
+          detalhe << pagamento.codigo_multa
+          detalhe << pagamento.data_vencimento.strftime('%d%m%Y')
+          detalhe << pagamento.formata_percentual_multa(13)
+          detalhe << ''.rjust(371, ' ')
+          detalhe << sequencial.to_s.rjust(6, '0')
           detalhe
         end
       end

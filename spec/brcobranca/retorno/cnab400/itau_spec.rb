@@ -1,6 +1,4 @@
 # -*- encoding: utf-8 -*-
-#
-
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::Cnab400::Itau do
@@ -8,8 +6,7 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Itau do
     @arquivo = File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB400ITAU.RET')
   end
 
-  it 'Ignora primeira linha que é header' do
-    pagamentos = described_class.load_lines(@arquivo)
+  it 'Ignora primeira linha que é header' do pagamentos = described_class.load_lines(@arquivo)
     pagamento = pagamentos.first
     expect(pagamento.sequencial).to eql('000002')
   end
@@ -35,7 +32,10 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Itau do
     expect(pagamento.valor_recebido).to eql('0000000003790')
     expect(pagamento.juros_mora).to eql('0000000000000')
     expect(pagamento.outros_recebimento).to eql('0000000000000')
+    expect(pagamento.codigo_ocorrencia).to eql('06')
+    expect(pagamento.data_ocorrencia).to eql('200513')
     expect(pagamento.data_credito).to eql('210513')
+    expect(pagamento.motivo_ocorrencia).to eql([])
     expect(pagamento.sequencial).to eql('000002')
 
     # Campos da classe base que não encontrei a relação com CNAB400
