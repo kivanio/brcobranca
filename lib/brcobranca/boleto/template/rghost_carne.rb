@@ -263,7 +263,7 @@ module Brcobranca
 
           # carteira
           doc.moveto x: colunas[3], y: linhas[4]
-          doc.show boleto.carteira_label
+          doc.show (boleto.carteira_label || boleto.carteira)
 
           # especie
           doc.moveto x: colunas[5], y: linhas[4]
