@@ -247,7 +247,7 @@ module Brcobranca
           if boleto.variacao
             doc.show "#{boleto.carteira}-#{boleto.variacao}"
           else
-            doc.show boleto.carteira_label
+            doc.show (boleto.carteira_label || boleto.carteira)
           end
 
           move_more(doc, 2, 0)
