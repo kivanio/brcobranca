@@ -180,7 +180,7 @@ module Brcobranca
           doc.show boleto.valor_documento.to_currency
 
           move_more(doc, -15, -1.3)
-          doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
+          doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}"
 
           move_more(doc, 0, -0.3)
           doc.show "#{boleto.sacado_endereco}"
