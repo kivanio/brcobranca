@@ -233,7 +233,7 @@ module Brcobranca
           move_more(doc, 5.8, 0)
           doc.show boleto.especie_documento
 
-          move_more(doc, 1.7, 0)
+          move_more(doc, 1.4, 0)
           doc.show boleto.aceite
 
           move_more(doc, 1.3, 0)

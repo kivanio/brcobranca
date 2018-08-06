@@ -15,6 +15,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Itau do
       cidade_sacado: 'Santa rita de cássia maria da silva',
       codigo_multa: '1',
       percentual_multa: 2.00,
+      especie_titulo: '99',
       uf_sacado: 'SP')
   end
   let(:params) do
