@@ -44,6 +44,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | 756 - Unicred          | 03 - [Marcelo J. Both](https://github.com/marceloboth) |                |
 | 085 - CECRED           | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)|                |
 | 097 - CREDISIS         | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth) |                |
+| 745 - Citibank         | 3            |                |
 
 ### Retornos e Remessas
 
