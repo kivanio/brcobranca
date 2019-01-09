@@ -9,8 +9,7 @@ after_script:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y ghostscript
-  - gem update --system # use the very latest Rubygems
-  - gem install bundler # use the very latest Bundler
+  - gem install bundler -v '< 2'
 dist: trusty
 before_script:
   - unset _JAVA_OPTIONS
