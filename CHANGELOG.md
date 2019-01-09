@@ -1,5 +1,20 @@
 # Change Log
 
+## [v9.2.3](https://github.com/kivanio/brcobranca/tree/v9.2.3) (18-12-2018)
+[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.2...v9.2.3)
+
+**Closed issues:**
+
+- Geração de Arquivos de remessa [\#199](https://github.com/kivanio/brcobranca/issues/199)
+- numero\_documento e nosso\_numero Diferentes [\#196](https://github.com/kivanio/brcobranca/issues/196)
+
+**Merged pull requests:**
+
+- Ajustes na função de formatar string para campo de remessa [\#203](https://github.com/kivanio/brcobranca/pull/203) ([escobera](https://github.com/escobera))
+
+## [v9.2.2](https://github.com/kivanio/brcobranca/tree/v9.2.2) (25-06-2018)
+[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.1...v9.2.2)
+
 ## [v9.2.1](https://github.com/kivanio/brcobranca/tree/v9.2.1) (21-06-2018)
 [Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.0...v9.2.1)
 
