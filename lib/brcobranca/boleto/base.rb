@@ -119,10 +119,12 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        if Brcobranca.configuration.gerador == :rghost_carne
-          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}_carne.eps")
+        case Brcobranca.configuration.gerador
+        when :rghost          then get_logo("#{class_name}.eps")
+        when :rghost_carne    then get_logo("#{class_name}_carne.eps")
+        when :rghost_proposta then get_logo("#{class_name}_proposta.eps")
         else
-          File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
+          raise ArgumentError, "Modelo não encontrado: #{Brcobranca.configuration.gerador}"
         end
       end
 
@@ -241,6 +243,10 @@ module Brcobranca
       # @return [String]
       def class_name
         self.class.to_s.split('::').last.downcase
+      end
+
+      def get_logo(name)
+        File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', name)
       end
     end
   end
