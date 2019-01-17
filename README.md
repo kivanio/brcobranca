@@ -78,6 +78,27 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 
 Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki).
 
+### Desenvolvimento com Docker
+
+Para desenvolver novas features e corrigir bugs utilizando o Docker, basta utilizar o `docker-compose.yml` que está no projeto, com o comando a seguir:
+
+```
+docker-compose build
+```
+
+Este comando criará a imagem necessária para prosseguir com o desenvolvimento.
+Uma vez que a imagem tenha sido criada, basta utilizar o comando a seguir para executar os testes:
+
+```
+docker-compose up
+```
+
+Ou se preferir entrar no container para executar os testes:
+
+```
+docker-compose run --rm brcobranca /bin/bash
+```
+
 ### Rubydoc
 
 - [versão estável](http://rubydoc.info/gems/brcobranca)
