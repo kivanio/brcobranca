@@ -1,12 +1,9 @@
 # -*- encoding: utf-8 -*-
 #
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'brcobranca/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'brcobranca'
-  gem.version     = Brcobranca::VERSION
+  gem.version     = '9.2.4'
   gem.authors = ['Kivanio Barbosa']
   gem.description = 'Gem para emissao de bloquetos de cobranca de bancos brasileiros.'
   gem.summary = 'Gem que permite trabalhar com bloquetos de cobranca para bancos brasileiros.'
