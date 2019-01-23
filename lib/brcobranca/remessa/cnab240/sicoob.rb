@@ -95,13 +95,23 @@ module Brcobranca
 
         alias_method :convenio_lote, :codigo_convenio
 
-        def info_conta
-          # CAMPO                  TAMANHO
+        def info_conta_header_arquivo
+          # CAMPO                  TAMANHO  DEFAULT
           # agencia                5
           # digito agencia         1
           # conta corrente         12
           # digito conta           1
-          # digito agencia/conta   1
+          # digito agencia/conta   1        0
+          "#{agencia.rjust(5, '0')}#{digito_agencia}#{conta_corrente.rjust(12, '0')}#{digito_conta}0"
+        end
+
+        def info_conta_header_lote
+          # CAMPO                  TAMANHO  DEFAULT
+          # agencia                5
+          # digito agencia         1
+          # conta corrente         12
+          # digito conta           1
+          # digito agencia/conta   1        ' '
           "#{agencia.rjust(5, '0')}#{digito_agencia}#{conta_corrente.rjust(12, '0')}#{digito_conta} "
         end
 

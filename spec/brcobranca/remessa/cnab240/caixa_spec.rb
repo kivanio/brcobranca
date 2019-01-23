@@ -105,8 +105,15 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Caixa do
       expect(conv_lote[6..19]).to eq ''.rjust(14, '0')
     end
 
-    it 'info_conta deve retornar as informacoes nas posicoes corretas' do
-      info_conta = caixa.info_conta
+    it 'info_conta do header do arquivo deve retornar as informacoes nas posicoes corretas' do
+      info_conta = caixa.info_conta_header_arquivo
+      expect(info_conta[0..4]).to eq '12345' # agencia
+      expect(info_conta[5]).to eq '1' # digito agencia
+      expect(info_conta[6..11]).to eq '123456' # convenio
+    end
+
+    it 'info_conta do header do lote deve retornar as informacoes nas posicoes corretas' do
+      info_conta = caixa.info_conta_header_lote
       expect(info_conta[0..4]).to eq '12345' # agencia
       expect(info_conta[5]).to eq '1' # digito agencia
       expect(info_conta[6..11]).to eq '123456' # convenio

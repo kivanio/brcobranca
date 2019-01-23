@@ -157,12 +157,22 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       expect(cod_convenio[0..19]).to eq '                    '
     end
 
-    it 'info conta deve retornar as informacoes nas posicoes corretas' do
-      info_conta = sicoob.info_conta
+    it 'info conta do header do arquivo deve retornar as informacoes nas posicoes corretas' do
+      info_conta = sicoob.info_conta_header_arquivo
       expect(info_conta[0..4]).to eq '04327'
       expect(info_conta[5]).to eq '3'
       expect(info_conta[6..17]).to eq '000000003666'
       expect(info_conta[18]).to eq '8'
+      expect(info_conta[19]).to eq '0'
+    end
+
+    it 'info conta do header do lote deve retornar as informacoes nas posicoes corretas' do
+      info_conta = sicoob.info_conta_header_lote
+      expect(info_conta[0..4]).to eq '04327'
+      expect(info_conta[5]).to eq '3'
+      expect(info_conta[6..17]).to eq '000000003666'
+      expect(info_conta[18]).to eq '8'
+      expect(info_conta[19]).to eq ' '
     end
 
     it 'complemento header deve retornar espacos em branco' do

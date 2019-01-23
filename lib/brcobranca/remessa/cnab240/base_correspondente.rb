@@ -71,7 +71,7 @@ module Brcobranca
           header_arquivo << 'R'                                 # tipo operacao: R-remessa      1
           header_arquivo << ''.rjust(7, '0')                    # zeros                         7
           header_arquivo << ''.rjust(2, ' ')                    # brancos                       2
-          header_arquivo << info_conta                          # informacoes da conta          22
+          header_arquivo << info_conta_header_arquivo           # informacoes da conta          22
           header_arquivo << ''.rjust(30, ' ')                   # brancos                       30
           header_arquivo << empresa_mae.format_size(30)         # nome da empresa               30
           header_arquivo << ''.rjust(80, ' ')                   # brancos                       80
@@ -271,11 +271,11 @@ module Brcobranca
           raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
-        # Informacoes da conta do cedente
+        # Informacoes da conta do cedente (Header do Arquivo)
         #
         # Este metodo deve ser sobrescrevido na classe do banco
         #
-        def info_conta
+        def info_conta_header_arquivo
           raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 

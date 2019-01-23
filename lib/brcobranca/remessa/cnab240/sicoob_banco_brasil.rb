@@ -30,13 +30,15 @@ module Brcobranca
           conta_corrente.modulo11(mapeamento: { 10 => 'X' }).to_s
         end
 
-        def info_conta
+        def info_conta_header_arquivo
           # CAMPO                  TAMANHO
           # agencia                4
           # codigo cobranca        7
           # conta corrente         11
           "#{agencia.rjust(4, '0')}#{codigo_cobranca.rjust(7, '0')}#{conta_corrente.rjust(10, '0')}#{digito_conta}"
         end
+
+        alias_method :info_conta_header_lote, :info_conta_header_arquivo
 
         def complemento_header
           "#{''.rjust(11, '0')}#{''.rjust(33, ' ')}"
