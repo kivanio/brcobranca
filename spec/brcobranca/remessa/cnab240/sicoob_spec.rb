@@ -191,7 +191,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
 
     it 'formata o nosso numero' do
       nosso_numero = sicoob.formata_nosso_numero 1
-      expect(nosso_numero).to eq "000000000101014     "
+      expect(nosso_numero).to eq "000000001501014     "
     end
   end
 
