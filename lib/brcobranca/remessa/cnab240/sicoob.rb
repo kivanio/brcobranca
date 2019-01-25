@@ -256,8 +256,8 @@ module Brcobranca
         #     Ex.: 11 – 3 = 8, então Nosso Número + DV = 21-8
         #
         def nosso_numero_dv(nosso_numero)
-          puts 'Remessa::Sicoob#nosso_numero_dv', agencia, convenio.rjust(10, '0'), nosso_numero.rjust(7, '0')
-          "#{agencia}#{convenio.rjust(10, '0')}#{nosso_numero.rjust(7, '0')}".modulo11(
+          puts 'Remessa::Sicoob#nosso_numero_dv', agencia, convenio.rjust(10, '0'), nosso_numero.to_s.rjust(7, '0')
+          "#{agencia}#{convenio.rjust(10, '0')}#{nosso_numero.to_s.rjust(7, '0')}".modulo11(
             reverse: false,
             multiplicador: [3, 1, 9, 7],
             mapeamento: { 10 => 0, 11 => 0 }
