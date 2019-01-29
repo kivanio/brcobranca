@@ -99,6 +99,14 @@ Ou se preferir entrar no container para executar os testes:
 docker-compose run --rm brcobranca /bin/bash
 ```
 
+Para testar a impressão dos boletos em PDF com alguns dados de exemplo, você pode utilizar o script `spec/print_boleto.rb` ou com a ENVVAR `CONSOLE=true` para carregar a gem dentro do IRB e, com isto, você pode fazer seus testes manuais também.
+
+```
+bundle exec spec/print_boleto.rb
+
+CONSOLE=true bundle exec spec/print_boleto.rb
+```
+
 ### Rubydoc
 
 - [versão estável](http://rubydoc.info/gems/brcobranca)
