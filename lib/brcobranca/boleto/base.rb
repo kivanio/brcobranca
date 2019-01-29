@@ -119,12 +119,14 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        case Brcobranca.configuration.gerador
-        when :rghost          then get_logo("#{class_name}.eps")
-        when :rghost_carne    then get_logo("#{class_name}_carne.eps")
-        when :rghost_proposta then get_logo("#{class_name}_proposta.eps")
-        else
+        unless %i(rghost rghost_carne rghost_proposta).include?(Brcobranca.configuration.gerador)
           raise ArgumentError, "Modelo não encontrado: #{Brcobranca.configuration.gerador}"
+        end
+
+        if Brcobranca.configuration.gerador == :rghost
+          get_logo("#{class_name}.eps")
+        else
+          get_logo("#{class_name}_carne.eps")
         end
       end
 
