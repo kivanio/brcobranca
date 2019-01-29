@@ -159,10 +159,14 @@ module Brcobranca
           doc.moveto x: colunas[6], y: linhas[3]
           doc.show boleto.carteira
 
+          # valor pago
+          doc.moveto x: colunas[7], y: linhas[3]
+          doc.show boleto.valor_documento.to_currency
+
           # valor abatimento
           # nada
 
-          # valor do documento
+          # valor pago
           doc.moveto x: colunas[7], y: linhas[5]
           doc.show boleto.valor_documento.to_currency
 
