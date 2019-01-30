@@ -80,7 +80,7 @@ module Brcobranca
       attr_accessor :sacado
       # <b>OPCIONAL</b>: Endereco do pagador
       attr_accessor :sacado_endereco
-      # <b>REQUERIDO</b>: Documento do pagador
+      # <b>OPCIONAL</b>: Documento do pagador
       attr_accessor :sacado_documento
       # <b>OPCIONAL</b>: Nome do avalista
       attr_accessor :avalista
@@ -90,7 +90,7 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, :sacado_documento, message: 'não pode estar em branco.'
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, message: 'não pode estar em branco.'
       validates_numericality_of :convenio, :agencia, :conta_corrente, :nosso_numero, message: 'não é um número.', allow_nil: true
 
       # Nova instancia da classe Base
