@@ -94,11 +94,6 @@ module Brcobranca
     yield(configuration)
   end
 
-  # Módulo para classes de propostas
-  module Proposta
-    autoload :Base,          'brcobranca/proposta/base'
-  end
-
   # Módulo para classes de boletos
   module Boleto
     autoload :Base,          'brcobranca/boleto/base'
