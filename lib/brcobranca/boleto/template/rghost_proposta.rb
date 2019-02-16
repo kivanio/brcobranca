@@ -98,6 +98,7 @@ module Brcobranca
         def modelo_proposta_define_tags(doc)
           doc.define_tags do
             tag :grande, size: 13
+            tag :pequena, size: 7
           end
         end
 
@@ -160,15 +161,32 @@ module Brcobranca
           doc.show boleto.carteira
 
           # valor pago
-          doc.moveto x: colunas[7], y: linhas[3]
-          doc.show boleto.valor_documento.to_currency
+          if boleto.valor_documento > 0
+            doc.moveto x: colunas[7], y: linhas[3]
+            doc.show boleto.valor_documento.to_currency
+          end
 
           # valor abatimento
           # nada
 
+          # Instruções
+          doc.moveto x: colunas[0], y: linhas[4]
+          doc.show boleto.instrucao1, tag: :pequena
+
+          doc.moveto x: colunas[0], y: (linhas[4] - 0.28)
+          doc.show boleto.instrucao2, tag: :pequena
+
+          doc.moveto x: colunas[0], y: (linhas[4] - 0.56)
+          doc.show boleto.instrucao3, tag: :pequena
+
+          doc.moveto x: colunas[0], y: (linhas[4] - 0.84)
+          doc.show boleto.instrucao4, tag: :pequena
+
           # valor pago
-          doc.moveto x: colunas[7], y: linhas[5]
-          doc.show boleto.valor_documento.to_currency
+          if boleto.valor_documento > 0
+            doc.moveto x: colunas[7], y: linhas[5]
+            doc.show boleto.valor_documento.to_currency
+          end
 
           # Sacado
           doc.moveto x: colunas[0], y: linhas[6]
