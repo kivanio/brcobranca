@@ -9,7 +9,7 @@ services:
     build: .
     image: brcobranca
     working_dir: /app
-    command: bash -c "(bundle check || bundle install) && bundle exec rspec"
+    command: bash -c "(bundle check || bundle install --path /vendor/bundle) && bundle exec rspec"
     volumes:
       - ./:/app
       - bundle:/vendor/bundle

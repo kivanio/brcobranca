@@ -1,5 +1,11 @@
 FROM ruby:2.5-alpine
-RUN apk add --update --no-cache build-base bash git ghostscript
+
+RUN apk add --update --no-cache \
+      bash \
+      build-base \
+      ghostscript \
+      git \
+      gmp-dev
 
 WORKDIR /app
 COPY * /app/
