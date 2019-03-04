@@ -199,10 +199,7 @@ module Brcobranca
 
           # Sacado endereço
           boleto.sacado_endereco.split("\n").each.with_index do |endereco, index|
-            linha_endereco = linhas[7] - (index * 0.25).to_f
-            puts linha_endereco
-
-            doc.moveto x: colunas[0] + 1.5, y: linha_endereco
+            doc.moveto x: colunas[0] + 1.5, y: linhas[7] - (index * 0.25).to_f
             doc.show endereco, tag: :pequena
           end
 
