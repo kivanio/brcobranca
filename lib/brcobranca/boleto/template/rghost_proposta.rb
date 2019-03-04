@@ -98,7 +98,8 @@ module Brcobranca
         def modelo_proposta_define_tags(doc)
           doc.define_tags do
             tag :grande, size: 13
-            tag :pequena, size: 7
+            tag :media, size: 7
+            tag :pequena, size: 6
           end
         end
 
@@ -111,7 +112,7 @@ module Brcobranca
 
         # define as linhas do documento conforme margem inferior
         def calc_linhas(margin_bottom)
-          linhas = [10.6, 6.6, 5.75, 4.9, 4.2, 3.35, 2.5, 2.1, 0.3]
+          linhas = [10.6, 6.6, 5.75, 4.9, 4.2, 3.35, 2.7, 2.45, 0.3]
 
           linhas.map.with_index { |v, i| linhas[i] = v + margin_bottom }
         end
@@ -171,16 +172,16 @@ module Brcobranca
 
           # Instruções
           doc.moveto x: colunas[0], y: linhas[4]
-          doc.show boleto.instrucao1, tag: :pequena
+          doc.show boleto.instrucao1, tag: :media
 
           doc.moveto x: colunas[0], y: (linhas[4] - 0.28)
-          doc.show boleto.instrucao2, tag: :pequena
+          doc.show boleto.instrucao2, tag: :media
 
           doc.moveto x: colunas[0], y: (linhas[4] - 0.56)
-          doc.show boleto.instrucao3, tag: :pequena
+          doc.show boleto.instrucao3, tag: :media
 
           doc.moveto x: colunas[0], y: (linhas[4] - 0.84)
-          doc.show boleto.instrucao4, tag: :pequena
+          doc.show boleto.instrucao4, tag: :media
 
           # valor pago
           if boleto.valor_documento > 0
@@ -189,16 +190,21 @@ module Brcobranca
           end
 
           # Sacado
-          doc.moveto x: colunas[0], y: linhas[6]
+          doc.moveto x: colunas[0] + 1.5, y: linhas[6]
           if boleto.sacado_documento
-            doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
+            doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}", tag: :pequena
           else
-            doc.show boleto.sacado
+            doc.show boleto.sacado, tag: :pequena
           end
 
           # Sacado endereço
-          doc.moveto x: colunas[0], y: linhas[7]
-          doc.show boleto.sacado_endereco
+          boleto.sacado_endereco.split("\n").each.with_index do |endereco, index|
+            linha_endereco = linhas[7] - (index * 0.25).to_f
+            puts linha_endereco
+
+            doc.moveto x: colunas[0] + 1.5, y: linha_endereco
+            doc.show endereco, tag: :pequena
+          end
 
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode
