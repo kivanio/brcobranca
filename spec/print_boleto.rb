@@ -21,13 +21,19 @@ if ENV.fetch("CONSOLE", nil).nil?
     documento_numero: "666-0",
     data_vencimento: Date.parse("2008-02-01"),
     data_documento: Date.parse("2008-02-01"),
-    instrucao1: "Pagável na rede bancária até a data de vencimento.",
-    instrucao2: "Juros de mora de 2.0% mensal(R$ 0,09 ao dia)",
-    instrucao3: "DESCONTO DE R$ 29,50 APÓS 05/11/2006 ATÉ 15/11/2006",
-    instrucao4: "NÃO RECEBER APÓS 15/11/2006",
-    instrucao5: "Após vencimento pagável somente nas agências do Banco do Brasil",
-    instrucao6: "ACRESCER R$ 4,00 REFERENTE AO BOLETO BANCÁRIO",
-    sacado_endereco: "Av. Rubéns de Mendonça, 157 - 78008-000 - Cuiabá/MT"
+
+    instrucao1: "Sr. Caixa: este boleto pode ser pago com qualquer valor.",
+    instrucao2: "Sugerimos o valor acima de R$ 20,00 devido às despesas bancárias e de envio.",
+    instrucao3: "Após o vencimento pagável somente nas agências Bradesco.",
+    instrucao4: "Este boleto deve ser utilizado para doação espontânea, não é uma cobrança.",
+
+    # instrucao1: "Pagável na rede bancária até a data de vencimento.",
+    # instrucao2: "Juros de mora de 2.0% mensal(R$ 0,09 ao dia)",
+    # instrucao3: "DESCONTO DE R$ 29,50 APÓS 05/11/2006 ATÉ 15/11/2006",
+    # instrucao4: "NÃO RECEBER APÓS 15/11/2006",
+    # instrucao5: "Após vencimento pagável somente nas agências do Banco do Brasil",
+    # instrucao6: "ACRESCER R$ 4,00 REFERENTE AO BOLETO BANCÁRIO",
+    sacado_endereco: "Av. Rubéns de Mendonça, 157 - Apto 3\nCentro\n78008-000 - Cuiabá -MT"
   }
 
   File.open("proposta_itau.pdf", "w") do |f|
