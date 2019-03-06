@@ -99,7 +99,8 @@ module Brcobranca
           doc.define_tags do
             tag :grande, size: 13
             tag :media, size: 7
-            tag :pequena, size: 6
+
+            tag :arial_font, name: "Arial", size: 10
           end
         end
 
@@ -112,7 +113,7 @@ module Brcobranca
 
         # define as linhas do documento conforme margem inferior
         def calc_linhas(margin_bottom)
-          linhas = [10.6, 6.6, 5.75, 4.9, 4.2, 3.35, 2.7, 2.45, 0.3]
+          linhas = [10.6, 6.6, 5.75, 4.9, 4.2, 3.35, 2.6, 2.3, 0.3]
 
           linhas.map.with_index { |v, i| linhas[i] = v + margin_bottom }
         end
@@ -190,17 +191,17 @@ module Brcobranca
           end
 
           # Sacado
-          doc.moveto x: colunas[0] + 1.5, y: linhas[6]
+          doc.moveto x: colunas[0] + 3.0, y: linhas[6]
           if boleto.sacado_documento
-            doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}", tag: :pequena
+            doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}", tag: :arial_font
           else
-            doc.show boleto.sacado, tag: :pequena
+            doc.show boleto.sacado, tag: :arial_font
           end
 
           # Sacado endereço
           boleto.sacado_endereco.split("\n").each.with_index do |endereco, index|
-            doc.moveto x: colunas[0] + 1.5, y: linhas[7] - (index * 0.25).to_f
-            doc.show endereco, tag: :pequena
+            doc.moveto x: colunas[0] + 3.0, y: linhas[7] - (index * 0.3).to_f
+            doc.show endereco, tag: :arial_font
           end
 
           # codigo de barras
