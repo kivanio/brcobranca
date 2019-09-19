@@ -18,18 +18,20 @@ dist: trusty
 before_script:
   - unset _JAVA_OPTIONS
 rvm:
-  - '2.5.0'
-  - '2.4.3'
-  - '2.3.4'
-  - '2.2.7'
+  - '2.6.4'
+  - '2.5.6'
+  - '2.4.7'
+  - '2.3.8'
+  - '2.2.10'
   - '2.1.10'
-  - jruby-9.1.16.0
+  - jruby-9.2.8.0
 
 gemfile:
   - gemfiles/rails_42.gemfile
   - gemfiles/rails_50.gemfile
   - gemfiles/rails_51.gemfile
   - gemfiles/rails_52.gemfile
+  - gemfiles/rails_60.gemfile
 
 env:
   global:
@@ -41,21 +43,30 @@ matrix:
   fast_finish: true
 
   allow_failures:
-    - rvm: jruby-9.1.16.0
+    - rvm: jruby-9.2.8.0
       gemfile: gemfiles/rails_42.gemfile
-    - rvm: jruby-9.1.16.0
+    - rvm: jruby-9.2.8.0
       gemfile: gemfiles/rails_50.gemfile
-    - rvm: jruby-9.1.16.0
+    - rvm: jruby-9.2.8.0
       gemfile: gemfiles/rails_51.gemfile
-    - rvm: jruby-9.1.16.0
+    - rvm: jruby-9.2.8.0
+      gemfile: gemfiles/rails_52.gemfile
+    - rvm: jruby-9.2.8.0
+      gemfile: gemfiles/rails_60.gemfile
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails_50.gemfile
+    - rvm: 2.1.10
+      gemfile: gemfiles/rails_51.gemfile
+    - rvm: 2.1.10
       gemfile: gemfiles/rails_52.gemfile
     - rvm: 2.1.10
-      gemfile: gemfiles/rails_50.gemfile
-    - rvm: 2.1.10
-      gemfile: gemfiles/rails_51.gemfile
-    - rvm: 2.1.10
-      gemfile: gemfiles/rails_52.gemfile
-
+      gemfile: gemfiles/rails_60.gemfile
+    - rvm: 2.2.10
+      gemfile: gemfiles/rails_60.gemfile
+    - rvm: 2.3.8
+      gemfile: gemfiles/rails_60.gemfile
+    - rvm: 2.4.7
+      gemfile: gemfiles/rails_60.gemfile
 branches:
   only:
     - master
