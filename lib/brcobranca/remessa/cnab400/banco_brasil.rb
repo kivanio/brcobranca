@@ -118,7 +118,7 @@ module Brcobranca
           detalhe << '000000'                                                 # numero do bordero (zeros)         9[06] 096 a 101
           detalhe << tipo_cobranca.to_s.ljust(5, ' ')                         # tipo de cobranca                  9[05] 102 a 106
           detalhe << carteira                                                 # carteira                          9[02] 107 a 108
-          detalhe << '01'                                                     # comando (01 = registro de titulo) 9[02] 109 a 110
+          detalhe << pagamento.identificacao_ocorrencia                       # comando / ocorrência              9[02] 109 a 110
           detalhe << pagamento.nosso_numero.to_s.rjust(10, '0')               # numero atribuido pela empresa     X[10] 111 a 120
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')             # data de vencimento                9[06] 121 a 126
           detalhe << pagamento.formata_valor                                  # valor do titulo                   9[13] 127 a 139
