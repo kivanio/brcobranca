@@ -118,7 +118,7 @@ module Brcobranca
           detalhe << '000000'                                                 # numero do bordero (zeros)         9[06] 096 a 101
           detalhe << tipo_cobranca.to_s.ljust(5, ' ')                         # tipo de cobranca                  9[05] 102 a 106
           detalhe << carteira                                                 # carteira                          9[02] 107 a 108
-          detalhe << '01'                                                     # comando (01 = registro de titulo) 9[02] 109 a 110
+          detalhe << pagamento.identificacao_ocorrencia                       # comando / ocorrência              9[02] 109 a 110
           detalhe << pagamento.nosso_numero.to_s.rjust(10, '0')               # numero atribuido pela empresa     X[10] 111 a 120
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')             # data de vencimento                9[06] 121 a 126
           detalhe << pagamento.formata_valor                                  # valor do titulo                   9[13] 127 a 139
@@ -152,11 +152,10 @@ module Brcobranca
 
         def monta_detalhe_multa(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
-          return false if %w[0 9].include?(pagamento.codigo_multa)
 
           detalhe = '5'
           detalhe << '99'                                                # Tipo de Serviço: “99” (Cobrança de Multa)   9[02]       002 a 003
-          detalhe << '2'                                                 # código da multa                             9[01]       004 a 004
+          detalhe << pagamento.codigo_multa                              # código da multa                             9[01]       004 a 004
           detalhe << pagamento.formata_data_multa                        # Data de Inicio da Cobrança da Multa         9[06]       005 a 010
           detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[12]       011 a 022
           detalhe << ''.rjust(372, ' ')                                  # brancos                                     9[372]      023 a 394
