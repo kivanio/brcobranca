@@ -29,8 +29,8 @@ module Brcobranca
       include Brcobranca::Validations
 
       validates_presence_of :empresa_mae, message: 'não pode estar em branco.'
-      validates_presence_of :transferencias, if: proc { |b| b.pagamentos.blank? }
-      validates_presence_of :pagamentos,     if: proc { |b| b.transferencias.blank? }
+#       validates_presence_of :transferencias, if: proc { |b| b.pagamentos.blank? }
+#       validates_presence_of :pagamentos,     if: proc { |b| b.transferencias.blank? }
 
       validates_each :transferencias do |record, attr, value|
         if value.is_a? Array
