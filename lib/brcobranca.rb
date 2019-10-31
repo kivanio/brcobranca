@@ -157,6 +157,7 @@ module Brcobranca
   module Remessa
     autoload :Base,            'brcobranca/remessa/base'
     autoload :Pagamento,       'brcobranca/remessa/pagamento'
+    autoload :Transferencia,   'brcobranca/remessa/transferencia'
 
     module Cnab400
       autoload :Base,          'brcobranca/remessa/cnab400/base'
@@ -176,6 +177,7 @@ module Brcobranca
     module Cnab240
       autoload :Base,               'brcobranca/remessa/cnab240/base'
       autoload :BaseCorrespondente, 'brcobranca/remessa/cnab240/base_correspondente'
+      autoload :Bradesco,           'brcobranca/remessa/cnab240/bradesco'
       autoload :Caixa,              'brcobranca/remessa/cnab240/caixa'
       autoload :Cecred,             'brcobranca/remessa/cnab240/cecred'
       autoload :BancoBrasil,        'brcobranca/remessa/cnab240/banco_brasil'
