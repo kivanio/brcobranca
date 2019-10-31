@@ -47,7 +47,7 @@ module Brcobranca
           end
           contador += 1
 
-          lote << monta_trailer_lote(nro_lote, contador)
+          lote << monta_trailer_lote(nro_lote, contador, transferencias.map(&:valor).sum)
 
           lote
         end
@@ -90,6 +90,17 @@ module Brcobranca
           header_lote
         end
 
+        def monta_trailer_lote(nro_lote, nro_registros, valor_total)
+          trailer_lote = ''                                             # CAMPO                   # TAMANHO
+          trailer_lote << cod_banco                                     # codigo banco            3
+          trailer_lote << nro_lote.to_s.rjust(4, '0')                   # lote de servico         4
+          trailer_lote << '5'                                           # tipo de servico         1
+          trailer_lote << ''.rjust(9, ' ')                              # uso exclusivo           9
+          trailer_lote << nro_registros.to_s.rjust(6, '0')              # qtde de registros lote  6
+          trailer_lote << complemento_trailer(valor_total)              # uso exclusivo           217
+          trailer_lote
+        end        
+        
         def cod_banco
           '237'
         end
@@ -144,7 +155,7 @@ module Brcobranca
         def complemento_header
           ''.rjust(29, ' ')
         end
-
+        
         alias_method :convenio_lote, :codigo_convenio
 
         def info_conta
@@ -157,8 +168,11 @@ module Brcobranca
           "#{agencia.rjust(5, '0')}#{digito_agencia}#{conta_corrente.rjust(12, '0')}#{digito_conta} "
         end
 
-        def complemento_trailer
-          ''.rjust(217, ' ')
+        def complemento_trailer(valor_total)
+          complemento = "#{format_value(valor_total, 18)}"
+          complemento << ''.rjust(24, '0')
+          complemento << ''.rjust(175, ' ')
+          complemento
         end
 
         def complemento_p(pagamento)
