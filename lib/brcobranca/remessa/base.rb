@@ -4,6 +4,8 @@ require 'unidecoder'
 module Brcobranca
   module Remessa
     class Base
+      # transferencias da remessa (cada pagamento representa um registro detalhe no arquivo)
+      attr_accessor :transferencias
       # pagamentos da remessa (cada pagamento representa um registro detalhe no arquivo)
       attr_accessor :pagamentos
       # empresa mae (razao social)
@@ -26,11 +28,30 @@ module Brcobranca
       # Validações
       include Brcobranca::Validations
 
-      validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
+      validates_presence_of :empresa_mae, message: 'não pode estar em branco.'
+      validates_presence_of :transferencias, if: proc { |b| b.pagamentos.blank? }
+      validates_presence_of :pagamentos,     if: proc { |b| b.transferencias.blank? }
 
+      validates_each :transferencias do |record, attr, value|
+        if value.is_a? Array
+          #record.errors.add(attr, 'não pode estar vazio.') if value.empty?
+          value.each do |transferencia|
+            if transferencia.is_a? Brcobranca::Remessa::Transferencia
+              if transferencia.invalid?
+                transferencia.errors.full_messages.each { |msg| record.errors.add(attr, msg) }
+              end
+            else
+              record.errors.add(attr, 'cada item deve ser um objeto Transferência.')
+            end
+          end
+        else
+          record.errors.add(attr, 'deve ser uma coleção (Array).')
+        end
+      end
+      
       validates_each :pagamentos do |record, attr, value|
         if value.is_a? Array
-          record.errors.add(attr, 'não pode estar vazio.') if value.empty?
+          #record.errors.add(attr, 'não pode estar vazio.') if value.empty?
           value.each do |pagamento|
             if pagamento.is_a? Brcobranca::Remessa::Pagamento
               if pagamento.invalid?
