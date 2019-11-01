@@ -12,7 +12,11 @@ module Brcobranca
       # '888' = TED (STR/CIP)
       # <b>REQUERIDO</b>: camara_centralizadora
       attr_accessor :camara_centralizadora
-
+      # '01' - credito em conta corrente
+      # '05' - credito em conta poupanca
+      # '03' - TED
+      # <b>REQUERIDO</b>: camara_centralizadora
+      attr_accessor :forma_lancamento
       # <b>REQUERIDO</b>: banco do favorecido
       attr_accessor :banco
       # <b>REQUERIDO</b>: agencia do favorecido
