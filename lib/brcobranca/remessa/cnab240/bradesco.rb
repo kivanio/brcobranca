@@ -126,6 +126,10 @@ module Brcobranca
           trailer_lote
         end        
         
+        def total_segmentos(pagamentos)
+          pagamentos.size * 2
+        end
+        
         def cod_banco
           '237'
         end
