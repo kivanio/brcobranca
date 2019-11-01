@@ -31,13 +31,38 @@ module Brcobranca
           super(campos)
         end
 
-        def monta_lote(nro_lote)
-          # contador dos registros do lote
+       def gera_arquivo
+          raise Brcobranca::RemessaInvalida, self if invalid?
+
+          arquivo = [monta_header_arquivo]
+
+          # contador de do lotes
           contador = 1
 
-          lote = [monta_header_lote(nro_lote, '01')]
+          transferencias.map(&:forma_lancamento).uniq.each do |forma_lancamento|
+            arquivo.push monta_lote(contador, forma_lancamento)
+            contador += 1
+          end
 
-          transferencias.each do |transferencia|
+          total_linhas = (total_segmentos(transferencias) + (contador * 2) + 2)
+
+          arquivo << monta_trailer_arquivo(contador, total_linhas)
+
+          remittance = arquivo.join("\r\n").to_ascii.upcase
+          remittance << "\n"
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
+        end
+        
+        
+        def monta_lote(nro_lote, forma_lancamento)
+          # contador dos registros do lote
+          contador = 1
+          
+          lote = [monta_header_lote(nro_lote, forma_lancamento)]
+          
+          transf_validas = transferencias.select{|t| t.forma_lancamento == forma_lancamento}
+          
+          transf_validas.each do |transferencia|
             raise Brcobranca::RemessaInvalida, transferencia if transferencia.invalid?
 
             lote << monta_segmento_a(transferencia, nro_lote, contador)
@@ -47,7 +72,7 @@ module Brcobranca
           end
           contador += 1
 
-          lote << monta_trailer_lote(nro_lote, contador, transferencias.map(&:valor).sum)
+          lote << monta_trailer_lote(nro_lote, contador, transf_validas.map(&:valor).sum)
 
           lote
         end
