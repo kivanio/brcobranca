@@ -37,11 +37,11 @@ module Brcobranca
           arquivo = [monta_header_arquivo]
 
           # contador de do lotes
-          contador = 1
+          contador = 0
 
           transferencias.map(&:forma_lancamento).uniq.each do |forma_lancamento|
-            arquivo.push monta_lote(contador, forma_lancamento)
             contador += 1
+            arquivo.push monta_lote(contador, forma_lancamento)
           end
 
           total_linhas = (total_segmentos(transferencias) + (contador * 2) + 2)
