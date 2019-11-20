@@ -255,7 +255,7 @@ module Brcobranca
           segmento_a << transferencia.camara_centralizadora                 # camara centralizadora                 3
           segmento_a << transferencia.info_conta                            # informacoes da conta                  23
           segmento_a << transferencia.nome_sacado.format_size(30)           # nome do favorecido                    30
-          segmento_a << ''.ljust(20,' ')                                # nome do favorecido                    20
+          segmento_a << transferencia.nosso_numero.ljust(20,' ')                                # nosso numero                            20
 
           segmento_a << transferencia.data_vencimento.strftime('%d%m%Y')    # data de vencimento                    8
           segmento_a << "BRL"                                           # tipo da moeda                         3
