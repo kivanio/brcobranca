@@ -16,7 +16,7 @@ module Brcobranca
         validates_length_of :carteira, maximum: 2, message: 'deve ter 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
-        validates_inclusion_of :carteira, in: %w(01 03 04 05 06 07), message: 'não existente para este banco.'
+        validates_inclusion_of :carteira, in: %w(21), message: 'não existente para este banco.'
 
         # Nova instancia do Unicred
         def initialize(campos = {})
@@ -45,14 +45,6 @@ module Brcobranca
 
         def nome_banco
           "UNICRED".ljust(15, ' ')
-        end
-
-        # Codigo da carteira de acordo com a documentacao do Unicred
-        #
-        # @return [String]
-        #
-        def codigo_carteira
-          codigo_carteira = carteira[1]
         end
 
         def identificador_complemento
@@ -163,7 +155,7 @@ module Brcobranca
           detalhe << conta_corrente.rjust(12, "0")                  # Conta Corrente 9[12] 008 a 019
           detalhe << digito_conta                                   # Digito da Conta 9[1] 020 a 020
           detalhe << "0"                                            # Zero 9[1] 021 a 021
-          detalhe << "021"                                          # Codigo da Carteira 9[3] 022 a 024
+          detalhe << carteira.rjust(3, "0")                         # Codigo da Carteira 9[3] 022 a 024
           detalhe << "".rjust(13, "0")                              # Zeros 9[13] 025 a 037
           detalhe << "".rjust(25, " ")                              # No Controle do Participante Uso da empresa 9[25] 038 a 062
           detalhe << cod_banco                                      # Codigo do Banco na Camara de Compensacao 9[3] 063 a 065
