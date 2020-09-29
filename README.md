@@ -1,4 +1,4 @@
-Gem para emissão de bloquetos de cobrança para bancos brasileiros.
+Gem para emissão de boletos de cobrança para bancos brasileiros.
 
 [![Gem Version](http://img.shields.io/gem/v/brcobranca.svg)][gem]
 [![Build Status](http://img.shields.io/travis/kivanio/brcobranca.svg)][travis]
