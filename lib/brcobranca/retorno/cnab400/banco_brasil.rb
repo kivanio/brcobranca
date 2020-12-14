@@ -41,7 +41,7 @@ module Brcobranca
           # :dias, 82..85 #dias para calculo
 
           # :natureza_recebimento, 86..87 #natureza do recebimento
-          parse.field :motivos_de_ocorrencia, 86..87, ->(motivos) { motivos.scan(/../).reject { |n| n.to_i.zero? } }
+          parse.field :motivo_ocorrencia, 86..87, ->(motivos) { motivos.scan(/../).reject { |n| n.to_i.zero? } }
 
           # :prefixo_titulo, 88..90 #prefixo do titulo
           parse.field :carteira_variacao, 91..93
