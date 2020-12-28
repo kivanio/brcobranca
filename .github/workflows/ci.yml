@@ -20,12 +20,12 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
 
-      - name: Install native toolchain
+#       - name: Install native toolchain
 
-        run: |
-          sudo apt-get update
+#         run: |
+#           sudo apt-get update
 
-          sudo apt-get install build-essential libsqlite3-dev
+#           sudo apt-get install build-essential libsqlite3-dev
 
       - name: Run gem install bundler
 
