@@ -1,17 +1,8 @@
 Gem para emissão de boletos de cobrança para bancos brasileiros.
 
 [![Gem Version](http://img.shields.io/gem/v/brcobranca.svg)][gem]
-[![Build Status](http://img.shields.io/travis/kivanio/brcobranca.svg)][travis]
-[![Dependency Status](http://img.shields.io/gemnasium/kivanio/brcobranca.svg)][gemnasium]
-[![Code Climate](http://img.shields.io/codeclimate/github/kivanio/brcobranca.svg)][codeclimate]
-[![Test Coverage](https://codeclimate.com/github/kivanio/brcobranca/badges/coverage.svg)](https://codeclimate.com/github/kivanio/brcobranca/coverage)
-[![Coverage Status](https://coveralls.io/repos/kivanio/brcobranca/badge.svg)](https://coveralls.io/r/kivanio/brcobranca)
 
 [gem]: https://rubygems.org/gems/brcobranca
-[travis]: http://travis-ci.org/kivanio/brcobranca
-[gemnasium]: https://gemnasium.com/kivanio/brcobranca
-[codeclimate]: https://codeclimate.com/github/kivanio/brcobranca
-[coveralls]: https://coveralls.io/r/kivanio/brcobranca
 
 ### Exemplos
 

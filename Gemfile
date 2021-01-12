@@ -11,10 +11,8 @@ group :development do
 end
 
 group :test do
-  gem 'coveralls', require: false
   gem 'json'
-  gem 'simplecov'
-  gem 'codeclimate-test-reporter'
+  gem 'simplecov', require: false, group: :test
   gem 'rspec'
   gem 'rake'
   gem 'timecop'
