@@ -21,6 +21,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Setup ghostscript
+      run: sudo apt-get -yqq install ghostscript
     - name: Install dependencies
       run: bundle install
     - name: Run tests
@@ -39,6 +41,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.jruby }}
         bundler-cache: true
+    - name: Setup ghostscript
+      run: sudo apt-get -yqq install ghostscript
     - name: Install dependencies
       env:
         JRUBY_OPTS: --debug
