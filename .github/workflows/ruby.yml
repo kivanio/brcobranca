@@ -1,10 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
-# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-
 name: Ruby
 
 on:
@@ -15,19 +8,42 @@ on:
 
 jobs:
   test:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos]
+        ruby: [2.5, 2.6, 2.7, head, debug, truffleruby, truffleruby-head]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@21351ecc0a7c196081abca5dc55b08f085efe09a
+      uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
     - name: Install dependencies
       run: bundle install
     - name: Run tests
+      run: bundle exec rake
+  test-jruby:
+    runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos]
+        jruby: [jruby, jruby-head]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.jruby }}
+        bundler-cache: true
+    - name: Install dependencies
+      env:
+        JRUBY_OPTS: --debug
+      run: bundle install
+    - name: Run tests
+      env:
+        JRUBY_OPTS: --debug
       run: bundle exec rake
