@@ -216,7 +216,7 @@ module Brcobranca
 
           # linha digitavel
           doc.moveto x: colunas[6], y: linhas[0]
-          doc.show boleto.codigo_barras.linha_digitavel, tag: :media
+          doc.show exibe_linha_digitavel_para(boleto), tag: :media
 
           # local de pagamento
           doc.moveto x: colunas[2], y: linhas[1]
@@ -306,6 +306,10 @@ module Brcobranca
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode
           doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.2 cm', x: colunas[2], y: linhas[14]) if boleto.codigo_barras
+        end
+
+        def exibe_linha_digitavel_para(boleto)
+          boleto.linha_digitavel || boleto.codigo_barras.linha_digitavel
         end
       end # Base
     end

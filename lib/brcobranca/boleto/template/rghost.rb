@@ -147,7 +147,7 @@ module Brcobranca
           move_more(doc, 4.84, 0.02)
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :maior
           move_more(doc, 2, 0)
-          doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
+          doc.show exibe_linha_digitavel_para(boleto), tag: :grande
           move_more(doc, -6.5, -0.83)
 
           doc.show boleto.cedente
@@ -203,7 +203,7 @@ module Brcobranca
           doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :maior
 
           move_more(doc, 2, 0)
-          doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
+          doc.show exibe_linha_digitavel_para(boleto), tag: :grande
 
           move_more(doc, -6.5, -0.9)
           doc.show boleto.local_pagamento
@@ -291,6 +291,10 @@ module Brcobranca
             doc.show "#{boleto.avalista} - #{boleto.avalista_documento}"
           end
           # FIM Segunda parte do BOLETO
+        end
+
+        def exibe_linha_digitavel_para(boleto)
+          boleto.linha_digitavel || boleto.codigo_barras.linha_digitavel
         end
       end # Base
     end
