@@ -506,6 +506,11 @@ module Brcobranca
         def dv_agencia_cobradora
           '0'
         end
+        
+        def format_value(value, tamanho)
+          raise ValorInvalido, 'Deve ser um Float' unless value.to_s =~ /\./
+          sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
+        end
       end
     end
   end
