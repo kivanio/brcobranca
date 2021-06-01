@@ -85,7 +85,7 @@ module Brcobranca
           "#{convenio.rjust(6, '0')}#{''.rjust(14, '0')}"
         end
 
-        def info_conta
+        def info_conta_header_arquivo
           # CAMPO            # TAMANHO
           # agencia          5
           # digito agencia   1
@@ -94,6 +94,8 @@ module Brcobranca
           # uso CAIXA        1
           "#{agencia.to_s.rjust(5, '0')}#{digito_agencia}#{convenio}#{''.rjust(7, '0')}0"
         end
+
+        alias_method :info_conta_header_lote, :info_conta_header_arquivo
 
         def complemento_header
           versao = versao_aplicativo || ''

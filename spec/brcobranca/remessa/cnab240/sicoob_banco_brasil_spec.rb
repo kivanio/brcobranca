@@ -93,8 +93,15 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
       expect(sicoob_banco_brasil.codigo_cobranca).to eq '1234567'
     end
 
-    it 'info conta deve retornar as informacoes nas posicoes corretas' do
-      info_conta = sicoob_banco_brasil.info_conta
+    it 'info conta do header do arquivo deve retornar as informacoes nas posicoes corretas' do
+      info_conta = sicoob_banco_brasil.info_conta_header_arquivo
+      expect(info_conta[0..3]).to eq '4327'           # Agencia
+      expect(info_conta[4..10]).to eq '1234567'       # Codigo cobranca
+      expect(info_conta[11..21]).to eq '12345678900'  # Conta
+    end
+
+    it 'info conta do header do lote deve retornar as informacoes nas posicoes corretas' do
+      info_conta = sicoob_banco_brasil.info_conta_header_lote
       expect(info_conta[0..3]).to eq '4327'           # Agencia
       expect(info_conta[4..10]).to eq '1234567'       # Codigo cobranca
       expect(info_conta[11..21]).to eq '12345678900'  # Conta
@@ -119,20 +126,20 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
 
     it 'header arquivo deve ter as informacoes nas posicoes corretas' do
       header = sicoob_banco_brasil.monta_header_arquivo
-      expect(header[0..2]).to eq sicoob_banco_brasil.cod_banco        # cod. do banco
-      expect(header[3..6]).to eq '0000'                               # cod. do banco
-      expect(header[7]).to eq '1'                                     # reg. header do lote
-      expect(header[8]).to eq 'R'                                     # tipo da operacao R - remessa
-      expect(header[9..15]).to eq ''.rjust(7, '0')                    # zeros
-      expect(header[16..17]).to eq '  '                               # brancos
-      expect(header[18..39]).to eq sicoob_banco_brasil.info_conta     # informacoes da conta
-      expect(header[40..69]).to eq ''.rjust(30, ' ')                  # brancos
-      expect(header[70..99]).to eq 'SOCIEDADE BRASILEIRA DE ZOOLOG'   # razao social do cedente
-      expect(header[100..179]).to eq ''.rjust(80, ' ')                # brancos
-      expect(header[180..187]).to eq '00000001'                       # sequencial de remessa
-      expect(header[188..195]).to eq Date.current.strftime('%d%m%Y')    # data gravacao
-      expect(header[196..206]).to eq ''.rjust(11, '0')                # zeros
-      expect(header[207..239]).to eq ''.rjust(33, ' ')                # brancos
+      expect(header[0..2]).to eq sicoob_banco_brasil.cod_banco                    # cod. do banco
+      expect(header[3..6]).to eq '0000'                                           # cod. do banco
+      expect(header[7]).to eq '1'                                                 # reg. header do lote
+      expect(header[8]).to eq 'R'                                                 # tipo da operacao R - remessa
+      expect(header[9..15]).to eq ''.rjust(7, '0')                                # zeros
+      expect(header[16..17]).to eq '  '                                           # brancos
+      expect(header[18..39]).to eq sicoob_banco_brasil.info_conta_header_arquivo  # informacoes da conta
+      expect(header[40..69]).to eq ''.rjust(30, ' ')                              # brancos
+      expect(header[70..99]).to eq 'SOCIEDADE BRASILEIRA DE ZOOLOG'               # razao social do cedente
+      expect(header[100..179]).to eq ''.rjust(80, ' ')                            # brancos
+      expect(header[180..187]).to eq '00000001'                                   # sequencial de remessa
+      expect(header[188..195]).to eq Date.current.strftime('%d%m%Y')              # data gravacao
+      expect(header[196..206]).to eq ''.rjust(11, '0')                            # zeros
+      expect(header[207..239]).to eq ''.rjust(33, ' ')                            # brancos
     end
   end
 

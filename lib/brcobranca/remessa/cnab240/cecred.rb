@@ -59,7 +59,7 @@ module Brcobranca
           codigo_convenio
         end
 
-        def info_conta
+        def info_conta_header_arquivo
           # CAMPO            # TAMANHO
           # agencia          5
           # digito agencia   1
@@ -68,6 +68,8 @@ module Brcobranca
           # dv agencia/conta 1
           "#{agencia_conta_corrente}#{agencia_conta_corrente_dv}"
         end
+
+        alias_method :info_conta_header_lote, :info_conta_header_arquivo
 
         def agencia_conta_corrente
           "#{agencia.to_s.rjust(5, '0')}#{digito_agencia}#{conta_corrente.rjust(12, '0')}#{conta_corrente_dv}"

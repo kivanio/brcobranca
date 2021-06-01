@@ -103,8 +103,17 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Cecred do
       expect(conv_lote[6..19]).to eq ''.rjust(14, ' ')
     end
 
-    it 'info_conta deve retornar as informacoes nas posicoes corretas' do
-      info_conta = cecred.info_conta
+    it 'info_conta do header do arquivo deve retornar as informacoes nas posicoes corretas' do
+      info_conta = cecred.info_conta_header_arquivo
+      expect(info_conta[0..4]).to eq '12345'            # agencia
+      expect(info_conta[5]).to eq '1'                   # digito agencia
+      expect(info_conta[6..17]).to eq '000001234567'    # conta corrente
+      expect(info_conta[18]).to eq '9'                  # dv conta corrente
+      expect(info_conta[19]).to eq ' '                  # dv agencia/conta
+    end
+
+    it 'info_conta do header do lote deve retornar as informacoes nas posicoes corretas' do
+      info_conta = cecred.info_conta_header_lote
       expect(info_conta[0..4]).to eq '12345'            # agencia
       expect(info_conta[5]).to eq '1'                   # digito agencia
       expect(info_conta[6..17]).to eq '000001234567'    # conta corrente

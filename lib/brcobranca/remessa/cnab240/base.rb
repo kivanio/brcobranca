@@ -79,7 +79,7 @@ module Brcobranca
           header_arquivo << Brcobranca::Util::Empresa.new(documento_cedente, false).tipo # tipo inscricao                1
           header_arquivo << documento_cedente.to_s.rjust(14, '0') # numero de inscricao         14
           header_arquivo << codigo_convenio                     # codigo do convenio no banco   20
-          header_arquivo << info_conta                          # informacoes da conta          20
+          header_arquivo << info_conta_header_arquivo           # informacoes da conta          20
           header_arquivo << empresa_mae.format_size(30)         # nome da empresa               30
           header_arquivo << nome_banco.format_size(30)          # nome do banco                 30
           header_arquivo << ''.rjust(10, ' ')                   # uso exclusivo FEBRABAN        10
@@ -115,7 +115,7 @@ module Brcobranca
           header_lote << Brcobranca::Util::Empresa.new(documento_cedente, false).tipo # tipo de inscricao       1
           header_lote << documento_cedente.to_s.rjust(15, '0')  # inscricao cedente       15
           header_lote << convenio_lote                          # codigo do convenio      20
-          header_lote << info_conta                             # informacoes conta       20
+          header_lote << info_conta_header_lote                 # informacoes conta       20
           header_lote << empresa_mae.format_size(30)            # nome empresa            30
           header_lote << mensagem_1.to_s.format_size(40)        # 1a mensagem             40
           header_lote << mensagem_2.to_s.format_size(40)        # 2a mensagem             40
@@ -429,11 +429,19 @@ module Brcobranca
           raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
-        # Informacoes da conta do cedente
+        # Informacoes da conta do cedente (Header do Arquivo)
         #
         # Este metodo deve ser sobrescrevido na classe do banco
         #
-        def info_conta
+        def info_conta_header_arquivo
+          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+        end
+
+        # Informacoes da conta do cedente (Header do Lote)
+        #
+        # Este metodo deve ser sobrescrevido na classe do banco
+        #
+        def info_conta_header_lote
           raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 

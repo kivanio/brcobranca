@@ -76,7 +76,7 @@ module Brcobranca
 
         alias_method :convenio_lote, :codigo_convenio
 
-        def info_conta
+        def info_conta_header_arquivo
           # CAMPO                  TAMANHO
           # agencia                5
           # digito agencia         1
@@ -85,6 +85,8 @@ module Brcobranca
           # digito agencia/conta   1
           "#{agencia.rjust(5, '0')}#{digito_agencia}#{conta_corrente.rjust(12, '0')}#{digito_conta} "
         end
+
+        alias_method :info_conta_header_lote, :info_conta_header_arquivo
 
         def complemento_header
           ''.rjust(29, ' ')
