@@ -32,6 +32,16 @@ module Brcobranca
       attr_accessor :quantidade
       # <b>REQUERIDO</b>: Valor do boleto
       attr_accessor :valor
+      # <b>OPCIONAL</b>: Descontos
+      attr_accessor :desconto
+      # <b>OPCIONAL</b>: Deduções
+      attr_accessor :deducao
+      # <b>OPCIONAL</b>: Multa
+      attr_accessor :multa
+      # <b>OPCIONAL</b>: Acréscimos
+      attr_accessor :acrescimo
+      # <b>OPCIONAL</b>: Valor final cobrado
+      attr_accessor :valor_cobrado
       # <b>REQUERIDO</b>: Número da agencia sem <b>Digito Verificador</b>
       attr_accessor :agencia
       # <b>REQUERIDO</b>: Número da conta corrente sem <b>Digito Verificador</b>
@@ -90,9 +100,9 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, :sacado_documento, message: 'não pode estar em branco.'
-      validates_numericality_of :convenio, :agencia, :conta_corrente, :nosso_numero, message: 'não é um número.', allow_nil: true
-
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :numero_documento, :sacado, :sacado_documento, message: 'não pode estar em branco.'
+      validates_numericality_of :convenio, :agencia, :conta_corrente, :numero_documento, :desconto, :deducao, :multa, :acrescimo, :valor_cobrado, message: 'não é um número.', allow_nil: true
+      
       # Nova instancia da classe Base
       # @param [Hash] campos
       def initialize(campos = {})
@@ -234,7 +244,7 @@ module Brcobranca
       # Valor total do documento
       # @return [String] 10 caracteres numéricos.
       def valor_documento_formatado
-        valor_documento.round(2).limpa_valor_moeda.to_s.rjust(10, '0')
+        (valor_cobrado || valor_documento).round(2).limpa_valor_moeda.to_s.rjust(10, '0')
       end
 
       # Nome da classe do boleto

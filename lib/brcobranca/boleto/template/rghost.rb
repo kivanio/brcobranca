@@ -176,10 +176,31 @@ module Brcobranca
           move_more(doc, 3.8, 0)
           doc.show boleto.data_vencimento.to_s_br
 
-          move_more(doc, 5, 0)
-          doc.show boleto.valor_documento.to_currency
-
-          move_more(doc, -15, -1.3)
+          doc.moveto x: '20.3 cm', y: '23 cm'
+          doc.show boleto.nosso_numero_boleto, align: :show_right
+          doc.moveto x: '20.3 cm', y: '22.2 cm'
+          doc.show boleto.valor_documento.to_currency, align: :show_right
+          if boleto.desconto
+            doc.moveto x: '0.7 cm', y: '21.4 cm'
+            doc.show boleto.desconto.to_currency
+          end
+          if boleto.deducao
+            doc.moveto x: '4.3 cm', y: '21.4 cm'
+            doc.show boleto.deducao.to_currency
+          end
+          if boleto.multa
+            doc.moveto x: '8.0 cm', y: '21.4 cm'
+            doc.show boleto.multa.to_currency
+          end
+          if boleto.acrescimo
+            doc.moveto x: '11.7 cm', y: '21.4 cm'
+            doc.show boleto.acrescimo.to_currency
+          end
+          if boleto.valor_cobrado
+            doc.moveto x: '16.5 cm', y: '21.4 cm'
+            doc.show boleto.valor_cobrado.to_currency
+          end
+          doc.moveto x: '1.5 cm', y: '20.9 cm'
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
 
           move_more(doc, 0, -0.3)
@@ -252,35 +273,45 @@ module Brcobranca
 
           move_more(doc, 2, 0)
           doc.show boleto.especie
-
-          move_more(doc, 10.1, 0)
-          doc.show boleto.valor_documento.to_currency
-
-          if boleto.instrucoes
-            doc.text_area boleto.instrucoes, width: '14 cm', text_align: :left, x: "#{@x -= 15.8} cm", y: "#{@y -= 0.9} cm", row_height: '0.4 cm'
-            move_more(doc, 0, -2)
-          else
-            move_more(doc, -15.8, -0.9)
-            doc.show boleto.instrucao1
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao2
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao3
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao4
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao5
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao6
+          # doc.moveto x: '8 cm', y: '13.5 cm'
+          # doc.show boleto.quantidade
+          # doc.moveto :x => '11 cm' , :y => '13.5 cm'
+          # doc.show boleto.valor.to_currency
+          doc.moveto x: '20.3 cm', y: '13.5 cm'
+          doc.show boleto.valor_documento.to_currency, align: :show_right
+          if boleto.desconto
+            doc.moveto x: '16.5 cm', y: '12.7 cm'
+            doc.show boleto.desconto.to_currency
           end
-
-
-          move_more(doc, 0.5, -1.9)
+          if boleto.deducao
+            doc.moveto x: '16.5 cm', y: '11.9 cm'
+            doc.show boleto.deducao.to_currency
+          end
+          if boleto.multa
+            doc.moveto x: '16.5 cm', y: '11.15 cm'
+            doc.show boleto.multa.to_currency
+          end
+          if boleto.acrescimo
+            doc.moveto x: '16.5 cm', y: '10.35 cm'
+            doc.show boleto.acrescimo.to_currency
+          end
+          if boleto.valor_cobrado
+            doc.moveto x: '16.5 cm', y: '9.56 cm'
+            doc.show boleto.valor_cobrado.to_currency
+          end
+          doc.moveto x: '0.7 cm', y: '12.7 cm'
+          doc.show boleto.instrucao1
+          doc.moveto x: '0.7 cm', y: '12.3 cm'
+          doc.show boleto.instrucao2
+          doc.moveto x: '0.7 cm', y: '11.9 cm'
+          doc.show boleto.instrucao3
+          doc.moveto x: '0.7 cm', y: '11.5 cm'
+          doc.show boleto.instrucao4
+          doc.moveto x: '0.7 cm', y: '11.1 cm'
+          doc.show boleto.instrucao5
+          doc.moveto x: '0.7 cm', y: '10.7 cm'
+          doc.show boleto.instrucao6
+          doc.moveto x: '1.2 cm', y: '8.8 cm'
           doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
 
           move_more(doc, 0, -0.4)

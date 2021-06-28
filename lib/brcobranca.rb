@@ -110,6 +110,7 @@ module Brcobranca
     autoload :Santander,     'brcobranca/boleto/santander'
     autoload :Banestes,      'brcobranca/boleto/banestes'
     autoload :Banrisul,      'brcobranca/boleto/banrisul'
+    autoload :Banpara,       'brcobranca/boleto/banpara'
     autoload :Credisis,      'brcobranca/boleto/credisis'
     autoload :Cecred,        'brcobranca/boleto/cecred'
     autoload :Safra,         'brcobranca/boleto/safra'
