@@ -58,6 +58,12 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
       expect(pagamento.errors.full_messages).to include('Cidade sacado não pode estar em branco.')
     end
 
+    it "deve ser invalido se nao possuir bairro do sacado" do
+      pagamento.bairro_sacado = nil
+      expect(pagamento.invalid?).to be true
+      expect(pagamento.errors.full_messages).to include("Bairro sacado não pode estar em branco.")
+    end
+
     it 'deve ser invalido se nao possuir UF do sacado' do
       pagamento.uf_sacado = nil
       expect(pagamento.invalid?).to be true
