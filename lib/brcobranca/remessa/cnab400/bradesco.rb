@@ -124,6 +124,29 @@ module Brcobranca
           detalhe << sequencial.to_s.rjust(6, '0')                    # numero do registro do arquivo               9[06]       395 a 400
           detalhe
         end
+
+        def monta_descontos_adicionais(pagamento, sequencial)
+          raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
+
+          detalhe = '2'                                                  # identificacao do registro                   9[01]       001 a 001
+          detalhe << ''.rjust(80, ' ')                                   # mensagem 1                                  X[80]       002 a 081
+          detalhe << ''.rjust(80, ' ')                                   # mensagem 2                                  X[80]       082 a 161
+          detalhe << ''.rjust(80, ' ')                                   # mensagem 3                                  X[80]       162 a 241
+          detalhe << ''.rjust(80, ' ')                                   # mensagem 4                                  X[80]       242 a 321
+          detalhe << pagamento.formata_data_segundo_desconto             # data limite para o terceiro desconto        9[06]       322 a 327
+          detalhe << pagamento.formata_valor_segundo_desconto            # valor do segundo desconto                   9[13]       328 a 340
+          detalhe << pagamento.formata_data_terceiro_desconto            # data limite para o terceiro desconto        9[06]       341 a 346
+          detalhe << pagamento.formata_valor_terceiro_desconto           # valor do terceiro desconto                  9[13]       347 a 359
+          detalhe << ''.rjust(7, ' ')                                    # reserva                                     X[07]       360 a 366
+          detalhe << carteira.to_s.rjust(3, '0')                         # carteira                                    9[03]       367 a 369
+          detalhe << agencia                                             # codigo da agencia (sem dv)                  9[05]       370 a 374
+          detalhe << conta_corrente                                      # codigo da conta                             9[07]       375 a 381
+          detalhe << digito_conta                                        # digito da conta                             X[01]       382 a 382
+          detalhe << pagamento.nosso_numero.to_s.rjust(11, '0')          # identificacao do titulo (nosso numero)      9[11]       383 a 393
+          detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s    # digito de conferencia do nosso numero (dv)  X[01]       394 a 394
+          detalhe << sequencial.to_s.rjust(6, '0')                       # numero do registro do arquivo               9[06]       395 a 400
+          detalhe
+        end
       end
     end
   end

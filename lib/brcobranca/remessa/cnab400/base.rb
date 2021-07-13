@@ -73,6 +73,12 @@ module Brcobranca
               contador += 1
               ret << monta_detalhe_multa(pagamento, contador)
             end
+
+            # Adiciona registro de desconto adicional
+            if pagamento.valor_segundo_desconto.to_f > 0 && self.respond_to?(:monta_descontos_adicionais)
+              contador += 1
+              ret << monta_descontos_adicionais(pagamento, contador)
+            end
           end
           ret << monta_trailer(contador + 1)
 
