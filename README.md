@@ -32,8 +32,8 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | 399 - HSBC             | CNR, CSB - [Rafael DL](https://github.com/rafaeldl) |                |
 | 748 - Sicredi          | C (03)            |                |
 | 756 - Sicoob           | Todas as carteiras presentes na documentação |                |
-| 756 - Unicred          | 03 - [Marcelo J. Both](https://github.com/marceloboth) |                |
 | 085 - AILOS            | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)|                |
+| 136 - Unicred          | 21 - [Magno Costa](https://github.com/mbcosta) |                |
 | 097 - CREDISIS         | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth) |                |
 | 745 - Citibank         | 3            |                |
 
