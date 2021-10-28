@@ -17,8 +17,6 @@ RSpec.describe Brcobranca::Boleto::Unicred do
       conta_corrente: '61900',
       convenio: 12_345,
       nosso_numero: '00168',
-      posto: '1',
-      byte_idt: '7'
     }
   end
 
@@ -40,7 +38,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
 
   it 'Criar nova instancia com atributos válidos' do
     boleto_novo = described_class.new(@valid_attributes)
-    expect(boleto_novo.banco).to eql('748')
+    expect(boleto_novo.banco).to eql('136')
     expect(boleto_novo.especie_documento).to eql('DM')
     expect(boleto_novo.especie).to eql('R$')
     expect(boleto_novo.moeda).to eql('9')
@@ -71,8 +69,6 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     @valid_attributes[:agencia] = '1234'
     @valid_attributes[:carteira] = '3'
     @valid_attributes[:posto] = '8'
-    @valid_attributes[:aceite] = 'N'
-    @valid_attributes[:byte_idt] = '2'
     boleto_novo = described_class.new(@valid_attributes)
 
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74893.11220 13871.212349 08123.451018 3 52220000295295')
@@ -90,7 +86,6 @@ RSpec.describe Brcobranca::Boleto::Unicred do
 
     boleto_novo.byte_idt = '2'
     boleto_novo.agencia = '1234'
-    boleto_novo.posto = '18'
     boleto_novo.conta_corrente = '12345'
     boleto_novo.nosso_numero = '13871'
     boleto_novo.carteira = '3'
@@ -102,7 +97,6 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     boleto_novo = described_class.new(@valid_attributes)
 
     boleto_novo.agencia = '1234'
-    boleto_novo.posto = '18'
     boleto_novo.conta_corrente = '12345'
     expect(boleto_novo.agencia_conta_boleto).to eql('1234.18.12345')
   end

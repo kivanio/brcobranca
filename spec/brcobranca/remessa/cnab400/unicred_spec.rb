@@ -24,7 +24,6 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
       empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       documento_cedente: '12345678910',
       codigo_transmissao: '12345678901234567890',
-      byte_idt: '2',
       pagamentos: [pagamento]
     }
   end
@@ -118,8 +117,8 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
   end
 
   context 'formatacoes dos valores' do
-    it 'cod_banco deve ser 748' do
-      expect(unicred.cod_banco).to eq '748'
+    it 'cod_banco deve ser 136' do
+      expect(unicred.cod_banco).to eq '136'
     end
 
     it 'nome_banco deve ser UNICRED com 15 posicoes' do
