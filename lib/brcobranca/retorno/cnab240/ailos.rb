@@ -5,7 +5,7 @@ require 'parseline'
 module Brcobranca
   module Retorno
     module Cnab240
-      class Cecred < Brcobranca::Retorno::Cnab240::Base
+      class Ailos < Brcobranca::Retorno::Cnab240::Base
         # Regex para remoção de headers e trailers além de registros diferentes de T ou U
         REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/
 

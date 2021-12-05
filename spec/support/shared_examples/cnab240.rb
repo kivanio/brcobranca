@@ -40,7 +40,7 @@ shared_examples_for 'cnab240' do
       p.merge!(byte_idt: '2', posto: '14', digito_conta: '5')
     elsif subject.class == Brcobranca::Remessa::Cnab240::Unicred
       p.merge!(byte_idt: '2', posto: '14', digito_conta: '5')
-    elsif subject.class == Brcobranca::Remessa::Cnab240::Cecred
+    elsif subject.class == Brcobranca::Remessa::Cnab240::Ailos
       pagamento.codigo_multa = '2'
       pagamento.percentual_multa =  2.00
       p.merge!(digito_agencia: '1', pagamentos: [pagamento])

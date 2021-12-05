@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::Ailos do #:nodoc:[all]
   before do
     @valid_attributes = {
       valor: 0.0,
-      local_pagamento: 'PAGÁVEL PREFERENCIALMENTE NAS COOPERATIVAS DO SISTEMA CECRED',
+      local_pagamento: 'Pagar preferencialmente nas cooperativas do Sistema AILOS.',
       cedente: 'Kivanio Barbosa',
       documento_cedente: '12345678912',
       sacado: 'Claudio Pozzebom',
@@ -69,7 +69,7 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS COOPERATIVAS DO SISTEMA CECRED')
+    expect(boleto_novo.local_pagamento).to eql('Pagar preferencialmente nas cooperativas do Sistema AILOS.')
     expect(boleto_novo.carteira).to eql('01')
     expect(boleto_novo.codigo_servico).to be_falsey
   end
@@ -86,7 +86,7 @@ RSpec.describe Brcobranca::Boleto::Cecred do #:nodoc:[all]
     expect(boleto_novo.quantidade).to eql(1)
     expect(boleto_novo.valor).to eql(0.0)
     expect(boleto_novo.valor_documento).to eql(0.0)
-    expect(boleto_novo.local_pagamento).to eql('PAGÁVEL PREFERENCIALMENTE NAS COOPERATIVAS DO SISTEMA CECRED')
+    expect(boleto_novo.local_pagamento).to eql('Pagar preferencialmente nas cooperativas do Sistema AILOS.')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
     expect(boleto_novo.sacado).to eql('Claudio Pozzebom')
