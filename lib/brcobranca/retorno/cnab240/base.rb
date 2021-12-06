@@ -16,7 +16,7 @@ module Brcobranca
           when "033"
             Brcobranca::Retorno::Cnab240::Santander.load_lines(file, options)
           when "085"
-            Brcobranca::Retorno::Cnab240::Cecred.load_lines(file, options)
+            Brcobranca::Retorno::Cnab240::Ailos.load_lines(file, options)
           when "748"
             Brcobranca::Retorno::Cnab240::Sicredi.load_lines(file, options)
           when "756"

@@ -2,7 +2,7 @@
 module Brcobranca
   module Remessa
     module Cnab240
-      class Cecred < Brcobranca::Remessa::Cnab240::Base
+      class Ailos < Brcobranca::Remessa::Cnab240::Base
         # digito da agencia
         attr_accessor :digito_agencia
 
@@ -32,7 +32,7 @@ module Brcobranca
         end
 
         def nome_banco
-          'CECRED'.ljust(30, ' ')
+          'AILOS'.ljust(30, ' ')
         end
 
         def versao_layout_arquivo

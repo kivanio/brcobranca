@@ -33,7 +33,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | 748 - Sicredi          | C (03)            |                |
 | 756 - Sicoob           | Todas as carteiras presentes na documentação |                |
 | 756 - Unicred          | 03 - [Marcelo J. Both](https://github.com/marceloboth) |                |
-| 085 - CECRED           | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)|                |
+| 085 - AILOS            | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)|                |
 | 097 - CREDISIS         | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth) |                |
 | 745 - Citibank         | 3            |                |
 
@@ -55,7 +55,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | Sicoob                  | 240     | 400 e 240
 | Sicredi                 | 240     | 240
 | UNICRED                 | 400     | 400 e 240
-| CECRED                  | 240     | 240
+| AILOS                   | 240     | 240
 | CREDISIS                | 400     | 400
 
 * Banco do Brasil (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
