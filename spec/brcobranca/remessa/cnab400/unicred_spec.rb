@@ -5,25 +5,25 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
       data_vencimento: Date.current,
-      nosso_numero: '072000031',
-      documento: 6969,
+      nosso_numero: '72000031',
+      documento: '1/01',
       documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
+      nome_sacado: 'AKRETION LTDA',
+      endereco_sacado: 'AVENIDA PAULISTA 1',
+      bairro_sacado: 'CENTRO',
       cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
+      cidade_sacado: 'SAO PAULO',
       uf_sacado: 'SP')
   end
   let(:params) do
     {
-      carteira: '03',
+      carteira: '21',
       agencia: '1234',
       conta_corrente: '12345',
       digito_conta: '1',
       empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
       documento_cedente: '12345678910',
-      codigo_transmissao: '12345678901234567890',
+      codigo_beneficiario: '1234567890',
       pagamentos: [pagamento]
     }
   end
@@ -101,17 +101,17 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
       end
     end
 
-    context '@codigo_transmissao' do
+    context '@codigo_beneficiario' do
       it 'deve ser inválido se não existir' do
-        object = subject.class.new(params.merge!(codigo_transmissao: nil))
+        object = subject.class.new(params.merge!(codigo_beneficiario: nil))
         expect(object.invalid?).to be true
-        expect(object.errors.full_messages).to include('Codigo transmissao não pode estar em branco.')
+        expect(object.errors.full_messages).to include('Codigo beneficiario não pode estar em branco.')
       end
 
-      it 'deve ser inválido quando não possuir até 20 dígitos' do
-        object = subject.class.new(params.merge!(codigo_transmissao: '123456789012345678901'))
+      it 'deve ser inválido quando maior que 10 dígitos' do
+        object = subject.class.new(params.merge!(codigo_beneficiario: '12345678901'))
         expect(object.invalid?).to be true
-        expect(object.errors.full_messages).to include('Codigo transmissao deve ter 20 dígitos.')
+        expect(object.errors.full_messages).to include('Codigo Beneficiario não deve ter mais que 10 dígitos.')
       end
     end
   end
@@ -127,19 +127,19 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
       expect(nome_banco.strip).to eq 'UNICRED'
     end
 
-    it 'complemento deve retornar 294 caracteres' do
-      expect(unicred.complemento.size).to eq 294
+    it 'complemento deve retornar 277 caracteres' do
+      expect(unicred.complemento.size).to eq 277
     end
 
-    it 'info_conta deve retornar com 20 posicoes as informacoes da conta' do
+    it 'info_conta deve retornar com 10 posicoes as informacoes da conta' do
       info_conta = unicred.info_conta
-      expect(info_conta.size).to eq 20
-      expect(info_conta[0..19]).to eq '12345678901234567890'
+      expect(info_conta.size).to eq 20 
+      expect(info_conta[0..19]).to eq '00000000001234567890'
     end
 
     it 'deve retornar o codigo da carteira de acordo com o tipo de emissão' do
-      unicred.carteira = '03'
-      expect(unicred.codigo_carteira).to eq '3'
+      unicred.carteira = '21'
+      expect(unicred.carteira).to eq '21'
 
       unicred.carteira = '09'
       expect(unicred.invalid?).to be true
@@ -156,21 +156,21 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
         expect(header[1]).to eq '1'             # tipo operacao (1 = remessa)
         expect(header[2..8]).to eq 'REMESSA'    # literal da operacao
         expect(header[26..45]).to eq unicred.info_conta # informacoes da conta
-        expect(header[76..78]).to eq '748'      # codigo do banco
+        expect(header[76..78]).to eq '136'      # codigo do banco
       end
     end
 
     context 'detalhe' do
       it 'informacoes devem estar posicionadas corretamente no detalhe' do
         detalhe = unicred.monta_detalhe pagamento, 1
-        expect(detalhe[37..61]).to eq "6969".ljust(25) # documento
-        expect(detalhe[62..81]).to eq '072000031'.rjust(20, ' ')      # nosso numero
+	expect(detalhe[2..5]).to eq '1234'                            # Agencia
+	expect(detalhe[108..109]).to eq '01'                          # Instrução
+        expect(detalhe[110..119]).to eq "0000001/01"                  # documento
         expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990'               # valor do titulo
-        expect(detalhe[142..145]).to eq '0000'                        # agência cobradora
-        expect(detalhe[156..159]).to eq '0000'                        # instrução
+	expect(detalhe[192..202]).to eq '72000031'.rjust(10, ' ')     # nosso numero
         expect(detalhe[220..233]).to eq '00012345678901'              # documento do pagador
-        expect(detalhe[234..263]).to eq 'PABLO DIEGO JOSE FRANCISCO DE ' # nome do pagador
+        expect(detalhe[234..263]).to eq 'AKRETION LTDA'               # nome do pagador
       end
     end
 
