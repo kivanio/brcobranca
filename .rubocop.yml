@@ -1,5 +1,8 @@
 require: rubocop-rspec
 
+AllCops:
+  NewCops: enable
+
 Style/AsciiComments:
   Enabled: false
 
@@ -13,4 +16,4 @@ Metrics/LineLength:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
-  EnforcedStyle: when_needed
+  EnforcedStyle: always
