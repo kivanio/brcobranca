@@ -1,6 +1,6 @@
-# -*- encoding: utf-8 -*-
-require 'unidecoder'
+# frozen_string_literal: true
 
+require 'active_support/core_ext/object/blank'
 module Brcobranca
   module Remessa
     class Base
@@ -33,9 +33,7 @@ module Brcobranca
           record.errors.add(attr, 'não pode estar vazio.') if value.empty?
           value.each do |pagamento|
             if pagamento.is_a? Brcobranca::Remessa::Pagamento
-              if pagamento.invalid?
-                pagamento.errors.full_messages.each { |msg| record.errors.add(attr, msg) }
-              end
+              pagamento.errors.full_messages.each { |msg| record.errors.add(attr, msg) } if pagamento.invalid?
             else
               record.errors.add(attr, 'cada item deve ser um objeto Pagamento.')
             end
@@ -59,18 +57,17 @@ module Brcobranca
       end
 
       def quantidade_titulos_cobranca
-        pagamentos.length.to_s.rjust(6, "0")
+        pagamentos.length.to_s.rjust(6, '0')
       end
 
       def totaliza_valor_titulos
-        pagamentos.inject(0.0) { |sum, pagamento| sum += pagamento.valor.to_f }
+        pagamentos.inject(0.0) { |sum, pagamento| sum + pagamento.valor.to_f }
       end
 
       def valor_titulos_carteira(tamanho = 17)
-        total = sprintf "%.2f", totaliza_valor_titulos
-        total.somente_numeros.rjust(tamanho, "0")
+        total = format '%.2f', totaliza_valor_titulos
+        total.somente_numeros.rjust(tamanho, '0')
       end
-
     end
   end
 end

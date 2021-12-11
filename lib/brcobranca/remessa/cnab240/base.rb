@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab240
@@ -72,7 +73,7 @@ module Brcobranca
         #
         def monta_header_arquivo
           header_arquivo = ''                                   # CAMPO                         TAMANHO
-          header_arquivo << cod_banco                           # codigo do banco               3
+          header_arquivo += cod_banco                           # codigo do banco               3
           header_arquivo << '0000'                              # lote do servico               4
           header_arquivo << '0'                                 # tipo de registro              1
           header_arquivo << ''.rjust(9, ' ')                    # uso exclusivo FEBRABAN        9
@@ -104,7 +105,7 @@ module Brcobranca
         #
         def monta_header_lote(nro_lote)
           header_lote = ''                                      # CAMPO                   TAMANHO
-          header_lote << cod_banco                              # codigo banco            3
+          header_lote += cod_banco                              # codigo banco            3
           header_lote << nro_lote.to_s.rjust(4, '0')            # lote servico            4
           header_lote << '1'                                    # tipo de registro        1
           header_lote << 'R'                                    # tipo de operacao        1
@@ -138,8 +139,9 @@ module Brcobranca
         # @return [String]
         #
         def monta_segmento_p(pagamento, nro_lote, sequencial)
+          segmento_p = ''
           #                                                             # DESCRICAO                             TAMANHO
-          segmento_p = cod_banco                                        # codigo banco                          3
+          segmento_p += cod_banco # codigo banco                          3
           segmento_p << nro_lote.to_s.rjust(4, '0')                     # lote de servico                       4
           segmento_p << '3'                                             # tipo de registro                      1
           segmento_p << sequencial.to_s.rjust(5, '0')                   # num. sequencial do registro no lote   5
@@ -194,7 +196,7 @@ module Brcobranca
         #
         def monta_segmento_q(pagamento, nro_lote, sequencial)
           segmento_q = ''                                               # CAMPO                                TAMANHO
-          segmento_q << cod_banco                                       # codigo banco                         3
+          segmento_q += cod_banco                                       # codigo banco                         3
           segmento_q << nro_lote.to_s.rjust(4, '0')                     # lote de servico                      4
           segmento_q << '3'                                             # tipo de registro                     1
           segmento_q << sequencial.to_s.rjust(5, '0')                   # num. sequencial do registro no lote  5
@@ -211,7 +213,7 @@ module Brcobranca
           segmento_q << pagamento.cidade_sacado.format_size(15)         # cidade                               15
           segmento_q << pagamento.uf_sacado                             # uf                                   2
           segmento_q << pagamento.identificacao_avalista(false)         # identificacao do sacador             1
-          segmento_q << pagamento.documento_avalista.to_s.rjust(15, '0')# documento sacador                    15
+          segmento_q << pagamento.documento_avalista.to_s.rjust(15, '0') # documento sacador                    15
           segmento_q << pagamento.nome_avalista.format_size(40)         # nome avalista                        40
           segmento_q << ''.rjust(3, '0')                                # cod. banco correspondente            3
           segmento_q << ''.rjust(20, ' ')                               # nosso numero banco correspondente    20
@@ -232,19 +234,19 @@ module Brcobranca
         #
         def monta_segmento_r(pagamento, nro_lote, sequencial)
           segmento_r = ''                                               # CAMPO                                TAMANHO
-          segmento_r << cod_banco                                       # codigo banco                         3
+          segmento_r += cod_banco                                       # codigo banco                         3
           segmento_r << nro_lote.to_s.rjust(4, '0')                     # lote de servico                      4
           segmento_r << '3'                                             # tipo do registro                     1
           segmento_r << sequencial.to_s.rjust(5, '0')                   # num. sequencial do registro no lote  5
           segmento_r << 'R'                                             # cod. segmento                        1
           segmento_r << ' '                                             # uso exclusivo                        1
           segmento_r << pagamento.identificacao_ocorrencia              # cod. movimento remessa               2
-          segmento_r << "0"                                             # cod. desconto 2                      1
-          segmento_r << "".rjust(8,  '0')                               # data desconto 2                      8
-          segmento_r << "".rjust(15,  '0')                              # valor desconto 2                     15
-          segmento_r << "0"                                             # cod. desconto 3                      1
-          segmento_r << "".rjust(8,  '0')                               # data desconto 3                      8
-          segmento_r << "".rjust(15,  '0')                              # valor desconto 3                     15
+          segmento_r << '0'                                             # cod. desconto 2                      1
+          segmento_r << ''.rjust(8, '0')                               # data desconto 2                      8
+          segmento_r << ''.rjust(15, '0')                              # valor desconto 2                     15
+          segmento_r << '0' # cod. desconto 3                      1
+          segmento_r << ''.rjust(8, '0')                               # data desconto 3                      8
+          segmento_r << ''.rjust(15, '0')                              # valor desconto 3                     15
           segmento_r << pagamento.codigo_multa                          # codigo multa                         1
           segmento_r << data_multa(pagamento)                           # data multa                           8
           segmento_r << pagamento.formata_percentual_multa(15)          # valor multa                          15
@@ -267,7 +269,7 @@ module Brcobranca
         #
         def monta_trailer_lote(nro_lote, nro_registros)
           trailer_lote = ''                                             # CAMPO                   # TAMANHO
-          trailer_lote << cod_banco                                     # codigo banco            3
+          trailer_lote += cod_banco                                     # codigo banco            3
           trailer_lote << nro_lote.to_s.rjust(4, '0')                   # lote de servico         4
           trailer_lote << '5'                                           # tipo de servico         1
           trailer_lote << ''.rjust(9, ' ')                              # uso exclusivo           9
@@ -294,7 +296,11 @@ module Brcobranca
           # nro de lotes              6
           # nro de registros(linhas)  6
           # uso FEBRABAN              211
-          "#{cod_banco}99999#{''.rjust(9, ' ')}#{nro_lotes.to_s.rjust(6, '0')}#{sequencial.to_s.rjust(6, '0')}#{''.rjust(211, ' ')}"
+          "#{cod_banco}99999#{''.rjust(9,
+                                       ' ')}#{nro_lotes.to_s.rjust(6,
+                                                                   '0')}#{sequencial.to_s.rjust(6,
+                                                                                                '0')}#{''.rjust(211,
+                                                                                                                ' ')}"
         end
 
         # Monta um lote para o arquivo
@@ -309,7 +315,7 @@ module Brcobranca
         #
         def monta_lote(nro_lote)
           # contador dos registros do lote
-          contador = 1 #header
+          contador = 1 # header
 
           lote = [monta_header_lote(nro_lote)]
 
@@ -320,16 +326,16 @@ module Brcobranca
             contador += 1
             lote << monta_segmento_q(pagamento, nro_lote, contador)
             contador += 1
-            if self.respond_to?(:monta_segmento_r)
-              seg_r = monta_segmento_r(pagamento, nro_lote, contador)
+            next unless respond_to?(:monta_segmento_r)
 
-              if seg_r.present?
-                lote << seg_r
-                contador += 1
-              end
+            seg_r = monta_segmento_r(pagamento, nro_lote, contador)
+
+            if seg_r.present?
+              lote << seg_r
+              contador += 1
             end
           end
-          contador += 1 #trailer
+          contador += 1 # trailer
 
           lote << monta_trailer_lote(nro_lote, contador)
 
@@ -353,13 +359,14 @@ module Brcobranca
 
           arquivo << monta_trailer_arquivo(contador, total_linhas)
 
-          remittance = arquivo.join("\r\n").to_ascii.upcase
+          remittance = arquivo.join("\r\n").remove_accents.upcase
           remittance << "\n"
-          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding,
+                                                                                 crlf_newline: true)
         end
 
         def total_segmentos(pagamentos)
-          if self.respond_to?(:monta_segmento_r)
+          if respond_to?(:monta_segmento_r)
             pagamentos.size * 3
           else
             pagamentos.size * 2
@@ -371,7 +378,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def complemento_header
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Numero da versao do layout do arquivo
@@ -379,7 +387,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def versao_layout_arquivo
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Numero da versao do layout do lote
@@ -387,7 +396,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def versao_layout_lote
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Densidade de gravacao do arquivo
@@ -410,7 +420,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def convenio_lote
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Nome do banco
@@ -418,7 +429,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def nome_banco
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Codigo do banco
@@ -426,7 +438,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def cod_banco
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Informacoes da conta do cedente
@@ -434,7 +447,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def info_conta
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Codigo do convenio
@@ -442,7 +456,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def codigo_convenio
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Complemento do Segmento R
@@ -450,7 +465,7 @@ module Brcobranca
         # Sobreescreva caso necessário
         def complemento_r
           segmento_r = ''
-          segmento_r << ''.rjust(20, ' ')                               # Exclusivo FEBRABAN                   20
+          segmento_r += ''.rjust(20, ' ')                               # Exclusivo FEBRABAN                   20
           segmento_r << ''.rjust(8, '0')                                # Cod. Ocor do Pagador                 8
           segmento_r << ''.rjust(3, '0')                                # Cod. do Banco conta débito           3
           segmento_r << ''.rjust(5, '0')                                # Cod. da Agencia do débito            5
@@ -465,12 +480,14 @@ module Brcobranca
 
         def data_multa(pagamento)
           return ''.rjust(8, '0') if pagamento.codigo_multa == '0'
+
           pagamento.data_vencimento.strftime('%d%m%Y')
         end
 
         def data_mora(pagamento)
-          return "".rjust(8, "0") unless %w( 1 2 ).include? pagamento.tipo_mora
-          pagamento.data_vencimento.strftime("%d%m%Y")
+          return ''.rjust(8, '0') unless %w[1 2].include? pagamento.tipo_mora
+
+          pagamento.data_vencimento.strftime('%d%m%Y')
         end
 
         def codigo_desconto(pagamento)
@@ -482,7 +499,7 @@ module Brcobranca
         end
 
         def dias_baixa(pagamento)
-          pagamento.dias_baixa.to_s.rjust(3, "0")
+          pagamento.dias_baixa.to_s.rjust(3, '0')
         end
 
         # Identificacao do titulo da empresa
@@ -500,7 +517,7 @@ module Brcobranca
         #
         # Sobreescreva caso necessário
         def exclusivo_servico
-          "".rjust(2, " ")
+          ''.rjust(2, ' ')
         end
 
         def dv_agencia_cobradora

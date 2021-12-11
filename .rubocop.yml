@@ -1,19 +1,12 @@
-require: rubocop-rspec
+require:
+  - rubocop-performance
+  - "test_prof/rubocop"
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
-
-Style/AsciiComments:
-  Enabled: false
-
-Style/CommentAnnotation:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
-
-Metrics/LineLength:
-  Enabled: false
+  TargetRubyVersion: 2.6
+  SuggestExtensions: false
 
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always

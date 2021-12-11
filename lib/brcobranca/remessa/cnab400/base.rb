@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -54,7 +55,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def monta_detalhe(_pagamento, _sequencial)
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Gera o arquivo com os registros
@@ -69,23 +71,24 @@ module Brcobranca
           pagamentos.each do |pagamento|
             contador += 1
             ret << monta_detalhe(pagamento, contador)
-            if pagamento.codigo_multa.to_i > 0 && self.respond_to?(:monta_detalhe_multa)
+            if pagamento.codigo_multa.to_i.positive? && respond_to?(:monta_detalhe_multa)
               contador += 1
               ret << monta_detalhe_multa(pagamento, contador)
             end
 
             # Adiciona registro de desconto adicional
-            if pagamento.valor_segundo_desconto.to_f > 0 && self.respond_to?(:monta_descontos_adicionais)
+            if pagamento.valor_segundo_desconto.to_f.positive? && respond_to?(:monta_descontos_adicionais)
               contador += 1
               ret << monta_descontos_adicionais(pagamento, contador)
             end
           end
           ret << monta_trailer(contador + 1)
 
-          remittance = ret.join("\n").to_ascii.upcase
+          remittance = ret.join("\n").remove_accents.upcase
           remittance << "\n"
 
-          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding, crlf_newline: true)
+          remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding,
+                                                                                 crlf_newline: true)
         end
 
         # Informacoes referentes a conta do cedente
@@ -93,7 +96,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def info_conta
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Numero do banco na camara de compensacao
@@ -101,7 +105,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def cod_banco
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Nome por extenso do banco cobrador
@@ -109,7 +114,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def nome_banco
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Complemento do registro header
@@ -117,7 +123,8 @@ module Brcobranca
         # Este metodo deve ser sobrescrevido na classe do banco
         #
         def complemento
-          raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
+          raise Brcobranca::NaoImplementado,
+                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
       end
     end

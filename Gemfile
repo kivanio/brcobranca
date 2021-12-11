@@ -1,19 +1,23 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in brcobranca.gemspec
 gemspec
 
 group :development do
+  gem 'github_changelog_generator'
   gem 'pry'
   gem 'rubocop'
+  gem 'rubocop-performance'
   gem 'rubocop-rspec'
-  gem 'github_changelog_generator'
 end
 
 group :test do
   gem 'json'
-  gem 'simplecov', require: false, group: :test
-  gem 'rspec'
   gem 'rake'
+  gem 'rspec'
+  gem 'simplecov', require: false, group: :test
+  gem 'test-prof'
   gem 'timecop'
 end
