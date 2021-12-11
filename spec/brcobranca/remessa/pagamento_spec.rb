@@ -1,18 +1,19 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Pagamento do
   let(:pagamento) do
     subject.class.new(valor: 199.9,
-      data_vencimento: Date.parse('2015-06-25'),
-      nosso_numero: 123,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                      data_vencimento: Date.parse('2015-06-25'),
+                      nosso_numero: 123,
+                      documento_sacado: '12345678901',
+                      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                      bairro_sacado: 'São josé dos quatro apostolos magros',
+                      cep_sacado: '12345678',
+                      cidade_sacado: 'Santa rita de cássia maria da silva',
+                      uf_sacado: 'SP')
   end
 
   context 'validacoes' do
@@ -175,24 +176,24 @@ RSpec.describe Brcobranca::Remessa::Pagamento do
     context 'formata valor do campo documento' do
       before { pagamento.documento = '2345' }
 
-      it "deve formatar assumindo os valores padrao para os parametros tamanho e caracter" do
+      it 'deve formatar assumindo os valores padrao para os parametros tamanho e caracter' do
         expect(pagamento.formata_documento_ou_numero).to eql '2345'.rjust(25, ' ')
       end
 
-      it "deve formatar com os parametros tamanho e caracter" do
+      it 'deve formatar com os parametros tamanho e caracter' do
         expect(pagamento.formata_documento_ou_numero(15, '0')).to eql '2345'.rjust(15, '0')
       end
 
-      it "deve extrair somente o valor do campo no tamanho informado" do
+      it 'deve extrair somente o valor do campo no tamanho informado' do
         pagamento.documento = '12345678901234567890'
         expect(pagamento.formata_documento_ou_numero(15, '0')).to eql '123456789012345'
-        expect(pagamento.formata_documento_ou_numero(15, '0').length).to eql 15
+        expect(pagamento.formata_documento_ou_numero(15, '0').length).to be 15
       end
 
       it 'deve remover caracteres especiais ou acentuação' do
         pagamento.documento = 'JOÃO DEve R$ 900.00'
         expect(pagamento.formata_documento_ou_numero).to eql '         JOO DEve R 90000'
-        expect(pagamento.formata_documento_ou_numero.length).to eql 25
+        expect(pagamento.formata_documento_ou_numero.length).to be 25
       end
     end
 

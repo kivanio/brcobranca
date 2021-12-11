@@ -1,8 +1,9 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class Banrisul < Base # Banrisul
+    # Banrisul
+    class Banrisul < Base
       # <b>REQUERIDO</b>: digito verificador do convenio
       attr_accessor :digito_convenio
 

@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::Unicred do
@@ -36,6 +37,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Unicred do
   let(:unicred) { subject.class.new(params) }
 
   before { Timecop.freeze(Time.local(2007, 7, 14, 16, 15, 15)) }
+
   after { Timecop.return }
 
   context 'validacoes' do
@@ -138,7 +140,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Unicred do
       expect(unicred.digito_agencia).to eq ' '
     end
 
-    it 'deve calcular  digito da conta' do
+    it 'deve calcular digito da conta' do
       # digito calculado a partir do modulo 11 com base 9
       #
       # conta = 1  2  3  4  5
@@ -168,18 +170,18 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Unicred do
     end
 
     it 'complemento trailer deve retornar espacos em branco com a totalização das cobranças' do
-      total_cobranca_simples    = "".rjust(23, "0")
-      total_cobranca_vinculada  = "".rjust(23, "0")
-      total_cobranca_caucionada = "".rjust(23, "0")
-      total_cobranca_descontada = "".rjust(23, "0")
+      total_cobranca_simples    = ''.rjust(23, '0')
+      total_cobranca_vinculada  = ''.rjust(23, '0')
+      total_cobranca_caucionada = ''.rjust(23, '0')
+      total_cobranca_descontada = ''.rjust(23, '0')
 
       expect(unicred.complemento_trailer).to eq "#{total_cobranca_simples}#{total_cobranca_vinculada}"\
-        "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
+                                                "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
     end
 
     it 'formata o nosso numero' do
-      nosso_numero = unicred.formata_nosso_numero "072000031"
-      expect(nosso_numero.strip).to eq "072000031"
+      nosso_numero = unicred.formata_nosso_numero '072000031'
+      expect(nosso_numero.strip).to eq '072000031'
     end
   end
 

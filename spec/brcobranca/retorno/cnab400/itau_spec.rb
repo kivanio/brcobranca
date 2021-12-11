@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::Cnab400::Itau do
@@ -6,7 +7,8 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Itau do
     @arquivo = File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB400ITAU.RET')
   end
 
-  it 'Ignora primeira linha que é header' do pagamentos = described_class.load_lines(@arquivo)
+  it 'Ignora primeira linha que é header' do
+    pagamentos = described_class.load_lines(@arquivo)
     pagamento = pagamentos.first
     expect(pagamento.sequencial).to eql('000002')
   end

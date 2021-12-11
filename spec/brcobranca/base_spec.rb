@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::Base do
@@ -35,7 +35,7 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.valor).to eq(0.0)
     expect(boleto_novo.valor_documento).to eq(0.0)
     expect(boleto_novo.local_pagamento).to eql('QUALQUER BANCO ATÉ O VENCIMENTO')
-    expect(boleto_novo.valid?).to be_falsey
+    expect(boleto_novo).not_to be_valid
   end
 
   it 'Criar nova instancia com atributos válidos' do
@@ -59,7 +59,7 @@ RSpec.describe Brcobranca::Boleto::Base do
     expect(boleto_novo.convenio).to be(12_387_989)
     expect(boleto_novo.nosso_numero).to eql('777700168')
     expect(boleto_novo.documento_numero).to eql('9999999')
-    expect(boleto_novo.valid?).to be_truthy
+    expect(boleto_novo).to be_valid
   end
 
   it 'Calcula agencia_dv' do
@@ -142,20 +142,29 @@ RSpec.describe Brcobranca::Boleto::Base do
 
   it 'Mostrar aviso sobre sobrecarga de métodos padrões' do
     boleto_novo = described_class.new(@valid_attributes)
-    expect { boleto_novo.codigo_barras_segunda_parte }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-    expect { boleto_novo.nosso_numero_boleto }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-    expect { boleto_novo.agencia_conta_boleto }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
+    expect do
+      boleto_novo.codigo_barras_segunda_parte
+    end.to raise_error(Brcobranca::NaoImplementado,
+                       'Sobreescreva este método na classe referente ao banco que você esta criando')
+    expect do
+      boleto_novo.nosso_numero_boleto
+    end.to raise_error(Brcobranca::NaoImplementado,
+                       'Sobreescreva este método na classe referente ao banco que você esta criando')
+    expect do
+      boleto_novo.agencia_conta_boleto
+    end.to raise_error(Brcobranca::NaoImplementado,
+                       'Sobreescreva este método na classe referente ao banco que você esta criando')
   end
 
   it 'Incluir módulos de template na classe' do
-    expect(described_class.respond_to?(:lote)).to be_truthy
-    expect(described_class.respond_to?(:to)).to be_truthy
+    expect(described_class).to respond_to(:lote)
+    expect(described_class).to respond_to(:to)
   end
 
   it 'Incluir módulos de template na instancia' do
     boleto_novo = described_class.new
-    expect(boleto_novo.respond_to?(:lote)).to be_truthy
-    expect(boleto_novo.respond_to?(:to)).to be_truthy
+    expect(boleto_novo).to respond_to(:lote)
+    expect(boleto_novo).to respond_to(:to)
   end
 
   it 'data_documento em string' do

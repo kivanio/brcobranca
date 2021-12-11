@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'parseline'
 
 module Brcobranca
@@ -29,12 +30,12 @@ module Brcobranca
           parse.field :codigo_ocorrencia, 108..109
           parse.field :data_ocorrencia, 110..115
           # identificados na documentação mas não parseados
-          #parse.field :seu_numero, 116..125 seu numero
-          #parse.field :nosso_numero, 126..133 nosso numero denovo?
-          #parse.field :codigo_rejeicao, 134..135 nosso numero
-          parse.field :motivo_ocorrencia, 136..145, ->(motivos) do
-            motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-          end
+          # parse.field :seu_numero, 116..125 seu numero
+          # parse.field :nosso_numero, 126..133 nosso numero denovo?
+          # parse.field :codigo_rejeicao, 134..135 nosso numero
+          parse.field :motivo_ocorrencia, 136..145, lambda { |motivos|
+            motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+          }
 
           parse.field :data_vencimento, 146..151
           parse.field :valor_titulo, 152..164

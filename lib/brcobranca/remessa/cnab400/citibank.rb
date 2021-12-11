@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -61,10 +62,10 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << portfolio                                              # portfolio                             X[20]
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25)                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25) # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.especie_titulo                               # espécie do título                     9[02] - 00 = DMI – Duplicata Mercantil por Indicação, 02 = DM – Duplicata Mercantil
           detalhe << pagamento.nosso_numero.to_s.rjust(12, '0')             # nosso numero                          9[12]
           detalhe << ''.rjust(6, ' ')                                       # brancos                               X[06]
@@ -74,7 +75,7 @@ module Brcobranca
           detalhe << '000'                                                  # parcela                               9[03] - Só preencher se o banco for imprimir e enviar e for um carnê
           detalhe << carteira                                               # codigo da carteira                    X[01] - Código 1 = Cobrança Simples, Código 2 = Cobrança Caucionada
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0') # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -101,7 +102,7 @@ module Brcobranca
           # IMPORTANTE: essa instrução somente poderá ser utilizada após assinatura de contrato específico para o produto.
           # 09 = DEVOLVER: esta é a instrução de BAIXA quando esta instrução for dada também deverá ser preenchida a posição 159/160
           # 10 = SUSTAR PROTESTO: instrução utilizada para títulos que NÃO estejam em cartório
-          detalhe << '00'                                                   # Instrução para o título               9[02]
+          detalhe << '00' # Instrução para o título               9[02]
 
           # Quando posição 157/158 (Instrução para título) conter instrução 06 ou 09,
           # este campo deverá conter a quantidade de dias válidos para execução da instrução.

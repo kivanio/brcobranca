@@ -1,10 +1,11 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
       class Itau < Brcobranca::Remessa::Cnab400::Base
-        VALOR_EM_REAIS = "1"
-        VALOR_EM_PERCENTUAL = "2"
+        VALOR_EM_REAIS = '1'
+        VALOR_EM_PERCENTUAL = '2'
 
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, :digito_conta, message: 'não pode estar em branco.'
@@ -73,6 +74,7 @@ module Brcobranca
           return 'U' if carteira.to_s == '150'
           return '1' if carteira.to_s == '191'
           return 'E' if carteira.to_s == '147'
+
           'I'
         end
 
@@ -89,7 +91,7 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]
@@ -139,12 +141,13 @@ module Brcobranca
 
         def prazo_instrucao(pagamento)
           return '03' unless pagamento.cod_primeira_instrucao == '09'
+
           pagamento.dias_protesto.rjust(2, '0')
         end
 
         def monta_detalhe_multa(pagamento, sequencial)
           detalhe = '2'
-          detalhe << pagamento.codigo_multa
+          detalhe += pagamento.codigo_multa
           detalhe << pagamento.data_vencimento.strftime('%d%m%Y')
           detalhe << pagamento.formata_percentual_multa(13)
           detalhe << ''.rjust(371, ' ')

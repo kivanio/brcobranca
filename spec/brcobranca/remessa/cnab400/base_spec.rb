@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -39,15 +38,31 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Base do
 
   context 'sobrescrita dos metodos' do
     it 'mostrar aviso sobre sobrecarga de métodos padrões' do
-      expect { cnab400.monta_detalhe(Brcobranca::Remessa::Pagamento.new, 1) }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab400.info_conta }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab400.cod_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab400.nome_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab400.complemento }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab400.monta_detalhe(Brcobranca::Remessa::Pagamento.new,
+                              1)
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab400.info_conta
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab400.cod_banco
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab400.nome_banco
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab400.complemento
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
     end
   end
 
-  context '#valor_total_titulos' do
+  describe '#valor_total_titulos' do
     it { expect(cnab400.valor_titulos_carteira(13)).to eq('0000000039980') }
   end
 end

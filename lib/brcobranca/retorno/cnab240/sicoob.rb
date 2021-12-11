@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
 require 'parseline'
 
@@ -7,7 +7,7 @@ module Brcobranca
     module Cnab240
       class Sicoob < Brcobranca::Retorno::Cnab240::Base
         # Regex para remoção de headers e trailers além de registros diferentes de T ou U
-        REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/
+        REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/.freeze
 
         def self.load_lines(file, options = {})
           default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U }
@@ -23,11 +23,11 @@ module Brcobranca
           cnab_lines.each do |line|
             if line.tipo_registro == 'T'
               Line::REGISTRO_T_FIELDS.each do |attr|
-                retorno.send(attr + '=', line.send(attr))
+                retorno.send("#{attr}=", line.send(attr))
               end
             else
               Line::REGISTRO_U_FIELDS.each do |attr|
-                retorno.send(attr + '=', line.send(attr))
+                retorno.send("#{attr}=", line.send(attr))
               end
             end
           end
@@ -41,8 +41,10 @@ module Brcobranca
         class Line < Base
           extend ParseLine::FixedWidth # Extendendo parseline
 
-          REGISTRO_T_FIELDS = %w(codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia)
-          REGISTRO_U_FIELDS = %w(desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido outras_despesas outros_recebimento data_credito data_ocorrencia)
+          REGISTRO_T_FIELDS = %w[codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira
+                                 data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia].freeze
+          REGISTRO_U_FIELDS = %w[desconto_concedito valor_abatimento iof_desconto juros_mora valor_recebido
+                                 outras_despesas outros_recebimento data_credito data_ocorrencia].freeze
 
           attr_accessor :tipo_registro
 
@@ -69,9 +71,9 @@ module Brcobranca
             parse.field :juros_mora, 17..31
             parse.field :outros_recebimento, 122..136
             parse.field :valor_tarifa, 198..212
-            parse.field :motivo_ocorrencia, 213..222, ->(motivos) do
-              motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-            end
+            parse.field :motivo_ocorrencia, 213..222, lambda { |motivos|
+              motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+            }
 
             # Dados que não consegui extrair dos registros T e U
             # parse.field :convenio,31..37

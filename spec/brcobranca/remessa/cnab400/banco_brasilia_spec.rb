@@ -1,19 +1,20 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasilia do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento: 6969,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento: 6969,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -112,7 +113,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasilia do
         expect(header[3..5]).to eq '001'                              # versão
         expect(header[6..8]).to eq '075'                              # arquivo
         expect(header[9..18]).to eq banco_brasilia.info_conta         # informacoes da conta
-        expect(header[19..32]).to eq Time.now.strftime('%Y%m%d%H%M%S')  # data/hora de formação
+        expect(header[19..32]).to eq Time.now.strftime('%Y%m%d%H%M%S') # data/hora de formação
         expect(header[33..38]).to eq '000002'                         # num. de registros
       end
     end
@@ -133,8 +134,8 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasilia do
         expect(detalhe[111..112]).to eq 'SP'                          # uf do pagador
         expect(detalhe[113..120]).to eq '12345678'                    # cep do pagador
         expect(detalhe[121..121]).to eq '1'                           # tipo de pessoa
-        expect(detalhe[122..134]).to eq "6969".rjust(13, "0")             # seu numero
-        expect(detalhe[135..135]).to eq '2'                           # categoria de cobranca
+        expect(detalhe[122..134]).to eq '6969'.rjust(13, '0') # seu numero
+        expect(detalhe[135..135]).to eq '2' # categoria de cobranca
         expect(detalhe[136..143]).to eq Date.current.strftime('%d%m%Y') # data de emissao
         expect(detalhe[144..145]).to eq '21'                          # tipo do documento
         expect(detalhe[146..146]).to eq '0'                           # código da natureza
@@ -147,11 +148,11 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasilia do
         expect(detalhe[195..208]).to eq '00000000019990'              # valor do titulo
         expect(detalhe[209..220]).to eq '200012307038'                # nosso numero
         expect(detalhe[221..222]).to eq '00'                          # tipo de juros
-        expect(detalhe[223..236]).to eq ''.rjust(14, "0")             # valor dos juros
-        expect(detalhe[237..250]).to eq ''.rjust(14, "0")             # valor dos abatimento
+        expect(detalhe[223..236]).to eq ''.rjust(14, '0')             # valor dos juros
+        expect(detalhe[237..250]).to eq ''.rjust(14, '0')             # valor dos abatimento
         expect(detalhe[251..252]).to eq '00'                          # tipo de desconto
-        expect(detalhe[253..260]).to eq ''.rjust(8, "0")              # data limite de desconto
-        expect(detalhe[261..274]).to eq ''.rjust(14, "0")             # valor dos descontos
+        expect(detalhe[253..260]).to eq ''.rjust(8, '0')              # data limite de desconto
+        expect(detalhe[261..274]).to eq ''.rjust(14, '0')             # valor dos descontos
         expect(detalhe[288..327]).to eq 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA   ' # emitente do titulo
       end
     end
@@ -175,9 +176,13 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasilia do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
-      it { expect(banco_brasilia.gera_arquivo).to eq(read_remessa('remessa-banco-brasilia-cnab400.rem', banco_brasilia.gera_arquivo)) }
+      it {
+        expect(banco_brasilia.gera_arquivo).to eq(read_remessa('remessa-banco-brasilia-cnab400.rem',
+                                                               banco_brasilia.gera_arquivo))
+      }
     end
   end
 end

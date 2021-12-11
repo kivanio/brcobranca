@@ -1,22 +1,23 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      numero: 123,
-      documento: 6969,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP',
-      codigo_multa: '2',
-      percentual_multa: 2.0)
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       numero: 123,
+                                       documento: 6969,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP',
+                                       codigo_multa: '2',
+                                       percentual_multa: 2.0)
   end
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
@@ -122,14 +123,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
       comp_trailer = ailos.complemento_trailer
       expect(comp_trailer.size).to eq 217
 
-      total_cobranca_simples    = "00000100000000000019990"
-      total_cobranca_vinculada  = "".rjust(23, "0")
-      total_cobranca_caucionada = "".rjust(23, "0")
-      total_cobranca_descontada = "".rjust(23, "0")
+      total_cobranca_simples    = '00000100000000000019990'
+      total_cobranca_vinculada  = ''.rjust(23, '0')
+      total_cobranca_caucionada = ''.rjust(23, '0')
+      total_cobranca_descontada = ''.rjust(23, '0')
 
       expect(comp_trailer).to eq "#{total_cobranca_simples}#{total_cobranca_vinculada}"\
-                            "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
-
+                                 "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
     end
 
     it 'complemento P deve retornar as informacoes nas posicoes corretas' do
@@ -147,7 +147,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
 
     it 'deve conter a identificacao do titulo da empresa' do
       segmento_p = ailos.monta_segmento_p(pagamento, 1, 2)
-      expect(segmento_p[195..219]).to eq "6969".ljust(25, ' ')
+      expect(segmento_p[195..219]).to eq '6969'.ljust(25, ' ')
     end
   end
 
@@ -156,6 +156,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(ailos.gera_arquivo).to eq(read_remessa('remessa-ailos-cnab240.rem', ailos.gera_arquivo)) }

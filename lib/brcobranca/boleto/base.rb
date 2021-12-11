@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 # @author Kivanio Barbosa
 module Brcobranca
@@ -90,8 +91,10 @@ module Brcobranca
       attr_accessor :cedente_endereco
 
       # Validações
-      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero, :sacado, :sacado_documento, message: 'não pode estar em branco.'
-      validates_numericality_of :convenio, :agencia, :conta_corrente, :nosso_numero, message: 'não é um número.', allow_nil: true
+      validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero,
+                            :sacado, :sacado_documento, message: 'não pode estar em branco.'
+      validates_numericality_of :convenio, :agencia, :conta_corrente, :nosso_numero, message: 'não é um número.',
+                                                                                     allow_nil: true
 
       # Nova instancia da classe Base
       # @param [Hash] campos
@@ -199,8 +202,9 @@ module Brcobranca
       # @return [String] código de barras formado por 44 caracteres numéricos.
       def codigo_barras
         raise Brcobranca::BoletoInvalido, self unless valid?
+
         codigo = codigo_barras_primeira_parte # 18 digitos
-        codigo << codigo_barras_segunda_parte # 25 digitos
+        codigo += codigo_barras_segunda_parte # 25 digitos
         if codigo =~ /^(\d{4})(\d{39})$/
 
           codigo_dv = codigo.modulo11(
@@ -208,10 +212,11 @@ module Brcobranca
             mapeamento: { 0 => 1, 10 => 1, 11 => 1 }
           ) { |t| 11 - (t % 11) }
 
-          codigo = "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
-          codigo
+          "#{Regexp.last_match[1]}#{codigo_dv}#{Regexp.last_match[2]}"
+
         else
-          self.errors.add(:base, :too_long, message: "tamanho(#{codigo.size}) prévio do código de barras(#{codigo}) inválido, deveria ser 43 dígitos")
+          errors.add(:base, :too_long,
+                     message: "tamanho(#{codigo.size}) prévio do código de barras(#{codigo}) inválido, deveria ser 43 dígitos")
           raise Brcobranca::BoletoInvalido, self
         end
       end

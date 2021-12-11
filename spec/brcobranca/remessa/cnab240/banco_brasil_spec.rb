@@ -1,19 +1,20 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento: 6969,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento: 6969,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
@@ -118,7 +119,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
       expect(banco_brasil.digito_agencia).to eq '3'
     end
 
-    it 'deve calcular  digito da conta' do
+    it 'deve calcular digito da conta' do
       # digito calculado a partir do modulo 11 com base 9
       #
       # conta = 1  2  3  4  5
@@ -209,9 +210,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BancoBrasil do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
-      it { expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240.rem', banco_brasil.gera_arquivo)) }
+      it {
+        expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco_brasil-cnab240.rem',
+                                                             banco_brasil.gera_arquivo))
+      }
     end
   end
 end

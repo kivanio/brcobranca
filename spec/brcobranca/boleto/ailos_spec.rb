@@ -1,7 +1,8 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::Ailos do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::Ailos do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 0.0,
@@ -66,9 +67,9 @@ RSpec.describe Brcobranca::Boleto::Ailos do #:nodoc:[all]
     expect(boleto_novo.data_processamento).to eql(Date.today)
     expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagar preferencialmente nas cooperativas do Sistema AILOS.')
     expect(boleto_novo.carteira).to eql('01')
     expect(boleto_novo.codigo_servico).to be_falsey
@@ -83,9 +84,9 @@ RSpec.describe Brcobranca::Boleto::Ailos do #:nodoc:[all]
     expect(boleto_novo.data_processamento).to eql(Date.today)
     expect(boleto_novo.data_vencimento).to eql(Date.today)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('Pagar preferencialmente nas cooperativas do Sistema AILOS.')
     expect(boleto_novo.cedente).to eql('Kivanio Barbosa')
     expect(boleto_novo.documento_cedente).to eql('12345678912')
@@ -108,7 +109,7 @@ RSpec.describe Brcobranca::Boleto::Ailos do #:nodoc:[all]
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('0000001111111900000000101')
     expect(boleto_novo.codigo_barras).to eql('08593643900000001000000001111111900000000101')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('08590.00002 01111.111900 00000.001016 3 64390000000100')
-    expect(boleto_novo.conta_corrente_dv).to eql(9)
+    expect(boleto_novo.conta_corrente_dv).to be(9)
 
     @valid_attributes[:convenio] = '234'
     @valid_attributes[:conta_corrente] = '356156'

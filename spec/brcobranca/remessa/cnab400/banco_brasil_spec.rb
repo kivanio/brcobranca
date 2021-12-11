@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -179,9 +178,13 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoBrasil do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
-      it { expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco-brasil-cnab400.rem', banco_brasil.gera_arquivo)) }
+      it {
+        expect(banco_brasil.gera_arquivo).to eq(read_remessa('remessa-banco-brasil-cnab400.rem',
+                                                             banco_brasil.gera_arquivo))
+      }
     end
   end
 end

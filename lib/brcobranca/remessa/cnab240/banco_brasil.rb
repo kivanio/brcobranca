@@ -1,10 +1,12 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab240
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
         # variacao da carteira
         attr_accessor :variacao
+
         # identificacao da emissao do boleto (attr na classe base)
         #   campo nao tratado pelo sistema do Banco do Brasil
         # identificacao da distribuicao do boleto (attr na classe base)
@@ -20,10 +22,10 @@ module Brcobranca
 
         def initialize(campos = {})
           campos = { emissao_boleto: '0',
-            distribuicao_boleto: '0',
-            especie_titulo: '02',
-            codigo_baixa: '00',
-            codigo_carteira: '7',}.merge!(campos)
+                     distribuicao_boleto: '0',
+                     especie_titulo: '02',
+                     codigo_baixa: '00',
+                     codigo_carteira: '7' }.merge!(campos)
           super(campos)
         end
 
@@ -65,7 +67,7 @@ module Brcobranca
           "#{convenio.rjust(9, '0')}0014#{carteira}#{variacao}  "
         end
 
-        alias_method :convenio_lote, :codigo_convenio
+        alias convenio_lote codigo_convenio
 
         def info_conta
           # CAMPO                  TAMANHO
@@ -101,13 +103,13 @@ module Brcobranca
         def formata_nosso_numero(nosso_numero)
           quantidade = case convenio.to_s.size
                          # convenio de 4 posicoes com nosso numero de 7
-                       when 4 then
+                       when 4
                          7
                          # convenio de 6 posicoes com nosso numero de 5
-                       when 6 then
+                       when 6
                          5
                          # convenio de 7 posicoes com nosso numero de 10
-                       when 7 then
+                       when 7
                          10
                        else
                          raise Brcobranca::NaoImplementado, 'Tipo de convênio não implementado.'
@@ -136,8 +138,9 @@ module Brcobranca
         #
         def monta_segmento_p(pagamento, nro_lote, sequencial)
           # campos com * na frente nao foram implementados
+          segmento_p = ''
           #                                                             # DESCRICAO                             TAMANHO
-          segmento_p = cod_banco                                        # codigo banco                          3
+          segmento_p += cod_banco # codigo banco                          3
           segmento_p << nro_lote.to_s.rjust(4, '0')                     # lote de servico                       4
           segmento_p << '3'                                             # tipo de registro                      1
           segmento_p << sequencial.to_s.rjust(5, '0')                   # num. sequencial do registro no lote   5
@@ -227,7 +230,7 @@ module Brcobranca
           # No caso de carteira 31 ou carteira 11/17 modalidade Vinculada,
           # se não informado nenhum código,
           # o sistema assume automaticamente Protesto em 3 dias úteis.
-          segmento_p << pagamento.codigo_protesto                       # cod. para protesto                    1
+          segmento_p << pagamento.codigo_protesto # cod. para protesto                    1
           # Preencher de acordo com o código informado na posição 221.
           # Para código '1' – é possível, de 6 a 29 dias, 35o, 40o, dia corrido.
           # Para código '2' – é possível, 3o, 4o ou 5o dia útil.

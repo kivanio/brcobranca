@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab240
@@ -13,6 +14,7 @@ module Brcobranca
         #     14: título Registrado emissão Cedente
         #     21: título Sem Registro emissão CAIXA
         attr_accessor :modalidade_carteira
+
         # identificacao da emissao do boleto (attr na classe base)
         #   opcoes:
         #     ‘1’ = Banco Emite
@@ -101,7 +103,7 @@ module Brcobranca
         end
 
         def exclusivo_servico
-          "00"
+          '00'
         end
 
         def complemento_trailer
@@ -109,7 +111,7 @@ module Brcobranca
         end
 
         def tipo_documento
-          "2"
+          '2'
         end
 
         def complemento_p(pagamento)
@@ -118,44 +120,50 @@ module Brcobranca
           # uso CAIXA             11
           # modalidade carteira   2
           # ident. titulo         15
-          "#{convenio.rjust(6, '0')}#{''.rjust(11, '0')}#{modalidade_carteira}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
+          "#{convenio.rjust(6,
+                            '0')}#{''.rjust(11,
+                                            '0')}#{modalidade_carteira}#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
         end
 
         def complemento_r
           segmento_r = ''
-          segmento_r << ''.rjust(50, ' ')  # e-mail do sacado     50
+          segmento_r += ''.rjust(50, ' ')  # e-mail do sacado     50
           segmento_r << ''.rjust(11, ' ')  # exclusivo FEBRABAN   11
           segmento_r
         end
 
         def numero(pagamento)
-          "#{pagamento.formata_documento_ou_numero(11, "0")}#{''.rjust(4, ' ')}"
+          "#{pagamento.formata_documento_ou_numero(11, '0')}#{''.rjust(4, ' ')}"
         end
 
         def identificacao_titulo_empresa(pagamento)
-          "#{pagamento.formata_documento_ou_numero(11, "0")}#{''.rjust(14, ' ')}"
+          "#{pagamento.formata_documento_ou_numero(11, '0')}#{''.rjust(14, ' ')}"
         end
 
         def data_multa(pagamento)
           return ''.rjust(8, '0') if pagamento.codigo_multa == '0'
+
           data_multa = pagamento.data_vencimento + 1
           data_multa.strftime('%d%m%Y')
         end
 
         def codigo_baixa(pagamento)
-          return "1" if pagamento.codigo_protesto.to_s == "3"
-          "2"
+          return '1' if pagamento.codigo_protesto.to_s == '3'
+
+          '2'
         end
 
         def dias_baixa(pagamento)
-          return "120" if pagamento.codigo_protesto.to_s == "3"
-          "000"
+          return '120' if pagamento.codigo_protesto.to_s == '3'
+
+          '000'
         end
 
         def data_mora(pagamento)
-          return "".rjust(8, "0") unless %w( 1 2 ).include? pagamento.tipo_mora
+          return ''.rjust(8, '0') unless %w[1 2].include? pagamento.tipo_mora
+
           data_mora = pagamento.data_vencimento + 1
-          data_mora.strftime("%d%m%Y")
+          data_mora.strftime('%d%m%Y')
         end
       end
     end

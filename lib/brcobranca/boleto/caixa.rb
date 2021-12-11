@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 #
 # A Caixa tem dois padrões para a geração de boleto: SIGCB e SICOB.
@@ -7,7 +8,8 @@
 #
 module Brcobranca
   module Boleto
-    class Caixa < Base # Caixa
+    # Caixa
+    class Caixa < Base
       # <b>REQUERIDO</b>: Emissão do boleto
       attr_accessor :emissao
 
@@ -103,12 +105,12 @@ module Brcobranca
       # @return [String]
       def codigo_barras_segunda_parte
         campo_livre = "#{convenio}" \
-        "#{convenio_dv}" \
-        "#{nosso_numero_boleto[2..4]}" \
-        "#{nosso_numero_boleto[0..0]}" \
-        "#{nosso_numero_boleto[5..7]}" \
-        "#{nosso_numero_boleto[1..1]}" \
-        "#{nosso_numero_boleto[8..16]}"
+                      "#{convenio_dv}" \
+                      "#{nosso_numero_boleto[2..4]}" \
+                      "#{nosso_numero_boleto[0..0]}" \
+                      "#{nosso_numero_boleto[5..7]}" \
+                      "#{nosso_numero_boleto[1..1]}" \
+                      "#{nosso_numero_boleto[8..16]}"
 
         campo_livre.to_s +
           campo_livre.modulo11(

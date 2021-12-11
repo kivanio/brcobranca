@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::Cnab400::Credisis do
@@ -16,9 +17,9 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Credisis do
     pagamentos = described_class.load_lines(@arquivo)
     expect(pagamentos.size).to eq(2) # deve ignorar a primeira linha que é header
     pagamento = pagamentos.first
-    expect(pagamento.nosso_numero).to eql("00005005001")
-    expect(pagamento.data_vencimento).to eql("011012")
-    expect(pagamento.valor_titulo).to eql("0000005005001")
+    expect(pagamento.nosso_numero).to eql('00005005001')
+    expect(pagamento.data_vencimento).to eql('011012')
+    expect(pagamento.valor_titulo).to eql('0000005005001')
     expect(pagamento.valor_recebido).to eql('0000000044400')
     expect(pagamento.data_credito).to eql('150515')
   end

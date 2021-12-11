@@ -1,22 +1,23 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Credisis do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-       data_vencimento: Date.current,
-       nosso_numero: 123,
-       documento: 6969,
-       dias_protesto: '6',
-       valor_mora: "8.00",
-       percentual_multa: "2.00",
-       documento_sacado: '12345678901',
-       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-       bairro_sacado: 'São josé dos quatro apostolos magros',
-       cep_sacado: '12345678',
-       cidade_sacado: 'Santa rita de cássia maria da silva',
-       uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento: 6969,
+                                       dias_protesto: '6',
+                                       valor_mora: '8.00',
+                                       percentual_multa: '2.00',
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -151,14 +152,14 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Credisis do
         expect(detalhe[17..20]).to eq '0001'                                        # agência
         expect(detalhe[22..29]).to eq '00000002'                                    # conta corrente
         expect(detalhe[30]).to eq '7'                                               # dígito da conta corrente
-        expect(detalhe[37..61]).to eq "6969".ljust(25)                             # número controle cliente
+        expect(detalhe[37..61]).to eq '6969'.ljust(25) # número controle cliente
         expect(detalhe[62..72]).to eq '00027000123'                                 # nosso numero
         expect(detalhe[73..109]).to eq ''.rjust(37, ' ')                            # brancos
         expect(detalhe[110..119]).to eq '0000000000'                                # número documento
-        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y')               # data de vencimento
+        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990'                             # valor do titulo
         expect(detalhe[139..149]).to eq ''.rjust(11, ' ')                           # brancos
-        expect(detalhe[150..155]).to eq Date.current.strftime('%d%m%y')               # data emissão título
+        expect(detalhe[150..155]).to eq Date.current.strftime('%d%m%y') # data emissão título
         expect(detalhe[156..159]).to eq ''.rjust(4, ' ')                            # brancos
         expect(detalhe[160..165]).to eq '080000'                                    # mora
         expect(detalhe[166..171]).to eq '020000'                                    # multa
@@ -172,14 +173,15 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Credisis do
         expect(detalhe[326..333]).to eq '12345678'                                  # cep sacado
         expect(detalhe[334..348]).to eq 'Santa rita de c'                           # cidade sacado
         expect(detalhe[349..350]).to eq 'SP'                                        # uf sacado
-        expect(detalhe[351..375]).to eq ''.rjust(25, " ")                           # nome avalista
-        expect(detalhe[377..390]).to eq ''.rjust(14, " ")                           # documento avalista
+        expect(detalhe[351..375]).to eq ''.rjust(25, ' ')                           # nome avalista
+        expect(detalhe[377..390]).to eq ''.rjust(14, ' ')                           # documento avalista
         expect(detalhe[391..392]).to eq '06'                                        # dias para envio a protesto
       end
     end
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(credisis.gera_arquivo).to eq(read_remessa('remessa-credisis-cnab400.rem', credisis.gera_arquivo)) }

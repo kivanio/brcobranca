@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'

@@ -1,8 +1,9 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class Banestes < Base # Banestes
+    # Banestes
+    class Banestes < Base
       # <b>REQUERIDO</b>: digito verificador da conta corrente
       attr_accessor :digito_conta_corrente
 

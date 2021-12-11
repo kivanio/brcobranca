@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -147,15 +146,15 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)
 
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 
@@ -168,44 +167,48 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)
 
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.to(format)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 
   describe '#agencia_dv' do
-    it { expect(described_class.new(agencia: '0255').agencia_dv).to eq(0) }
-    it { expect(described_class.new(agencia: '0943').agencia_dv).to eq(1) }
-    it { expect(described_class.new(agencia: '1467').agencia_dv).to eq(2) }
-    it { expect(described_class.new(agencia: '0794').agencia_dv).to eq(3) }
-    it { expect(described_class.new(agencia: '0155').agencia_dv).to eq(4) }
-    it { expect(described_class.new(agencia: '0650').agencia_dv).to eq(5) }
-    it { expect(described_class.new(agencia: '0199').agencia_dv).to eq(6) }
-    it { expect(described_class.new(agencia: '1425').agencia_dv).to eq(7) }
-    it { expect(described_class.new(agencia: '2839').agencia_dv).to eq(8) }
-    it { expect(described_class.new(agencia: '2332').agencia_dv).to eq(9) }
-    it { expect(described_class.new(agencia: '0121').agencia_dv).to eq('P') }
+    specify(:aggregate_failures) do
+      expect(described_class.new(agencia: '0255').agencia_dv).to eq(0)
+      expect(described_class.new(agencia: '0943').agencia_dv).to eq(1)
+      expect(described_class.new(agencia: '1467').agencia_dv).to eq(2)
+      expect(described_class.new(agencia: '0794').agencia_dv).to eq(3)
+      expect(described_class.new(agencia: '0155').agencia_dv).to eq(4)
+      expect(described_class.new(agencia: '0650').agencia_dv).to eq(5)
+      expect(described_class.new(agencia: '0199').agencia_dv).to eq(6)
+      expect(described_class.new(agencia: '1425').agencia_dv).to eq(7)
+      expect(described_class.new(agencia: '2839').agencia_dv).to eq(8)
+      expect(described_class.new(agencia: '2332').agencia_dv).to eq(9)
+      expect(described_class.new(agencia: '0121').agencia_dv).to eq('P')
+    end
   end
 
   describe '#conta_corrente_dv' do
-    it { expect(described_class.new(conta_corrente: '0325620').conta_corrente_dv).to eq(0) }
-    it { expect(described_class.new(conta_corrente: '0284025').conta_corrente_dv).to eq(1) }
-    it { expect(described_class.new(conta_corrente: '0238069').conta_corrente_dv).to eq(2) }
-    it { expect(described_class.new(conta_corrente: '0135323').conta_corrente_dv).to eq(3) }
-    it { expect(described_class.new(conta_corrente: '0010667').conta_corrente_dv).to eq(4) }
-    it { expect(described_class.new(conta_corrente: '0420571').conta_corrente_dv).to eq(5) }
-    it { expect(described_class.new(conta_corrente: '0510701').conta_corrente_dv).to eq(6) }
-    it { expect(described_class.new(conta_corrente: '0420536').conta_corrente_dv).to eq(7) }
-    it { expect(described_class.new(conta_corrente: '0012500').conta_corrente_dv).to eq(8) }
-    it { expect(described_class.new(conta_corrente: '0010673').conta_corrente_dv).to eq(9) }
-    it { expect(described_class.new(conta_corrente: '0019669').conta_corrente_dv).to eq('P') }
-    it { expect(described_class.new(conta_corrente: '0301357').conta_corrente_dv).to eq('P') }
+    specify(:aggregate_failures) do
+      expect(described_class.new(conta_corrente: '0325620').conta_corrente_dv).to eq(0)
+      expect(described_class.new(conta_corrente: '0284025').conta_corrente_dv).to eq(1)
+      expect(described_class.new(conta_corrente: '0238069').conta_corrente_dv).to eq(2)
+      expect(described_class.new(conta_corrente: '0135323').conta_corrente_dv).to eq(3)
+      expect(described_class.new(conta_corrente: '0010667').conta_corrente_dv).to eq(4)
+      expect(described_class.new(conta_corrente: '0420571').conta_corrente_dv).to eq(5)
+      expect(described_class.new(conta_corrente: '0510701').conta_corrente_dv).to eq(6)
+      expect(described_class.new(conta_corrente: '0420536').conta_corrente_dv).to eq(7)
+      expect(described_class.new(conta_corrente: '0012500').conta_corrente_dv).to eq(8)
+      expect(described_class.new(conta_corrente: '0010673').conta_corrente_dv).to eq(9)
+      expect(described_class.new(conta_corrente: '0019669').conta_corrente_dv).to eq('P')
+      expect(described_class.new(conta_corrente: '0301357').conta_corrente_dv).to eq('P')
+    end
   end
 end

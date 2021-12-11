@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -14,7 +15,7 @@ module Brcobranca
         validates_length_of :documento_cedente, minimum: 11, maximum: 14, message: 'deve ter entre 11 e 14 dígitos.'
         validates_length_of :carteira, maximum: 2, message: 'deve ter 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
-        validates_inclusion_of :carteira, in: %w(21 41 51), message: 'não é válida.'
+        validates_inclusion_of :carteira, in: %w[21 41 51], message: 'não é válida.'
 
         # Nova instancia do Banco do Nordeste
         def initialize(campos = {})
@@ -74,11 +75,11 @@ module Brcobranca
         # @return [String]
         #
         def codigo_carteira
-          return "I" if carteira.to_s == "51"
+          return 'I' if carteira.to_s == '51'
 
           carteiras = {
-            "1" => { "21" => "1", "41" => "2" }, # 1 - Emitido pelo banco
-            "2" => { "21" => "4", "41" => "5" }  # 2 - Emitido pelo cliente
+            '1' => { '21' => '1', '41' => '2' }, # 1 - Emitido pelo banco
+            '2' => { '21' => '4', '41' => '5' }  # 2 - Emitido pelo cliente
           }
 
           carteiras[emissao_boleto.to_s][carteira.to_s]
@@ -109,14 +110,14 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << ''.rjust(16, ' ')                                      # filler                                 [16]
+          detalhe += ''.rjust(16, ' ')                                      # filler                                 [16]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(2, '0')                                       # complemento de registro (zeros)       9[02]
           detalhe << conta_corrente                                         # conta corrente                        9[07]
           detalhe << digito_conta                                           # dac                                   9[01]
           detalhe << pagamento.formata_percentual_multa.to_s[0..1]          # taxa - multa                           [02]
           detalhe << ''.rjust(4, ' ')                                       # filler                                 [04]
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25)                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25) # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(7, '0')              # nosso numero                          9[07]
           detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s       # dv nosso numero                       9[01]
           detalhe << ''.rjust(10, '0')                                      # numero do contrato                     [10]
@@ -125,7 +126,7 @@ module Brcobranca
           detalhe << ''.rjust(8, ' ')                                       # filler                                 [08]
           detalhe << codigo_carteira                                        # codigo da carteira                    X[01]
           detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0') # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -149,8 +150,8 @@ module Brcobranca
           detalhe << pagamento.cidade_sacado.format_size(15)                # cidade do pagador                     X[15]
           detalhe << pagamento.uf_sacado                                    # uf do pagador                         X[02]
           detalhe << pagamento.nome_avalista.format_size(40)                # nome do sacador/avalista              X[30]
-          detalhe << "99"                                                   # prazo para protesto                    [02]
-          detalhe << "0"                                                    # código da moeda                       X[01]
+          detalhe << '99'                                                   # prazo para protesto                    [02]
+          detalhe << '0'                                                    # código da moeda                       X[01]
           detalhe << sequencial.to_s.rjust(6, '0')                          # numero do registro no arquivo         9[06]
           detalhe
         end

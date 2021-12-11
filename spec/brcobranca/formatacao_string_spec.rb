@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::FormatacaoString do
@@ -13,9 +13,15 @@ RSpec.describe Brcobranca::FormatacaoString do
   end
 
   context 'above size' do
-    it { expect("SOÇIEDADE,  BRASI@?!+-_LEIR'\"A DE ZÔÔLOGIA LTDA.".format_size(30)).to eql('SOCIEDADE BRASILEIRA DE ZOOLOG') }
+    it {
+      expect("SOÇIEDADE,  BRASI@?!+-_LEIR'\"A DE ZÔÔLOGIA LTDA.".format_size(30)).to eql('SOCIEDADE BRASILEIRA DE ZOOLOG')
+    }
+
     it { expect('pablo diego JOSÉ FRANCISCO DE PAULA JUAN'.format_size(30)).to eql('pablo diego JOSE FRANCISCO DE ') }
-    it { expect('DF 250, KM 4 Cond. La Foret , Qd. M Casa 03'.format_size(40)).to eql('DF 250 KM 4 Cond La Foret  Qd M Casa 03 ') }
+
+    it {
+      expect('DF 250, KM 4 Cond. La Foret , Qd. M Casa 03'.format_size(40)).to eql('DF 250 KM 4 Cond La Foret  Qd M Casa 03 ')
+    }
   end
 
   context 'bellow size' do

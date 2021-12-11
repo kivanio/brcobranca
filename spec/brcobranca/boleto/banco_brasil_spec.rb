@@ -1,8 +1,8 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::BancoBrasil do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 0.0,
@@ -179,7 +179,9 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
 
     expect(boleto_novo.conta_corrente_dv).to be(0)
     expect { boleto_novo.codigo_barras_segunda_parte }.to raise_error(RuntimeError)
-    expect { boleto_novo.codigo_barras_segunda_parte }.to raise_error('Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17')
+    expect do
+      boleto_novo.codigo_barras_segunda_parte
+    end.to raise_error('Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é 17')
   end
 
   it 'Montar código de barras para convenio de 4 digitos e nosso numero de 7' do
@@ -301,15 +303,15 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:nosso_numero] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 
@@ -320,15 +322,15 @@ RSpec.describe Brcobranca::Boleto::BancoBrasil do #:nodoc:[all]
     @valid_attributes[:convenio] = 1_238_798
     @valid_attributes[:nosso_numero] = '7777700168'
     boleto_novo = described_class.new(@valid_attributes)
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.to(format)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 end

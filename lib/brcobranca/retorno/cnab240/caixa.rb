@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 module Brcobranca
   module Retorno
@@ -25,9 +24,9 @@ module Brcobranca
             parse.field :codigo_ocorrencia, 15..16
             parse.field :nosso_numero, 39..55
             parse.field :agencia_recebedora_com_dv, 99..103
-            parse.field :motivo_ocorrencia, 213..222, ->(motivos) do
-              motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-            end
+            parse.field :motivo_ocorrencia, 213..222, lambda { |motivos|
+              motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+            }
 
             # REGISTRO_U_FIELDS
 

@@ -1,8 +1,8 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe 'Muúltiplos boletos' do #:nodoc:[all]
+RSpec.describe 'Muúltiplos boletos' do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 0.0,
@@ -24,15 +24,15 @@ RSpec.describe 'Muúltiplos boletos' do #:nodoc:[all]
 
     boletos = [boleto_1, boleto_2, boleto_3]
 
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = Brcobranca::Boleto::Base.lote(boletos, formato: format.to_s.to_sym)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 end

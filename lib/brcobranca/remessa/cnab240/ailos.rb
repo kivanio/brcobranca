@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab240
@@ -78,11 +79,11 @@ module Brcobranca
         end
 
         def agencia_conta_corrente_dv
-          " "
+          ' '
         end
 
         def complemento_header
-          "#{''.rjust(29, ' ')}"
+          ''.rjust(29, ' ').to_s
         end
 
         def complemento_trailer
@@ -90,7 +91,7 @@ module Brcobranca
         end
 
         def tipo_documento
-          "1"
+          '1'
         end
 
         def complemento_p(pagamento)
@@ -99,7 +100,8 @@ module Brcobranca
           # dv conta corrente     1
           # dv agencia/conta      1
           # ident. titulo         20
-          "#{conta_corrente.rjust(12, '0')}#{conta_corrente_dv}#{agencia_conta_corrente_dv}#{ajusta_nosso_numero(pagamento)}"
+          "#{conta_corrente.rjust(12,
+                                  '0')}#{conta_corrente_dv}#{agencia_conta_corrente_dv}#{ajusta_nosso_numero(pagamento)}"
         end
 
         def ajusta_nosso_numero(pagamento)
@@ -107,7 +109,7 @@ module Brcobranca
         end
 
         def identificacao_titulo_empresa(pagamento)
-          pagamento.documento_ou_numero.to_s.ljust(25, " ")
+          pagamento.documento_ou_numero.to_s.ljust(25, ' ')
         end
 
         def complemento_trailer
@@ -121,28 +123,29 @@ module Brcobranca
           # Qt. Títulos em Cobrança Descontada  6
           # Vl. Títulos em Carteira Descontada  15 + 2 decimais
           total_cobranca_simples    = "#{quantidade_titulos_cobranca}#{valor_titulos_carteira}"
-          total_cobranca_vinculada  = "".rjust(23, "0")
-          total_cobranca_caucionada = "".rjust(23, "0")
-          total_cobranca_descontada = "".rjust(23, "0")
+          total_cobranca_vinculada  = ''.rjust(23, '0')
+          total_cobranca_caucionada = ''.rjust(23, '0')
+          total_cobranca_descontada = ''.rjust(23, '0')
 
           "#{total_cobranca_simples}#{total_cobranca_vinculada}#{total_cobranca_caucionada}"\
-            "#{total_cobranca_descontada}".ljust(217, ' ')
+          "#{total_cobranca_descontada}".ljust(217, ' ')
         end
 
         def total_segmentos(pagamentos)
-          pagamentos.inject(0) { |total, pagamento| total += pagamento.codigo_multa != '0' ? 3 : 2 }
+          pagamentos.inject(0) { |total, pagamento| total += pagamento.codigo_multa == '0' ? 2 : 3 }
         end
 
         def monta_segmento_r(pagamento, nro_lote, contador)
           return nil if pagamento.codigo_multa == '0'
+
           super(pagamento, nro_lote, contador)
         end
 
-        def codigo_baixa(pagamento)
+        def codigo_baixa(_pagamento)
           '2'
         end
 
-        def dias_baixa(pagamento)
+        def dias_baixa(_pagamento)
           ''.rjust(3, ' ')
         end
       end

@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Calculo do
@@ -172,14 +172,16 @@ RSpec.describe Brcobranca::Calculo do
   end
 
   describe '#duplo_digito' do
-    it { expect(111.duplo_digito).to eql('50') }
-    it { expect(8.duplo_digito).to eql('33') }
-    it { expect('111'.duplo_digito).to eql('50') }
-    it { expect('8'.duplo_digito).to eql('33') }
-    it { expect(0.duplo_digito).to eql('00') }
-    it { expect(19_669.duplo_digito).to eql('28') }
-    it { expect('00000032000272012924021'.duplo_digito).to eql('79') }
-    it { expect('00000033000272012924021'.duplo_digito).to eql('65') }
-    it { expect('9194'.duplo_digito).to eql('38') }
+    specify(:aggregate_failures) do
+      expect(111.duplo_digito).to eql('50')
+      expect(8.duplo_digito).to eql('33')
+      expect('111'.duplo_digito).to eql('50')
+      expect('8'.duplo_digito).to eql('33')
+      expect(0.duplo_digito).to eql('00')
+      expect(19_669.duplo_digito).to eql('28')
+      expect('00000032000272012924021'.duplo_digito).to eql('79')
+      expect('00000033000272012924021'.duplo_digito).to eql('65')
+      expect('9194'.duplo_digito).to eql('38')
+    end
   end
 end

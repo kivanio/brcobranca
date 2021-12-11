@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -152,24 +151,24 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Sicoob do
       # =         36 24 14 6 = 80
       # 80 / 11 = 7 com resto 3
       expected_digito_agencia_list = [
-        { agencia: "3214", dv: "0" },
-        { agencia: "2006", dv: "0" },
-        { agencia: "5651", dv: "0" },
-        { agencia: "5691", dv: "0" },
-        { agencia: "5741", dv: "0" },
-        { agencia: "1008", dv: "1" },
-        { agencia: "5681", dv: "2" },
-        { agencia: "5731", dv: "2" },
-        { agencia: "4327", dv: "3" },
-        { agencia: "1001", dv: "4" },
-        { agencia: "5761", dv: "4" },
-        { agencia: "3032", dv: "5" },
-        { agencia: "5671", dv: "5" },
-        { agencia: "5631", dv: "6" },
-        { agencia: "1005", dv: "7" },
-        { agencia: "5661", dv: "8" },
-        { agencia: "0001", dv: "9" },
-        { agencia: "5621", dv: "9" },
+        { agencia: '3214', dv: '0' },
+        { agencia: '2006', dv: '0' },
+        { agencia: '5651', dv: '0' },
+        { agencia: '5691', dv: '0' },
+        { agencia: '5741', dv: '0' },
+        { agencia: '1008', dv: '1' },
+        { agencia: '5681', dv: '2' },
+        { agencia: '5731', dv: '2' },
+        { agencia: '4327', dv: '3' },
+        { agencia: '1001', dv: '4' },
+        { agencia: '5761', dv: '4' },
+        { agencia: '3032', dv: '5' },
+        { agencia: '5671', dv: '5' },
+        { agencia: '5631', dv: '6' },
+        { agencia: '1005', dv: '7' },
+        { agencia: '5661', dv: '8' },
+        { agencia: '0001', dv: '9' },
+        { agencia: '5621', dv: '9' }
       ]
 
       expected_digito_agencia_list.each do |expected_dv_agencia|
@@ -209,6 +208,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Sicoob do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-sicoob-cnab400.rem', sicoob.gera_arquivo)) }

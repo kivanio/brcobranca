@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 
-#
 module RemessaHelpers
   def read_remessa(name, body = nil)
     filename = File.join(File.dirname(__FILE__), '..', 'fixtures', 'remessa', name)

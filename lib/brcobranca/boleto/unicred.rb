@@ -1,28 +1,28 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class Unicred < Base # Banco Unicred
-
+    # Banco Unicred
+    class Unicred < Base
       validates_length_of :agencia, maximum: 4, message:
-       "deve ser menor ou igual a 4 dígitos."
+       'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :nosso_numero, maximum: 10, message:
-       "deve ser menor ou igual a 10 dígitos."
+       'deve ser menor ou igual a 10 dígitos.'
       # validates_length_of :conta_corrente, maximum: 5, message:
       #  'deve ser menor ou igual a 5 dígitos.'
       # Carteira com 2(dois) caracteres ( SEMPRE 21 )
       validates_length_of :carteira, maximum: 2, message:
-       "deve ser menor ou igual a 2 dígitos."
+       'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :convenio, maximum: 10, message:
-       "deve ser menor ou igual a 10 dígitos."
+       'deve ser menor ou igual a 10 dígitos.'
 
       # Nova instancia do Unicred
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = {
-          carteira: "21",
-          local_pagamento: "PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED",
-          aceite: "N",
+          carteira: '21',
+          local_pagamento: 'PAGÁVEL PREFERENCIALMENTE NAS AGÊNCIAS DA UNICRED',
+          aceite: 'N'
         }.merge!(campos)
         super(campos)
       end
@@ -31,25 +31,25 @@ module Brcobranca
       #
       # @return [String] 3 caracteres numericos.
       def banco
-        "136"
+        '136'
       end
 
       # Numero da conta corrente
       # @return [String] 9 caracteres numericos.
       def conta_corrente=(valor)
-        @conta_corrente = valor.to_s.rjust(9, "0") if valor
+        @conta_corrente = valor.to_s.rjust(9, '0') if valor
       end
 
       # Codigo Beneficiario
       # @return [String] 5 caracteres numericos.
       def convenio=(valor)
-        @convenio = valor.to_s.rjust(5, "0") if valor
+        @convenio = valor.to_s.rjust(5, '0') if valor
       end
 
       # Digito verificador do banco
       # @return [String] 1 caractere.
       def banco_dv
-        "8"
+        '8'
       end
 
       # Nosso numero para exibir no boleto. Nosso Numero e formado com 11 onze
@@ -77,7 +77,7 @@ module Brcobranca
       # Digito verificador do nosso numero
       # @return [Integer] 1 caracteres numericos.
       def nosso_numero_dv
-        "#{nosso_numero}".modulo11(mapeamento: mapeamento_para_modulo_11)
+        nosso_numero.to_s.modulo11(mapeamento: mapeamento_para_modulo_11)
       end
 
       def conta_corrente_codigo_barra

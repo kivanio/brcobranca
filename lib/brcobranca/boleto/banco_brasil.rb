@@ -1,8 +1,9 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class BancoBrasil < Base # Banco do Brasil
+    # Banco do Brasil
+    class BancoBrasil < Base
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
@@ -103,7 +104,7 @@ module Brcobranca
                        codigo_servico ? 17 : 5
                      else
                        raise Brcobranca::NaoImplementado, 'Tipo de convênio não implementado.'
-        end
+                     end
         quantidade ? @nosso_numero.to_s.rjust(quantidade, '0') : @nosso_numero
       end
 
@@ -145,7 +146,10 @@ module Brcobranca
             "#{convenio}#{nosso_numero}#{agencia}#{conta_corrente}#{carteira}"
           else
             # Nosso Número de 17 dígitos com Convenio de 6 dígitos e sem nosso_numero, carteira 16 e 18
-            raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{carteira}" unless %w(16 18).include?(carteira)
+            raise "Só é permitido emitir boletos com nosso número de 17 dígitos com carteiras 16 ou 18. Sua carteira atual é #{carteira}" unless %w[
+              16 18
+            ].include?(carteira)
+
             "#{convenio}#{nosso_numero}21"
           end
         when 4 # Nosso Número de 7 dígitos com Convenio de 4 dígitos e sem nosso_numero

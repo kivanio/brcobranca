@@ -1,7 +1,9 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class Credisis < Base # CrediSIS
+    # CrediSIS
+    class Credisis < Base
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
       validates_length_of :carteira, is: 2, message: 'deve ser menor ou igual a 2 dígitos.'
@@ -84,7 +86,7 @@ module Brcobranca
         "#{agencia}-#{agencia_dv} / #{conta_corrente}-#{conta_corrente_dv}"
       end
 
-      #X – Módulo 11 do CPF/CNPJ (incluindo dígitos verificadores) do Beneficiário emissor
+      # X – Módulo 11 do CPF/CNPJ (incluindo dígitos verificadores) do Beneficiário emissor
       # Obs.: Caso for CPF, utilizar 9 como limitador da multiplicação.
       # Caso for CNPJ, utilizar 8 no limitador da multiplicação.
       def documento_cedente_dv
@@ -95,7 +97,7 @@ module Brcobranca
 
       # Segunda parte do código de barras.
       # @return [String] 25 caracteres numéricos.
-      #1. - Número do Banco: “097”
+      # 1. - Número do Banco: “097”
       # 2. - Moeda: “9”
       # 3. - DV do Código de Barras, Baseado no Módulo 11 (Vide Anexo X).
       # 4. - Fator de Vencimento do Boleto (Vide Anexo VII).

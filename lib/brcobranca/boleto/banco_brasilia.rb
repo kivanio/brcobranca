@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class BancoBrasilia < Base # Banco Brasilia
-
+    # Banco Brasilia
+    class BancoBrasilia < Base
       # <b>OPCIONAL</b>: Incremento do Campo Livre do Nosso Número
       attr_accessor :nosso_numero_incremento
 
@@ -61,7 +61,7 @@ module Brcobranca
       # Nosso número boleto
       # @return [String]
       def nosso_numero_boleto
-        "#{carteira}#{nosso_numero}070#{codigo_barras_segunda_parte[-2..-1]}"
+        "#{carteira}#{nosso_numero}070#{codigo_barras_segunda_parte[-2..]}"
       end
 
       # Número da agência/código cedente do cliente para exibir no boleto.

@@ -1,14 +1,14 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 module Brcobranca
   module Boleto
-    class Safra < Base # Banco Safra
+    # Banco Safra
+    class Safra < Base
       # <b>REQUERIDO</b>: Dígito da Agência
       attr_accessor :agencia_dv
       # <b>REQUERIDO</b>: Dígito da conta
       attr_accessor :conta_corrente_dv
-      
+
       validates_presence_of :agencia_dv, :conta_corrente_dv, message: 'não pode estar em branco.'
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :nosso_numero, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'

@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 # @author Kivanio Barbosa
 
@@ -8,11 +9,11 @@ module Brcobranca
   # Métodos auxiliares de cálculos envolvendo Datas.
   module CalculoData
     # Calcula o número de dias corridos entre a <b>data base ("Fixada" em 07.10.1997)</b> e a <b>data de vencimento</b> desejada.
-    # A partir de 22.02.2025, o fator retorna para '1000' adicionando- se '1' a cada dia subsequente a este fator 
+    # A partir de 22.02.2025, o fator retorna para '1000' adicionando- se '1' a cada dia subsequente a este fator
     # até que chegue a 9999 novamente onde deve ser usada nova data base começando de 1000.
     #
-    # Somente serão considerados válidos para pagamento os boletos com 3.000 fatores de vencimento anteriores 
-    # e 5.500 fatores futuros, ambos em relação a data atual. 
+    # Somente serão considerados válidos para pagamento os boletos com 3.000 fatores de vencimento anteriores
+    # e 5.500 fatores futuros, ambos em relação a data atual.
     # Boletos fora deste controle não serão considerados validos para pagamento na rede bancária.
     # Ex. Hoje é 13/03/2014 (fator 6.001)
     # Limite para emissão ou pagamento de boletos vencido: 24/12/2005 (fator 3.000)
@@ -25,7 +26,7 @@ module Brcobranca
       data_base = Date.parse '1997-10-07'
       fator_vencimento = Integer(self - data_base)
       while fator_vencimento > 9999
-        data_base = data_base + 10000
+        data_base += 10_000
         fator_vencimento = Integer(self - data_base) + 1000
       end
       fator_vencimento.to_s

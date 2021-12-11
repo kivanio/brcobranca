@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -27,7 +27,8 @@ module Brcobranca
         #
         attr_accessor :tipo_cobranca
 
-        validates_presence_of :agencia, :conta_corrente, :convenio, :variacao_carteira, :documento_cedente, message: 'não pode estar em branco.'
+        validates_presence_of :agencia, :conta_corrente, :convenio, :variacao_carteira, :documento_cedente,
+                              message: 'não pode estar em branco.'
 
         validates_length_of :agencia, maximum: 4, message: 'deve ser igual a 4 digítos.'
         validates_length_of :conta_corrente, maximum: 8, message: 'deve ser menor ou igual a 8 dígitos.'
@@ -88,7 +89,7 @@ module Brcobranca
 
         def complemento
           ret = ''
-          ret << sequencial_remessa.to_s.rjust(7, '0')       # sequencial da remessa (nao controlado pelo banco)  9[007]
+          ret += sequencial_remessa.to_s.rjust(7, '0')       # sequencial da remessa (nao controlado pelo banco)  9[007]
           ret << ''.ljust(22, ' ')                           # complemento (brancos)                              X[022]
           ret << convenio_lider.to_s.rjust(7, '0')           # numero do convenio lider (opcional)                9[007]
           ret << ''.ljust(258, ' ')                          # complemento (brancos)                              X[258]
@@ -98,7 +99,7 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '7'                                                       # identificacao do registro         9[1]  001 a 001
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo    # tipo de identificacao da empresa  9[02] 002 a 003
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo    # tipo de identificacao da empresa  9[02] 002 a 003
           detalhe << documento_cedente.to_s.rjust(14, '0')                    # cpf/cnpj da empresa               9[14] 004 a 017
           detalhe << agencia                                                  # agencia                           9[04] 018 a 021
           detalhe << agencia_dv.to_s                                          # digito agencia                    X[01] 022 a 022
@@ -154,7 +155,7 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '5'
-          detalhe << '99'                                                # Tipo de Serviço: “99” (Cobrança de Multa)   9[02]       002 a 003
+          detalhe += '99'                                                # Tipo de Serviço: “99” (Cobrança de Multa)   9[02]       002 a 003
           detalhe << pagamento.codigo_multa                              # código da multa                             9[01]       004 a 004
           detalhe << pagamento.formata_data_multa                        # Data de Inicio da Cobrança da Multa         9[06]       005 a 010
           detalhe << pagamento.formata_valor_multa(12)                   # percentual multa                            9[12]       011 a 022

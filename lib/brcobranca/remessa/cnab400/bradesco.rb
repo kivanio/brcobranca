@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -8,7 +9,7 @@ module Brcobranca
 
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :codigo_empresa, :sequencial_remessa,
-          :digito_conta, message: 'não pode estar em branco.'
+                              :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :codigo_empresa, maximum: 20, message: 'deve ser menor ou igual a 20 dígitos.'
         validates_length_of :agencia, maximum: 5, message: 'deve ter 5 dígitos.'
         validates_length_of :conta_corrente, maximum: 7, message: 'deve ter 7 dígitos.'
@@ -51,7 +52,7 @@ module Brcobranca
         def identificacao_empresa
           # identificacao da empresa no banco
           identificacao = '0'                            # vazio                       [1]
-          identificacao << carteira.to_s.rjust(3, '0')   # carteira                    [3]
+          identificacao += carteira.to_s.rjust(3, '0')   # carteira                    [3]
           identificacao << agencia                       # codigo da agencia (sem dv)  [5]
           identificacao << conta_corrente                # codigo da conta             [7]
           identificacao << digito_conta                  # digito da conta             [1]
@@ -71,6 +72,7 @@ module Brcobranca
         def formata_endereco_sacado(pgto)
           endereco = "#{pgto.endereco_sacado}, #{pgto.cidade_sacado}/#{pgto.uf_sacado}"
           return endereco.ljust(40, ' ') if endereco.size <= 40
+
           "#{pgto.endereco_sacado[0..19]} #{pgto.cidade_sacado[0..14]}/#{pgto.uf_sacado}".format_size(40)
         end
 
@@ -78,13 +80,13 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                               # identificacao do registro                   9[01]       001 a 001
-          detalhe << ''.rjust(5, '0')                                 # agencia de debito (op)                      9[05]       002 a 006
+          detalhe += ''.rjust(5, '0')                                 # agencia de debito (op)                      9[05]       002 a 006
           detalhe << ''.rjust(1, '0')                                 # digito da agencia de debito (op)            X[01]       007 a 007
           detalhe << ''.rjust(5, '0')                                 # razao da conta corrente de debito (op)      9[05]       008 a 012
           detalhe << ''.rjust(7, '0')                                 # conta corrente (op)                         9[07]       013 a 019
           detalhe << ''.rjust(1, '0')                                 # digito da conta corrente (op)               X[01]       020 a 020
           detalhe << identificacao_empresa                            # identficacao da empresa                     X[17]       021 a 037
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ')   # num. controle                               X[25]       038 a 062
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ') # num. controle                               X[25]       038 a 062
           detalhe << ''.rjust(3, '0')                                 # codigo do banco (debito automatico apenas)  9[03]       063 a 065
           detalhe << pagamento.codigo_multa                           # campo da multa (0 = sem, 2 = com)           9[01]       066 a 066 *
           detalhe << pagamento.formata_percentual_multa               # percentual multa                            9[04]       067 a 070 *
@@ -129,7 +131,7 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '2'                                                  # identificacao do registro                   9[01]       001 a 001
-          detalhe << ''.rjust(80, ' ')                                   # mensagem 1                                  X[80]       002 a 081
+          detalhe += ''.rjust(80, ' ')                                   # mensagem 1                                  X[80]       002 a 081
           detalhe << ''.rjust(80, ' ')                                   # mensagem 2                                  X[80]       082 a 161
           detalhe << ''.rjust(80, ' ')                                   # mensagem 3                                  X[80]       162 a 241
           detalhe << ''.rjust(80, ' ')                                   # mensagem 4                                  X[80]       242 a 321

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
 module Brcobranca
   module Retorno
@@ -107,9 +107,9 @@ module Brcobranca
           # :numero_do_protocolo, 370..379
           # :brancos, 380..393
 
-          parse.field :motivo_ocorrencia, 318..327, ->(motivos) do
-            motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-          end
+          parse.field :motivo_ocorrencia, 318..327, lambda { |motivos|
+            motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+          }
 
           # :numero_sequencial, 394..399 # numero sequencial no arquivo
           parse.field :sequencial, 394..399

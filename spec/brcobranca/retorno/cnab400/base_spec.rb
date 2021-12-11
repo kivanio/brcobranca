@@ -1,56 +1,56 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::Cnab400::Base do
   let(:arquivo) { File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', nome_arquivo) }
 
-  describe "#load_lines" do
-
-    it "retorna nil se o arquivo é nil" do
-      expect(Brcobranca::Retorno::Cnab400::Base.load_lines(nil)).to be_nil
+  describe '#load_lines' do
+    it 'retorna nil se o arquivo é nil' do
+      expect(described_class.load_lines(nil)).to be_nil
     end
 
-    context "Banco de Brasilia" do
-      let(:nome_arquivo) { "CNAB400BANCOBRASILIA.RET" }
-
+    context 'Banco de Brasilia' do
       subject { Brcobranca::Retorno::Cnab400::BancoBrasilia }
 
-      it "lê o arquivo pela classe do Banco de Brasilia" do
+      let(:nome_arquivo) { 'CNAB400BANCOBRASILIA.RET' }
+
+      it 'lê o arquivo pela classe do Banco de Brasilia' do
         expect(subject).to receive(:load_lines).with(arquivo, {})
-        Brcobranca::Retorno::Cnab400::Base.load_lines(arquivo)
+        described_class.load_lines(arquivo)
       end
     end
 
-    context "Bradesco" do
-      let(:nome_arquivo) { "CNAB400BRADESCO.RET" }
-
+    context 'Bradesco' do
       subject { Brcobranca::Retorno::Cnab400::Bradesco }
 
-      it "lê o arquivo pela classe do Bradesco" do
+      let(:nome_arquivo) { 'CNAB400BRADESCO.RET' }
+
+      it 'lê o arquivo pela classe do Bradesco' do
         expect(subject).to receive(:load_lines).with(arquivo, {})
-        Brcobranca::Retorno::Cnab400::Base.load_lines(arquivo)
+        described_class.load_lines(arquivo)
       end
     end
 
-    context "Itaú" do
-      let(:nome_arquivo) { "CNAB400ITAU.RET" }
-
+    context 'Itaú' do
       subject { Brcobranca::Retorno::Cnab400::Itau }
 
-      it "lê o arquivo pela classe do Itaú" do
+      let(:nome_arquivo) { 'CNAB400ITAU.RET' }
+
+      it 'lê o arquivo pela classe do Itaú' do
         expect(subject).to receive(:load_lines).with(arquivo, {})
-        Brcobranca::Retorno::Cnab400::Base.load_lines(arquivo)
+        described_class.load_lines(arquivo)
       end
     end
 
-    context "Santander" do
-      let(:nome_arquivo) { "CNAB400SANTANDER.RET" }
-
+    context 'Santander' do
       subject { Brcobranca::Retorno::Cnab400::Santander }
 
-      it "lê o arquivo pela classe do Santander" do
+      let(:nome_arquivo) { 'CNAB400SANTANDER.RET' }
+
+      it 'lê o arquivo pela classe do Santander' do
         expect(subject).to receive(:load_lines).with(arquivo, {})
-        Brcobranca::Retorno::Cnab400::Base.load_lines(arquivo)
+        described_class.load_lines(arquivo)
       end
     end
   end

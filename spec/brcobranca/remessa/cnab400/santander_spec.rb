@@ -1,24 +1,25 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      codigo_multa: '4',
-      percentual_multa: '2.00',
-      valor_mora: '8.00',
-      cod_primeira_instrucao: '06',
-      dias_protesto: '6',
-      nosso_numero: 123,
-      documento: 6969,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       codigo_multa: '4',
+                                       percentual_multa: '2.00',
+                                       valor_mora: '8.00',
+                                       cod_primeira_instrucao: '06',
+                                       dias_protesto: '6',
+                                       nosso_numero: 123,
+                                       documento: 6969,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -111,18 +112,18 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
         header = santander.monta_header
         expect(header[1]).to eq '1'                                 # tipo operacao (1 = remessa)
         expect(header[2..8]).to eq 'REMESSA'                        # literal da operacao
-        expect(header[26..45]).to eq santander.info_conta   # informacoes da conta
+        expect(header[26..45]).to eq santander.info_conta # informacoes da conta
         expect(header[76..78]).to eq '033'                          # codigo do banco
-        expect(header[100..115]).to eq ''.rjust(16, "0")            # zeros
-        expect(header[116..390]).to eq ''.rjust(275,' ')            # campos mensagens vazios
-        expect(header[391..393]).to eq '058'                        # numero da versão da remessa
+        expect(header[100..115]).to eq ''.rjust(16, '0')            # zeros
+        expect(header[116..390]).to eq ''.rjust(275, ' ') # campos mensagens vazios
+        expect(header[391..393]).to eq '058' # numero da versão da remessa
       end
     end
 
     context 'detalhe' do
       it 'informacoes devem estar posicionadas corretamente no detalhe' do
         detalhe = santander.monta_detalhe pagamento, 1
-        expect(detalhe[37..61]).to eq "6969".ljust(25) # nosso numero
+        expect(detalhe[37..61]).to eq '6969'.ljust(25) # nosso numero
         expect(detalhe[62..69]).to eq '00000123' # nosso numero
         expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990' # valor do titulo
@@ -133,7 +134,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
 
     context 'trailer' do
       it 'informacoes devem estar posicionadas corretamente no trailer' do
-        trailer = santander.monta_trailer "3"
+        trailer = santander.monta_trailer '3'
         expect(trailer[0]).to eq '9'                        # código registro
         expect(trailer[1..6]).to eq '000003'                # quant. total de linhas
         expect(trailer[7..19]).to eq '0000000019990'        # valor total dos titulos
@@ -144,6 +145,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Santander do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(santander.gera_arquivo).to eq(read_remessa('remessa-santander-cnab400.rem', santander.gera_arquivo)) }

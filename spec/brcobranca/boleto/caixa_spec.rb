@@ -1,9 +1,8 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::Caixa do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 10.00,
@@ -39,7 +38,7 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
 
   it 'Criar nova instancia com atributos válidos' do
     boleto_novo = described_class.new @valid_attributes
-    @valid_attributes.keys.each do |key|
+    @valid_attributes.each_key do |key|
       expect(boleto_novo.send(key)).to eql(@valid_attributes[key])
     end
     expect(boleto_novo).to be_valid
@@ -129,15 +128,15 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:nosso_numero] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 
@@ -147,15 +146,15 @@ RSpec.describe Brcobranca::Boleto::Caixa do #:nodoc:[all]
     @valid_attributes[:data_vencimento] = Date.parse('2008-02-03')
     @valid_attributes[:nosso_numero] = '000000077700168'
     boleto_novo = described_class.new(@valid_attributes)
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.to(format)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 end

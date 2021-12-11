@@ -1,20 +1,21 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Boleto
-    class Citibank < Base # Citibank
+    # Citibank
+    class Citibank < Base
       # <b>REQUERIDO</b>: Portfolio
       attr_accessor :portfolio
 
-      validates_length_of :convenio, is: 10, message: 'deve possuir 10 dígitos.' #Conta cosmos
+      validates_length_of :convenio, is: 10, message: 'deve possuir 10 dígitos.' # Conta cosmos
       validates_length_of :nosso_numero, is: 11, message: 'deve possuir 11 dígitos.'
-      validates_length_of :portfolio, is: 3, message: 'deve possuir 3 dígitos.' #Portfolio
+      validates_length_of :portfolio, is: 3, message: 'deve possuir 3 dígitos.' # Portfolio
 
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
         campos = {
           carteira: '3',
-          carteira_label: '3',
+          carteira_label: '3'
         }.merge!(campos)
         super(campos)
       end
@@ -58,7 +59,7 @@ module Brcobranca
       # Utiliza-se o [-1..-1] para retornar o último caracter
       # @return [String]
       def nosso_numero_dv
-        "#{nosso_numero}".modulo11(
+        nosso_numero.to_s.modulo11(
           multiplicador: (2..9).to_a,
           mapeamento: { 10 => 0, 11 => 0 }
         ) { |total| 11 - (total % 11) }.to_s
@@ -86,10 +87,10 @@ module Brcobranca
       # 123456 - Base (Posição 24 a 29)
       # 78     - Sequência (Posição 30 a 31)
       # 9      - Dígito Verificador (Posição 32
-      # 
+      #
       # @return [String]
       def codigo_barras_segunda_parte
-        "#{carteira}#{portfolio}#{convenio[1..-1]}#{nosso_numero}#{nosso_numero_dv}"
+        "#{carteira}#{portfolio}#{convenio[1..]}#{nosso_numero}#{nosso_numero_dv}"
       end
     end
   end

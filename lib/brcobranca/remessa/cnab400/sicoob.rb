@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
@@ -7,20 +7,16 @@ module Brcobranca
         # convenio do cedente
         attr_accessor :convenio
 
-        attr_accessor :modalidade_carteira
+        attr_accessor :modalidade_carteira, :distribuicao_boleto, :tipo_formulario
         # identificacao da emissao do boleto (attr na classe base)
         #   opcoes:
         #     ‘1’ = Banco Emite
         #     ‘2’ = Cliente Emite
-
-        attr_accessor :distribuicao_boleto
         #
         # identificacao da distribuicao do boleto (attr na classe base)
         #   opcoes:
         #     ‘1’ = Banco distribui
         #     ‘2’ = Cliente distribui
-
-        attr_accessor :tipo_formulario
         #       Tipo Formulário - 01 posição  (15 a 15):
         #            "1" -auto-copiativo
         #            "3" -auto-envelopável
@@ -30,7 +26,8 @@ module Brcobranca
         # convenio do cedente
         attr_accessor :convenio
 
-        validates_presence_of :agencia, :conta_corrente, :carteira, :convenio, :modalidade_carteira, :tipo_formulario, :digito_conta, :sequencial_remessa, :documento_cedente, message: 'não pode estar em branco.'
+        validates_presence_of :agencia, :conta_corrente, :carteira, :convenio, :modalidade_carteira, :tipo_formulario,
+                              :digito_conta, :sequencial_remessa, :documento_cedente, message: 'não pode estar em branco.'
         # Remessa 400 - 8 digitos
         # Remessa 240 - 12 digitos
         validates_length_of :conta_corrente, is: 8, message: 'deve ter 8 dígitos.'
@@ -131,7 +128,7 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # Prefixo da Cooperativa                9[4]
           detalhe << digito_agencia                                         # Digito da Cooperativa                 9[1]
@@ -185,8 +182,8 @@ module Brcobranca
           # 31 = Alteração de Outros Dados
           # 34 = Baixa - Pagamento Direto ao Beneficiário
 
-          detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.identificacao_ocorrencia # identificacao ocorrencia              9[02]
+          detalhe << pagamento.numero.to_s.rjust(10, '0') # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]

@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
@@ -113,24 +114,24 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       # =         36 24 14 6 = 80
       # 80 / 11 = 7 com resto 3
       expected_digito_agencia_list = [
-        { agencia: "3214", dv: "0" },
-        { agencia: "2006", dv: "0" },
-        { agencia: "5651", dv: "0" },
-        { agencia: "5691", dv: "0" },
-        { agencia: "5741", dv: "0" },
-        { agencia: "1008", dv: "1" },
-        { agencia: "5681", dv: "2" },
-        { agencia: "5731", dv: "2" },
-        { agencia: "4327", dv: "3" },
-        { agencia: "1001", dv: "4" },
-        { agencia: "5761", dv: "4" },
-        { agencia: "3032", dv: "5" },
-        { agencia: "5671", dv: "5" },
-        { agencia: "5631", dv: "6" },
-        { agencia: "1005", dv: "7" },
-        { agencia: "5661", dv: "8" },
-        { agencia: "0001", dv: "9" },
-        { agencia: "5621", dv: "9" },
+        { agencia: '3214', dv: '0' },
+        { agencia: '2006', dv: '0' },
+        { agencia: '5651', dv: '0' },
+        { agencia: '5691', dv: '0' },
+        { agencia: '5741', dv: '0' },
+        { agencia: '1008', dv: '1' },
+        { agencia: '5681', dv: '2' },
+        { agencia: '5731', dv: '2' },
+        { agencia: '4327', dv: '3' },
+        { agencia: '1001', dv: '4' },
+        { agencia: '5761', dv: '4' },
+        { agencia: '3032', dv: '5' },
+        { agencia: '5671', dv: '5' },
+        { agencia: '5631', dv: '6' },
+        { agencia: '1005', dv: '7' },
+        { agencia: '5661', dv: '8' },
+        { agencia: '0001', dv: '9' },
+        { agencia: '5621', dv: '9' }
       ]
 
       expected_digito_agencia_list.each do |expected_dv_agencia|
@@ -140,7 +141,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
       end
     end
 
-    it 'deve calcular  digito da conta' do
+    it 'deve calcular digito da conta' do
       # digito calculado a partir do modulo 11 com base 9
       #
       # conta = 1  2  3  4  5
@@ -170,18 +171,18 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
     end
 
     it 'complemento trailer deve retornar espacos em branco com a totalização das cobranças' do
-      total_cobranca_simples    = "00000100000000000005000"
-      total_cobranca_vinculada  = "".rjust(23, "0")
-      total_cobranca_caucionada = "".rjust(23, "0")
-      total_cobranca_descontada = "".rjust(23, "0")
+      total_cobranca_simples    = '00000100000000000005000'
+      total_cobranca_vinculada  = ''.rjust(23, '0')
+      total_cobranca_caucionada = ''.rjust(23, '0')
+      total_cobranca_descontada = ''.rjust(23, '0')
 
       expect(sicoob.complemento_trailer).to eq "#{total_cobranca_simples}#{total_cobranca_vinculada}"\
-                            "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
+                                               "#{total_cobranca_caucionada}#{total_cobranca_descontada}".ljust(217, ' ')
     end
 
     it 'formata o nosso numero' do
       nosso_numero = sicoob.formata_nosso_numero 1
-      expect(nosso_numero).to eq "000000000101014     "
+      expect(nosso_numero).to eq '000000000101014     '
     end
   end
 
@@ -190,6 +191,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicoob do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(sicoob.gera_arquivo).to eq(read_remessa('remessa-bancoob-cnab240.rem', sicoob.gera_arquivo)) }

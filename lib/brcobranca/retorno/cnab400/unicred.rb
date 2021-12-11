@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'parseline'
 
 module Brcobranca
@@ -104,9 +105,9 @@ module Brcobranca
           #   Tarifa (Valor Pago – Valor da Tarifa)
 
           # :Complemento do Movimento 318..325
-          parse.field :motivo_ocorrencia, 318..325, ->(motivos) do
-            motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-          end
+          parse.field :motivo_ocorrencia, 318..325, lambda { |motivos|
+            motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+          }
 
           # :Tipo de Instrucao de Origem 326..327
 

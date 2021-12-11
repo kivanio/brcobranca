@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
 begin
   require 'rghost'
@@ -53,7 +53,7 @@ module Brcobranca
         def method_missing(m, *args)
           method = m.to_s
           if method.start_with?('to_')
-            modelo_generico(self, (args.first || {}).merge!(formato: method[3..-1]))
+            modelo_generico(self, (args.first || {}).merge!(formato: method[3..]))
           else
             super
           end
@@ -80,7 +80,10 @@ module Brcobranca
           modelo_generico_rodape(doc, boleto)
 
           # Gerando codigo de barra com rghost_barcode
-          doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm", y: "#{@y - 1.67} cm") if boleto.codigo_barras
+          if boleto.codigo_barras
+            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm",
+                                                              y: "#{@y - 1.67} cm")
+          end
 
           # Gerando stream
           formato = (options.delete(:formato) || Brcobranca.configuration.formato)
@@ -108,7 +111,10 @@ module Brcobranca
             modelo_generico_rodape(doc, boleto)
 
             # Gerando codigo de barra com rghost_barcode
-            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm", y: "#{@y - 1.67} cm") if boleto.codigo_barras
+            if boleto.codigo_barras
+              doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm",
+                                                                y: "#{@y - 1.67} cm")
+            end
 
             # Cria nova página se não for o último boleto
             doc.next_page unless index == boletos.length - 1
@@ -135,6 +141,7 @@ module Brcobranca
           @y += y
           doc.moveto x: "#{@x} cm", y: "#{@y} cm"
         end
+
         # Monta o cabeçalho do layout do boleto
         def modelo_generico_cabecalho(doc, boleto)
           # INICIO Primeira parte do BOLETO
@@ -172,7 +179,7 @@ module Brcobranca
           doc.show boleto.quantidade
 
           move_more(doc, 2, 0)
-          doc.show "#{boleto.documento_cedente.formata_documento}"
+          doc.show boleto.documento_cedente.formata_documento.to_s
 
           move_more(doc, 3.8, 0)
           doc.show boleto.data_vencimento.to_s_br
@@ -184,9 +191,10 @@ module Brcobranca
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
 
           move_more(doc, 0, -0.3)
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
           if boleto.demonstrativo
-            doc.text_area boleto.demonstrativo, width: '18.5 cm', text_align: :left, x: "#{@x - 0.8} cm", y: "#{@y - 0.9} cm", row_height: '0.4 cm'
+            doc.text_area boleto.demonstrativo, width: '18.5 cm', text_align: :left, x: "#{@x - 0.8} cm",
+                                                y: "#{@y - 0.9} cm", row_height: '0.4 cm'
           end
           # FIM Primeira parte do BOLETO
         end
@@ -225,7 +233,7 @@ module Brcobranca
           move_more(doc, 15.8, 0)
           doc.show boleto.agencia_conta_boleto
 
-          move_more(doc, -15.8 , -0.9)
+          move_more(doc, -15.8, -0.9)
           doc.show boleto.data_documento.to_s_br if boleto.data_documento
 
           move_more(doc, 3.5, 0)
@@ -258,7 +266,8 @@ module Brcobranca
           doc.show boleto.valor_documento.to_currency
 
           if boleto.instrucoes
-            doc.text_area boleto.instrucoes, width: '14 cm', text_align: :left, x: "#{@x -= 15.8} cm", y: "#{@y -= 0.9} cm", row_height: '0.4 cm'
+            doc.text_area boleto.instrucoes, width: '14 cm', text_align: :left, x: "#{@x -= 15.8} cm",
+                                             y: "#{@y -= 0.9} cm", row_height: '0.4 cm'
             move_more(doc, 0, -2)
           else
             move_more(doc, -15.8, -0.9)
@@ -280,20 +289,19 @@ module Brcobranca
             doc.show boleto.instrucao6
           end
 
-
           move_more(doc, 0.5, -1.9)
-          doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
+          if boleto.sacado && boleto.sacado_documento
+            doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}"
+          end
 
           move_more(doc, 0, -0.4)
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
 
           move_more(doc, 1.2, -0.93)
-          if boleto.avalista && boleto.avalista_documento
-            doc.show "#{boleto.avalista} - #{boleto.avalista_documento}"
-          end
+          doc.show "#{boleto.avalista} - #{boleto.avalista_documento}" if boleto.avalista && boleto.avalista_documento
           # FIM Segunda parte do BOLETO
         end
-      end # Base
+      end
     end
   end
 end

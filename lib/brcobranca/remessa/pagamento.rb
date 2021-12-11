@@ -1,8 +1,10 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
+require 'active_support/core_ext/object/blank'
+
 module Brcobranca
   module Remessa
     class Pagamento
-
       include Brcobranca::Validations
 
       # <b>REQUERIDO</b>: nosso numero
@@ -91,8 +93,8 @@ module Brcobranca
       attr_accessor :parcela
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
-        :documento_sacado, :nome_sacado, :endereco_sacado,
-        :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
+                            :documento_sacado, :nome_sacado, :endereco_sacado,
+                            :cep_sacado, :cidade_sacado, :uf_sacado, message: 'não pode estar em branco.'
       validates_length_of :uf_sacado, is: 2, message: 'deve ter 2 dígitos.'
       validates_length_of :cep_sacado, is: 8, message: 'deve ter 8 dígitos.'
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
@@ -106,9 +108,9 @@ module Brcobranca
       def initialize(campos = {})
         padrao = {
           data_emissao: Date.current,
-          data_segundo_desconto:'00-00-00',
-          data_terceiro_desconto:'00-00-00',
-          tipo_mora: "3",
+          data_segundo_desconto: '00-00-00',
+          data_terceiro_desconto: '00-00-00',
+          tipo_mora: '3',
           valor_mora: 0.0,
           valor_desconto: 0.0,
           valor_segundo_desconto: 0.0,
@@ -144,7 +146,7 @@ module Brcobranca
       #
       def formata_data_desconto(formato = '%d%m%y')
         data_desconto.strftime(formato)
-      rescue
+      rescue StandardError
         if formato == '%d%m%y'
           '000000'
         else
@@ -158,7 +160,7 @@ module Brcobranca
       #
       def formata_data_segundo_desconto(formato = '%d%m%y')
         data_segundo_desconto.strftime(formato)
-      rescue
+      rescue StandardError
         if formato == '%d%m%y'
           '000000'
         else
@@ -172,7 +174,7 @@ module Brcobranca
       #
       def formata_data_terceiro_desconto(formato = '%d%m%y')
         data_terceiro_desconto.strftime(formato)
-      rescue
+      rescue StandardError
         if formato == '%d%m%y'
           '000000'
         else
@@ -197,7 +199,7 @@ module Brcobranca
       #
       def formata_data_multa(formato = '%d%m%y')
         data_multa.strftime(formato)
-      rescue
+      rescue StandardError
         if formato == '%d%m%y'
           '000000'
         else
@@ -302,15 +304,16 @@ module Brcobranca
       #
       def identificacao_avalista(zero = true)
         return '0' if documento_avalista.nil?
+
         Brcobranca::Util::Empresa.new(documento_avalista, zero).tipo
       end
 
       private
 
       def format_value(value, tamanho)
-        raise ValorInvalido, 'Deve ser um Float' unless value.to_s =~ /\./
+        raise ValorInvalido, 'Deve ser um Float' unless /\./.match?(value.to_s)
 
-        sprintf('%.2f', value).delete('.').rjust(tamanho, '0')
+        format('%.2f', value).delete('.').rjust(tamanho, '0')
       end
     end
   end

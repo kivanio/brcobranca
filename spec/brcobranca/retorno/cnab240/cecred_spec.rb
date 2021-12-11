@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Brcobranca::Retorno::Cnab240::Ailos do
   before do
     @arquivo = File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB240AILOS.RET')

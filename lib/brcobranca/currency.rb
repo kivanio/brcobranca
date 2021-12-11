@@ -1,27 +1,27 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 # @author Fernando Vieira do http://simplesideias.com.br
-module Brcobranca #:nodoc:[all]
-  module Currency #:nodoc:[all]
+module Brcobranca # :nodoc:[all]
+  module Currency # :nodoc:[all]
     # Implementação feita por Fernando Vieira do http://simplesideias.com.br
     # post http://simplesideias.com.br/usando-number_to_currency-em-modelos-no-rails
     BRL = { delimiter: '.', separator: ',', unit: 'R$', precision: 2, position: 'before' }.freeze
     USD = { delimiter: ',', separator: '.', unit: 'US$', precision: 2, position: 'before' }.freeze
     DEFAULT = BRL.merge(unit: '')
 
-    module String #:nodoc:[all]
+    module String # :nodoc:[all]
       def to_number(_options = {})
         return tr(',', '.').to_f if numeric?
+
         nil
       end
 
       def numeric?
-        self =~ /^(\+|-)?[0-9]+((\.|,)[0-9]+)?$/ ? true : false
+        /^(\+|-)?[0-9]+((\.|,)[0-9]+)?$/.match?(self)
       end
     end
 
-    module Number #:nodoc:[all]
+    module Number # :nodoc:[all]
       def to_currency(options = {})
         number = self
         default   = Brcobranca::Currency::DEFAULT
@@ -29,14 +29,14 @@ module Brcobranca #:nodoc:[all]
         precision = options[:precision] || default[:precision]
         unit      = options[:unit] || default[:unit]
         position  = options[:position] || default[:position]
-        separator = precision > 0 ? options[:separator] || default[:separator] : ''
+        separator = precision.positive? ? options[:separator] || default[:separator] : ''
         delimiter = options[:delimiter] || default[:delimiter]
 
         begin
           parts = number.with_precision(precision).split('.')
           number = parts[0].to_i.with_delimiter(delimiter) + separator + parts[1].to_s
           position == 'before' ? unit + number : number + unit
-        rescue
+        rescue StandardError
           number
         end
       end
@@ -47,7 +47,7 @@ module Brcobranca #:nodoc:[all]
           parts = number.to_s.split(separator)
           parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{delimiter}")
           parts.join separator
-        rescue
+        rescue StandardError
           self
         end
       end

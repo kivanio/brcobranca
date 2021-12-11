@@ -1,19 +1,20 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: '72000031',
-      documento: '1/01',
-      documento_sacado: '12345678901',
-      nome_sacado: 'AKRETION LTDA',
-      endereco_sacado: 'AVENIDA PAULISTA 1',
-      bairro_sacado: 'CENTRO',
-      cep_sacado: '12345678',
-      cidade_sacado: 'SAO PAULO',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: '72000031',
+                                       documento: '1/01',
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'AKRETION LTDA',
+                                       endereco_sacado: 'AVENIDA PAULISTA 1',
+                                       bairro_sacado: 'CENTRO',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'SAO PAULO',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -133,7 +134,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
 
     it 'info_conta deve retornar com 10 posicoes as informacoes da conta' do
       info_conta = unicred.info_conta
-      expect(info_conta.size).to eq 20 
+      expect(info_conta.size).to eq 20
       expect(info_conta[0..19]).to eq '00000000001234567890'
     end
 
@@ -156,19 +157,19 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
         expect(header[1]).to eq '1'             # tipo operacao (1 = remessa)
         expect(header[2..8]).to eq 'REMESSA'    # literal da operacao
         expect(header[26..45]).to eq unicred.info_conta # informacoes da conta
-        expect(header[76..78]).to eq '136'      # codigo do banco
+        expect(header[76..78]).to eq '136' # codigo do banco
       end
     end
 
     context 'detalhe' do
       it 'informacoes devem estar posicionadas corretamente no detalhe' do
         detalhe = unicred.monta_detalhe pagamento, 1
-	expect(detalhe[2..5]).to eq '1234'                            # Agencia
-	expect(detalhe[108..109]).to eq '01'                          # Instrução
-        expect(detalhe[110..119]).to eq "0000001/01"                  # documento
+        expect(detalhe[2..5]).to eq '1234'                            # Agencia
+        expect(detalhe[108..109]).to eq '01'                          # Instrução
+        expect(detalhe[110..119]).to eq '0000001/01' # documento
         expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
-        expect(detalhe[126..138]).to eq '0000000019990'               # valor do titulo
-	expect(detalhe[192..202]).to eq '72000031'.rjust(10, ' ')     # nosso numero
+        expect(detalhe[126..138]).to eq '0000000019990' # valor do titulo
+        expect(detalhe[192..202]).to eq '72000031'.rjust(10, ' ') # nosso numero
         expect(detalhe[220..233]).to eq '00012345678901'              # documento do pagador
         expect(detalhe[234..263]).to eq 'AKRETION LTDA'               # nome do pagador
       end
@@ -176,6 +177,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Unicred do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(unicred.gera_arquivo).to eq(read_remessa('remessa-unicred-cnab400.rem', unicred.gera_arquivo)) }

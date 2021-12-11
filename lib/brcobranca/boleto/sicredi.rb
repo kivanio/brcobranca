@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 #
 # Sicredi
@@ -6,7 +7,8 @@
 #
 module Brcobranca
   module Boleto
-    class Sicredi < Base # Banco SICREDI
+    # Banco SICREDI
+    class Sicredi < Base
       # <b>REQUERIDO</b>: Código do posto da cooperativa de crédito
       attr_accessor :posto
 
@@ -22,7 +24,8 @@ module Brcobranca
       # Obs.: O SICREDI não validará este campo.
       validates_length_of :carteira, maximum: 1, message: 'deve ser menor ou igual a 1 dígitos.'
       validates_length_of :posto, maximum: 2, message: 'deve ser menor ou igual a 2 dígitos.'
-      validates_length_of :byte_idt, is: 1, message: 'deve ser 1 se o numero foi gerado pela agencia ou 2-9 se foi gerado pelo beneficiário'
+      validates_length_of :byte_idt, is: 1,
+                                     message: 'deve ser 1 se o numero foi gerado pela agencia ou 2-9 se foi gerado pelo beneficiário'
       validates_length_of :convenio, maximum: 5, message: 'deve ser menor ou igual a 5 dígitos.'
 
       # Nova instancia do Bradesco
@@ -81,7 +84,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "14/200022-5"
       def nosso_numero_boleto
-        "#{nosso_numero_with_byte_idt[0..1]}/#{nosso_numero_with_byte_idt[2..-1]}-#{nosso_numero_dv}"
+        "#{nosso_numero_with_byte_idt[0..1]}/#{nosso_numero_with_byte_idt[2..]}-#{nosso_numero_dv}"
       end
 
       def nosso_numero_codigo_barra

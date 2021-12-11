@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -78,14 +77,38 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Base do
 
   context 'sobrescrita dos metodos' do
     it 'mostrar aviso sobre sobrecarga de métodos padrões' do
-      expect { cnab240.complemento_header }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.versao_layout_arquivo }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.versao_layout_lote }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.convenio_lote }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.nome_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.cod_banco }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.info_conta }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
-      expect { cnab240.codigo_convenio }.to raise_error(Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.complemento_header
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.versao_layout_arquivo
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.versao_layout_lote
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.convenio_lote
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.nome_banco
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.cod_banco
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.info_conta
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
+      expect do
+        cnab240.codigo_convenio
+      end.to raise_error(Brcobranca::NaoImplementado,
+                         'Sobreescreva este método na classe referente ao banco que você esta criando')
     end
   end
 end

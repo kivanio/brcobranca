@@ -1,20 +1,21 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::Banrisul do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 22832563,
-      documento: '1',
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      percentual_multa: 2.0,
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 22_832_563,
+                                       documento: '1',
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       percentual_multa: 2.0,
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -115,7 +116,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Banrisul do
     end
 
     it 'calcula o dígito verificador do nosso número' do
-      expect(banrisul.digito_nosso_numero(22832563)).to eq("51")
+      expect(banrisul.digito_nosso_numero(22_832_563)).to eq('51')
     end
   end
 
@@ -147,13 +148,13 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Banrisul do
         expect(detalhe[107]).to eq '1'                                               # carteira
         expect(detalhe[108..109]).to eq '01'                                         # código da ocorrência
         expect(detalhe[110..119]).to eq '1'.ljust(10, ' ')                           # seu número
-        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y')                # data de vencimento
+        expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
         expect(detalhe[126..138]).to eq '0000000019990'                              # valor do documento
         expect(detalhe[139..141]).to eq '041'                                        # banco cobrador
         expect(detalhe[142..146]).to eq ''.rjust(5, ' ')                             # brancos
         expect(detalhe[147..148]).to eq '08'                                         # tipo de documento (08 - Cobrança Credenciada Banrisul - CCB)
         expect(detalhe[149]).to eq 'N'                                               # código de aceite
-        expect(detalhe[150..155]).to eq Date.current.strftime('%d%m%y')                # data de emissão
+        expect(detalhe[150..155]).to eq Date.current.strftime('%d%m%y') # data de emissão
         expect(detalhe[156..157]).to eq '18'                                         # código da 1a instrução
         expect(detalhe[158..159]).to eq '00'                                         # código da 2a instrução
         expect(detalhe[160]).to eq ' '                                               # código da mora
@@ -182,6 +183,7 @@ RSpec.describe Brcobranca::Remessa::Cnab400::Banrisul do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
       it { expect(banrisul.gera_arquivo).to eq(read_remessa('remessa-banrisul-cnab400.rem', banrisul.gera_arquivo)) }

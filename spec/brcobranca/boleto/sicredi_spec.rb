@@ -1,5 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -77,6 +76,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74891.11620 08879.307109 65001.291015 1 68940000019557')
       expect(boleto_novo.codigo_barras_segunda_parte).to eql('1116208879307106500129101')
     end
+
     it 'case 2' do
       valid_attributes[:valor] = 700.00
       valid_attributes[:data_vencimento] = Date.parse('2016-07-25')
@@ -85,6 +85,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74891.11620 08902.107104 65001.291007 3 68660000070000')
       expect(boleto_novo.codigo_barras_segunda_parte).to eql('1116208902107106500129100')
     end
+
     it 'case 3' do
       valid_attributes[:valor] = 700.00
       valid_attributes[:data_vencimento] = Date.parse('2016-07-25')
@@ -93,6 +94,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74891.11620 08896.307108 65001.291072 1 68660000070000')
       expect(boleto_novo.codigo_barras_segunda_parte).to eql('1116208896307106500129107')
     end
+
     it 'case 4' do
       valid_attributes[:valor] = 700.00
       valid_attributes[:data_vencimento] = Date.parse('2016-07-25')
@@ -101,6 +103,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74891.11620 08899.807104 65001.291031 6 68660000070000')
       expect(boleto_novo.codigo_barras_segunda_parte).to eql('1116208899807106500129103')
     end
+
     it 'case 5' do
       valid_attributes[:valor] = 195.58
       valid_attributes[:data_vencimento] = Date.parse('2016-07-25')
@@ -109,6 +112,7 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
       expect(boleto_novo.codigo_barras.linha_digitavel).to eql('74891.11620 08878.507105 65001.291064 1 68660000019558')
       expect(boleto_novo.codigo_barras_segunda_parte).to eql('1116208878507106500129106')
     end
+
     it 'case 6' do
       valid_attributes[:valor] = 222.00
       valid_attributes[:data_vencimento] = Date.parse('2016-08-26')
@@ -155,15 +159,15 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
   it 'Gerar boleto nos formatos válidos com método to_' do
     boleto_novo = described_class.new(valid_attributes)
 
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.send("to_#{format}".to_sym)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 
@@ -176,15 +180,15 @@ RSpec.describe Brcobranca::Boleto::Sicredi do
     valid_attributes[:agencia] = '1172'
     boleto_novo = described_class.new(valid_attributes)
 
-    %w(pdf jpg tif png).each do |format|
+    %w[pdf jpg tif png].each do |format|
       file_body = boleto_novo.to(format)
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close
-      expect(File.exist?(tmp_file.path)).to be_truthy
-      expect(File.stat(tmp_file.path).zero?).to be_falsey
+      expect(File).to exist(tmp_file.path)
+      expect(File.stat(tmp_file.path)).not_to be_zero
       expect(File.delete(tmp_file.path)).to be(1)
-      expect(File.exist?(tmp_file.path)).to be_falsey
+      expect(File).not_to exist(tmp_file.path)
     end
   end
 end

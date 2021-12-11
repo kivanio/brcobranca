@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
 begin
   require 'rghost'
@@ -53,7 +53,7 @@ module Brcobranca
         def method_missing(m, *args)
           method = m.to_s
           if method.start_with?('to_')
-            modelo_carne(self, (args.first || {}).merge!(formato: method[3..-1]))
+            modelo_carne(self, (args.first || {}).merge!(formato: method[3..]))
           else
             super
           end
@@ -117,12 +117,12 @@ module Brcobranca
             modelo_carne_build_data_left(doc, boleto, colunas, linhas)
             modelo_carne_build_data_right(doc, boleto, colunas, linhas)
 
-            if curr_page_position >= max_per_page # maximo 3 boletos por pagina
-              # Cria nova página se não for o último boleto
-              doc.next_page unless index == boletos.length - 1
+            next unless curr_page_position >= max_per_page # maximo 3 boletos por pagina
 
-              curr_page_position = 0 # reinicia contador por página
-            end
+            # Cria nova página se não for o último boleto
+            doc.next_page unless index == boletos.length - 1
+
+            curr_page_position = 0 # reinicia contador por página
           end
 
           # Gerando stream
@@ -203,7 +203,7 @@ module Brcobranca
 
           # sacado
           doc.moveto x: colunas[0], y: linhas[13]
-          doc.show "#{boleto.sacado}"
+          doc.show boleto.sacado.to_s
         end
 
         # aplica dados do lado direito
@@ -298,17 +298,22 @@ module Brcobranca
 
           # Sacado
           doc.moveto x: colunas[2], y: linhas[11]
-          doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}" if boleto.sacado && boleto.sacado_documento
+          if boleto.sacado && boleto.sacado_documento
+            doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
+          end
 
           # Sacado endereço
           doc.moveto x: colunas[2], y: linhas[12]
-          doc.show "#{boleto.sacado_endereco}"
+          doc.show boleto.sacado_endereco.to_s
 
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode
-          doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.2 cm', x: colunas[2], y: linhas[14]) if boleto.codigo_barras
+          if boleto.codigo_barras
+            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.2 cm', x: colunas[2],
+                                                              y: linhas[14])
+          end
         end
-      end # Base
+      end
     end
   end
 end

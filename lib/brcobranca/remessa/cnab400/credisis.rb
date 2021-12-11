@@ -1,11 +1,13 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
       class Credisis < Brcobranca::Remessa::Cnab400::Base
         attr_accessor :codigo_cedente, :documento_cedente, :convenio
 
-        validates_presence_of :agencia, :conta_corrente, :codigo_cedente, :digito_conta, message: 'não pode estar em branco.'
+        validates_presence_of :agencia, :conta_corrente, :codigo_cedente, :digito_conta,
+                              message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :codigo_cedente, maximum: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 8, message: 'deve ter 8 dígitos.'
@@ -86,17 +88,17 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << agencia                                                # agencia                               9[04]
           detalhe << ''.rjust(1, ' ')                                       # brancos                               X[01]
           detalhe << conta_corrente                                         # conta corrente                        9[08]
           detalhe << digito_conta                                           # dac                                   9[01]
           detalhe << ''.rjust(6, ' ')                                       # complemento do registro (brancos)     X[06]
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25)                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25) # identificacao do tit. na empresa      X[25]
           detalhe << formata_nosso_numero(pagamento.nosso_numero.to_s)      # nosso numero                          9[11]
           detalhe << ''.rjust(37, ' ')                                      # brancos                               X[37]
-          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.numero.to_s.rjust(10, '0') # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    A[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << ''.rjust(11, ' ')                                      # brancos                               X[11]

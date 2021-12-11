@@ -1,5 +1,5 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RGhost' do
@@ -19,8 +19,8 @@ RSpec.describe 'RGhost' do
 
   it 'Testar se RGhost e GhostScript estão instalados' do
     # RGhost::Config.config_platform
-    expect(File.exist?(RGhost::Config::GS[:path])).to be_truthy
-    expect(File.executable?(RGhost::Config::GS[:path])).to be_truthy
+    expect(File).to exist(RGhost::Config::GS[:path])
+    expect(File).to be_executable(RGhost::Config::GS[:path])
     s = `#{RGhost::Config::GS[:path]} -v`
     expect(s).to match(/^GPL Ghostscript/)
     s = `#{RGhost::Config::GS[:path]} --version`

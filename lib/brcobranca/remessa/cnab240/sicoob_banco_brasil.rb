@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab240
@@ -45,7 +46,7 @@ module Brcobranca
         def complemento_p(pagamento)
           # CAMPO                   TAMANHO
           # num. doc. de corbanca   15
-          "#{pagamento.nosso_numero.to_s.rjust(15, '0')}"
+          pagamento.nosso_numero.to_s.rjust(15, '0').to_s
         end
 
         def codigo_convenio
@@ -54,15 +55,15 @@ module Brcobranca
           ''.rjust(20, ' ')
         end
 
-        alias_method :convenio_lote, :codigo_convenio
+        alias convenio_lote codigo_convenio
 
         def totaliza_valor_titulos
           pagamentos.inject(0) { |sum, pag| sum += pag.valor.to_f }
         end
 
         def valor_titulos_carteira
-          total = sprintf "%.2f", totaliza_valor_titulos
-          total.somente_numeros.rjust(17, "0")
+          total = format '%.2f', totaliza_valor_titulos
+          total.somente_numeros.rjust(17, '0')
         end
 
         def complemento_trailer
@@ -78,7 +79,7 @@ module Brcobranca
         #
         # @return [String]
         #
-        def monta_trailer_arquivo(nro_lotes, sequencial)
+        def monta_trailer_arquivo(nro_lotes, _sequencial)
           # CAMPO                     TAMANHO
           # zeros                     7
           # registro trailer lote     1
@@ -86,7 +87,13 @@ module Brcobranca
           # nro de lotes              6
           # nro de registros(linhas)  6
           # uso FEBRABAN              211
-          "#{''.rjust(7, '0')}5#{''.rjust(9, ' ')}#{nro_lotes.to_s.rjust(6, '0')}#{valor_titulos_carteira}#{''.rjust(6, '0')}#{''.rjust(194, ' ')}"
+          "#{''.rjust(7,
+                      '0')}5#{''.rjust(9,
+                                       ' ')}#{nro_lotes.to_s.rjust(6,
+                                                                   '0')}#{valor_titulos_carteira}#{''.rjust(6,
+                                                                                                            '0')}#{''.rjust(
+                                                                                                              194, ' '
+                                                                                                            )}"
         end
       end
     end

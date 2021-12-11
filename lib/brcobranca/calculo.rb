@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 # @author Kivanio Barbosa
 module Brcobranca
@@ -14,7 +15,7 @@ module Brcobranca
       total = 0
       multiplicador = 2
 
-      to_s.split(//).reverse!.each do |caracter|
+      to_s.chars.reverse!.each do |caracter|
         total += (caracter.to_i * multiplicador).soma_digitos
         multiplicador = multiplicador == 2 ? 1 : 2
       end
@@ -35,7 +36,7 @@ module Brcobranca
       options[:multiplicador] ||= [9, 8, 7, 6, 5, 4, 3, 2]
 
       total = multiplicador(fatores: options[:multiplicador], reverse: options[:reverse])
-      valor = block_given? ? yield(total) : (total % 11)
+      valor = _block ? yield(total) : (total % 11)
 
       options[:mapeamento][valor] || valor
     end
@@ -56,8 +57,8 @@ module Brcobranca
     #  13 (-9 ) #=> 4
     #  18 (-9 ) #=> 9
     def soma_digitos
-      total = self.to_i
-      total = total - 9 if total > 9
+      total = to_i
+      total -= 9 if total > 9
       total
     end
 
@@ -73,11 +74,11 @@ module Brcobranca
       total = 0
       multiplicador_posicao = 0
       fatores = options[:fatores]
-      numeros = options[:reverse].nil? ? to_s.split(//).reverse! : to_s.split(//)
+      numeros = options[:reverse].nil? ? to_s.chars.reverse! : to_s.chars
 
       numeros.each do |caracter|
         fator = fatores[multiplicador_posicao]
-        total += block_given? ? yield(caracter, fator) : (caracter.to_i * fator)
+        total += _block ? yield(caracter, fator) : (caracter.to_i * fator)
         multiplicador_posicao = multiplicador_posicao < (fatores.size - 1) ? (multiplicador_posicao + 1) : 0
       end
       total
@@ -91,7 +92,9 @@ module Brcobranca
       raise ArgumentError, 'Número inválido' unless is_number?
 
       digito_1 = modulo10
-      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total < 11 ? total : total % 11) }
+      digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) do |total|
+        (total < 11 ? total : total % 11)
+      end
 
       while digito_2 == 1
         digito_1 = if digito_1 == 9
@@ -100,7 +103,9 @@ module Brcobranca
                      digito_1 + 1
                    end
 
-        digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) { |total| (total < 11 ? total : total % 11) }
+        digito_2 = "#{self}#{digito_1}".modulo11(multiplicador: [2, 3, 4, 5, 6, 7]) do |total|
+          (total < 11 ? total : total % 11)
+        end
       end
 
       digito_2 = 11 - digito_2 if digito_2 != 0

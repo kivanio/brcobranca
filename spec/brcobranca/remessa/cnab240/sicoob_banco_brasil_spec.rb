@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
@@ -81,7 +82,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
         expect(sicoob_banco_brasil.errors.full_messages).to include('Sequencial remessa deve ter 8 dígitos.')
       end
     end
-
   end
 
   context 'formatacoes' do
@@ -108,7 +108,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
 
     it 'formata o nosso numero' do
       nosso_numero = sicoob_banco_brasil.formata_nosso_numero 1
-      expect(nosso_numero).to eq "12345678900000001"
+      expect(nosso_numero).to eq '12345678900000001'
     end
   end
 
@@ -130,7 +130,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
       expect(header[70..99]).to eq 'SOCIEDADE BRASILEIRA DE ZOOLOG'   # razao social do cedente
       expect(header[100..179]).to eq ''.rjust(80, ' ')                # brancos
       expect(header[180..187]).to eq '00000001'                       # sequencial de remessa
-      expect(header[188..195]).to eq Date.current.strftime('%d%m%Y')    # data gravacao
+      expect(header[188..195]).to eq Date.current.strftime('%d%m%Y') # data gravacao
       expect(header[196..206]).to eq ''.rjust(11, '0')                # zeros
       expect(header[207..239]).to eq ''.rjust(33, ' ')                # brancos
     end
@@ -156,12 +156,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
       expect(segmento_p[60]).to eq '2'                                # emissao boleto
       expect(segmento_p[61]).to eq ' '                                # branco
       expect(segmento_p[62..76]).to eq '000000001234567'              # numero do documento de cobranca
-      expect(segmento_p[77..84]).to eq Date.current.strftime('%d%m%Y')  # data de vencimento
+      expect(segmento_p[77..84]).to eq Date.current.strftime('%d%m%Y') # data de vencimento
       expect(segmento_p[85..99]).to eq '000000000005000'              # valor do documento
       expect(segmento_p[100..105]).to eq ''.rjust(6, '0')             # zeros
       expect(segmento_p[106]).to eq 'N'                               # aceite
       expect(segmento_p[107..108]).to eq '  '                         # brancos
-      expect(segmento_p[109..116]).to eq Date.current.strftime('%d%m%Y')# data de emissao
+      expect(segmento_p[109..116]).to eq Date.current.strftime('%d%m%Y') # data de emissao
       expect(segmento_p[117]).to eq '1'                               # tipo da mora
       expect(segmento_p[118..132]).to eq ''.rjust(15, '0')            # valor juros/mora
       expect(segmento_p[133..141]).to eq ''.rjust(9, '0')             # zeros
@@ -204,7 +204,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
       expect(segmento_q[153..154]).to eq '01'                         # tipo inscricao avalista
       expect(segmento_q[155..168]).to eq '00012345678901'             # documento avalista
       expect(segmento_q[169..208]).to eq 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUE' # nome do avalista
-      expect(segmento_q[209..239]).to eq ''.rjust(31, ' ')              # brancos
+      expect(segmento_q[209..239]).to eq ''.rjust(31, ' ') # brancos
     end
   end
 
@@ -260,9 +260,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::SicoobBancoBrasil do
   context 'geracao remessa' do
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
-      it { expect(sicoob_banco_brasil.gera_arquivo).to eq(read_remessa('remessa-sicoob-correspondente-bb-cnab240.rem', sicoob_banco_brasil.gera_arquivo)) }
+      it {
+        expect(sicoob_banco_brasil.gera_arquivo).to eq(read_remessa('remessa-sicoob-correspondente-bb-cnab240.rem',
+                                                                    sicoob_banco_brasil.gera_arquivo))
+      }
     end
   end
 end

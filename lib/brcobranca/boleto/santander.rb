@@ -1,10 +1,12 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 # @author Kivanio Barbosa
 # @author Ronaldo Araujo
 module Brcobranca
   module Boleto
-    class Santander < Base # Banco Santander
+    # Banco Santander
+    class Santander < Base
       validates_presence_of :convenio, message: 'não pode estar em branco.'
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :convenio, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'

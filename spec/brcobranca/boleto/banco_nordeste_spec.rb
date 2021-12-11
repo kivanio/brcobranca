@@ -1,9 +1,8 @@
-# -*- encoding: utf-8 -*-
-#
+# frozen_string_literal: true
 
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::BancoNordeste do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::BancoNordeste do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 25.0,

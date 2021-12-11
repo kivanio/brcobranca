@@ -1,4 +1,5 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 #
 # DEPRECATED
 #
@@ -23,7 +24,7 @@ module Brcobranca
 
       fixed_width_layout do |parse|
         parse.field :codigo_registro, 0..0
-        parse.field :agencia_com_dv, 17..20 # FIXME - SEM DIV
+        parse.field :agencia_com_dv, 17..20 # FIXME: - SEM DIV
         parse.field :cedente_com_dv, 23..28
         parse.field :nosso_numero, 62..69
         parse.field :carteira_variacao, 82..84
@@ -43,9 +44,9 @@ module Brcobranca
         parse.field :juros_mora, 266..278
         parse.field :outros_recebimento, 279..291
         parse.field :data_credito, 295..300
-        parse.field :motivo_ocorrencia, 377..384, ->(motivos) do
-          motivos.scan(/.{2}/).reject(&:blank?).reject{|motivo| motivo == '00'}
-        end
+        parse.field :motivo_ocorrencia, 377..384, lambda { |motivos|
+          motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
+        }
         parse.field :sequencial, 394..399
 
         # Campos da classe base que não encontrei a relação com CNAB400

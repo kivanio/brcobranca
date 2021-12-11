@@ -1,9 +1,9 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 module Brcobranca
   module Remessa
     module Cnab400
       class Santander < Brcobranca::Remessa::Cnab400::Base
-
         # Código de Transmissão
         # Consultar seu gerente para pegar esse código. Geralmente está no e-mail enviado pelo banco.
         attr_accessor :codigo_transmissao
@@ -48,16 +48,15 @@ module Brcobranca
         # @return [String]
         #
         def zeros
-          "".ljust(16, "0")
+          ''.ljust(16, '0')
         end
-
 
         # Complemento do header
         #
         # @return [String]
         #
         def complemento
-          "".ljust(275, " ")
+          ''.ljust(275, ' ')
         end
 
         # Numero da versão da remessa
@@ -65,7 +64,7 @@ module Brcobranca
         # @return [String]
         #
         def versao
-          "058"
+          '058'
         end
 
         def monta_header
@@ -84,7 +83,8 @@ module Brcobranca
           # complemento registro  [275]
           # versao                [3]
           # num. sequencial       [6]        000001
-          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae[0..29].to_s.ljust(30, ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{zeros}#{complemento}#{versao}000001"
+          "01REMESSA01COBRANCA       #{info_conta}#{empresa_mae[0..29].to_s.ljust(30,
+                                                                                  ' ')}#{cod_banco}#{nome_banco}#{data_geracao}#{zeros}#{complemento}#{versao}000001"
         end
 
         # Detalhe do arquivo
@@ -100,10 +100,10 @@ module Brcobranca
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
           detalhe = '1'                                                     # identificacao transacao               9[01]
-          detalhe << Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
+          detalhe += Brcobranca::Util::Empresa.new(documento_cedente).tipo  # tipo de identificacao da empresa      9[02]
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << codigo_transmissao                                     # Código de Transmissão                 9[20]
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ')                                      # identificacao do tit. na empresa      X[25]
+          detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ') # identificacao do tit. na empresa      X[25]
           detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[8]
           detalhe << pagamento.formata_data_segundo_desconto                # data limite para o segundo desconto   9[06]
           detalhe << ''.rjust(1, ' ')                                       # brancos                               X[1]
@@ -121,7 +121,7 @@ module Brcobranca
           # 5 = RÁPIDA COM REGISTRO
           # (BLOQUETE EMITIDO PELO CLIENTE) 6 = CAUCIONADA RAPIDA
           # 7 = DESCONTADA ELETRÔNICA
-          detalhe << codigo_carteira                                        # codigo da carteira                    9[01]
+          detalhe << codigo_carteira # codigo da carteira                    9[01]
 
           # Código da ocorrência:
           # 01 = ENTRADA DE TÍTULO
@@ -133,8 +133,8 @@ module Brcobranca
           # 08 = ALTERAÇÃO DO SEU NÚMERO
           # 09 = PROTESTAR
           # 18 = SUSTAR PROTESTO
-          detalhe << pagamento.identificacao_ocorrencia                     # identificacao ocorrencia              9[02]
-          detalhe << pagamento.numero.to_s.rjust(10, '0')         # numero do documento                   X[10]
+          detalhe << pagamento.identificacao_ocorrencia # identificacao ocorrencia              9[02]
+          detalhe << pagamento.numero.to_s.rjust(10, '0') # numero do documento                   X[10]
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')           # data do vencimento                    9[06]
           detalhe << pagamento.formata_valor                                # valor do documento                    9[13]
           detalhe << cod_banco                                              # codigo banco                          9[03]
@@ -188,11 +188,13 @@ module Brcobranca
 
         def identificador_movimento_complemento
           return 'I' if conta_padrao_novo?
+
           ''.rjust(1, ' ')
         end
 
         def movimento_complemento
           return "#{conta_corrente[8]}#{digito_conta}" if conta_padrao_novo?
+
           ''.rjust(2, ' ')
         end
 
@@ -205,8 +207,8 @@ module Brcobranca
         # @return [String]
         #
         def total_titulos
-          total = sprintf "%.2f", pagamentos.map(&:valor).inject(:+)
-          total.to_s.somente_numeros.rjust(13, "0")
+          total = format '%.2f', pagamentos.map(&:valor).inject(:+)
+          total.to_s.somente_numeros.rjust(13, '0')
         end
 
         # Trailer do arquivo remessa
@@ -223,7 +225,7 @@ module Brcobranca
           # valor total titulos [13]
           # zeros               [374]     0
           # num. sequencial     [6]
-          "9#{sequencial.to_s.rjust(6, '0')}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, "0")}"
+          "9#{sequencial.to_s.rjust(6, '0')}#{total_titulos}#{''.rjust(374, '0')}#{sequencial.to_s.rjust(6, '0')}"
         end
       end
     end

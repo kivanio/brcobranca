@@ -1,19 +1,20 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Remessa::Cnab400::BancoNordeste do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
-      data_vencimento: Date.current,
-      nosso_numero: 123,
-      documento: 6969,
-      documento_sacado: '12345678901',
-      nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
-      endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
-      bairro_sacado: 'São josé dos quatro apostolos magros',
-      cep_sacado: '12345678',
-      cidade_sacado: 'Santa rita de cássia maria da silva',
-      uf_sacado: 'SP')
+                                       data_vencimento: Date.current,
+                                       nosso_numero: 123,
+                                       documento: 6969,
+                                       documento_sacado: '12345678901',
+                                       nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
+                                       endereco_sacado: 'RUA RIO GRANDE DO SUL,!^.?\/@ São paulo Minas caçapa da silva junior',
+                                       bairro_sacado: 'São josé dos quatro apostolos magros',
+                                       cep_sacado: '12345678',
+                                       cidade_sacado: 'Santa rita de cássia maria da silva',
+                                       uf_sacado: 'SP')
   end
   let(:params) do
     {
@@ -158,14 +159,14 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoNordeste do
         expect(header[1]).to eq '1'             # tipo operacao (1 = remessa)
         expect(header[2..8]).to eq 'REMESSA'    # literal da operacao
         expect(header[26..45]).to eq banco_nordeste.info_conta # informacoes da conta
-        expect(header[76..78]).to eq '004'      # codigo do banco
+        expect(header[76..78]).to eq '004' # codigo do banco
       end
     end
 
     context 'detalhe' do
       it 'informacoes devem estar posicionadas corretamente no detalhe' do
         detalhe = banco_nordeste.monta_detalhe pagamento, 1
-        expect(detalhe[37..61]).to eq "6969".ljust(25) # documento
+        expect(detalhe[37..61]).to eq '6969'.ljust(25) # documento
         expect(detalhe[62..68]).to eq '0000123'                       # nosso numero
         expect(detalhe[69]).to eq '6'                                 # digito verificador
         expect(detalhe[120..125]).to eq Date.current.strftime('%d%m%y') # data de vencimento
@@ -179,9 +180,13 @@ RSpec.describe Brcobranca::Remessa::Cnab400::BancoNordeste do
 
     context 'arquivo' do
       before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
       after { Timecop.return }
 
-      it { expect(banco_nordeste.gera_arquivo).to eq(read_remessa('remessa-banco-nordeste-cnab400.rem', banco_nordeste.gera_arquivo)) }
+      it {
+        expect(banco_nordeste.gera_arquivo).to eq(read_remessa('remessa-banco-nordeste-cnab400.rem',
+                                                               banco_nordeste.gera_arquivo))
+      }
     end
   end
 end

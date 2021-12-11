@@ -1,7 +1,8 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
+RSpec.describe Brcobranca::Boleto::BancoBrasilia do # :nodoc:[all]
   before do
     @valid_attributes = {
       valor: 10.00,
@@ -24,9 +25,9 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
     expect(boleto_novo.data_processamento).to eql(Date.current)
     expect(boleto_novo.data_vencimento).to eql(Date.current)
     expect(boleto_novo.aceite).to eql('S')
-    expect(boleto_novo.quantidade).to eql(1)
-    expect(boleto_novo.valor).to eql(0.0)
-    expect(boleto_novo.valor_documento).to eql(0.0)
+    expect(boleto_novo.quantidade).to be(1)
+    expect(boleto_novo.valor).to be(0.0)
+    expect(boleto_novo.valor_documento).to be(0.0)
     expect(boleto_novo.local_pagamento).to eql('PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO')
     expect(boleto_novo.codigo_servico).to be_falsey
     expect(boleto_novo.carteira).to eql('2')
@@ -34,7 +35,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
 
   it 'Criar nova instancia com atributos válidos' do
     boleto_novo = described_class.new @valid_attributes
-    @valid_attributes.keys.each do |key|
+    @valid_attributes.each_key do |key|
       expect(boleto_novo.send(key)).to eql(@valid_attributes[key])
     end
     expect(boleto_novo).to be_valid
@@ -55,7 +56,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
     @valid_attributes[:valor] = 372.77
     @valid_attributes[:carteira] = 1
     @valid_attributes[:agencia] = 240
-    @valid_attributes[:conta_corrente] = 44990
+    @valid_attributes[:conta_corrente] = 44_990
     @valid_attributes[:nosso_numero] = 1
     @valid_attributes[:nosso_numero_incremento] = 2
 
@@ -71,10 +72,10 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
   end
 
   it 'Tamanho do número da agência deve ser de 3 dígitos' do
-    boleto_novo = described_class.new @valid_attributes.merge(agencia: "80")
+    boleto_novo = described_class.new @valid_attributes.merge(agencia: '80')
     expect(boleto_novo.agencia).to eq('080')
 
-    boleto_novo = described_class.new @valid_attributes.merge(agencia: "0080")
+    boleto_novo = described_class.new @valid_attributes.merge(agencia: '0080')
     expect(boleto_novo).not_to be_valid
   end
 
@@ -119,7 +120,7 @@ RSpec.describe Brcobranca::Boleto::BancoBrasilia do #:nodoc:[all]
 
     @valid_attributes[:carteira] = 1
     @valid_attributes[:agencia] = '058'
-    @valid_attributes[:conta_corrente] = 6002006
+    @valid_attributes[:conta_corrente] = 6_002_006
     @valid_attributes[:nosso_numero] = 1
     boleto_novo = described_class.new @valid_attributes
     expect(boleto_novo.nosso_numero_boleto).to eq('100000107045')
