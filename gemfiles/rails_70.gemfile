@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+
+eval_gemfile(File.expand_path(File.join("..", "Gemfile"), __dir__))
+
+gem 'rails', '~> 7.0.0.rc1'
+gem "bootsnap"
+gem 'activerecord-jdbcsqlite3-adapter', '~> 61.1', platforms: :jruby
+
+gemspec path: "../"
