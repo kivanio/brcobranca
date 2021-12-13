@@ -83,7 +83,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
     it 'nome do banco deve ser Ailos com 30 posicoes' do
       nome_banco = ailos.nome_banco
       expect(nome_banco.size).to eq 30
-      expect(nome_banco[0..5]).to eq 'AILOS'
+      expect(nome_banco[0..4]).to eq 'AILOS'
     end
 
     it 'versao do layout do arquivo deve retornar 087' do
