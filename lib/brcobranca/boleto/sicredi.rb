@@ -84,7 +84,7 @@ module Brcobranca
       # @example
       #  boleto.nosso_numero_boleto #=> "14/200022-5"
       def nosso_numero_boleto
-        "#{nosso_numero_with_byte_idt[0..1]}/#{nosso_numero_with_byte_idt[2..]}-#{nosso_numero_dv}"
+        "#{nosso_numero_with_byte_idt[0..1]}/#{nosso_numero_with_byte_idt[2..-1]}-#{nosso_numero_dv}"
       end
 
       def nosso_numero_codigo_barra

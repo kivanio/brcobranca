@@ -90,7 +90,7 @@ module Brcobranca
       #
       # @return [String]
       def codigo_barras_segunda_parte
-        "#{carteira}#{portfolio}#{convenio[1..]}#{nosso_numero}#{nosso_numero_dv}"
+        "#{carteira}#{portfolio}#{convenio[1..-1]}#{nosso_numero}#{nosso_numero_dv}"
       end
     end
   end
