@@ -14,7 +14,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
       sacado_documento: '12345678900',
       agencia: '4042',
       conta_corrente: '61900',
-      convenio: 12_345,
+      conta_corrente_dv: '7',
       nosso_numero: '00168'
     }
   end
@@ -54,7 +54,6 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     expect(boleto_novo.sacado_documento).to eql('12345678900')
     expect(boleto_novo.conta_corrente).to eql('000061900')
     expect(boleto_novo.agencia).to eql('4042')
-    expect(boleto_novo.convenio).to eql('12345')
     expect(boleto_novo.nosso_numero).to eql('0000000168')
     expect(boleto_novo.carteira).to eql('21')
   end
@@ -69,14 +68,14 @@ RSpec.describe Brcobranca::Boleto::Unicred do
     @valid_attributes[:carteira] = '21'
     boleto_novo = described_class.new(@valid_attributes)
 
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('13691.23409 00012.345500 00001.387117 1 52220000295295')
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('1234000012345500000138711')
+    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('13691.23409 00012.345708 00001.387117 1 52220000295295')
+    expect(boleto_novo.codigo_barras_segunda_parte).to eql('1234000012345700000138711')
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
     boleto_novo = described_class.new
     expect { boleto_novo.codigo_barras }.to raise_error(Brcobranca::BoletoInvalido)
-    expect(boleto_novo.errors.count).to be(6)
+    expect(boleto_novo.errors.count).to be(5)
   end
 
   it 'Montar nosso_numero_boleto' do
@@ -95,7 +94,7 @@ RSpec.describe Brcobranca::Boleto::Unicred do
 
     boleto_novo.agencia = '1234'
     boleto_novo.conta_corrente = '12345'
-    expect(boleto_novo.agencia_conta_boleto).to eql('1234 / 000012345-5')
+    expect(boleto_novo.agencia_conta_boleto).to eql('1234 / 000012345-7')
   end
 
   describe 'Busca logotipo do banco' do

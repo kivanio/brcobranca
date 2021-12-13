@@ -4,17 +4,19 @@ module Brcobranca
   module Boleto
     # Banco Unicred
     class Unicred < Base
+      attr_accessor :conta_corrente_dv
+
       validates_length_of :agencia, maximum: 4, message:
        'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :nosso_numero, maximum: 10, message:
        'deve ser menor ou igual a 10 dígitos.'
-      # validates_length_of :conta_corrente, maximum: 5, message:
-      #  'deve ser menor ou igual a 5 dígitos.'
+      validates_length_of :conta_corrente, maximum: 9, message:
+'deve ser menor ou igual a 9 dígitos.'
       # Carteira com 2(dois) caracteres ( SEMPRE 21 )
       validates_length_of :carteira, maximum: 2, message:
        'deve ser menor ou igual a 2 dígitos.'
-      validates_length_of :convenio, maximum: 10, message:
-       'deve ser menor ou igual a 10 dígitos.'
+      validates_length_of :conta_corrente_dv, maximum: 1, message:
+      'deve ser menor ou igual a 1 dígitos.'
 
       # Nova instancia do Unicred
       # @param (see Brcobranca::Boleto::Base#initialize)
@@ -34,82 +36,63 @@ module Brcobranca
         '136'
       end
 
-      # Numero da conta corrente
-      # @return [String] 9 caracteres numericos.
+      # Agência do cliente junto ao banco.
+      # @return [String] 4 caracteres numéricos.
+      def agencia=(valor)
+        @agencia = valor.to_s.rjust(4, '0') if valor
+      end
+
+      # Conta corrente
+      # @return [String] 9 caracteres numéricos.
       def conta_corrente=(valor)
         @conta_corrente = valor.to_s.rjust(9, '0') if valor
       end
 
-      # Codigo Beneficiario
-      # @return [String] 5 caracteres numericos.
-      def convenio=(valor)
-        @convenio = valor.to_s.rjust(5, '0') if valor
-      end
-
-      # Digito verificador do banco
-      # @return [String] 1 caractere.
-      def banco_dv
-        '8'
-      end
-
-      # Nosso numero para exibir no boleto. Nosso Numero e formado com 11 onze
-      # caracteres, sendo 10 digitos para o nosso numero e um digito para o
-      # digito verificador. Ex.: 9999999999-D. Obs.: O Nosso Numero e um
-      # identificador do boleto, devendo ser atribuido Nosso Numero diferenciado
-      # para cada um. D = digito verificador calculado
-      # @return [String]
-      # @example
-      #  boleto.nosso_numero_boleto #=> "9999999999-D"
-      def nosso_numero_boleto
-        "#{nosso_numero}-#{nosso_numero_dv}"
-      end
-
-      def nosso_numero_codigo_barra
-        nosso_numero_boleto.gsub(/\D/, '')
-      end
-
-      # Numero sequencial utilizado para identificar o boleto.
-      # @return [String] 10 caracteres numericos.
+      # Número seqüencial utilizado para identificar o boleto.
+      # @return [String] 10 caracteres numéricos.
       def nosso_numero=(valor)
         @nosso_numero = valor.to_s.rjust(10, '0') if valor
       end
 
-      # Digito verificador do nosso numero
-      # @return [Integer] 1 caracteres numericos.
+      # Dígito verificador do nosso número.
+      #
+      # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        nosso_numero.to_s.modulo11(mapeamento: mapeamento_para_modulo_11)
+        nosso_numero.to_s.modulo11(mapeamento: {
+                                     10 => 0,
+                                     11 => 0
+                                   })
       end
 
-      def conta_corrente_codigo_barra
-        "#{conta_corrente}#{conta_corrente_dv}"
+      # Nosso número para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.nosso_numero_boleto #=> "12345678-4"
+      def nosso_numero_boleto
+        "#{nosso_numero}-#{nosso_numero_dv}"
       end
 
-      # AGENCIA / CODIGO DO BENEFICIARIO: devera ser preenchido com o codigo da
-      # agencia, contendo 4 quatro caracteres / Conta Corrente com 10 dez
-      # caracteres. Ex. 9999/999999999-9. Obs.: Preencher com zeros a direita
-      # quando necessario.
+      # Agência + conta corrente do cliente para exibir no boleto.
+      # @return [String]
+      # @example
+      #  boleto.agencia_conta_boleto #=> "08111 / 536788-8"
       def agencia_conta_boleto
         "#{agencia} / #{conta_corrente}-#{conta_corrente_dv}"
       end
 
-      # Segunda parte do codigo de barras.
-      # Posicao       Tamanho      Conteudo
-      # 20 - 23       04      Agencia BENEFICIARIO Sem o digito verificador,
-      #                       completar com zeros a esquerda quando necessario
-      # 24 - 33       10      Conta do BENEFICIARIO Com o digito verificador -
-      #                       Completar com zeros a esquerda quando necessario
-      # 34 – 44       11      Nosso Numero Com o digito verificador
+      # Segunda parte do código de barras.
+      # Posição    | Tamanho | Picture | Conteúdo
+      # 01-03 | 3  | 9(3) | Identificação da instituição financeira - 136
+      # 04-04 | 1  | 9 | Código moeda (9 – Real)
+      # 05-05 | 1  | 9 | Dígito verificador do código de barras (DV)
+      # 06-19 | 14 | 9(4)   | Posições 06 a 09 – fator de vencimento
+      #       |    | 9(8)v99 | Posições 10 a 19 – valor nominal do título
+      # 20-23 | 4  | 4  | Agência BENEFICIÁRIO (Sem o dígito verificador)
+      # 24-33 | 10 | 10 | Conta do BENEFICIÁRIO (Com o dígito verificador)
+      # 34–44 | 11 | 11 | Nosso Número (Com o dígito verificador)
+      # @return [String] 25 caracteres numéricos.
       def codigo_barras_segunda_parte
-        "#{agencia}#{conta_corrente_codigo_barra}#{nosso_numero_codigo_barra}"
-      end
-
-      private
-
-      def mapeamento_para_modulo_11
-        {
-          10 => 0,
-          11 => 0
-        }
+        "#{agencia}#{conta_corrente}#{conta_corrente_dv}#{nosso_numero}#{nosso_numero_dv}"
       end
     end
   end

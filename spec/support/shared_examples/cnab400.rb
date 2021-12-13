@@ -77,6 +77,7 @@ shared_examples_for 'cnab400' do
         carteira: '03',
         agencia: '1234',
         conta_corrente: '12345',
+        conta_corrente_dv: '1',
         digito_conta: '1',
         empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
         documento_cedente: '12345678910',
