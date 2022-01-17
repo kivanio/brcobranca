@@ -9,6 +9,7 @@ group :development do
   gem 'github_changelog_generator'
   gem 'pry'
   gem 'rubocop'
+  gem 'rubocop-packaging'
   gem 'rubocop-performance'
   gem 'rubocop-rspec'
   gem 'solargraph'
@@ -18,7 +19,7 @@ group :test do
   gem 'json'
   gem 'rake'
   gem 'rspec'
-  gem 'simplecov', require: false, group: :test
+  gem 'simplecov'
   gem 'test-prof'
   gem 'timecop'
 end

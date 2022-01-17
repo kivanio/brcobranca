@@ -1,7 +1,8 @@
 require:
   - rubocop-performance
-  - "test_prof/rubocop"
+  - 'test_prof/rubocop'
   - rubocop-rspec
+  - rubocop-packaging
 
 AllCops:
   NewCops: enable

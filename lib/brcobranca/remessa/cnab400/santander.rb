@@ -207,7 +207,7 @@ module Brcobranca
         # @return [String]
         #
         def total_titulos
-          total = format '%.2f', pagamentos.map(&:valor).inject(:+)
+          total = format '%.2f', pagamentos.sum(&:valor)
           total.to_s.somente_numeros.rjust(13, '0')
         end
 
