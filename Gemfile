@@ -6,7 +6,6 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'brakeman'
   gem 'github_changelog_generator'
   gem 'pry'
   gem 'rubocop'

@@ -20,4 +20,3 @@ jobs:
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
       - run: |
           bundle exec rubocop --color --parallel --fail-level E
-          bundle exec brakeman -q -w3 -i brakeman.ignore
