@@ -1,20 +1,36 @@
 # Changelog
 
-## [Unreleased](https://github.com/kivanio/brcobranca/tree/HEAD)
+## [v10.0.0](https://github.com/kivanio/brcobranca/tree/v10.0.0) (2022-01-24)
 
-[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.4...HEAD)
+[Full Changelog](https://github.com/kivanio/brcobranca/compare/v9.2.4...v10.0.0)
 
 **Closed issues:**
 
+- RGhost::RenderException: Error: /invalidfileaccess in --run-- [\#229](https://github.com/kivanio/brcobranca/issues/229)
+- Conta Cosmos - Citibank [\#225](https://github.com/kivanio/brcobranca/issues/225)
+- Santander 400 gerando código de barras incorreto [\#224](https://github.com/kivanio/brcobranca/issues/224)
 - Citibank Documentação [\#223](https://github.com/kivanio/brcobranca/issues/223)
 - Código de barras inválido [\#221](https://github.com/kivanio/brcobranca/issues/221)
+- Utilizando template carne [\#220](https://github.com/kivanio/brcobranca/issues/220)
 - Incluir campos Sequencial e Data de Criação do Arquivo no Retorno do CNAB [\#218](https://github.com/kivanio/brcobranca/issues/218)
+- Problema para gerar boleto banco do Brasil. [\#216](https://github.com/kivanio/brcobranca/issues/216)
 - Bancos Sicred e Unicred possuem o mesmo Código de Banco 748 [\#214](https://github.com/kivanio/brcobranca/issues/214)
 - Erro ao executar o send\_data [\#213](https://github.com/kivanio/brcobranca/issues/213)
+- Endereço do Sacado [\#210](https://github.com/kivanio/brcobranca/issues/210)
 - - [\#207](https://github.com/kivanio/brcobranca/issues/207)
+- SANTANDER CNAB 400 [\#202](https://github.com/kivanio/brcobranca/issues/202)
+- Boleto não gerado no windows [\#192](https://github.com/kivanio/brcobranca/issues/192)
+- undefined method `logotipo' for Brcobranca [\#191](https://github.com/kivanio/brcobranca/issues/191)
+- Boleto Vencido, reimpressão... [\#190](https://github.com/kivanio/brcobranca/issues/190)
+- Remessa inválida ao aplicar desconto [\#188](https://github.com/kivanio/brcobranca/issues/188)
+- RetornoCnab240 [\#187](https://github.com/kivanio/brcobranca/issues/187)
+- Arquivo Remessa Itau [\#185](https://github.com/kivanio/brcobranca/issues/185)
+- Documentações [\#182](https://github.com/kivanio/brcobranca/issues/182)
+- Divergência no campo Aceite [\#138](https://github.com/kivanio/brcobranca/issues/138)
 
 **Merged pull requests:**
 
+- \[FIX\] Erro na emissão do Boleto. [\#228](https://github.com/kivanio/brcobranca/pull/228) ([mbcosta](https://github.com/mbcosta))
 - atualizaçao do banco cecred para ailos [\#227](https://github.com/kivanio/brcobranca/pull/227) ([netosjb](https://github.com/netosjb))
 - \[FIX\] especie do titulo - remessa itaú [\#226](https://github.com/kivanio/brcobranca/pull/226) ([netosjb](https://github.com/netosjb))
 - Bradesco CNAB400: Adiciona suporte ao 2º e 3º desconto [\#222](https://github.com/kivanio/brcobranca/pull/222) ([Wilfison](https://github.com/Wilfison))
