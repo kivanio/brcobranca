@@ -190,7 +190,7 @@ module Brcobranca
       # @return [String]
       #
       def formata_percentual_multa(tamanho = 4)
-        format_value(percentual_multa, tamanho)
+        format_value(:percentual_multa, tamanho)
       end
 
       # Formata a data de cobrança da multa
@@ -215,7 +215,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor(tamanho = 13)
-        format_value(valor, tamanho)
+        format_value(:valor, tamanho)
       end
 
       def documento_ou_numero
@@ -233,7 +233,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_mora(tamanho = 13)
-        format_value(valor_mora, tamanho)
+        format_value(:valor_mora, tamanho)
       end
 
       # Formata o campo valor da multa
@@ -242,7 +242,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_multa(tamanho = 6)
-        format_value(percentual_multa, tamanho)
+        format_value(:percentual_multa, tamanho)
       end
 
       # Formata o campo valor do desconto
@@ -251,7 +251,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_desconto(tamanho = 13)
-        format_value(valor_desconto, tamanho)
+        format_value(:valor_desconto, tamanho)
       end
 
       # Formata o campo valor do segundo desconto
@@ -260,7 +260,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_segundo_desconto(tamanho = 13)
-        format_value(valor_segundo_desconto, tamanho)
+        format_value(:valor_segundo_desconto, tamanho)
       end
 
       # Formata o campo valor do terceiro desconto
@@ -269,7 +269,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_terceiro_desconto(tamanho = 13)
-        format_value(valor_terceiro_desconto, tamanho)
+        format_value(:valor_terceiro_desconto, tamanho)
       end
 
       # Formata o campo valor do IOF
@@ -278,7 +278,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_iof(tamanho = 13)
-        format_value(valor_iof, tamanho)
+        format_value(:valor_iof, tamanho)
       end
 
       # Formata o campo valor do IOF
@@ -287,7 +287,7 @@ module Brcobranca
       #   quantidade de caracteres a ser retornado
       #
       def formata_valor_abatimento(tamanho = 13)
-        format_value(valor_abatimento, tamanho)
+        format_value(:valor_abatimento, tamanho)
       end
 
       # Retorna a identificacao do pagador
@@ -310,8 +310,10 @@ module Brcobranca
 
       private
 
-      def format_value(value, tamanho)
-        raise ValorInvalido, 'Deve ser um Float' unless /\./.match?(value.to_s)
+      def format_value(attribute, tamanho)
+        value = send(attribute)
+
+        raise ValorInvalido, "Pagamento##{attribute}: Deve ser um Float" unless /\./.match?(value.to_s)
 
         format('%.2f', value).delete('.').rjust(tamanho, '0')
       end
