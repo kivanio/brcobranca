@@ -91,6 +91,15 @@ module Brcobranca
       # 24-33 | 10 | 10 | Conta do BENEFICIÁRIO (Com o dígito verificador)
       # 34–44 | 11 | 11 | Nosso Número (Com o dígito verificador)
       # @return [String] 25 caracteres numéricos.
+      def banco_dv
+        "8"
+      end
+
+      def codigo_barras_primeira_parte
+        # Herança necessário para informar o quinto caracter Banco DV
+        "#{banco}#{moeda}#{banco_dv}#{fator_vencimento}#{valor_documento_formatado}"
+      end
+
       def codigo_barras_segunda_parte
         "#{agencia}#{conta_corrente}#{conta_corrente_dv}#{nosso_numero}#{nosso_numero_dv}"
       end
