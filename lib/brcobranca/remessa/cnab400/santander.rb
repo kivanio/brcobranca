@@ -104,7 +104,8 @@ module Brcobranca
           detalhe << documento_cedente.to_s.rjust(14, '0')                  # cpf/cnpj da empresa                   9[14]
           detalhe << codigo_transmissao                                     # Código de Transmissão                 9[20]
           detalhe << pagamento.documento_ou_numero.to_s.ljust(25, ' ') # identificacao do tit. na empresa      X[25]
-          detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')              # nosso numero                          9[8]
+          detalhe << pagamento.nosso_numero.to_s.rjust(7, '0')              # identificacao do titulo (nosso numero) 9[7]       
+          detalhe << digito_nosso_numero(pagamento.nosso_numero).to_s       # nosso numero (dv)                     9[01]
           detalhe << pagamento.formata_data_segundo_desconto                # data limite para o segundo desconto   9[06]
           detalhe << ''.rjust(1, ' ')                                       # brancos                               X[1]
           detalhe << pagamento.codigo_multa                                 # Com multa = 4, Sem multa = 0          9[1]
@@ -200,6 +201,13 @@ module Brcobranca
 
         def conta_padrao_novo?
           conta_corrente.present? && conta_corrente.length > 8
+        end
+
+        def digito_nosso_numero(nosso_numero)
+          "#{nosso_numero.to_s.rjust(7, '0')}".modulo11(
+            multiplicador: (2..9).to_a,
+            mapeamento: { 10 => 0, 11 => 0 }
+          ) { |total| 11 - (total % 11) }
         end
 
         # Valor total de todos os títulos
