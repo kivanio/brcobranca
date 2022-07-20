@@ -12,6 +12,8 @@ module Brcobranca
             [Brcobranca::Boleto::Template::Rghost]
           when :rghost_carne
             [Brcobranca::Boleto::Template::RghostCarne]
+          when :rghost2
+            [Brcobranca::Boleto::Template::Rghost2]
           when :both
             [Brcobranca::Boleto::Template::Rghost, Brcobranca::Boleto::Template::RghostCarne]
           else

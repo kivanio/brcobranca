@@ -119,6 +119,7 @@ module Brcobranca
     module Template
       autoload :Base,        'brcobranca/boleto/template/base'
       autoload :Rghost,      'brcobranca/boleto/template/rghost'
+      autoload :Rghost2,     'brcobranca/boleto/template/rghost2'     
       autoload :RghostCarne, 'brcobranca/boleto/template/rghost_carne'
     end
   end
