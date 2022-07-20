@@ -111,12 +111,13 @@ begin
   
           # Define o template a ser usado no boleto
           def modelo_generico_template(doc, _boleto, template_path)
-            doc.define_template(:template, template_path, x: '0.732 cm', y: '2.060 cm')
+            doc.define_template(:template, template_path, x: '0.732 cm', y: '3.48 cm')
             doc.use_template :template
   
             doc.define_tags do
               tag :menor, name: "LiberationMono", size: 8
-              tag :menor_bold, name: "Helvetica-Bold", size: 9
+              tag :menor2, name: "LiberationMono", size: 6
+              tag :menor_bold, name: "Helvetica-Bold", size: 8
               tag :medio, name: "Helvetica-Bold", size: 12
               tag :maior, name: "Helvetica-Bold", size: 13.5
             end
@@ -151,14 +152,12 @@ begin
             doc.show boleto.codigo_barras.linha_digitavel, tag: :menor_bold
             doc.moveto x:  1.121, y: 18.924
             doc.show truncar(boleto.cedente, 47), tag: :menor
-            doc.moveto x:  9.8, y: 18.924
+            doc.moveto x:  9.9, y: 18.924
             doc.show boleto.agencia_conta_boleto.tr(' ', ''), tag: :menor
             doc.moveto x:  16.423, y: 18.924
             doc.show boleto.nosso_numero_boleto, tag: :menor
             doc.moveto x:  1.121, y: 17.984
             doc.show boleto.documento_numero, tag: :menor
-            doc.moveto x:  12.904, y: 18.924
-            doc.show boleto.especie, tag: :menor
             doc.moveto x:  14.139, y: 18.924
             doc.show boleto.quantidade, tag: :menor
             doc.moveto x:  7.0, y: 17.984
@@ -173,10 +172,10 @@ begin
           # Monta o corpo e rodapé do layout do boleto
           def modelo_generico_rodape(doc, boleto)
             monta_logotipo(doc, boleto, 0.782, 13.9, 0.85)
-            doc.text_area "<menor>#{boleto.data_vencimento.to_s_br if boleto.data_vencimento}</menor>", width: 5.786, text_align: :center, x: 14.47271, y: 13.11587
+            doc.text_area "<menor_bold>#{boleto.data_vencimento.to_s_br if boleto.data_vencimento}</menor_bold>", width: 5.786, text_align: :center, x: 14.47271, y: 13.11587
             doc.text_area "<menor>#{boleto.agencia_conta_boleto}</menor>", width: 5.786, text_align: :center, x:  14.47271, y: 12.26921
             doc.text_area "<menor>#{boleto.nosso_numero_boleto}</menor>", width: 5.786, text_align: :center, x:  14.47271, y: 11.42254
-            doc.text_area "<menor>#{boleto.valor_documento.to_currency}</menor>", width: 5.5, text_align: :right, x:  14.47271, y: 10.56926
+            doc.text_area "<menor_bold>#{boleto.valor_documento.to_currency}</menor_bold>", width: 5.5, text_align: :right, x:  14.47271, y: 10.56926
             doc.moveto x:  4.813, y: 13.977
             doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :medio
             doc.moveto x:  6.815, y: 13.990
@@ -207,11 +206,11 @@ begin
             doc.show boleto.especie
             monta_instrucoes(doc, boleto, 0.8, 9.8)
             pagador = "<menor>#{truncar(boleto.sacado,75)} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}</menor>"
-            pagador += "\n<menor>#{boleto.sacado_endereco.to_s}</menor>"
+            pagador += "\n<menor>#{boleto.sacado_endereco.to_s}</menor>" if boleto.sacado_endereco
             doc.text_area pagador, width: 18, text_align: :left, x: 2.04611, y: 5.8, row_height: '0.4 cm'
-            avalista = "#{boleto.avalista} - #{boleto.avalista_documento}" if boleto.avalista && boleto.avalista_documento
+            avalista = "#{truncar(boleto.avalista,46)} - CPF/CNPJ:  #{boleto.avalista_documento.formata_documento.to_s}" if boleto.avalista && boleto.avalista_documento
             if avalista
-              doc.text_area "<menor>#{truncar(avalista, 59)}</menor>", width: 12.312, text_align: :left, x: 2.04611, y: 4.3, row_height: '0.4 cm'
+              doc.text_area "<menor2>#{avalista}</menor2>", width: 12.312, text_align: :left, x: 2.04611, y: 4.3, row_height: '0.4 cm'
             end
             # Gerando codigo de barra com rghost_barcode
             if boleto.codigo_barras
