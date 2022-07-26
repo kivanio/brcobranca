@@ -29,7 +29,11 @@ module Brcobranca
       # Nova instancia do BancoBrasil
       # @param (see Brcobranca::Boleto::Base#initialize)
       def initialize(campos = {})
-        campos = { carteira: '18', codigo_servico: false }.merge!(campos)
+        campos = { 
+          carteira: '18', 
+          codigo_servico: false, 
+          local_pagamento: 'PAGÁVEL EM QUALQUER BANCO.'
+        }.merge!(campos)       
         super(campos)
       end
 
