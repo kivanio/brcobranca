@@ -71,12 +71,17 @@ module Brcobranca
         def modelo_generico(boleto, options = {})
           doc = Document.new paper: :A4 # 210x297
 
-          template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico.eps')
+          with_logo = boleto.recipient_logo_details.present?
+          template_name = with_logo ? 'modelo_generico_logo.eps' : 'modelo_generico.eps'
+
+          template_path = File.join(File.dirname(__FILE__),
+                                    '..', '..', 'arquivos', 'templates', template_name)
 
           raise 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           modelo_generico_template(doc, boleto, template_path)
-          modelo_generico_cabecalho(doc, boleto)
+          modelo_generico_logo(doc, boleto) if with_logo
+          modelo_generico_cabecalho(doc, boleto, with_logo: with_logo)
           modelo_generico_rodape(doc, boleto)
 
           # Gerando codigo de barra com rghost_barcode
@@ -140,12 +145,38 @@ module Brcobranca
           doc.moveto x: "#{@x} cm", y: "#{@y} cm"
         end
 
+        # Monta o logo do layout do boleto
+        def modelo_generico_logo(doc, boleto)
+          has_image = boleto.recipient_logo_details[:image_path].present?
+          if has_image
+            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 1.00 cm", y: "24.15 cm"
+          end
+
+          @x = 0.50
+          @y = 27.42
+          initial_increment = has_image ? 10 : 0.5
+          move_more(doc, initial_increment, -0.2)
+          doc.show boleto.recipient_logo_details[:title]&.truncate(35), tag: :maior
+          move_more(doc, 0, -0.6)
+          doc.show boleto.recipient_logo_details[:sub_title]&.truncate(35), tag: :grande
+          move_more(doc, 0, -0.6)
+          doc.show boleto.recipient_logo_details[:text1]&.truncate(65)
+          move_more(doc, 0, -0.45)
+          doc.show boleto.recipient_logo_details[:text2]&.truncate(65)
+          move_more(doc, 0, -0.45)
+          doc.show boleto.recipient_logo_details[:text3]&.truncate(65)
+          move_more(doc, 0, -0.45)
+          doc.show boleto.recipient_logo_details[:text4]&.truncate(65)
+          move_more(doc, 0, -0.45)
+          doc.show boleto.recipient_logo_details[:text5]&.truncate(65)
+        end
+
         # Monta o cabeçalho do layout do boleto
-        def modelo_generico_cabecalho(doc, boleto)
+        def modelo_generico_cabecalho(doc, boleto, with_logo: false)
           # INICIO Primeira parte do BOLETO
           # Pontos iniciais em x e y
           @x = 0.50
-          @y = 27.42
+          @y = with_logo ? 21.00 : 27.42 # LOGOTIPO do BANCO
           # LOGOTIPO do BANCO
           doc.image boleto.logotipo, x: "#{@x} cm", y: "#{@y} cm"
           # Dados

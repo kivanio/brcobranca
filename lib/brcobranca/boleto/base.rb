@@ -89,6 +89,10 @@ module Brcobranca
       attr_accessor :avalista_documento
       # <b>OPCIONAL</b>: Endereço do beneficiário
       attr_accessor :cedente_endereco
+      # <b>OPCIONAL</b>: Detalhes do logo do beneficiário
+      attr_accessor :recipient_logo_details
+      # <b>OPCIONAL</b>: Marcar como verdadeiro se boleto gerado em modo carne
+      attr_accessor :carne
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero,
@@ -122,7 +126,7 @@ module Brcobranca
       # Logotipo do banco
       # @return [Path] Caminho para o arquivo de logotipo do banco.
       def logotipo
-        if Brcobranca.configuration.gerador == :rghost_carne
+        if Brcobranca.configuration.gerador == :rghost_carne || carne.presence
           File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}_carne.eps")
         else
           File.join(File.dirname(__FILE__), '..', 'arquivos', 'logos', "#{class_name}.eps")
