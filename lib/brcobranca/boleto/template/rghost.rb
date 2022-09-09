@@ -73,6 +73,8 @@ module Brcobranca
 
           with_logo = boleto.recipient_logo_details.present?
           template_name = with_logo ? 'modelo_generico_logo.eps' : 'modelo_generico.eps'
+          with_pix = boleto.pix_details.present?
+          template_name = with_pix ? 'modelo_generico_logo_pix.eps' : template_name
 
           template_path = File.join(File.dirname(__FILE__),
                                     '..', '..', 'arquivos', 'templates', template_name)
@@ -172,15 +174,15 @@ module Brcobranca
 
           has_image = boleto.recipient_logo_details[:image_path].present?
           if has_image
-            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 9.00 cm", y: "25.15 cm"
+            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 8.50 cm", y: "25.15 cm"
           end
         end
 
         def draw_pix(doc, pix_details)
-          return unless pix_details[:qrcode_path].present?
+          return if pix_details[:qrcode_path].nil?
 
-          doc.set Jpeg.new pix_details[:qrcode_path], x: " 16.90 cm", y: "24.4 cm"
-          @x = 17.25
+          doc.set Jpeg.new pix_details[:qrcode_path], x: " 16.835 cm", y: "24.4 cm"
+          @x = 17.175
           @y = 27.5
           move_more(doc, 0, 0)
           doc.show pix_details[:title], tag: :menor_bold
@@ -192,8 +194,6 @@ module Brcobranca
           doc.show pix_details[:description1], tag: :menor3
           move_more(doc, 0, -0.25)
           doc.show pix_details[:description2], tag: :menor3
-
-          doc.vertical_line :start_in => 16.75, y: 10, :size => 4.65, :border => { color: :black, width: 1 }
         end
 
         # Monta o cabeçalho do layout do boleto
