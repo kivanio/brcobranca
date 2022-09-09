@@ -179,7 +179,7 @@ module Brcobranca
         end
 
         def draw_pix(doc, pix_details)
-          return if pix_details[:qrcode_path].nil?
+          return if pix_details.blank?
 
           doc.set Jpeg.new pix_details[:qrcode_path], x: " 16.835 cm", y: "24.4 cm"
           @x = 17.175
