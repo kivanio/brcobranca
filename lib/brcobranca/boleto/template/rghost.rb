@@ -73,6 +73,8 @@ module Brcobranca
 
           with_logo = boleto.recipient_logo_details.present?
           template_name = with_logo ? 'modelo_generico_logo.eps' : 'modelo_generico.eps'
+          with_pix = boleto.pix_details.present?
+          template_name = with_pix ? 'modelo_generico_logo_pix.eps' : template_name
 
           template_path = File.join(File.dirname(__FILE__),
                                     '..', '..', 'arquivos', 'templates', template_name)
@@ -136,6 +138,10 @@ module Brcobranca
           doc.define_tags do
             tag :grande, size: 13
             tag :maior, size: 15
+            tag :menor, name: "LiberationMono", size: 8
+            tag :menor2, name: "LiberationMono", size: 6
+            tag :menor3, name: "Segoi-UI-Bold", size: 6, color: '374151'
+            tag :menor_bold, name: "Segoi-UI-Bold", size: 8, color: '374151'
           end
         end
 
@@ -147,15 +153,11 @@ module Brcobranca
 
         # Monta o logo do layout do boleto
         def modelo_generico_logo(doc, boleto)
-          has_image = boleto.recipient_logo_details[:image_path].present?
-          if has_image
-            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 1.00 cm", y: "24.15 cm"
-          end
+          draw_pix(doc, boleto.pix_details)
 
           @x = 0.50
           @y = 27.42
-          initial_increment = has_image ? 10 : 0.5
-          move_more(doc, initial_increment, -0.2)
+          move_more(doc, 0.5, -0.2)
           doc.show boleto.recipient_logo_details[:title]&.truncate(35), tag: :maior
           move_more(doc, 0, -0.6)
           doc.show boleto.recipient_logo_details[:sub_title]&.truncate(35), tag: :grande
@@ -169,6 +171,29 @@ module Brcobranca
           doc.show boleto.recipient_logo_details[:text4]&.truncate(65)
           move_more(doc, 0, -0.45)
           doc.show boleto.recipient_logo_details[:text5]&.truncate(65)
+
+          has_image = boleto.recipient_logo_details[:image_path].present?
+          if has_image
+            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 8.50 cm", y: "25.15 cm"
+          end
+        end
+
+        def draw_pix(doc, pix_details)
+          return if pix_details.blank?
+
+          doc.set Jpeg.new pix_details[:qrcode_path], x: " 16.835 cm", y: "24.4 cm"
+          @x = 17.175
+          @y = 27.5
+          move_more(doc, 0, 0)
+          doc.show pix_details[:title], tag: :menor_bold
+          
+          move_more(doc, -0.25, -3.45)
+          doc.set Jpeg.new pix_details[:icon], x: "#{@x} cm", y: "#{@y} cm", zoom: 20
+          
+          move_more(doc, 0.7, 0.35)
+          doc.show pix_details[:description1], tag: :menor3
+          move_more(doc, 0, -0.25)
+          doc.show pix_details[:description2], tag: :menor3
         end
 
         # Monta o cabeçalho do layout do boleto

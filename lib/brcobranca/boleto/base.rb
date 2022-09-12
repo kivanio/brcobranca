@@ -93,6 +93,8 @@ module Brcobranca
       attr_accessor :recipient_logo_details
       # <b>OPCIONAL</b>: Marcar como verdadeiro se boleto gerado em modo carne
       attr_accessor :carne
+      # <b>OPCIONAL</b>: Detalhes do qrcode para o PIX
+      attr_accessor :pix_details
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero,
