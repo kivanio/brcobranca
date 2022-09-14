@@ -23,6 +23,9 @@ module Brcobranca
           # :zeros, 1..2 # zeros
           # :zeros, 3..16 #zeros
 
+          # :codigo_registro, 0..0 #identificação do registro
+          parse.field :codigo_registro, 0..0
+
           # :agencia, 17..21 #agencia mantenedora da conta com digito
           parse.field :agencia_com_dv, 17..21
 
