@@ -174,7 +174,22 @@ module Brcobranca
 
           has_image = boleto.recipient_logo_details[:image_path].present?
           if has_image
-            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: " 8.50 cm", y: "25.15 cm"
+            @x = 11.083
+            @y = 23.62
+
+            square_size_cm = 3.2
+
+            # 1cm in rails -> 0.95cm in chrome pdf
+            y_border = 4.1 - (square_size_cm/100) * recipient_logo_details[:image_shape][:height]
+            y_border = y_border/2.0
+            inc_y = y_border/0.95
+
+            x_border = 4.8 - (square_size_cm/100) * recipient_logo_details[:image_shape][:width]
+            x_border = x_border/2.0
+            inc_x = x_border/0.95
+
+            move_more(doc, inc_x, inc_y)
+            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: "#{@x} cm" , y: "#{@y} cm"
           end
         end
 
