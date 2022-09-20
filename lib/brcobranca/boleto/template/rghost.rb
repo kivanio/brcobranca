@@ -172,31 +172,37 @@ module Brcobranca
           move_more(doc, 0, -0.45)
           doc.show boleto.recipient_logo_details[:text5]&.truncate(65)
 
-          has_image = boleto.recipient_logo_details[:image_path].present?
-          if has_image
-            @x = 11.083
-            @y = 23.62
+          has_pix = boleto.pix_details.present?
+          draw_logo(doc, boleto.recipient_logo_details, has_pix)
+        end
 
-            square_size_cm = 3.2
+        def draw_logo(doc, logo_details, has_pix)
+          return if logo_details[:image_path].blank?
 
-            # 1cm in rails -> 0.95cm in chrome pdf
-            y_border = 4.1 - (square_size_cm/100) * recipient_logo_details[:image_shape][:height]
-            y_border = y_border/2.0
-            inc_y = y_border/0.95
+          increment = has_pix ? 0.0 : 4.21
 
-            x_border = 4.8 - (square_size_cm/100) * recipient_logo_details[:image_shape][:width]
-            x_border = x_border/2.0
-            inc_x = x_border/0.95
+          @x = 11.083 + increment
+          @y = 23.62
 
-            move_more(doc, inc_x, inc_y)
-            doc.set Jpeg.new boleto.recipient_logo_details[:image_path], x: "#{@x} cm" , y: "#{@y} cm"
-          end
+          square_size_cm = 3.2
+
+          # 1cm in rails -> 0.95cm in chrome pdf
+          y_border = 4.1 - (square_size_cm/100) * logo_details[:image_shape][:height]
+          y_border = y_border/2.0
+          inc_y = y_border/0.95
+
+          x_border = 4.8 - (square_size_cm/100) * logo_details[:image_shape][:width]
+          x_border = x_border/2.0
+          inc_x = x_border/0.95
+
+          move_more(doc, inc_x, inc_y)
+          doc.set Jpeg.new logo_details[:image_path], x: "#{@x} cm" , y: "#{@y} cm"
         end
 
         def draw_pix(doc, pix_details)
           return if pix_details.blank?
 
-          doc.set Jpeg.new pix_details[:qrcode_path], x: " 16.835 cm", y: "24.4 cm"
+          doc.set Jpeg.new pix_details[:qrcode].path, x: " 16.835 cm", y: "24.4 cm"
           @x = 17.175
           @y = 27.5
           move_more(doc, 0, 0)
