@@ -13,13 +13,11 @@ Gem::Specification.new do |gem|
   gem.email = 'kivanio@gmail.com'
   gem.homepage = 'http://rubygems.org/gems/brcobranca'
   gem.files = Dir['Rakefile', '{lib}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*', 'History*']
-  gem.test_files = Dir['spec/**/*_spec.rb']
   gem.require_paths = ['lib']
   gem.required_ruby_version = '>= 2.6.0'
 
-  gem.requirements = ['GhostScript > 9.0, para gear PDF e código de Barras']
+  gem.requirements = ['GhostScript > 9.0, para gerar PDF e código de Barras']
 
-  # Gems that must be intalled for sift to work
   gem.add_dependency 'activesupport', '>= 5.2.6'
   gem.add_dependency 'parseline', '>= 1.0.3'
   gem.add_dependency 'rghost', '>= 0.9'
