@@ -189,4 +189,8 @@ RSpec.describe Brcobranca::Boleto::Sicoob do # :nodoc:[all]
       expect(File).not_to exist(tmp_file.path)
     end
   end
+
+  describe 'Aplica senha no pdf do boleto' do
+    it_behaves_like 'senha_pdf'
+  end
 end

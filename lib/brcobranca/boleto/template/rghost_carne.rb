@@ -71,6 +71,12 @@ module Brcobranca
         def modelo_carne(boleto, options = {})
           doc = Document.new paper: [21, 9]
 
+          doc.security do |sec|
+            sec.owner_password = boleto.senha
+            sec.user_password = boleto.senha
+            sec.key_length = 128
+          end unless boleto.senha.blank?
+
           colunas = calc_colunas 1
           linhas = calc_linhas 0
 
@@ -96,6 +102,12 @@ module Brcobranca
         # @option options [Symbol] :formato Formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         def modelo_carne_multipage(boletos, options = {})
           doc = Document.new paper: :A4
+
+          doc.security do |sec|
+            sec.owner_password = boletos.first.senha
+            sec.user_password = boletos.first.senha
+            sec.key_length = 128
+          end unless boletos.first.senha.blank?
 
           max_per_page = 3
           curr_page_position = 0

@@ -157,4 +157,8 @@ RSpec.describe Brcobranca::Boleto::BancoNordeste do # :nodoc:[all]
   describe 'Formato do boleto' do
     it_behaves_like 'formatos_validos'
   end
+
+  describe 'Aplica senha no pdf do boleto' do
+    it_behaves_like 'senha_pdf'
+  end
 end

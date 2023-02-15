@@ -211,4 +211,8 @@ RSpec.describe Brcobranca::Boleto::Bradesco do
       expect(described_class.new(conta_corrente: '0301357').conta_corrente_dv).to eq('P')
     end
   end
+
+  describe 'Aplica senha no pdf do boleto' do
+    it_behaves_like 'senha_pdf'
+  end
 end

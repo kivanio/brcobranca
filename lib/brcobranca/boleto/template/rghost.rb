@@ -71,6 +71,12 @@ module Brcobranca
         def modelo_generico(boleto, options = {})
           doc = Document.new paper: :A4 # 210x297
 
+          doc.security do |sec|
+            sec.owner_password = boleto.senha
+            sec.user_password = boleto.senha
+            sec.key_length = 128
+          end unless boleto.senha.blank?
+
           with_logo = boleto.recipient_logo_details.present?
           template_name = with_logo ? 'modelo_generico_logo.eps' : 'modelo_generico.eps'
           with_pix = boleto.pix_details.present?
@@ -106,6 +112,12 @@ module Brcobranca
         # @option options [Symbol] :formato Formato desejado [:pdf, :jpg, :tif, :png, :ps, :laserjet, ... etc]
         def modelo_generico_multipage(boletos, options = {})
           doc = Document.new paper: :A4 # 210x297
+
+          doc.security do |sec|
+            sec.owner_password = boletos.first.senha
+            sec.user_password = boletos.first.senha
+            sec.key_length = 128
+          end unless boletos.first.senha.blank?
 
           template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico.eps')
 

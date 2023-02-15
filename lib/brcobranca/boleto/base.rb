@@ -95,6 +95,8 @@ module Brcobranca
       attr_accessor :carne
       # <b>OPCIONAL</b>: Detalhes do qrcode para o PIX
       attr_accessor :pix_details
+      # <b>OPCIONAL</b>: Senha para o boleto
+      attr_accessor :senha
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero,
