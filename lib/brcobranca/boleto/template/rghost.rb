@@ -88,7 +88,7 @@ module Brcobranca
           if boleto.emv
             doc.barcode_qrcode(boleto.emv, width: '2.5 cm', height: '2.5 cm', x: "#{@x+12.9} cm", y: "#{@y - 2.50} cm")
             move_more(doc, @x + 12.9, @y - 3.70)
-            doc.show 'Pague com PIX'
+            doc.show "Pague com PIX"
           end
 
           # Gerando stream
@@ -125,7 +125,7 @@ module Brcobranca
             if boleto.emv
               doc.barcode_qrcode(boleto.emv, width: '2.5 cm', height: '2.5 cm', x: "#{@x+12.5} cm", y: "#{@y - 2.50} cm")
               move_more(doc, @x + 12.5, @y - 3.70)
-              doc.show 'Pague com PIX'
+              doc.show "Pague com PIX"
             end
 
             # Cria nova página se não for o último boleto
