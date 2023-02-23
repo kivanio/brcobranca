@@ -84,6 +84,13 @@ module Brcobranca
             doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm", y: "#{@y - 1.67} cm")
           end
 
+          # Gerando QRCode a partir de um emv
+          if boleto.emv
+            doc.barcode_qrcode(boleto.emv, width: '2.5 cm', height: '2.5 cm', x: "#{@x+12.9} cm", y: "#{@y - 2.50} cm")
+            move_more(doc, @x + 12.9, @y - 3.70)
+            doc.show 'Pague com PIX'
+          end
+
           # Gerando stream
           formato = (options.delete(:formato) || Brcobranca.configuration.formato)
           resolucao = (options.delete(:resolucao) || Brcobranca.configuration.resolucao)
@@ -112,6 +119,13 @@ module Brcobranca
             # Gerando codigo de barra com rghost_barcode
             if boleto.codigo_barras
               doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm", y: "#{@y - 1.67} cm")
+            end
+
+            # Gerando QRCode a partir de um emv
+            if boleto.emv
+              doc.barcode_qrcode(boleto.emv, width: '2.5 cm', height: '2.5 cm', x: "#{@x+12.5} cm", y: "#{@y - 2.50} cm")
+              move_more(doc, @x + 12.5, @y - 3.70)
+              doc.show 'Pague com PIX'
             end
 
             # Cria nova página se não for o último boleto
