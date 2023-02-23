@@ -86,8 +86,10 @@ module Brcobranca
 
           # Gerando QRCode a partir de um emv
           if boleto.emv
-            doc.barcode_qrcode(boleto.emv, width: "2.5 cm", height: "2.5 cm",
-                                           x: "#{@x + 12.9} cm", y: "#{@y - 2.50} cm")
+            doc.barcode_qrcode(boleto.emv, width: "2.5 cm",
+                                           height: "2.5 cm",
+                                           x: "#{@x + 12.9} cm",
+                                           y: "#{@y - 2.50} cm")
             move_more(doc, @x + 12.9, @y - 3.70)
             doc.show "Pague com PIX"
           end
@@ -124,8 +126,10 @@ module Brcobranca
 
             # Gerando QRCode a partir de um emv
             if boleto.emv
-              doc.barcode_qrcode(boleto.emv, width: "2.5 cm", height: "2.5 cm",
-                                             x: "#{@x + 12.9} cm", y: "#{@y - 2.50} cm")
+              doc.barcode_qrcode(boleto.emv, width: "2.5 cm",
+                                             height: "2.5 cm",
+                                             x: "#{@x + 12.9} cm",
+                                             y: "#{@y - 2.50} cm")
               move_more(doc, @x + 12.9, @y - 3.70)
               doc.show "Pague com PIX"
             end
