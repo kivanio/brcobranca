@@ -44,7 +44,7 @@ module Brcobranca
         def method_missing(m, *args)
           method = m.to_s
           if method.start_with?('to_')
-            modelo_generico(self, (args.first || {}).merge!(formato: method[3..]))
+            modelo_generico(self, (args.first || {}).merge!(formato: method[3..-1]))
           else
             super
           end
