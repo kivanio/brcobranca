@@ -1,6 +1,7 @@
 Gem para emissão de boletos de cobrança para bancos brasileiros.
 
 [![Ruby](https://github.com/kivanio/brcobranca/actions/workflows/main.yml/badge.svg)](https://github.com/kivanio/brcobranca/actions/workflows/main.yml)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkivanio%2Fbrcobranca.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkivanio%2Fbrcobranca?ref=badge_shield)
 
 [![Gem Version](http://img.shields.io/gem/v/brcobranca.svg)][gem]
 
@@ -83,3 +84,7 @@ Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](h
 ### Licença
 
 - BSD
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkivanio%2Fbrcobranca.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkivanio%2Fbrcobranca?ref=badge_large)
