@@ -44,7 +44,7 @@ module Brcobranca
         def method_missing(m, *args)
           method = m.to_s
           if method.start_with?('to_')
-            modelo_generico(self, (args.first || {}).merge!(formato: method[3..-1]))
+            modelo_generico(self, (args.first || {}).merge!(formato: method[3..]))
           else
             super
           end
@@ -235,8 +235,10 @@ module Brcobranca
           doc.show boleto.valor_documento.to_currency
 
           if boleto.instrucoes
-            doc.text_area boleto.instrucoes, width: '14 cm', text_align: :left, x: "#{@x -= 15.8} cm",
-                                             y: "#{@y -= 0.9} cm", row_height: '0.4 cm'
+            doc.text_area boleto.instrucoes, width: '14 cm',
+                                             text_align: :left, x: "#{@x -= 15.8} cm",
+                                             y: "#{@y -= 0.9} cm",
+                                             row_height: '0.4 cm'
             move_more(doc, 0, -2)
           else
             move_more(doc, -15.8, -0.9)
@@ -260,7 +262,8 @@ module Brcobranca
 
           move_more(doc, 0.5, -1.9)
           if boleto.sacado && boleto.sacado_documento
-            doc.show "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}"
+            sacado_info = "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}"
+            doc.show sacado_info
           end
 
           move_more(doc, 0, -0.4)
