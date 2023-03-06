@@ -10,4 +10,6 @@ task default: :spec
 
 GitHubChangelogGenerator::RakeTask.new :changelog do |config|
   config.date_format = '%d-%m-%Y'
+  config.user = 'kivanio'
+  config.project = 'brcobranca'
 end
