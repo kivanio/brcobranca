@@ -14,4 +14,4 @@ Style/FrozenStringLiteralComment:
 
 Layout/LineLength:
   Max: 125
-  IgnoredPatterns: ['\A#']
+  AllowedPatterns: ['\A#']
