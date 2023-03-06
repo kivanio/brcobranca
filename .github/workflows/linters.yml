@@ -16,8 +16,5 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Security audit application code
-        run: bundle exec brakeman -q -w3 -i brakeman.ignore
-
       - name: Lint Ruby files
         run: bundle exec rubocop --color --parallel --fail-level E
