@@ -89,6 +89,8 @@ module Brcobranca
       attr_accessor :avalista_documento
       # <b>OPCIONAL</b>: Endereço do beneficiário
       attr_accessor :cedente_endereco
+      # <b>OPCIONAL</b>: EMV para gerar QRCode para pagamento via PIX
+      attr_accessor :emv
 
       # Validações
       validates_presence_of :agencia, :conta_corrente, :moeda, :especie_documento, :especie, :aceite, :nosso_numero,

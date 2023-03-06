@@ -11,3 +11,7 @@ AllCops:
 
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
+
+Layout/LineLength:
+  Max: 125
+  IgnoredPatterns: ['\A#']
