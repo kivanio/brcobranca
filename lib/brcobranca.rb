@@ -8,6 +8,7 @@ require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 require 'brcobranca/validations'
 require 'brcobranca/util/date'
+require 'fast_blank'
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.

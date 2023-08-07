@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'active_support/core_ext/object/blank'
+
 require 'parseline'
 
 module Brcobranca
@@ -8,7 +8,7 @@ module Brcobranca
       class Base < Brcobranca::Retorno::Base
         # Load lines
         def self.load_lines(file, options = {})
-          return nil if file.blank?
+          return nil unless file
 
           codigo_banco = codigo_banco_do_arquivo(file)
 

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'active_support/core_ext/object/blank'
-
 module Brcobranca
   module Remessa
     class Pagamento
@@ -219,7 +217,7 @@ module Brcobranca
       end
 
       def documento_ou_numero
-        documento.present? ? documento : numero
+        documento || numero
       end
 
       def formata_documento_ou_numero(tamanho = 25, caracter = ' ')

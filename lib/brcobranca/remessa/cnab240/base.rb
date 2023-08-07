@@ -330,7 +330,7 @@ module Brcobranca
 
             seg_r = monta_segmento_r(pagamento, nro_lote, contador)
 
-            if seg_r.present?
+            unless seg_r.blank?
               lote << seg_r
               contador += 1
             end
