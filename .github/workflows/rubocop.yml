@@ -25,16 +25,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # If running on a self-hosted runner, check it meets the requirements
-      # listed at https://github.com/ruby/setup-ruby#using-self-hosted-runners
       - name: Set up Ruby
-        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.6
-
-      # This step is not necessary if you add the gem to your Gemfile
-      - name: Install Code Scanning integration
-        run: bundle add code-scanning-rubocop --version 0.3.0 --skip-install
+          ruby-version: 2.7
+          bundler-cache: true # runs 'bundle install' and caches installed
 
       - name: Install dependencies
         run: bundle install

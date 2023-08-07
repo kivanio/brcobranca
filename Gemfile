@@ -17,6 +17,8 @@ group :development do
 end
 
 group :test do
+  gem 'brakeman'
+  gem 'code-scanning-rubocop'
   gem 'json'
   gem 'rake'
   gem 'rspec'

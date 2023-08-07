@@ -31,4 +31,3 @@ pkg
 pkg/*.8
 doc
 doc/*.*
-Gemfile.lock
