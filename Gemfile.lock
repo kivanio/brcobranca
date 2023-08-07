@@ -13,7 +13,6 @@ GEM
     ast (2.4.2)
     backport (1.2.0)
     benchmark (0.2.1)
-    brakeman (6.0.1)
     code-scanning-rubocop (0.6.1)
       rubocop (~> 1.0)
     coderay (1.1.3)
@@ -86,7 +85,7 @@ GEM
     rubocop-performance (1.18.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rspec (2.23.0)
+    rubocop-rspec (2.23.1)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
@@ -125,7 +124,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  brakeman
   brcobranca!
   code-scanning-rubocop
   json

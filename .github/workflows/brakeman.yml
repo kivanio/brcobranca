@@ -40,6 +40,9 @@ jobs:
           ruby-version: '2.7'
           bundler-cache: true
 
+      - name: Install dependencies
+        run: bundle install brakeman
+
       # Execute Brakeman CLI and generate a SARIF output with the security issues identified during the analysis
       - name: Scan
         continue-on-error: true

@@ -31,9 +31,6 @@ jobs:
           ruby-version: 2.7
           bundler-cache: true # runs 'bundle install' and caches installed
 
-      - name: Install dependencies
-        run: bundle install
-
       - name: Rubocop run
         run: |
           bash -c "
