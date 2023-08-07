@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.homepage = 'http://rubygems.org/gems/brcobranca'
   gem.files = Dir['Rakefile', '{lib}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*', 'History*']
   gem.require_paths = ['lib']
-  gem.required_ruby_version = '>= 2.6.0'
+  gem.required_ruby_version = '>= 2.7.0'
 
   gem.requirements = ['GhostScript > 9.0, para gerar PDF e código de Barras']
 

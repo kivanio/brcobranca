@@ -10,12 +10,12 @@ name: Brakeman Scan
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ['master']
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "master" ]
-  schedule:
-    - cron: '28 13 * * 4'
+    branches: ['master']
+  # schedule:
+  #   - cron: '28 13 * * 4'
 
 permissions:
   contents: read
@@ -29,30 +29,31 @@ jobs:
     name: Brakeman Scan
     runs-on: ubuntu-latest
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v3
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    # Customize the ruby version depending on your needs
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf # v1.146.0
-      with:
-        ruby-version: '2.7'
+      # Customize the ruby version depending on your needs
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
 
-    - name: Setup Brakeman
-      env:
-        BRAKEMAN_VERSION: '4.10' # SARIF support is provided in Brakeman version 4.10+
-      run: |
-        gem install brakeman --version $BRAKEMAN_VERSION
+      - name: Setup Brakeman
+        env:
+          BRAKEMAN_VERSION: '4.10' # SARIF support is provided in Brakeman version 4.10+
+        run: |
+          gem install brakeman --version $BRAKEMAN_VERSION
 
-    # Execute Brakeman CLI and generate a SARIF output with the security issues identified during the analysis
-    - name: Scan
-      continue-on-error: true
-      run: |
-        brakeman -f sarif -o output.sarif.json .
+      # Execute Brakeman CLI and generate a SARIF output with the security issues identified during the analysis
+      - name: Scan
+        continue-on-error: true
+        run: |
+          brakeman -f sarif -o output.sarif.json .
 
-    # Upload the SARIF file generated in the previous step
-    - name: Upload SARIF
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: output.sarif.json
+      # Upload the SARIF file generated in the previous step
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: output.sarif.json

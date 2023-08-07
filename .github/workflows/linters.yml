@@ -2,7 +2,7 @@ name: linters
 on:
   push:
     branches: [master]
-  pull_request:
+  pull_request: ['master']
 jobs:
   lint:
     runs-on: ubuntu-latest

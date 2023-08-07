@@ -24,6 +24,6 @@ RSpec.describe 'RGhost' do
     s = `#{RGhost::Config::GS[:path]} -v`
     expect(s).to match(/^GPL Ghostscript/)
     s = `#{RGhost::Config::GS[:path]} --version`
-    expect(s).to match(/[8-9]\.[0-9]/)
+    expect(s).to match(/[8-9]\.[0-9]|[1-9][0-9]*\.[0-9]+\.[0-9]+/)
   end
 end
