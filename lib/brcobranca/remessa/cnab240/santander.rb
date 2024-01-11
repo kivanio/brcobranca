@@ -7,16 +7,12 @@ module Brcobranca
 
         # Código de Transmissão
         attr_accessor :codigo_transmissao
-        # Dígito da Agência
-        attr_accessor :digito_agencia
 
-        validates_presence_of :codigo_transmissao, :digito_agencia, :digito_conta, message: 'não pode estar em branco.'
+        validates_presence_of :codigo_transmissao, message: 'não pode estar em branco.'
 
         validates_length_of :codigo_transmissao, maximum: 15, message: 'deve ter no máximo 15 dígitos.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
-        validates_length_of :digito_agencia, maximum: 1, message: 'deve ter 1 dígito.'
         validates_length_of :conta_corrente, maximum: 9, message: 'deve ter 9 dígitos.'
-        validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
         def initialize(campos = {})
           campos = {  emissao_boleto: ' ', distribuicao_boleto: ' ',
@@ -26,6 +22,14 @@ module Brcobranca
 
         def codigo_transmissao=(valor)
           @codigo_transmissao = valor.to_s.strip.rjust(15, '0') if valor
+        end
+
+        def digito_agencia
+          agencia.modulo11(mapeamento: { 10 => 'X', 11 => 'X' }).to_s
+        end
+
+        def digito_conta
+          conta_corrente.modulo11(mapeamento: { 10 => 'X', 11 => 'X' }).to_s
         end
 
         def complemento_header

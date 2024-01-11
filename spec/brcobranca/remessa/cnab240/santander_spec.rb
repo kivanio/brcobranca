@@ -23,9 +23,8 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       documento_cedente: '28254225000193',
       codigo_transmissao: '000100001234567',
       agencia: '0001',
-      digito_agencia: '3',
       conta_corrente: '013001234',
-      digito_conta: '1',
+      digito_conta: '3',
       sequencial_remessa: '1',
       pagamentos: [pagamento] }
   end
@@ -52,12 +51,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
         expect(santander.invalid?).to be true
         expect(santander.errors.full_messages).to include('Agencia deve ter 4 dígitos.')
       end
-
-      it 'deve ser invalido se o digito_agencia tiver mais de 1 digito' do
-        santander.digito_agencia = '12'
-        expect(santander.invalid?).to be true
-        expect(santander.errors.full_messages).to include('Digito agencia deve ter 1 dígito.')
-      end
     end
 
     context '@conta_corrente' do
@@ -65,12 +58,6 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
         santander.conta_corrente = '1234567890'
         expect(santander.invalid?).to be true
         expect(santander.errors.full_messages).to include('Conta corrente deve ter 9 dígitos.')
-      end
-
-      it 'deve ser invalido se o digito_conta tiver mais de 1 digito' do
-        santander.digito_conta = '12'
-        expect(santander.invalid?).to be true
-        expect(santander.errors.full_messages).to include('Digito conta deve ter 1 dígito.')
       end
     end
   end
