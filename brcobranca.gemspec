@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.description = 'Gem para emissao de boletos e CNABs de bancos brasileiros.'
   gem.summary = 'Gem que permite trabalhar com boletos e CNABs para bancos brasileiros.'
   gem.email = 'kivanio@gmail.com'
-  gem.homepage = 'http://rubygems.org/gems/brcobranca'
+  gem.homepage = 'https://github.com/kivanio/brcobranca'
   gem.files = Dir['Rakefile', '{lib}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*', 'History*']
   gem.require_paths = ['lib']
   gem.required_ruby_version = '>= 2.7.0'
