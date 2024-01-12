@@ -42,24 +42,24 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 
 ### Retornos e Remessas
 
-| Banco             | Retorno        | Remessa               |
-| ----------------- | -------------- | --------------------- |
-| Banco do Brasil   | 400(ou CBR643) | 400 (ou CBR641) e 240 |
-| Banco do Nordeste | 400            | 400                   |
-| Banco de Brasília | Não            | 400                   |
-| Banestes          | Sim            | Não                   |
-| Banrisul          | 400            | 400                   |
-| Bradesco          | 400            | 400                   |
-| Caixa             | 240            | 240                   |
-| Citibank          | Não            | 400                   |
-| HSBC              | Não            | Não                   |
-| Itaú              | 400            | 400                   |
-| Santander         | 240            | 400                   |
-| Sicoob            | 240            | 400 e 240             |
-| Sicredi           | 240            | 240                   |
-| UNICRED           | 400            | 400 e 240             |
-| AILOS             | 240            | 240                   |
-| CREDISIS          | 400            | 400                   |
+| Banco             | Retorno         | Remessa               |
+| ----------------- | --------------- | --------------------- |
+| Banco do Brasil   | 400 (ou CBR643) | 400 (ou CBR641) e 240 |
+| Banco do Nordeste | 400             | 400                   |
+| Banco de Brasília | 400             | 400                   |
+| Banestes          | Não             | Não                   |
+| Banrisul          | 400             | 400                   |
+| Bradesco          | 400             | 400                   |
+| Caixa             | 240             | 240                   |
+| Citibank          | Não             | 400                   |
+| HSBC              | Não             | Não                   |
+| Itaú              | 400             | 400                   |
+| Santander         | 400 e 240       | 400 e 240             |
+| Sicoob            | 240             | 400 e 240             |
+| Sicredi           | 240             | 240                   |
+| UNICRED           | 400             | 400 e 240             |
+| AILOS             | 240             | 240                   |
+| CREDISIS          | 400             | 400                   |
 
 - Banco do Brasil (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 - Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
@@ -67,6 +67,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 - Itaú (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 - Citibank (CNAB400)
 - Santander (CNAB400)
+- Santander (CNAB240)
 
 ### Documentação
 
