@@ -32,6 +32,8 @@ jobs:
           - 'head'
           - truffleruby-head
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
+    env:
+      BUNDLE_WITHOUT: development
     steps:
     - uses: actions/checkout@v4
 
