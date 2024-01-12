@@ -6,7 +6,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
   let(:pagamento) do
     Brcobranca::Remessa::Pagamento.new(valor: 199.9,
                                        data_vencimento: Date.current,
-                                       nosso_numero: 1234567,
+                                       nosso_numero: 1_234_567,
                                        documento: 9999,
                                        documento_sacado: '12345678901',
                                        nome_sacado: 'PABLO DIEGO JOSÉ FRANCISCO,!^.?\/@  DE PAULA JUAN NEPOMUCENO MARÍA DE LOS REMEDIOS CIPRIANO DE LA SANTÍSSIMA TRINIDAD RUIZ Y PICASSO',
@@ -15,8 +15,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
                                        cep_sacado: '12345678',
                                        cidade_sacado: 'Santa rita de cássia maria da silva',
                                        uf_sacado: 'SP',
-                                       numero: '123'
-                                      )
+                                       numero: '123')
   end
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
@@ -107,7 +106,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
     end
 
     it 'identificador do titulo deve ter as informacoes nas posicoes corretas' do
-      identificador = santander.identificador_titulo(1234567)
+      identificador = santander.identificador_titulo(1_234_567)
       expect(identificador).to eq '0000012345679'
     end
   end
@@ -121,7 +120,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it 'header arquivo deve ter 240 posicoes' do
         expect(santander.monta_header_arquivo.size).to eq 240
       end
-  
+
       it 'header arquivo deve ter as informacoes nas posicoes corretas' do
         header = santander.monta_header_arquivo
         expect(header[0..2]).to eq santander.cod_banco # cod. do banco
@@ -138,7 +137,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it 'header lote deve ter 240 posicoes' do
         expect(santander.monta_header_lote(1).size).to eq 240
       end
-  
+
       it 'header lote deve ter as informacoes nas posicoes corretas' do
         header = santander.monta_header_lote(1)
         expect(header[0..2]).to eq santander.cod_banco # cod. do banco
@@ -154,12 +153,11 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       end
     end
 
-
     context 'segmento P' do
       it 'segmento P deve ter 240 posicoes' do
         expect(santander.monta_segmento_p(pagamento, 1, 2).size).to eq 240
       end
-  
+
       it 'segmento P deve ter as informacos nas posicoes corretas' do
         segmento_p = santander.monta_segmento_p(pagamento, 1, 2)
         expect(segmento_p[0..2]).to eq santander.cod_banco # codigo do banco
@@ -178,12 +176,12 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
         expect(segmento_p[165..179]).to eq ''.rjust(15, '0') # valor do IOF
         expect(segmento_p[180..194]).to eq ''.rjust(15, '0') # valor do abatimento
       end
-  
+
       it 'segmento P deve ter as informações sobre o protesto' do
         pagamento.codigo_protesto = '3'
         pagamento.dias_protesto = '6'
         segmento_p = santander.monta_segmento_p(pagamento, 1, 2)
-  
+
         expect(segmento_p[220]).to eq '3'
         expect(segmento_p[221..222]).to eq '06'
       end
@@ -193,7 +191,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it 'segmento Q deve ter 240 posicoes' do
         expect(santander.monta_segmento_q(pagamento, 1, 3).size).to eq 240
       end
-  
+
       it 'segmento Q deve ter as informacoes nas posicoes corretas' do
         segmento_q = santander.monta_segmento_q(pagamento, 1, 3)
         expect(segmento_q[0..2]).to eq santander.cod_banco # codigo do banco
@@ -218,7 +216,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
 
       it 'segmento R deve ter as informacoes nas posicoes corretas' do
         segmento_r = santander.monta_segmento_r(pagamento, 1, 4)
-        expect(segmento_r[0..2]).to eq santander.cod_banco         # codigo banco
+        expect(segmento_r[0..2]).to eq santander.cod_banco # codigo banco
         expect(segmento_r[3..6]).to eq '0001'                   # lote de servico
         expect(segmento_r[7]).to eq '3'                         # tipo de registro
         expect(segmento_r[8..12]).to eq '00004'                 # nro seq. registro no lote
@@ -241,7 +239,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it 'trailer lote deve ter 240 posicoes' do
         expect(santander.monta_trailer_lote(1, 4).size).to eq 240
       end
-  
+
       it 'trailer lote deve ter as informacoes nas posicoes corretas' do
         trailer = santander.monta_trailer_lote(1, 4)
         expect(trailer[0..2]).to eq santander.cod_banco # cod. do banco
@@ -255,7 +253,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it 'trailer arquivo deve ter 240 posicoes' do
         expect(santander.monta_trailer_arquivo(1, 6).size).to eq 240
       end
-  
+
       it 'trailer arquivo deve ter as informacoes nas posicoes corretas' do
         trailer = santander.monta_trailer_arquivo(1, 6)
         expect(trailer[0..2]).to eq santander.cod_banco # cod. do banco
@@ -267,14 +265,14 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
     context 'monta lote' do
       it 'retorno de lote deve ser uma colecao com os registros' do
         lote = santander.monta_lote(1)
-  
+
         expect(lote.is_a?(Array)).to be true
         expect(lote.count).to be 5 # header, segmento p, segmento q, segmento r e trailer
       end
-  
+
       it 'contador de registros deve acrescer 1 a cada registro' do
         lote = santander.monta_lote(1)
-  
+
         expect(lote[1][8..12]).to eq '00001' # segmento P
         expect(lote[2][8..12]).to eq '00002' # segmento Q
         expect(lote[3][8..12]).to eq '00003' # segmento R
@@ -289,7 +287,7 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
 
       it 'remessa deve conter os registros mais as quebras de linha' do
         remessa = santander.gera_arquivo
-  
+
         expect(remessa.size).to eq 1694
         # quebras de linha
         expect(remessa[240..241]).to eq "\r\n"

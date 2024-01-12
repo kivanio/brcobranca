@@ -59,10 +59,10 @@ RSpec.describe Brcobranca::Currency::Number do
     expect(1234.to_currency).to eql('1.234,00')
     expect(123.4.to_currency).to eql('123,40')
     expect(1234.03.to_currency).to eql('1.234,03')
-    expect(1234.03.to_currency(options = { unit: 'R$ ' })).to eql('R$ 1.234,03')
-    expect(1234.03.to_currency(options = { unit: 'R$ ', separator: '.' })).to eql('R$ 1.234.03')
-    expect(1234.03.to_currency(options = { unit: 'R$ ', separator: '.', delimiter: ',' })).to eql('R$ 1,234.03')
-    expect(1234.03.to_currency(options = { unit: 'R$ ', precision: 3 })).to eql('R$ 1.234,030')
+    expect(1234.03.to_currency({ unit: 'R$ ' })).to eql('R$ 1.234,03')
+    expect(1234.03.to_currency({ unit: 'R$ ', separator: '.' })).to eql('R$ 1.234.03')
+    expect(1234.03.to_currency({ unit: 'R$ ', separator: '.', delimiter: ',' })).to eql('R$ 1,234.03')
+    expect(1234.03.to_currency({ unit: 'R$ ', precision: 3 })).to eql('R$ 1.234,030')
   end
 
   it 'converts value seted using delimiter and separator' do

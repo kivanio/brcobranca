@@ -104,7 +104,7 @@ module Brcobranca
           total_cobranca_caucionada = ''.rjust(23, '0')
           total_cobranca_descontada = ''.rjust(23, '0')
 
-          "#{total_cobranca_simples}#{total_cobranca_vinculada}#{total_cobranca_caucionada}"\
+          "#{total_cobranca_simples}#{total_cobranca_vinculada}#{total_cobranca_caucionada}" \
           "#{total_cobranca_descontada}".ljust(217, ' ')
         end
 

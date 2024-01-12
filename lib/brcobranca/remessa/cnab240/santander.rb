@@ -4,7 +4,6 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Santander < Brcobranca::Remessa::Cnab240::Base
-
         # Código de Transmissão
         attr_accessor :codigo_transmissao
 
@@ -219,7 +218,6 @@ module Brcobranca
           segmento_q << ''.rjust(19, ' ')                               # Reservado (uso Branco)               19
           segmento_q
         end
-
       end
     end
   end

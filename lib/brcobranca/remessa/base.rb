@@ -49,7 +49,7 @@ module Brcobranca
       def initialize(campos = {})
         campos = { aceite: 'N' }.merge!(campos)
         campos.each do |campo, valor|
-          send "#{campo}=", valor
+          send :"#{campo}=", valor
         end
 
         yield self if block_given?

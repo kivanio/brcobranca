@@ -37,7 +37,7 @@ RSpec.describe Brcobranca::Formatacao do
 
   it 'Monta linha digitável' do
     expect('00192376900000135000000001238798777770016818'.linha_digitavel).to eql('00190.00009 01238.798779 77700.168188 2 37690000013500')
-    expect('00192376900000135000000001238798777770016818'.linha_digitavel).to be_a_kind_of(String)
+    expect('00192376900000135000000001238798777770016818'.linha_digitavel).to be_a(String)
     expect { ''.linha_digitavel }.to raise_error(ArgumentError)
     expect { '00193373700'.linha_digitavel }.to raise_error(ArgumentError)
     expect { '0019337370000193373700'.linha_digitavel }.to raise_error(ArgumentError)

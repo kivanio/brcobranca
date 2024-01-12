@@ -16,12 +16,12 @@ RSpec.describe Brcobranca::Calculo do
     expect('3456788005'.modulo10).to be(8)
     expect('7123457000'.modulo10).to be(1)
     expect('00571234511012345678'.modulo10).to be(8)
-    expect('001905009'.modulo10).to be_a_kind_of(Integer)
+    expect('001905009'.modulo10).to be_a(Integer)
     expect(1_905_009.modulo10).to be(5)
     expect(4_014_481_606.modulo10).to be(9)
     expect(680_935_031.modulo10).to be(4)
     expect(29_004_590.modulo10).to be(5)
-    expect(1_905_009.modulo10).to be_a_kind_of(Integer)
+    expect(1_905_009.modulo10).to be_a(Integer)
   end
 
   it 'Multiplicador' do
@@ -30,13 +30,13 @@ RSpec.describe Brcobranca::Calculo do
     expect('12387987777700168'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(460)
     expect('34230'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(55)
     expect('258281'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(118)
-    expect('5444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Integer)
-    expect('000000005444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Integer)
+    expect('5444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a(Integer)
+    expect('000000005444'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a(Integer)
     expect(85_068_014_982.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(255)
     expect(5_009_401_448.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(164)
     expect(5444.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(61)
     expect(1_129_004_590.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be(162)
-    expect(5444.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a_kind_of(Integer)
+    expect(5444.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9])).to be_a(Integer)
     expect { '2582fd81'.multiplicador(fatores: [2, 3, 4, 5, 6, 7, 8, 9]) }.to raise_error(ArgumentError)
     expect { 5444.multiplicador }.to raise_error(ArgumentError)
   end
@@ -75,9 +75,9 @@ RSpec.describe Brcobranca::Calculo do
     end
 
     it 'Retorna o tipo correto' do
-      expect(modulo_11_de_9_ate_2(5444)).to be_a_kind_of(Integer)
-      expect(modulo_11_de_9_ate_2('5444')).to be_a_kind_of(Integer)
-      expect(modulo_11_de_9_ate_2('000000005444')).to be_a_kind_of(Integer)
+      expect(modulo_11_de_9_ate_2(5444)).to be_a(Integer)
+      expect(modulo_11_de_9_ate_2('5444')).to be_a(Integer)
+      expect(modulo_11_de_9_ate_2('000000005444')).to be_a(Integer)
     end
   end
 
@@ -100,9 +100,9 @@ RSpec.describe Brcobranca::Calculo do
     end
 
     it 'Retorna o tipo correto' do
-      expect(modulo_11_de_9_ate_2_map_10_X('15735')).to be_a_kind_of(String)
-      expect(modulo_11_de_9_ate_2_map_10_X('5444')).to be_a_kind_of(Integer)
-      expect(modulo_11_de_9_ate_2_map_10_X('000000005444')).to be_a_kind_of(Integer)
+      expect(modulo_11_de_9_ate_2_map_10_X('15735')).to be_a(String)
+      expect(modulo_11_de_9_ate_2_map_10_X('5444')).to be_a(Integer)
+      expect(modulo_11_de_9_ate_2_map_10_X('000000005444')).to be_a(Integer)
     end
 
     it { expect { modulo_11_de_9_ate_2_map_10_X '2582fd81' }.to raise_error(ArgumentError) }
@@ -125,8 +125,8 @@ RSpec.describe Brcobranca::Calculo do
     end
 
     it 'Retorna o tipo correto' do
-      expect(modulo_11_de_2_ate_9(19_373_700_000_001_000_500_940_144_816_060_680_935_031)).to be_a_kind_of(Integer)
-      expect(modulo_11_de_2_ate_9('0019373700000001000500940144816060680935031')).to be_a_kind_of(Integer)
+      expect(modulo_11_de_2_ate_9(19_373_700_000_001_000_500_940_144_816_060_680_935_031)).to be_a(Integer)
+      expect(modulo_11_de_2_ate_9('0019373700000001000500940144816060680935031')).to be_a(Integer)
     end
 
     it { expect { modulo_11_de_2_ate_9 '2582fd81' }.to raise_error(ArgumentError) }
@@ -167,8 +167,8 @@ RSpec.describe Brcobranca::Calculo do
     expect('11'.soma_digitos).to be(2)
     expect('8'.soma_digitos).to be(8)
     expect(0.soma_digitos).to be(0)
-    expect(11.soma_digitos).to be_a_kind_of(Integer)
-    expect('11'.soma_digitos).to be_a_kind_of(Integer)
+    expect(11.soma_digitos).to be_a(Integer)
+    expect('11'.soma_digitos).to be_a(Integer)
   end
 
   describe '#duplo_digito' do

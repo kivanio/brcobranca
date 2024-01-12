@@ -81,20 +81,20 @@ module Brcobranca
     # @example
     #  "00192376900000135000000001238798777770016818".linha_digitavel #=> "00190.00009 01238.798779 77700.168188 2 37690000013500"
     def linha_digitavel
-      if self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
-        linha = Regexp.last_match[1]
-        linha << Regexp.last_match[4]
-        linha << linha.modulo10.to_s
-        linha << Regexp.last_match[5]
-        linha << Regexp.last_match[5].modulo10.to_s
-        linha << Regexp.last_match[6]
-        linha << Regexp.last_match[6].modulo10.to_s
-        linha << Regexp.last_match[2]
-        linha << Regexp.last_match[3]
-        linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/, '\1.\2 \3.\4 \5.\6 \7 \8')
-      else
+      unless self =~ /^(\d{4})(\d{1})(\d{14})(\d{5})(\d{10})(\d{10})$/
         raise ArgumentError, "#{self} Precisa conter 44 caracteres numéricos."
       end
+
+      linha = Regexp.last_match[1]
+      linha << Regexp.last_match[4]
+      linha << linha.modulo10.to_s
+      linha << Regexp.last_match[5]
+      linha << Regexp.last_match[5].modulo10.to_s
+      linha << Regexp.last_match[6]
+      linha << Regexp.last_match[6].modulo10.to_s
+      linha << Regexp.last_match[2]
+      linha << Regexp.last_match[3]
+      linha.gsub(/^(.{5})(.{5})(.{5})(.{6})(.{5})(.{6})(.{1})(.{14})$/, '\1.\2 \3.\4 \5.\6 \7 \8')
     end
   end
 end

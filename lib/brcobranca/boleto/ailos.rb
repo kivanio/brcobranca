@@ -7,7 +7,7 @@ module Brcobranca
       validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
       validates_length_of :conta_corrente,
                           maximum: 8,
-                          message: "deve ser menor ou igual a 8 dígitos."
+                          message: 'deve ser menor ou igual a 8 dígitos.'
       validates_length_of :carteira, is: 2, message: 'deve ser menor ou igual a 2 dígitos.'
       validates_length_of :convenio, is: 6, message: 'deve ser menor ou igual a 6 dígitos.'
       validates_length_of :nosso_numero, maximum: 9, message: 'deve ser menor ou igual a 9 dígitos.'

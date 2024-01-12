@@ -82,8 +82,8 @@ module Brcobranca
           modelo_carne_build_data_right(doc, boleto, colunas, linhas)
 
           # Gerando stream
-          formato = (options.delete(:formato) || Brcobranca.configuration.formato)
-          resolucao = (options.delete(:resolucao) || Brcobranca.configuration.resolucao)
+          formato = options.delete(:formato) || Brcobranca.configuration.formato
+          resolucao = options.delete(:resolucao) || Brcobranca.configuration.resolucao
           doc.render_stream(formato.to_sym, resolution: resolucao)
         end
 
@@ -126,8 +126,8 @@ module Brcobranca
           end
 
           # Gerando stream
-          formato = (options.delete(:formato) || Brcobranca.configuration.formato)
-          resolucao = (options.delete(:resolucao) || Brcobranca.configuration.resolucao)
+          formato = options.delete(:formato) || Brcobranca.configuration.formato
+          resolucao = options.delete(:resolucao) || Brcobranca.configuration.resolucao
 
           doc.render_stream(formato.to_sym, resolution: resolucao)
         end
@@ -308,10 +308,10 @@ module Brcobranca
 
           # codigo de barras
           # Gerando codigo de barra com rghost_barcode
-          if boleto.codigo_barras
-            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.2 cm', x: colunas[2],
-                                                              y: linhas[14])
-          end
+          return unless boleto.codigo_barras
+
+          doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.2 cm', x: colunas[2],
+                                                            y: linhas[14])
         end
       end
     end

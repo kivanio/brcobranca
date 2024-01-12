@@ -164,7 +164,7 @@ RSpec.describe Brcobranca::Boleto::Citibank do # :nodoc:[all]
     @valid_attributes[:nosso_numero] = '00077700168'
     boleto_novo = described_class.new(@valid_attributes)
     %w[pdf jpg tif png].each do |format|
-      file_body = boleto_novo.send("to_#{format}".to_sym)
+      file_body = boleto_novo.send(:"to_#{format}")
       tmp_file = Tempfile.new(['foobar.', format])
       tmp_file.puts file_body
       tmp_file.close

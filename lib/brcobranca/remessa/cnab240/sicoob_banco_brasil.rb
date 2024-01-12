@@ -58,7 +58,7 @@ module Brcobranca
         alias convenio_lote codigo_convenio
 
         def totaliza_valor_titulos
-          pagamentos.inject(0) { |sum, pag| sum += pag.valor.to_f }
+          pagamentos.inject(0) { |sum, pag| sum + pag.valor.to_f }
         end
 
         def valor_titulos_carteira

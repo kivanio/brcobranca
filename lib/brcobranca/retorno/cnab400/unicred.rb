@@ -14,7 +14,7 @@ module Brcobranca
           default_options = { except: [1] }
           options = default_options.merge!(options)
 
-          super file, options
+          super(file, options)
         end
 
         fixed_width_layout do |parse|

@@ -142,7 +142,7 @@ module Brcobranca
         end
 
         def formata_percentual_multa(pagamento)
-          raise ValorInvalido, 'Deve ser um Float' unless /\./.match?(pagamento.percentual_multa.to_s)
+          raise ValorInvalido, 'Deve ser um Float' unless pagamento.percentual_multa.to_s.include?('.')
 
           format('%.1f', pagamento.percentual_multa).delete('.').rjust(3, '0')
         end

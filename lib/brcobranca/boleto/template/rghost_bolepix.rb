@@ -88,8 +88,8 @@ module Brcobranca
           end
 
           # Gerando stream
-          formato = (options.delete(:formato) || Brcobranca.configuration.formato)
-          resolucao = (options.delete(:resolucao) || Brcobranca.configuration.resolucao)
+          formato = options.delete(:formato) || Brcobranca.configuration.formato
+          resolucao = options.delete(:resolucao) || Brcobranca.configuration.resolucao
           doc.render_stream(formato.to_sym, resolution: resolucao)
         end
 
