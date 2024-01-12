@@ -11,7 +11,6 @@ group :development do
   gem 'rubocop-packaging'
   gem 'rubocop-performance'
   gem 'rubocop-rspec'
-  gem 'solargraph'
 end
 
 group :test do
