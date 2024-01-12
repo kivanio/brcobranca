@@ -16,6 +16,15 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.required_ruby_version = '>= 2.7.0'
 
+  gem.metadata = {
+    'homepage_uri' => 'https://github.com/kivanio/brcobranca',
+    'changelog_uri' => 'https://github.com/kivanio/brcobranca/releases',
+    'source_code_uri' => 'https://github.com/kivanio/brcobranca',
+    'bug_tracker_uri' => 'https://github.com/kivanio/brcobranca/issues',
+    'documentation_uri' => 'https://github.com/kivanio/brcobranca/wiki',
+    'rubygems_mfa_required' => 'true'
+  }
+
   gem.requirements = ['GhostScript > 9.0, para gerar PDF e código de Barras']
 
   gem.add_dependency 'fast_blank'
