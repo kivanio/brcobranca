@@ -30,7 +30,6 @@ jobs:
           - '3.2'
           - '3.3'
           - 'head'
-          - truffleruby-head
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
     env:
       BUNDLE_WITHOUT: development
