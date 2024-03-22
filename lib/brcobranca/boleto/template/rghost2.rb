@@ -126,6 +126,7 @@ module Brcobranca
 
         # Monta Recibo do Beneficiário
         def modelo_recibo_beneficiario(doc, boleto)
+          monta_logotipo(doc, boleto, 14.500, 26.850, 1.00)
           doc.moveto x: 4.28, y: 26.87
           doc.show truncar(boleto.cedente, 90), tag: :menor
           doc.moveto x: 4.28, y: 26.33
