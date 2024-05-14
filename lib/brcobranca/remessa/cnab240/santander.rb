@@ -12,6 +12,7 @@ module Brcobranca
         validates_length_of :codigo_transmissao, maximum: 15, message: 'deve ter no máximo 15 dígitos.'
         validates_length_of :agencia, maximum: 4, message: 'deve ter 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 9, message: 'deve ter 9 dígitos.'
+        validates_length_of :digito_conta, is: 1, message: 'deve ter 1 dígito.'
 
         def initialize(campos = {})
           campos = {  emissao_boleto: ' ', distribuicao_boleto: ' ',
@@ -26,11 +27,7 @@ module Brcobranca
         def digito_agencia
           agencia.modulo11(mapeamento: { 10 => 'X', 11 => 'X' }).to_s
         end
-
-        def digito_conta
-          conta_corrente.modulo11(mapeamento: { 10 => 'X', 11 => 'X' }).to_s
-        end
-
+       
         def complemento_header
           ''.rjust(29, ' ')
         end
