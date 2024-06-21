@@ -52,6 +52,14 @@ module Brcobranca
 
         private
 
+        def monta_logotipo(doc, boleto, x, y, scale)
+          doc.graphic do |g|
+            g.scale(scale, scale)
+            fator = 1 / scale
+            g.image boleto.logotipo, x: (x * fator), y: (y * fator)
+          end
+        end
+
         # Retorna um stream pronto para gravação em arquivo.
         #
         # @return [Stream]
@@ -62,29 +70,32 @@ module Brcobranca
         def modelo_generico(boleto, options = {})
           doc = Document.new paper: :A4 # 210x297
 
-          template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico.eps')
+          template_path = File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'templates', 'modelo_generico3.eps')
 
           raise 'Não foi possível encontrar o template. Verifique o caminho' unless File.exist?(template_path)
 
           modelo_generico_template(doc, boleto, template_path)
           modelo_generico_cabecalho(doc, boleto)
+
+          # Gerando QRCode a partir de um emv
+          if boleto.emv
+            doc.barcode_qrcode(boleto.emv, width: '4.6 cm',
+                                           height: '4.6 cm',
+                                           eclevel: 'H',
+                                           x: "#{@x - 10.8} cm",
+                                           y: "#{@y - 6.9} cm")
+
+            move_more(doc, @x + 10.8, @y - 3.70)
+          end
+
           modelo_generico_rodape(doc, boleto)
 
           # Gerando codigo de barra com rghost_barcode
           if boleto.codigo_barras
-            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '10.3 cm', height: '1.3 cm', x: "#{@x - 1.7} cm",
-                                                              y: "#{@y - 1.67} cm")
-          end
-
-          # Gerando QRCode a partir de um emv
-          if boleto.emv
-            doc.barcode_qrcode(boleto.emv, width: '2.5 cm',
-                                           height: '2.5 cm',
-                                           eclevel: 'H',
-                                           x: "#{@x + 12.9} cm",
-                                           y: "#{@y - 2.50} cm")
-            move_more(doc, @x + 12.9, @y - 3.70)
-            doc.show 'Pague com PIX'
+            doc.barcode_interleaved2of5(boleto.codigo_barras, width: '11.3 cm',
+                                                              height: '1.3 cm',
+                                                              x: "#{@x} cm",
+                                                              y: "#{@y - 1.87} cm")
           end
 
           # Gerando stream
@@ -95,12 +106,18 @@ module Brcobranca
 
         # Define o template a ser usado no boleto
         def modelo_generico_template(doc, _boleto, template_path)
-          doc.define_template(:template, template_path, x: '0.5 cm', y: '2.7 cm')
+          doc.define_template(:template, template_path, x: '0 cm', y: '0 cm')
           doc.use_template :template
 
           doc.define_tags do
-            tag :grande, size: 13
-            tag :maior, size: 15
+            tag :menor, size: 8, name: 'Arial', color: '#4B5563'
+            tag :menor_bold, size: 8, name: 'Arial-Bold', color: '#4B5563'
+            tag :pequeno, size: 10, name: 'Arial', color: '#4B5563'
+            tag :pequeno_bold, size: 10, name: 'Arial-Bold', color: '#4B5563'
+            tag :grande, size: 12, name: 'Arial', color: '#4B5563'
+            tag :grande_bold, size: 12, name: 'Arial-Bold', color: '#4B5563'
+            tag :maior, size: 14, name: 'Arial', color: '#4B5563'
+            tag :maior_bold, size: 14, name: 'Arial-Bold', color: '#4B5563'
           end
         end
 
@@ -114,56 +131,40 @@ module Brcobranca
         def modelo_generico_cabecalho(doc, boleto)
           # INICIO Primeira parte do BOLETO
           # Pontos iniciais em x e y
-          @x = 0.50
-          @y = 27.42
-          # LOGOTIPO do BANCO
-          doc.image boleto.logotipo, x: "#{@x} cm", y: "#{@y} cm"
-          # Dados
+          @x = 0
+          @y = 0
 
-          move_more(doc, 4.84, 0.02)
-          doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :maior
-          move_more(doc, 2, 0)
-          doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
-          move_more(doc, -6.5, -0.83)
+          move_more(doc, 1.3, 26.0)
+          doc.show boleto.sacado, tag: :pequeno_bold
 
-          doc.show boleto.cedente
+          move_more(doc, 12, 0)
+          doc.show 'Descrição:', tag: :menor_bold
 
-          move_more(doc, 15.8, 0)
-          doc.show boleto.agencia_conta_boleto
+          move_more(doc, 0, -0.45)
+          doc.show boleto.instrucao1, tag: :menor
 
-          move_more(doc, -15.8, -0.9)
-          doc.show boleto.cedente_endereco
+          move_more(doc, 0, -0.45)
+          doc.show boleto.instrucao2, tag: :menor
 
-          move_more(doc, 15.8, 0)
-          doc.show boleto.nosso_numero_boleto
+          move_more(doc, -12, 0.45)
+          doc.show boleto.sacado_documento.formata_documento, tag: :pequeno
 
-          move_more(doc, -15.8, -0.8)
-          doc.show boleto.documento_numero
+          if boleto.sacado_endereco
+            move_more(doc, 0, -0.45)
+            doc.show boleto.sacado_endereco[:nome_logradouro], tag: :pequeno
 
-          move_more(doc, 3.5, 0)
-          doc.show boleto.especie
+            move_more(doc, 0, -0.45)
+            doc.show "#{boleto.sacado_endereco[:nome_bairro]} - #{boleto.sacado_endereco[:nome_cidade]}/#{boleto.sacado_endereco[:sigla_UF]}", tag: :pequeno
 
-          move_more(doc, 1.5, 0)
-          doc.show boleto.quantidade
+            move_more(doc, 0, -0.45)
+            doc.show boleto.sacado_endereco[:numero_CEP].to_br_cep, tag: :pequeno
+          end
 
-          move_more(doc, 2, 0)
-          doc.show boleto.documento_cedente.formata_documento.to_s
+          move_more(doc, 1.9, -2.5)
+          doc.show "#{boleto.especie} #{boleto.valor_documento.to_currency}", tag: :grande_bold
 
-          move_more(doc, 3.8, 0)
-          doc.show boleto.data_vencimento.to_s_br
-
-          move_more(doc, 5, 0)
-          doc.show boleto.valor_documento.to_currency
-
-          move_more(doc, -15, -1.3)
-          doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
-
-          move_more(doc, 0, -0.3)
-          doc.show boleto.sacado_endereco.to_s
-          return unless boleto.demonstrativo
-
-          doc.text_area boleto.demonstrativo, width: '18.5 cm', text_align: :left, x: "#{@x - 0.8} cm",
-                                              y: "#{@y - 0.9} cm", row_height: '0.4 cm'
+          move_more(doc, 9.4, 0)
+          doc.show boleto.data_vencimento.to_s_br, tag: :grande_bold
 
           # FIM Primeira parte do BOLETO
         end
@@ -174,103 +175,91 @@ module Brcobranca
           # Pontos iniciais em x e y
           @x = 0.50
           @y = 12.22
+
           # LOGOTIPO do BANCO
-          doc.image boleto.logotipo, x: "#{@x} cm", y: "#{@y} cm"
+          monta_logotipo(doc, boleto, 1.4, 11.2, 0.7)
 
-          move_more(doc, 4.84, 0.01)
-          doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :maior
-
-          move_more(doc, 2, 0)
-          doc.show boleto.codigo_barras.linha_digitavel, tag: :grande
-
-          move_more(doc, -6.5, -0.9)
-          doc.show boleto.local_pagamento
-
-          move_more(doc, 15.8, 0)
-          doc.show boleto.data_vencimento.to_s_br if boleto.data_vencimento
-
-          move_more(doc, -15.8, -0.8)
-          if boleto.cedente_endereco
-            doc.show boleto.cedente_endereco
-            move_more(doc, 1.2, 0.3)
-            doc.show boleto.cedente
-            move_more(doc, -1.2, -0.3)
-          else
-            doc.show boleto.cedente
-          end
-
-          move_more(doc, 15.8, 0)
-          doc.show boleto.agencia_conta_boleto
-
-          move_more(doc, -15.8, -0.9)
-          doc.show boleto.data_documento.to_s_br if boleto.data_documento
-
-          move_more(doc, 3.5, 0)
-          doc.show boleto.documento_numero
-
-          move_more(doc, 5.8, 0)
-          doc.show boleto.especie_documento
+          move_more(doc, 4.4, -0.95)
+          doc.show "#{boleto.banco}-#{boleto.banco_dv}", tag: :grande_bold
 
           move_more(doc, 1.7, 0)
-          doc.show boleto.aceite
+          doc.show boleto.codigo_barras.linha_digitavel, tag: :grande_bold
 
-          move_more(doc, 1.3, 0)
+          move_more(doc, -5.1, -1.2)
+          doc.show boleto.local_pagamento, tag: :menor_bold
 
-          doc.show boleto.data_processamento.to_s_br if boleto.data_processamento
+          move_more(doc, 16.4, -0.2)
+          doc.show boleto.data_vencimento.to_s_br, tag: :menor_bold if boleto.data_vencimento
 
-          move_more(doc, 3.5, 0)
-          doc.show boleto.nosso_numero_boleto
+          move_more(doc, -16.37, -0.97)
+          doc.show "#{boleto.cedente} (#{boleto.documento_cedente.formata_documento})", tag: :menor_bold
 
-          move_more(doc, -12.1, -0.8)
+          move_more(doc, 15.95, -0.2)
+          doc.show boleto.agencia_conta_boleto, tag: :menor_bold
+
+          move_more(doc, -14.7, -1)
+          doc.show boleto.data_documento.to_s_br, tag: :menor_bold if boleto.data_documento
+
+          move_more(doc, 3.65, 0)
+          doc.show boleto.documento_numero, tag: :menor_bold
+
+          move_more(doc, 2.4, 0)
+          doc.show boleto.especie_documento, tag: :menor_bold
+
+          move_more(doc, 1.9, 0)
+          doc.show boleto.aceite, tag: :menor_bold
+
+          move_more(doc, 1.9, 0)
+          doc.show boleto.data_processamento.to_s_br, tag: :menor_bold if boleto.data_processamento
+
+          move_more(doc, 4.7, 0)
+          doc.show boleto.nosso_numero_boleto, tag: :menor_bold
+
+          move_more(doc, -12.1, -1.1)
           if boleto.variacao
-            doc.show "#{boleto.carteira}-#{boleto.variacao}"
+            doc.show "#{boleto.carteira}-#{boleto.variacao}", tag: :menor_bold
           else
-            doc.show boleto.carteira
+            doc.show boleto.carteira, tag: :menor_bold
           end
 
-          move_more(doc, 2, 0)
-          doc.show boleto.especie
+          move_more(doc, 1.6, 0)
+          doc.show boleto.especie, tag: :menor_bold
 
-          move_more(doc, 10.1, 0)
-          doc.show boleto.valor_documento.to_currency
+          move_more(doc, 3.95, 0)
+          doc.show boleto.quantidade, tag: :menor_bold
+
+          move_more(doc, 7.55, 0)
+          doc.show boleto.valor_documento.to_currency, tag: :menor_bold
 
           if boleto.instrucoes
             doc.text_area boleto.instrucoes, width: '14 cm',
                                              text_align: :left, x: "#{@x -= 15.8} cm",
                                              y: "#{@y -= 0.9} cm",
-                                             row_height: '0.4 cm'
+                                             row_height: '0.4 cm',
+                                             tag: :menor
             move_more(doc, 0, -2)
           else
-            move_more(doc, -15.8, -0.9)
-            doc.show boleto.instrucao1
+            move_more(doc, -16.75, -0.7)
+            doc.show boleto.instrucao3, tag: :menor
 
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao2
+            move_more(doc, 0, -0.45)
+            doc.show boleto.instrucao4, tag: :menor
 
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao3
+            move_more(doc, 0, -0.45)
+            doc.show boleto.instrucao5, tag: :menor
 
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao4
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao5
-
-            move_more(doc, 0, -0.4)
-            doc.show boleto.instrucao6
+            move_more(doc, 0, -0.45)
+            doc.show boleto.instrucao6, tag: :menor
           end
 
-          move_more(doc, 0.5, -1.9)
-          if boleto.sacado && boleto.sacado_documento
-            sacado_info = "#{boleto.sacado} - CPF/CNPJ: #{boleto.sacado_documento.formata_documento}"
-            doc.show sacado_info
+          move_more(doc, 0, -1.25)
+          doc.show "#{boleto.sacado} (#{boleto.sacado_documento.formata_documento})", tag: :menor_bold
+
+          if boleto.sacado_endereco
+            move_more(doc, 0, -0.3)
+            doc.show "#{boleto.sacado_endereco[:nome_logradouro]} - #{boleto.sacado_endereco[:nome_bairro]} - #{boleto.sacado_endereco[:nome_cidade]}/#{boleto.sacado_endereco[:sigla_UF]}, #{boleto.sacado_endereco[:numero_CEP].to_br_cep}", tag: :menor
           end
 
-          move_more(doc, 0, -0.4)
-          doc.show boleto.sacado_endereco.to_s
-
-          move_more(doc, 1.2, -0.93)
-          doc.show "#{boleto.avalista} - #{boleto.avalista_documento}" if boleto.avalista && boleto.avalista_documento
           # FIM Segunda parte do BOLETO
         end
       end
