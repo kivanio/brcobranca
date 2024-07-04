@@ -120,6 +120,10 @@ module Brcobranca
           ''.rjust(1, ' ')
         end
 
+        def dias_baixa(pagamento)
+          pagamento.dias_baixa.to_s.rjust(2, '0')
+        end
+
         def monta_header_arquivo
           header_arquivo = ''                                   # CAMPO                         TAMANHO
           header_arquivo += cod_banco                           # codigo do banco               3
@@ -182,9 +186,9 @@ module Brcobranca
           segmento_p << formata_documento_ou_numero(pagamento)          # identificacao titulo empresa          25
           segmento_p << pagamento.codigo_protesto                       # cod. para protesto                    1
           segmento_p << pagamento.dias_protesto.to_s.rjust(2, '0')      # dias para protesto                    2
-          segmento_p << '3'                                             # cod. para baixa                       1
+          segmento_p << codigo_baixa(pagamento)                         # cod. para baixa                       1
           segmento_p << '0'                                             # zero fixo                             1
-          segmento_p << '00'                                            # dias para baixa                       2
+          segmento_p << dias_baixa(pagamento)                           # dias para baixa                       2
           segmento_p << '00'                                            # cod. da moeda                         2
           segmento_p << ''.rjust(11, ' ')                               # uso exclusivo                         11
           segmento_p

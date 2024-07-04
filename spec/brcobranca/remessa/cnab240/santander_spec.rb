@@ -15,7 +15,9 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
                                        cep_sacado: '12345678',
                                        cidade_sacado: 'Santa rita de cássia maria da silva',
                                        uf_sacado: 'SP',
-                                       numero: '123')
+                                       numero: '123',
+                                       codigo_baixa: '3',
+                                       dias_baixa: '0')
   end
   let(:params) do
     { empresa_mae: 'SOCIEDADE BRASILEIRA DE ZOOLOGIA LTDA',
