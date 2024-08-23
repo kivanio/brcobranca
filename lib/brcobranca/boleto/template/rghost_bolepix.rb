@@ -156,7 +156,7 @@ module Brcobranca
           doc.show boleto.valor_documento.to_currency
 
           move_more(doc, -15.8, -0.75)
-          doc.show boleto.descontos_e_abatimentos.to_currency
+          doc.show boleto.descontos_e_abatimentos&.to_currency
 
           move_more(doc, 0.8, -0.55)
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
@@ -238,7 +238,7 @@ module Brcobranca
           doc.show boleto.valor_documento.to_currency
 
           move_more(doc, 0, -0.8)
-          doc.show boleto.descontos_e_abatimentos.to_currency
+          doc.show boleto.descontos_e_abatimentos&.to_currency
 
           move_more(doc, 0, 0.8)
           if boleto.instrucoes
