@@ -24,8 +24,16 @@ module Brcobranca
           codigo_beneficiario.to_s.rjust(5, '0')
         end
 
+
+        def data_geracao
+          Date.current.strftime('%Y%m%d')
+        end
+
         def monta_header
-          "01REMESSA01COBRANCA       #{info_conta}#{documento_cedente}#{cod_banco}#{nome_banco}#{data_geracao}0000001"
+          cod = "1"
+          version = "2.00"
+          num_sequencial = 1.to_s.rjust(6, '0')
+          "01REMESSA01COBRANCA       #{info_conta}#{documento_cedente}                               #{cod_banco}#{nome_banco}#{data_geracao}        #{cod.to_s.rjust(7, '0')}                                                                                                                                                                                                                                                                                 #{version}#{num_sequencial}"
         end
 
         def monta_detalhe(pagamento, sequencial)
