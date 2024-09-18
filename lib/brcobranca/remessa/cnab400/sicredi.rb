@@ -36,18 +36,23 @@ module Brcobranca
           "01REMESSA01COBRANCA       #{info_conta}#{documento_cedente}                               #{cod_banco}#{nome_banco}#{data_geracao}        #{cod.to_s.rjust(7, '0')}                                                                                                                                                                                                                                                                                 #{version}#{num_sequencial}"
         end
 
+        def 
+
         def monta_detalhe(pagamento, sequencial)
-          detalhe = '1'
-          detalhe << documento_cedente.rjust(14, '0')
-          detalhe << info_conta
-          detalhe << pagamento.documento_ou_numero.to_s.ljust(25)
-          detalhe << pagamento.nosso_numero.to_s.rjust(8, '0')
+          detalhe = '1AAA H'
+          detalhe << ''.rjust(10, ' ')
+          detalhe << 'ABB'
+          detalhe << ''.rjust(28, ' ')
+          detalhe << pagamento.nosso_numero.to_s.rjust(9, '0')
+          detalhe << ''.rjust(6, ' ')
+          detalhe << pagamento.data_emissao.strftime('%y%m%d')
+
+          # above is incorrect implementation
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')
           detalhe << pagamento.valor.to_s.rjust(13, '0')
           detalhe << cod_banco
           detalhe << pagamento.especie_titulo
           detalhe << aceite
-          detalhe << pagamento.data_emissao.strftime('%d%m%y')
           detalhe << pagamento.cod_primeira_instrucao
           detalhe << pagamento.formata_valor_mora
           detalhe << pagamento.formata_valor_desconto
