@@ -17,7 +17,6 @@ module Brcobranca
         validates_length_of :carteira, maximum: 2, message: 'deve ter 2 dígitos.'
         validates_length_of :digito_conta, maximum: 1, message: 'deve ter 1 dígito.'
 
-        validates_inclusion_of :carteira, in: %w[1], message: 'não existente para este banco.'
 
         def initialize(campos = {})
           campos = { aceite: 'N' }.merge!(campos)
@@ -152,11 +151,16 @@ module Brcobranca
           detalhe << sequencial.to_s.rjust(6, '0') # Número sequencial
           detalhe
         end
-        def monta_trailer(quantidade_registros)
-          trailer = "9" # Código do trailer
-          trailer << ''.rjust(393, '0') # Filler com zeros
-          trailer << quantidade_registros.to_s.rjust(6, '0') # Número sequencial
-          trailer
+        def monta_trailer_lote(quantidade_registros_lote, quantidade_titulos_cobranca, valor_total_titulos_cobranca, quantidade_titulos_carteira, valor_total_titulos_carteira)
+          trailer_lote = '5' # Tipo de Registro: Trailer de lote
+          trailer_lote << ''.rjust(1, ' ') # CNAB (Em branco)
+          trailer_lote << quantidade_registros_lote.to_s.rjust(6, '0') # Quantidade de Registros no Lote
+          trailer_lote << quantidade_titulos_cobranca.to_s.rjust(6, '0') # Quantidade de Títulos em Cobrança
+          trailer_lote << valor_total_titulos_cobranca.to_s.rjust(15, '0') # Valor Total dos Títulos em Cobrança
+          trailer_lote << quantidade_titulos_carteira.to_s.rjust(6, '0') # Quantidade de Títulos em Carteira
+          trailer_lote << valor_total_titulos_carteira.to_s.rjust(15, '0') # Valor Total dos Títulos em Carteira
+          trailer_lote << ''.rjust(9, ' ') # CNAB (Em branco)
+          trailer_lote
         end
       end  
     end
