@@ -31,6 +31,8 @@ module Brcobranca
             Brcobranca::Retorno::Cnab400::Santander.load_lines(file, options)
           when '136'
             Brcobranca::Retorno::Cnab400::Unicred.load_lines(file, options)
+          when '748'
+            Brcobranca::Retorno::Cnab400::Sicredi.load_lines(file, options)
           else
             Brcobranca::Retorno::RetornoCnab400.load_lines(file, options)
           end
