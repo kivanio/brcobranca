@@ -78,7 +78,7 @@ module Brcobranca
           detalhe << pagamento.cod_primeira_instrucao.to_s.rjust(2, '0')  # Instrução de protesto
           detalhe << pagamento.numero.to_s.rjust(10, '0')  # Valor do título
           detalhe << pagamento.data_vencimento.strftime('%d%m%y')  # Data de vencimento
-          detalhe << pagamento.valor.to_s.rjust(13, '0')  # Valor do título
+          detalhe << pagamento.formata_valor  # Valor do título
           detalhe << ''.rjust(9, ' ')  # Filler
           detalhe << 'J'  # Impressão realizada pelo beneficiário
           detalhe << 'N'  # Impressão realizada pelo beneficiário
