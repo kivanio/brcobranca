@@ -311,7 +311,7 @@ module Brcobranca
       def format_value(attribute, tamanho)
         value = send(attribute)
 
-        raise ValorInvalido, "Pagamento##{attribute}: Deve ser um Float" unless value.to_s.include?('.')
+        raise ValorInvalido, "#{self.class}###{attribute}: Deve ser um Float" unless value.to_s.include?('.')
 
         format('%.2f', value).delete('.').rjust(tamanho, '0')
       end

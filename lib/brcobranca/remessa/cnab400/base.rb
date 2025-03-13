@@ -81,6 +81,11 @@ module Brcobranca
               contador += 1
               ret << monta_descontos_adicionais(pagamento, contador)
             end
+
+            if pagamento.is_a?(Brcobranca::Remessa::PagamentoPix) && respond_to?(:monta_detalhe_pix)
+              contador += 1
+              ret << monta_detalhe_pix(pagamento, contador)
+            end
           end
           ret << monta_trailer(contador + 1)
 

@@ -13,7 +13,7 @@ module Brcobranca
     end
 
     module ClassMethods
-      attr_reader :presences, :lengths, :numericals, :inclusions, :eachs
+      attr_reader :presences, :lengths, :numericals, :inclusions, :eachs, :with_formats
 
       def validates_presence_of(*attr_names)
         @presences ||= []
@@ -33,6 +33,11 @@ module Brcobranca
       def validates_inclusion_of(*attr_names)
         @inclusions ||= []
         @inclusions = @inclusions << attr_names
+      end
+
+      def validates_format_of(*attr_names)
+        @with_formats ||= []
+        @with_formats = @with_formats << attr_names
       end
 
       def validates_each(*attr_names, &block)
@@ -58,6 +63,7 @@ module Brcobranca
       all_valid = false unless check_numericals
       all_valid = false unless check_lengths
       all_valid = false unless check_inclusions
+      all_valid = false unless check_with_formats
       all_valid
     end
 
@@ -95,6 +101,8 @@ module Brcobranca
       all_present = true
       presences.each do |presence|
         presence.select { |p| p.is_a? Symbol }.each do |variable|
+          next unless valid_condition?(presence[-1])
+
           if blank?(send(variable))
             all_present = false
             errors.add variable, presence[-1][:message]
@@ -113,6 +121,8 @@ module Brcobranca
       all_numerical = true
       numericals.each do |numerical|
         numerical.select { |p| p.is_a? Symbol }.each do |variable|
+          next unless valid_condition?(numerical[-1])
+
           if respond_to?(variable) && send(variable) && (send(variable).to_s =~ /\A[+-]?\d+\z/).nil?
             all_numerical = false
             errors.add variable, numerical[-1][:message]
@@ -133,6 +143,7 @@ module Brcobranca
       lengths.each do |rule|
         variable = rule[0]
         next unless respond_to?(variable)
+        next unless valid_condition?(rule[-1])
 
         value = send(variable)
         if rule[-1][:in]
@@ -186,8 +197,37 @@ module Brcobranca
         next unless value
 
         next unless rule[-1][:in]
+        next unless valid_condition?(rule[-1])
 
         unless rule[-1][:in].include?(value)
+          all_checked = false
+          errors.add variable, rule[-1][:message]
+        end
+      end
+      all_checked
+    end
+
+    def check_with_formats
+      with_formats = []
+      if self.class.superclass.superclass.respond_to?(:with_formats)
+        with_formats = self.class.superclass.superclass.with_formats || []
+      end
+      with_formats += self.class.superclass.with_formats || [] if self.class.superclass.respond_to?(:with_formats)
+      with_formats += self.class.with_formats if self.class.with_formats
+      return true unless with_formats
+
+      all_checked = true
+      with_formats.each do |rule|
+        variable = rule[0]
+        next unless respond_to?(variable)
+
+        value = send(variable)
+        next unless value
+
+        next unless rule[-1][:with]
+        next unless valid_condition?(rule[-1])
+
+        unless value&.match?(rule[-1][:with])
           all_checked = false
           errors.add variable, rule[-1][:message]
         end
@@ -203,6 +243,18 @@ module Brcobranca
       return obj !~ /\S/ if obj.is_a? String
 
       obj.respond_to?(:empty?) ? obj.empty? : !obj
+    end
+
+    def valid_condition?(rule)
+      return true unless rule[:if]
+
+      if rule[:if].is_a?(Symbol)
+        send(rule[:if])
+      elsif rule[:if].is_a?(Proc)
+        rule[:if].call(self)
+      else
+        raise ArgumentError, 'Condition must be a symbol or a proc'
+      end
     end
   end
 end

@@ -160,6 +160,7 @@ module Brcobranca
   module Remessa
     autoload :Base,            'brcobranca/remessa/base'
     autoload :Pagamento,       'brcobranca/remessa/pagamento'
+    autoload :PagamentoPix,    'brcobranca/remessa/pagamento_pix'
 
     module Cnab400
       autoload :Base,          'brcobranca/remessa/cnab400/base'
@@ -169,6 +170,7 @@ module Brcobranca
       autoload :Itau,          'brcobranca/remessa/cnab400/itau'
       autoload :Citibank,      'brcobranca/remessa/cnab400/citibank'
       autoload :Santander,     'brcobranca/remessa/cnab400/santander'
+      autoload :SantanderPix,  'brcobranca/remessa/cnab400/santander_pix'
       autoload :Sicoob,        'brcobranca/remessa/cnab400/sicoob'
       autoload :BancoNordeste, 'brcobranca/remessa/cnab400/banco_nordeste'
       autoload :BancoBrasilia, 'brcobranca/remessa/cnab400/banco_brasilia'
