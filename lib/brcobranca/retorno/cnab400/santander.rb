@@ -17,11 +17,8 @@ module Brcobranca
           super(file, options)
         end
 
-        fixed_width_layout do |parse|
-          # Todos os campos descritos no documento em ordem
-          # identificacao do registro transacao
-          # começa do 0 então contar com +1 as posições
-          parse.field :codigo_registro, 0..0
+        # 1 - Registro Movimento
+        def self.parse_registro_movimento(parse)
           parse.field :agencia_com_dv, 17..20
           parse.field :cedente_com_dv, 23..28
           parse.field :nosso_numero, 62..69
@@ -50,6 +47,24 @@ module Brcobranca
           parse.field :juros_mora, 266..278
           parse.field :outros_recebimento, 279..291
           parse.field :data_credito, 295..300
+        end
+
+        # 2 - Registro Movimento – Identificação dos dados Qr Code (PIX).
+        def self.parse_registro_pix(parse)
+          parse.field :tipo_chave_pix, 1..1
+          parse.field :chave_pix, 2..78
+          parse.field :txid_pix, 79..113
+        end
+
+        fixed_width_layout do |parse|
+          # Todos os campos descritos no documento em ordem
+          # identificacao do registro transacao
+          # começa do 0 então contar com +1 as posições
+          parse.field :codigo_registro, 0..0
+
+          parse_registro_movimento(parse)
+          parse_registro_pix(parse)
+
           parse.field :sequencial, 394..399
         end
       end
