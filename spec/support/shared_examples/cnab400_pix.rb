@@ -14,8 +14,8 @@ shared_examples_for 'cnab400 PIX' do
       cidade_sacado: 'Santa rita de cássia maria da silva',
       nome_avalista: 'ISABEL CRISTINA LEOPOLDINA ALGUSTA MIGUELA GABRIELA RAFAELA GONZAGA DE BRAGANÇA E BOURBON',
       uf_sacado: 'SP',
-      tipo_chave_pix: 'cpf',
-      chave_pix: '12345678910',
+      tipo_chave_dict: 'cpf',
+      codigo_chave_dict: '12345678910',
       tipo_pagamento_pix: '00',
       quantidade_pagamentos_pix: 1,
       tipo_valor_pix: '2', # 1 - percentual, 2 - valor
@@ -23,7 +23,7 @@ shared_examples_for 'cnab400 PIX' do
       percentual_maximo_pix: 100.0,
       valor_minimo_pix: 199.9,
       percentual_minimo_pix: 100.0,
-      txid_pix: nil
+      txid: nil
     )
   end
 

@@ -44,8 +44,8 @@ RSpec.describe Brcobranca::Retorno::Cnab400::Santander do
     pagamento = pagamentos[52]
 
     expect(pagamento.codigo_registro).to eql('2')
-    expect(pagamento.tipo_chave_pix).to eql('1')
-    expect(pagamento.chave_pix).to eql('12345678901')
-    expect(pagamento.txid_pix).to eql('d48c95197d6ec3985b89bc3ccb3351')
+    expect(pagamento.tipo_chave_dict).to eql('1')
+    expect(pagamento.codigo_chave_dict).to eql('12345678901')
+    expect(pagamento.txid).to eql('d48c95197d6ec3985b89bc3ccb3351')
   end
 end

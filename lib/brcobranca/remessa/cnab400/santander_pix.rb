@@ -32,9 +32,9 @@ module Brcobranca
           detalhe << pagamento.formata_percentual_maximo_pix                   # Percentual Máximo                   9[005]
           detalhe << pagamento.formata_valor_minimo_pix                        # Valor Mínimo                        9[013]
           detalhe << pagamento.formata_percentual_minimo_pix                   # Percentual Mínimo                   9[005]
-          detalhe << tipo_chave_dict(pagamento.tipo_chave_pix)                 # Tipo de Chave DICT                  X[001]
-          detalhe << pagamento.chave_pix.ljust(77, ' ')                        # Código Chave DICT                   X[077]
-          detalhe << pagamento.txid_pix.to_s.ljust(35, ' ')                    # Código de Identificação do Qr Code  X[035]
+          detalhe << tipo_chave_dict(pagamento.tipo_chave_dict)                # Tipo de Chave DICT                  X[001]
+          detalhe << pagamento.codigo_chave_dict.ljust(77, ' ')                # Código Chave DICT                   X[077]
+          detalhe << pagamento.txid.to_s.ljust(35, ' ')                        # Código de Identificação do Qr Code  X[035]
           detalhe << ''.rjust(239, ' ')                                        # Reservado (uso banco)               X[239]
           detalhe << sequencial.to_s.rjust(6, '0')                             # numero do registro no arquivo       9[006]
           detalhe
@@ -51,8 +51,8 @@ module Brcobranca
           tipo_pagamento_pix.to_i.to_s.rjust(2, '0')
         end
 
-        def tipo_chave_dict(tipo_chave_pix)
-          TIPOS_CHAVE_DICT[tipo_chave_pix.to_sym]
+        def tipo_chave_dict(tipo_chave_dict)
+          TIPOS_CHAVE_DICT[tipo_chave_dict.to_sym]
         end
       end
     end

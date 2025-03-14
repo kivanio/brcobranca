@@ -17,11 +17,11 @@ module Brcobranca
         chave_aleatoria
       ].freeze
 
-      # <b>REQUERIDO</b>: Tipos de chave PIX.
+      # <b>REQUERIDO</b>: Tipos de chave DICT.
       # @see TIPOS_CHAVE_DICT
-      attr_accessor :tipo_chave_pix
+      attr_accessor :tipo_chave_dict
       # <b>REQUERIDO</b>: Chave PIX do recebedor
-      attr_accessor :chave_pix
+      attr_accessor :codigo_chave_dict
       # <b>OPCIONAL</b>: Identificação de Tipo de Pagamento
       attr_accessor :tipo_pagamento_pix
       # <b>OPCIONAL</b>: Quantidade de pagamento possíveis
@@ -37,42 +37,42 @@ module Brcobranca
       # <b>OPCIONAL</b>: Percentual mínimo
       attr_accessor :percentual_minimo_pix
       # <b>OPCIONAL</b>: Código de identificação do Qr Code (TXID)
-      attr_accessor :txid_pix
+      attr_accessor :txid
 
-      validates_presence_of :chave_pix, :tipo_chave_pix, message: 'não pode estar em branco.'
+      validates_presence_of :codigo_chave_dict, :tipo_chave_dict, message: 'não pode estar em branco.'
 
-      validates_inclusion_of :tipo_chave_pix,
+      validates_inclusion_of :tipo_chave_dict,
                              in: TIPOS_CHAVE_DICT,
                              message: "precisa ser um dos seguintes: #{TIPOS_CHAVE_DICT.join(', ')}"
 
-      validates_format_of :chave_pix,
+      validates_format_of :codigo_chave_dict,
                           with: /^\d{11}$/,
                           if: :tipo_chave_cpf?,
                           message: 'deve ter 11 dígitos.'
 
-      validates_format_of :chave_pix,
+      validates_format_of :codigo_chave_dict,
                           with: URI::MailTo::EMAIL_REGEXP,
                           if: :tipo_chave_email?,
                           message: 'não é válido.'
 
-      validates_format_of :chave_pix,
+      validates_format_of :codigo_chave_dict,
                           with: /^[\da-zA-Z]{12}\d{2}$/,
                           if: :tipo_chave_cnpj?,
                           message: 'deve ter 14 caracteres.'
 
-      validates_format_of :chave_pix,
+      validates_format_of :codigo_chave_dict,
                           with: /^\+\d{12,13}$/,
                           if: :tipo_chave_telefone?,
                           message: 'deve estar no formato +55DDNNNNNNNNN.'
 
-      validates_length_of :chave_pix,
+      validates_length_of :codigo_chave_dict,
                           in: 1..77,
                           if: :tipo_chave_chave_aleatoria?,
                           message: 'deve ter entre 1 e 77 caracteres.'
 
       def initialize(campos = {})
         padrao = {
-          tipo_chave_pix: 'cnpj',
+          tipo_chave_dict: 'cnpj',
           tipo_pagamento_pix: '00',
           quantidade_pagamentos_pix: '01',
           tipo_valor_pix: '1',
@@ -80,7 +80,7 @@ module Brcobranca
           percentual_maximo_pix: 100.0,
           valor_minimo_pix: 100.0,
           percentual_minimo_pix: 100.0,
-          txid_pix: nil
+          txid: nil
         }
 
         super(padrao.merge!(campos))
@@ -110,7 +110,7 @@ module Brcobranca
 
       TIPOS_CHAVE_DICT.each do |tipo|
         define_method(:"tipo_chave_#{tipo}?") do
-          tipo_chave_pix == tipo
+          tipo_chave_dict == tipo
         end
       end
     end

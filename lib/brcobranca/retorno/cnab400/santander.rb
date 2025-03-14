@@ -51,9 +51,9 @@ module Brcobranca
 
         # 2 - Registro Movimento – Identificação dos dados Qr Code (PIX).
         def self.parse_registro_pix(parse)
-          parse.field :tipo_chave_pix, 1..1
-          parse.field :chave_pix, 2..78
-          parse.field :txid_pix, 79..113
+          parse.field :tipo_chave_dict, 1..1
+          parse.field :codigo_chave_dict, 2..78
+          parse.field :txid, 79..113
         end
 
         fixed_width_layout do |parse|
