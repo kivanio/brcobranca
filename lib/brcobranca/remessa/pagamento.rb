@@ -89,6 +89,8 @@ module Brcobranca
       attr_accessor :dias_baixa
       # <b>OPCIONAL</b>: Número da Parcela
       attr_accessor :parcela
+      # <b>OPCIONAL</b>: Chave da Nota Fiscal Eletrônica
+      attr_accessor :chave_nfe
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,

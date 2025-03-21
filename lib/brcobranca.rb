@@ -176,6 +176,10 @@ module Brcobranca
       autoload :Credisis,      'brcobranca/remessa/cnab400/credisis'
     end
 
+    module Cnab444
+      autoload :Itau,          'brcobranca/remessa/cnab444/itau'
+    end
+
     module Cnab240
       autoload :Base,               'brcobranca/remessa/cnab240/base'
       autoload :BaseCorrespondente, 'brcobranca/remessa/cnab240/base_correspondente'
