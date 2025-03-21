@@ -53,7 +53,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | Caixa             | 240             | 240                   |
 | Citibank          | Não             | 400                   |
 | HSBC              | Não             | Não                   |
-| Itaú              | 400             | 400                   |
+| Itaú              | 400             | 400 e 444             |
 | Santander         | 400 e 240       | 400 e 240             |
 | Sicoob            | 240             | 400 e 240             |
 | Sicredi           | 240             | 240                   |
@@ -65,6 +65,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 - Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 - Bradesco (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 - Itaú (CNAB400) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
+- Itaú (CNAB444) [Junior Tada](https://github.com/juniortada) 
 - Citibank (CNAB400)
 - Santander (CNAB400)
 - Santander (CNAB240)
