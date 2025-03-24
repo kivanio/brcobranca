@@ -22,21 +22,21 @@ module Brcobranca
       attr_accessor :tipo_chave_dict
       # <b>REQUERIDO</b>: Chave PIX do recebedor
       attr_accessor :codigo_chave_dict
-      # <b>OPCIONAL</b>: Identificação de Tipo de Pagamento
+      # <b>OPCIONAL</b>: Identificacao de Tipo de Pagamento
       attr_accessor :tipo_pagamento_pix
-      # <b>OPCIONAL</b>: Quantidade de pagamento possíveis
+      # <b>OPCIONAL</b>: Quantidade de pagamento possiveis
       attr_accessor :quantidade_pagamentos_pix
       # <b>OPCIONAL</b>: Identifica o tipo do valor informado
       attr_accessor :tipo_valor_pix
-      # <b>OPCIONAL</b>: Valor Máximo
+      # <b>OPCIONAL</b>: Valor Maximo
       attr_accessor :valor_maximo_pix
-      # <b>OPCIONAL</b>: Percentual máximo
+      # <b>OPCIONAL</b>: Percentual maximo
       attr_accessor :percentual_maximo_pix
-      # <b>OPCIONAL</b>: Valor Mínimo
+      # <b>OPCIONAL</b>: Valor Minimo
       attr_accessor :valor_minimo_pix
-      # <b>OPCIONAL</b>: Percentual mínimo
+      # <b>OPCIONAL</b>: Percentual minimo
       attr_accessor :percentual_minimo_pix
-      # <b>OPCIONAL</b>: Código de identificação do Qr Code (TXID)
+      # <b>OPCIONAL</b>: Codigo de identificacao do Qr Code (TXID)
       attr_accessor :txid
 
       validates_presence_of :codigo_chave_dict, :tipo_chave_dict, message: 'não pode estar em branco.'

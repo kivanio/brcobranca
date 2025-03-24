@@ -24,17 +24,17 @@ module Brcobranca
         def monta_detalhe_pix(pagamento, sequencial)
           raise Brcobranca::RemessaInvalida, pagamento if pagamento.invalid?
 
-          detalhe = '8'                                                        # Código do Registro                  9[001]
+          detalhe = '8'                                                        # Codigo do Registro                  9[001]
           detalhe += tipo_pagamento_pix(pagamento.tipo_pagamento_pix)          # Tipo de Pagamento                   9[002]
-          detalhe << pagamento.quantidade_pagamentos_pix.to_s.rjust(2, '0')    # Quantidade de Pagamentos possíveis  9[002]
+          detalhe << pagamento.quantidade_pagamentos_pix.to_s.rjust(2, '0')    # Quantidade de Pagamentos possiveis  9[002]
           detalhe << pagamento.tipo_valor_pix.to_s.rjust(1, '0')               # Tipo do Valor Informado             9[001]
-          detalhe << pagamento.formata_valor_maximo_pix                        # Valor Máximo                        9[013]
-          detalhe << pagamento.formata_percentual_maximo_pix                   # Percentual Máximo                   9[005]
-          detalhe << pagamento.formata_valor_minimo_pix                        # Valor Mínimo                        9[013]
-          detalhe << pagamento.formata_percentual_minimo_pix                   # Percentual Mínimo                   9[005]
+          detalhe << pagamento.formata_valor_maximo_pix                        # Valor Maximo                        9[013]
+          detalhe << pagamento.formata_percentual_maximo_pix                   # Percentual Maximo                   9[005]
+          detalhe << pagamento.formata_valor_minimo_pix                        # Valor Minimo                        9[013]
+          detalhe << pagamento.formata_percentual_minimo_pix                   # Percentual Minimo                   9[005]
           detalhe << tipo_chave_dict(pagamento.tipo_chave_dict)                # Tipo de Chave DICT                  X[001]
-          detalhe << pagamento.codigo_chave_dict.ljust(77, ' ')                # Código Chave DICT                   X[077]
-          detalhe << pagamento.txid.to_s.ljust(35, ' ')                        # Código de Identificação do Qr Code  X[035]
+          detalhe << pagamento.codigo_chave_dict.ljust(77, ' ')                # Codigo Chave DICT                   X[077]
+          detalhe << pagamento.txid.to_s.ljust(35, ' ')                        # Codigo de Identificacao do Qr Code  X[035]
           detalhe << ''.rjust(239, ' ')                                        # Reservado (uso banco)               X[239]
           detalhe << sequencial.to_s.rjust(6, '0')                             # numero do registro no arquivo       9[006]
           detalhe
@@ -42,11 +42,11 @@ module Brcobranca
 
         private
 
-        # Identificação do tipo de pagamento
-        # 00 - Conforme Perfil do Beneficiário
+        # Identificacao do tipo de pagamento
+        # 00 - Conforme Perfil do Beneficiario
         # 01 - Aceita qualquer valor
-        # 02 - Entre o mínimo e o máximo
-        # 03 - Não aceita pagamento com o valor divergente
+        # 02 - Entre o minimo e o maximo
+        # 03 - Nao aceita pagamento com o valor divergente
         def tipo_pagamento_pix(tipo_pagamento_pix)
           tipo_pagamento_pix.to_i.to_s.rjust(2, '0')
         end

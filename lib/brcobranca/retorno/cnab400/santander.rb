@@ -14,7 +14,7 @@ module Brcobranca
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header
           options = default_options.merge!(options)
-          super(file, options)
+          super
         end
 
         # 1 - Registro Movimento
@@ -49,7 +49,7 @@ module Brcobranca
           parse.field :data_credito, 295..300
         end
 
-        # 2 - Registro Movimento – Identificação dos dados Qr Code (PIX).
+        # 2 - Registro Movimento – Identificacao dos dados Qr Code (PIX).
         def self.parse_registro_pix(parse)
           parse.field :tipo_chave_dict, 1..1
           parse.field :codigo_chave_dict, 2..78
@@ -59,7 +59,7 @@ module Brcobranca
         fixed_width_layout do |parse|
           # Todos os campos descritos no documento em ordem
           # identificacao do registro transacao
-          # começa do 0 então contar com +1 as posições
+          # comeca do 0 entao contar com +1 as posicoes
           parse.field :codigo_registro, 0..0
 
           parse_registro_movimento(parse)
