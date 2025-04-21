@@ -25,13 +25,18 @@ module Brcobranca
       # Validações
       include Brcobranca::Validations
 
+      PAYMENT_CLASSES = [
+        Brcobranca::Remessa::Pagamento,
+        Brcobranca::Remessa::PagamentoPix
+      ].freeze
+
       validates_presence_of :pagamentos, :empresa_mae, message: 'não pode estar em branco.'
 
       validates_each :pagamentos do |record, attr, value|
         if value.is_a? Array
           record.errors.add(attr, 'não pode estar vazio.') if value.empty?
           value.each do |pagamento|
-            if pagamento.is_a? Brcobranca::Remessa::Pagamento
+            if PAYMENT_CLASSES.include?(pagamento.class)
               pagamento.errors.full_messages.each { |msg| record.errors.add(attr, msg) } if pagamento.invalid?
             else
               record.errors.add(attr, 'cada item deve ser um objeto Pagamento.')
