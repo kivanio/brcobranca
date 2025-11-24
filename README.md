@@ -1,3 +1,24 @@
+# BRCobrança - Fork Mantido por Maxwell (@maxwbh)
+
+> **⚠️ IMPORTANTE:** Este é um **FORK** do projeto original [kivanio/brcobranca](https://github.com/kivanio/brcobranca).
+>
+> **Mantido por:** Maxwell da Silva Oliveira ([@maxwbh](https://github.com/maxwbh)) - M&S do Brasil Ltda
+>
+> Este fork contém melhorias e documentação adicional desenvolvidas para atender necessidades específicas enfrentadas em projetos particulares. **O código continua 100% livre e disponível** para uso da comunidade sob a mesma licença BSD.
+>
+> **Projeto Original:** https://github.com/kivanio/brcobranca
+>
+> **Diferenças deste Fork:**
+> - ✨ Documentação completa de campos por banco ([CAMPOS_BANCOS.md](CAMPOS_BANCOS.md))
+> - 📖 Guia de início rápido detalhado ([GUIA_INICIO_RAPIDO.md](GUIA_INICIO_RAPIDO.md))
+> - 🚀 Guia de deploy otimizado para Render ([RENDER_DEPLOY.md](RENDER_DEPLOY.md))
+> - 🐍 Exemplos em Python para integração via API
+> - 🔧 Otimizações para ambientes low-cost
+>
+> **Sincronização:** Este fork é mantido atualizado com o repositório original.
+
+---
+
 Gem para emissão de boletos de cobrança para bancos brasileiros.
 
 [![Ruby](https://github.com/kivanio/brcobranca/actions/workflows/main.yml/badge.svg)](https://github.com/kivanio/brcobranca/actions/workflows/main.yml)
@@ -7,11 +28,12 @@ Gem para emissão de boletos de cobrança para bancos brasileiros.
 
 [gem]: https://rubygems.org/gems/brcobranca
 
-## Documentação Completa
+## 📚 Documentação Completa
 
-- 📖 **[Guia de Início Rápido](GUIA_INICIO_RAPIDO.md)** - Comece a usar a gem rapidamente
+- 📖 **[Guia de Início Rápido (Ruby)](GUIA_INICIO_RAPIDO.md)** - Comece a usar a gem rapidamente
 - 📋 **[Campos por Banco](CAMPOS_BANCOS.md)** - Documentação detalhada de campos obrigatórios, opcionais e validações para cada banco
 - 🚀 **[Deploy no Render](RENDER_DEPLOY.md)** - Guia completo para deploy otimizado no Render (plano free)
+- 🐍 **[Exemplos Python](examples/python/)** - Integração com Python via API REST
 
 ### Exemplos e Documentação
 

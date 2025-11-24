@@ -1,0 +1,11 @@
+# Dependências Python para exemplos BRCobrança
+
+# Cliente HTTP
+requests>=2.31.0
+
+# Manipulação de datas
+python-dateutil>=2.8.2
+
+# Opcional: Para frameworks web
+# flask>=3.0.0
+# django>=4.2.0
