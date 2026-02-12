@@ -75,18 +75,18 @@ RSpec.describe Brcobranca::ParseLine do
     end
 
     it 'define os campos corretamente' do
-      expect(TestParser.class_variable_get(:@@parse_values)).to be_an(Array)
-      expect(TestParser.class_variable_get(:@@parse_values).size).to eq(4)
+      expect(TestParser.parse_values).to be_an(Array)
+      expect(TestParser.parse_values.size).to eq(4)
     end
   end
 
   describe '.field' do
     it 'adiciona um campo ao layout' do
-      expect(SimpleParser.class_variable_get(:@@parse_values).size).to eq(2)
+      expect(SimpleParser.parse_values.size).to eq(2)
     end
 
     it 'armazena o nome do campo, range e transformador' do
-      field_definition = TestParser.class_variable_get(:@@parse_values).first
+      field_definition = TestParser.parse_values.first
       expect(field_definition[0]).to eq(:name)
       expect(field_definition[1]).to eq(0..19)
     end
