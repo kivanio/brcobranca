@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "parseline"
-
 module Brcobranca
   module Retorno
     module Cnab240

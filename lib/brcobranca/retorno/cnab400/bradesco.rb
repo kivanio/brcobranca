@@ -6,7 +6,7 @@ module Brcobranca
       # Formato de Retorno CNAB 400
       # Baseado em: http://www.bradesco.com.br/portal/PDF/pessoajuridica/solucoes-integradas/outros/layout-de-arquivo/cobranca/4008-524-0121-08-layout-cobranca-versao-portugues.pdf
       class Bradesco < Brcobranca::Retorno::Cnab400::Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+        extend ParseLine
 
         # Load lines
         def self.load_lines(file, options = {})

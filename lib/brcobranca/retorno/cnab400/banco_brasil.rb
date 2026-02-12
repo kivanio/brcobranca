@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require 'parseline'
-
 module Brcobranca
   module Retorno
     module Cnab400
       # Formato de Retorno CNAB 400
       # Baseado em: http://www.bb.com.br/docs/pub/emp/empl/dwn/Doc2628CBR643Pos7.pdf
       class BancoBrasil < Brcobranca::Retorno::Cnab400::Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+        extend ParseLine
 
         # Load lines
         def self.load_lines(file, options = {})

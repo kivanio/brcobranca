@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-require 'parseline'
 module Brcobranca
   module Retorno
     # Formato de Retorno CNAB 643
     class RetornoCbr643 < Base
-      extend ParseLine::FixedWidth # Extendendo parseline
+      extend ParseLine
 
       fixed_width_layout do |parse|
         parse.field :agencia_com_dv, 17..21

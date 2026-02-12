@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'fast_blank'
 require 'brcobranca/calculo'
 require 'brcobranca/limpeza'
 require 'brcobranca/formatacao'
@@ -7,8 +8,8 @@ require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 require 'brcobranca/validations'
+require 'brcobranca/parse_line'
 require 'brcobranca/util/date'
-require 'fast_blank'
 
 module Brcobranca
   # Exception lançada quando algum tipo de boleto soicitado ainda não tiver sido implementado.
@@ -16,6 +17,9 @@ module Brcobranca
   end
 
   class ValorInvalido < StandardError
+  end
+
+  class MalformedLayoutOrLine < StandardError
   end
 
   # Exception lançada quando os dados informados para o boleto estão inválidos.

@@ -18,3 +18,18 @@ Layout/LineLength:
 
 Style/SuperArguments:
   Enabled: false
+
+RSpec/ContextWording:
+  Enabled: true
+  Prefixes:
+    - quando
+    - com
+    - sem
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Max: 10
+
+RSpec/ExampleLength:
+  Enabled: true
+  Max: 25
