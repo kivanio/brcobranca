@@ -1,6 +1,6 @@
 require:
   - rubocop-performance
-  - 'test_prof/rubocop'
+  - "test_prof/rubocop"
   - rubocop-rspec
   - rubocop-packaging
 
@@ -13,5 +13,15 @@ Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
 Layout/LineLength:
-  Max: 125
+  Max: 150
   AllowedPatterns: ['\A#']
+
+Metrics/MethodLength:
+  Max: 35
+
+Metrics/AbcSize:
+  Max: 50
+
+Metrics/ModuleLength:
+  Exclude:
+    - "lib/brcobranca/boleto/template/*.rb"

@@ -6,6 +6,10 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'barby'
+  gem 'prawn'
+  gem 'rqrcode'
+
   gem 'pry'
   gem 'rubocop'
   gem 'rubocop-packaging'

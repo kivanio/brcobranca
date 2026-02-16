@@ -118,11 +118,12 @@ module Brcobranca
 
     # Módulos para classes de template
     module Template
-      autoload :Base,        'brcobranca/boleto/template/base'
-      autoload :Rghost,      'brcobranca/boleto/template/rghost'
-      autoload :Rghost2,     'brcobranca/boleto/template/rghost2'
-      autoload :RghostCarne, 'brcobranca/boleto/template/rghost_carne'
+      autoload :Base,          'brcobranca/boleto/template/base'
+      autoload :Rghost,        'brcobranca/boleto/template/rghost'
+      autoload :Rghost2,       'brcobranca/boleto/template/rghost2'
+      autoload :RghostCarne,   'brcobranca/boleto/template/rghost_carne'
       autoload :RghostBolepix, 'brcobranca/boleto/template/rghost_bolepix'
+      autoload :Prawn,         'brcobranca/boleto/template/prawn'
     end
   end
 
