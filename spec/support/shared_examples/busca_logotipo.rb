@@ -4,6 +4,7 @@ shared_examples_for 'busca_logotipo' do
   it 'para layout padrão' do
     boleto_novo = described_class.new
 
+    expect(Brcobranca.configuration.gerador).to be(:rghost)
     expect(boleto_novo.logotipo).to match(/\.eps\z/)
     expect(File).to exist(boleto_novo.logotipo)
     expect(File.stat(boleto_novo.logotipo)).not_to be_zero
@@ -16,6 +17,9 @@ shared_examples_for 'busca_logotipo' do
     expect(boleto_novo.logotipo).to match(/\.eps\z/)
     expect(File).to exist(boleto_novo.logotipo)
     expect(File.stat(boleto_novo.logotipo)).not_to be_zero
+
+    # Restaura o gerador para o valor padrão após os testes
+    Brcobranca.configuration.gerador = :rghost
   end
 
   it 'para layout com prawn' do
