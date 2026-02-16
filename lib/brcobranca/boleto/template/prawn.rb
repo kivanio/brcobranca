@@ -7,10 +7,14 @@ module Brcobranca
       module Prawn
         extend self
 
-        require 'prawn'
-        require 'barby'
-        require 'barby/outputter/prawn_outputter'
-        require 'barby/barcode/code_25_interleaved'
+        begin
+          require 'prawn'
+          require 'barby'
+          require 'barby/outputter/prawn_outputter'
+          require 'barby/barcode/code_25_interleaved'
+        rescue LoadError
+          raise 'As gems "prawn" e "barby" são necessárias para usar o template Prawn.'
+        end
 
         COLORS = { light: 'E9E9E9', dark: '000000' }.freeze
         FONT_SIZE = { important: 13, body: 8, small: 6 }.freeze
@@ -26,8 +30,6 @@ module Brcobranca
         # @param options [Hash] Opções adicionais para geração do PDF.
         # @return [Stream, Prawn::Document]
         def to(formato, options = {})
-          raise NotImplementedError, 'O formato PDF é o único suportado para este template' unless formato == :pdf
-
           modelo_generico([self], options.merge(formato: formato))
         end
 
@@ -341,9 +343,11 @@ module Brcobranca
         end
 
         def desenha_qr_code(emv, pos_x, pos_y)
-          # Evita carregar a gem RQRCode desnecessariamente se o boleto
-          # não tiver um código QR para ser gerado
-          require 'rqrcode' unless defined?(RQRCode)
+          begin
+            require 'rqrcode'
+          rescue LoadError
+            raise 'A gem "rqrcode" é necessária para gerar o QR Code no template Prawn.'
+          end
 
           qr_code_matrix = RQRCode::QRCode.new(emv).modules
           module_size = QRCODE_WIDTH / qr_code_matrix.length.to_f
@@ -593,7 +597,7 @@ module Brcobranca
             sacado_info = 'Sacador/Avalista'
 
             if @boleto.sacado && @boleto.sacado_documento && @boleto.avalista && @boleto.avalista_documento
-              sacado_info += "#{@boleto.avalista} - #{@boleto.avalista_documento}"
+              sacado_info += "     #{@boleto.avalista} - #{@boleto.avalista_documento}"
             end
 
             @doc.text(sacado_info, size: FONT_SIZE[:small])
