@@ -32,3 +32,5 @@ RSpec.configure do |config|
 end
 
 RGhost::Config.config_platform
+# Permite testar com multiplos caminhos para o Ghostscript, se necessário
+RGhost::Config::GS[:path] = ENV['GHOSTSCRIPT_PATH'] if ENV['GHOSTSCRIPT_PATH']

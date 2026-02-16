@@ -1,6 +1,6 @@
 require:
   - rubocop-performance
-  - 'test_prof/rubocop'
+  - "test_prof/rubocop"
   - rubocop-rspec
   - rubocop-packaging
 
@@ -12,6 +12,25 @@ AllCops:
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
 Layout/LineLength:
   Max: 125
   AllowedPatterns: ['\A#']
+  Exclude:
+    - "lib/brcobranca/boleto/template/*.rb"
+
+Metrics/MethodLength:
+  Max: 20
+  Exclude:
+    - "lib/brcobranca/boleto/template/*.rb"
+
+Metrics/AbcSize:
+  Max: 20
+  Exclude:
+    - "lib/brcobranca/boleto/template/*.rb"
+
+Metrics/ModuleLength:
+  Exclude:
+    - "lib/brcobranca/boleto/template/*.rb"
