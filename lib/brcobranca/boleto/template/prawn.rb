@@ -47,9 +47,10 @@ module Brcobranca
           method_name.to_s.start_with?('to_') || super
         end
 
-        #  Cria o métodos dinâmicos (to_pdf, to_gif e etc) com todos os fomátos válidos.
+        #  Cria o métodos dinâmicos (to_pdf, to_prawn) com todos os fomatos válidos.
         #  @example
-        #    @@boleto.to_pdf
+        #    @boleto.to_pdf
+        #    @boleto.to_prawn
         #
         # @return [Stream, Prawn::Document]
         def method_missing(name, *args)
@@ -169,7 +170,7 @@ module Brcobranca
           @doc.move_down(5)
         end
 
-        def desenha_cabecalho_recibo # rubocop:disable Metrics/MethodLength
+        def desenha_cabecalho_recibo
           pos_y = @doc.cursor.to_i
           pos_x = 0
           width_big = @doc.bounds.width - WIDTH_CELLS_RIGHT
@@ -412,7 +413,7 @@ module Brcobranca
           end
         end
 
-        def desenha_rodape # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+        def desenha_rodape
           pos_y = @doc.cursor.to_i
           pos_x = 0
           width_big = @doc.bounds.width - WIDTH_CELLS_RIGHT
@@ -627,7 +628,7 @@ module Brcobranca
           end
         end
 
-        # Desenha uma divisória vestical no boleto, usada para separar seções.
+        # Desenha uma divisória vertical no boleto, usada para separar seções.
         #
         # @param pos_x [Numeric] A posição horizontal da divisória
         # @param pos_y [Numeric] A posição vertical da divisória
