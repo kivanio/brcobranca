@@ -12,6 +12,9 @@ AllCops:
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
 Layout/LineLength:
   Max: 150
   AllowedPatterns: ['\A#']
