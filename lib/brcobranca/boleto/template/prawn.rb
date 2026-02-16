@@ -53,7 +53,7 @@ module Brcobranca
         def method_missing(name, *args)
           method = name.to_s
           if method.start_with?('to_')
-            modelo_generico(self, (args.first || {}).merge!(formato: method[3..].to_sym))
+            modelo_generico([self], (args.first || {}).merge!(formato: method[3..].to_sym))
           else
             super
           end
