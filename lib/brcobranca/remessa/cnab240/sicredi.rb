@@ -151,8 +151,14 @@ module Brcobranca
           nosso_numero.somente_numeros.ljust(20, ' ')
         end
 
-        def codigo_desconto(_pagamento)
-          '1'
+        def codigo_desconto(pagamento)
+          allowed_codes = [0, 1, 2, 3, 7]
+          code = pagamento.cod_desconto.to_i         
+          if allowed_codes.include?(code)
+            code.to_s
+          else
+            "1"
+          end
         end
 
         def codigo_baixa(_pagamento)
