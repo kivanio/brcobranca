@@ -17,7 +17,7 @@ GEM
     diff-lcs (1.6.1)
     docile (1.4.1)
     fast_blank (1.0.1)
-    json (2.10.2)
+    json (2.19.9)
     language_server-protocol (3.17.0.4)
     lint_roller (1.1.0)
     method_source (1.1.0)
