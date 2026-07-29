@@ -28,6 +28,18 @@ module Brcobranca
         '341'
       end
 
+      # Agencia mantenedora da conta.
+      # @return [String] 4 caracteres numericos.
+      def agencia=(valor)
+        @agencia = valor.to_s.rjust(4, "0") if valor
+      end
+
+      # Numero da carteira no banco.
+      # @return [String] 3 caracteres numericos.
+      def carteira=(valor)
+        @carteira = valor.to_s.rjust(3, "0") if valor
+      end
+
       # Número do convênio/contrato do cliente junto ao banco.
       # @return [String] 5 caracteres numéricos.
       def convenio=(valor)
@@ -65,17 +77,18 @@ module Brcobranca
       #
       # @return [String] 1 caracteres numéricos.
       def nosso_numero_dv
-        if %w[112 126 131 146 150 168].include?(carteira)
-          "#{carteira}#{nosso_numero}".modulo10
-        else
-          "#{agencia}#{conta_corrente}#{carteira}#{nosso_numero}".modulo10
-        end
+        Brcobranca::Util::Itau.nosso_numero_dv(
+          agencia, conta_corrente, carteira, nosso_numero
+        )
       end
 
-      # Calcula o dígito verificador para conta corrente do Itau.
-      # Retorna apenas o dígito verificador da conta ou nil caso seja impossível calcular.
+      # Calcula o digito verificador para conta corrente do Itau.
+      # Retorna apenas o digito verificador da conta, ou nil se nao for
+      # possivel calcular.
       def agencia_conta_corrente_dv
-        "#{agencia}#{conta_corrente}".modulo10
+        Brcobranca::Util::Itau.agencia_conta_corrente_dv(
+          agencia, conta_corrente
+        )
       end
 
       # Nosso número para exibir no boleto.

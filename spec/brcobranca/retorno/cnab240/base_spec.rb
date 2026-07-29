@@ -20,5 +20,16 @@ RSpec.describe Brcobranca::Retorno::Cnab240::Base do
         described_class.load_lines(arquivo)
       end
     end
+
+    context "Itau" do
+      subject { Brcobranca::Retorno::Cnab240::Itau }
+
+      let(:nome_arquivo) { "CNAB240ITAU.RET" }
+
+      it "lê o arquivo pela classe do Itau" do
+        expect(subject).to receive(:load_lines).with(arquivo, {})
+        described_class.load_lines(arquivo)
+      end
+    end
   end
 end

@@ -53,7 +53,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | Caixa             | 240             | 240                   |
 | Citibank          | Não             | 400                   |
 | HSBC              | Não             | Não                   |
-| Itaú              | 400             | 400 e 444             |
+| Itaú              | 400 e 240       | 400, 444 e 240        |
 | Santander         | 400 e 240       | 400 e 240             |
 | Sicoob            | 240             | 400 e 240             |
 | Sicredi           | 240             | 240                   |
