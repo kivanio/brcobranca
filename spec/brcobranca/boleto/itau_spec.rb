@@ -84,15 +84,21 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras).to eql('34191377000000135001750025828170810536789000')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.75009 25828.170818 05367.890000 1 37700000013500')
 
+    # carteira 168 (Integer, de proposito) exercita a excecao documentada em
+    # #nosso_numero_dv: o DV deve considerar apenas carteira/nosso_numero,
+    # sem agencia/conta.
     @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
     @valid_attributes[:carteira] = 168
     @valid_attributes[:valor] = 135.00
     boleto_novo = described_class.new(@valid_attributes)
 
-    expect(boleto_novo.codigo_barras_segunda_parte).to eql('1680025828120810536789000')
-    expect(boleto_novo.codigo_barras).to eql('34194252500000135001680025828120810536789000')
-    expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.68004 25828.120813 05367.890000 4 25250000013500')
+    expect(boleto_novo.codigo_barras_segunda_parte).
+      to eql("1680025828100810536789000")
+    expect(boleto_novo.codigo_barras).
+      to eql("34197252500000135001680025828100810536789000")
+    expect(boleto_novo.codigo_barras.linha_digitavel).
+      to eql("34191.68004 25828.100815 05367.890000 7 25250000013500")
 
     @valid_attributes[:nosso_numero] = '258281'
     @valid_attributes[:data_vencimento] = Date.parse('2004/09/05')
@@ -144,6 +150,20 @@ RSpec.describe Brcobranca::Boleto::Itau do
     expect(boleto_novo.codigo_barras_segunda_parte).to eql('1090001015271248021246000')
     expect(boleto_novo.codigo_barras).to eql('34194254800006757871090001015271248021246000')
     expect(boleto_novo.codigo_barras.linha_digitavel).to eql('34191.09008 01015.271248 80212.460002 4 25480000675787')
+  end
+
+  it "Preenche agencia/carteira com zeros a esquerda quando sem padding" do
+    # agencia/carteira sem zeros a esquerda passam em validates_length_of
+    # (que so checa o maximo), mas sem o auto-preenchimento o codigo de
+    # barras fica curto demais e codigo_barras levanta BoletoInvalido.
+    @valid_attributes[:data_vencimento] = Date.parse("2009/08/14")
+    @valid_attributes[:agencia] = "810" # sem zero a esquerda
+    boleto_novo = described_class.new(@valid_attributes)
+
+    expect(boleto_novo.agencia).to eql("0810")
+    expect(boleto_novo.codigo_barras_segunda_parte).
+      to eql("1751234567840810536789000")
+    expect { boleto_novo.codigo_barras }.not_to raise_error
   end
 
   it 'Não permitir gerar boleto com atributos inválido' do
