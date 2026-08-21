@@ -191,6 +191,76 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Sicredi do
       expect(segmento_p[77..84]).to eql '14072007'    # data de vencimento
       expect(segmento_p[118..125]).to eql '15072007'  # data do juro de mora
     end
+
+    context 'codigo_desconto' do
+      it 'deve respeitar o codigo de desconto informado' do
+        pagamento.cod_desconto = '1'
+        expect(sicredi.codigo_desconto(pagamento)).to eq '1'
+      end
+
+      it 'deve zerar a data e o valor do desconto quando o codigo for 0' do
+        pagamento.cod_desconto = '0'
+        pagamento.data_desconto = Date.new(2007, 7, 10)
+        pagamento.valor_desconto = 5.0
+
+        sicredi.codigo_desconto(pagamento)
+
+        expect(pagamento.data_desconto).to be_nil
+        expect(pagamento.valor_desconto).to eq 0.0
+      end
+
+      it 'deve manter a data e o valor do desconto quando o codigo for 1' do
+        pagamento.cod_desconto = '1'
+        pagamento.data_desconto = Date.new(2007, 7, 10)
+        pagamento.valor_desconto = 5.0
+
+        sicredi.codigo_desconto(pagamento)
+
+        expect(pagamento.data_desconto).to eq Date.new(2007, 7, 10)
+        expect(pagamento.valor_desconto).to eq 5.0
+      end
+    end
+
+    it 'dias de baixa deve ser 000' do
+      expect(sicredi.dias_baixa(pagamento)).to eq '000'
+    end
+
+    context 'numero' do
+      it 'deve alinhar o numero a esquerda e preencher com zeros' do
+        pagamento.documento = nil
+        pagamento.numero = '7'
+        expect(sicredi.numero(pagamento)).to eq '700000000000000'
+      end
+
+      it 'nao deve conter espacos' do
+        pagamento.documento = nil
+        pagamento.numero = 'ABC 123'
+        expect(sicredi.numero(pagamento)).to eq 'ABC123000000000'
+      end
+    end
+
+    context 'monta_segmento_q' do
+      it 'deve deixar o cpf do beneficiario final em branco quando nao informado' do
+        pagamento.documento_avalista = ''
+        segmento_q = sicredi.monta_segmento_q(pagamento, 1, 2)
+        expect(segmento_q[153]).to eq '0'
+        expect(segmento_q[154, 15]).to eq ' ' * 15
+      end
+
+      it 'deve deixar o cpf do beneficiario final em branco quando informado apenas espacos' do
+        pagamento.documento_avalista = '   '
+        segmento_q = sicredi.monta_segmento_q(pagamento, 1, 2)
+        expect(segmento_q[153]).to eq '0'
+        expect(segmento_q[154, 15]).to eq ' ' * 15
+      end
+
+      it 'deve manter o cpf do beneficiario final quando informado' do
+        pagamento.documento_avalista = '82136760505'
+        segmento_q = sicredi.monta_segmento_q(pagamento, 1, 2)
+        expect(segmento_q[153]).to eq '1'
+        expect(segmento_q[154, 15]).to eq '000082136760505'
+      end
+    end
   end
 
   context 'geracao remessa' do

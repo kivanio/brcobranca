@@ -151,16 +151,49 @@ module Brcobranca
           nosso_numero.somente_numeros.ljust(20, ' ')
         end
 
-        def codigo_desconto(_pagamento)
-          '1'
+        # Campo 30.3P - Codigo do desconto 1.
+        # Manual Sicredi: '0' - Sem desconto | '1' - Valor fixo ate a data
+        # informada | '2' - Percentual ate a data informada.
+        # Para o codigo '0' o valor e a data do desconto devem ser zerados.
+        # Deve respeitar o valor informado pelo beneficiario.
+        def codigo_desconto(pagamento)
+          if pagamento.cod_desconto == '0'
+            pagamento.data_desconto = nil
+            pagamento.valor_desconto = 0.0
+          end
+          pagamento.cod_desconto
         end
 
         def codigo_baixa(_pagamento)
           '1'
         end
 
+        # Campo 39.3P - No de dias para baixa/devolucao.
+        # Manual Sicredi: o Sicredi nao utiliza esse campo, preencher com zeros.
         def dias_baixa(_pagamento)
-          '060'
+          '000'
+        end
+
+        # Campo 19.3P - Seu Numero (posicoes 63-77).
+        # Manual Sicredi: "Embora no layout constem 15 posicoes, o Sicredi
+        # apenas validara as 10 primeiras (campos 63-72), ou seja, da esquerda
+        # para a direita. Nao pode conter espaco."
+        # O numero deve entao ser alinhado a esquerda e o restante preenchido
+        # com zeros (o campo nao pode conter espaco).
+        def numero(pagamento)
+          pagamento.documento_ou_numero.to_s.gsub(/[^0-9A-Za-z]/, '').ljust(15, '0')[0...15]
+        end
+
+        # Campos 17.3Q, 18.3Q e 19.3Q - Beneficiario Final.
+        # Manual Sicredi: nao havendo Beneficiario Final o tipo deve ser "0"
+        # e o campo CPF/CNPJ (posicoes 155-169) deve ficar em branco.
+        # O BRCobranca preenche o CPF/CNPJ com zeros quando nao informado.
+        def monta_segmento_q(pagamento, nro_lote, sequencial)
+          segmento_q = super
+          return segmento_q unless pagamento.documento_avalista.to_s.strip.empty?
+
+          segmento_q[153, 16] = "0#{''.rjust(15, ' ')}"
+          segmento_q
         end
 
         def data_mora(pagamento)
