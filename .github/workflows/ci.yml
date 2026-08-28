@@ -29,10 +29,6 @@ jobs:
       fail-fast: false # don't fail all matrix builds if one fails
       matrix:
         ruby:
-          - '2.7'
-          - '3.0'
-          - '3.1'
-          - '3.2'
           - '3.3'
           - '3.4'
           - '4.0'
@@ -52,6 +48,9 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+          # O BUNDLED WITH do Gemfile.lock e antigo demais para o ruby-head
+          # (quebra em `uninitialized constant Pathname::SEPARATOR_PAT`).
+          bundler: latest
           bundler-cache: true # runs 'bundle install' and caches installed
 
       - name: Run tests

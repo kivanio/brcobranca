@@ -29,7 +29,7 @@ rake build / rake install / rake release      # tarefas do bundler/gem_tasks
 
 ### Compatibilidade de sintaxe (importante)
 
-O CI roda a matriz **Ruby 2.7 → 3.4 + head**, o gemspec exige `>= 2.7.0` e o RuboCop tem `TargetRubyVersion: 2.7`. Nada de sintaxe exclusiva de Ruby 3.x. `# frozen_string_literal: true` é obrigatório em todo arquivo.
+O CI roda a matriz **Ruby 3.3, 3.4, 4.0 + head**, o gemspec exige `>= 3.3.0` e o RuboCop tem `TargetRubyVersion: 3.3` — as versões anteriores saíram junto com o EOL upstream. Sintaxe de 3.3 é permitida; nada de 3.4+ exclusivo. `# frozen_string_literal: true` é obrigatório em todo arquivo.
 
 ## Arquitetura
 

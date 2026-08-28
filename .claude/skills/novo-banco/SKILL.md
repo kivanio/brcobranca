@@ -53,7 +53,7 @@ module Brcobranca
 end
 ```
 
-Atenção: o alvo é **Ruby 2.7** (RuboCop `TargetRubyVersion: 2.7`, matriz de CI a partir do 2.7) — nada de endless method, pattern matching ou outras novidades de 3.x.
+Atenção: o alvo é **Ruby 3.3** (RuboCop `TargetRubyVersion: 3.3`, matriz de CI a partir do 3.3) — nada de sintaxe exclusiva de 3.4 ou 4.0.
 
 O total tem que fechar: primeira parte (18) + segunda parte (25) = 43, + DV = 44. Se o tamanho não bater, `Base#codigo_barras` levanta `BoletoInvalido` dizendo o tamanho encontrado.
 
