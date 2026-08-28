@@ -11,7 +11,9 @@ module Brcobranca
         default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U }
         options = default_options.merge!(options)
 
-        Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
+        # self::Line (e nao Line) para que uma subclasse, como o
+        # Cnab240::Caixa, use o proprio layout em vez do generico.
+        self::Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
           retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
         end
       end
@@ -20,11 +22,11 @@ module Brcobranca
         retorno = new
         cnab_lines.each do |line|
           if line.tipo_registro == 'T'
-            Line::REGISTRO_T_FIELDS.each do |attr|
+            self::Line::REGISTRO_T_FIELDS.each do |attr|
               retorno.send(:"#{attr}=", line.send(attr))
             end
           else
-            Line::REGISTRO_U_FIELDS.each do |attr|
+            self::Line::REGISTRO_U_FIELDS.each do |attr|
               retorno.send(:"#{attr}=", line.send(attr))
             end
           end

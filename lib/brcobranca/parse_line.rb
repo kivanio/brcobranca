@@ -6,9 +6,16 @@ module Brcobranca
   #
   # Originalmente baseado em: https://github.com/shairontoledo/parseline
   module ParseLine
-    # :nodoc:
+    # Campos definidos para a classe.
+    #
+    # Uma subclasse comeca com uma copia dos campos da classe pai e a partir
+    # dai tem vida propria: definir um campo na filha nunca altera o layout da
+    # mae. E o que permite ao Retorno::Cnab240::Caixa reaproveitar o layout
+    # generico do CNAB 240 sobrescrevendo apenas alguns campos.
+    #
+    # @return [Array<Array>] lista de [campo, range, transformador].
     def parse_values
-      @parse_values ||= []
+      @parse_values ||= parse_values_herdados
     end
 
     # Define o layout de cada linha do arquivo de acordo com as posicoes de cada campo.
@@ -38,8 +45,8 @@ module Brcobranca
     # @param [Symbol] field O nome do campo a ser definido.
     # @param [Range] range O intervalo de caracteres onde o campo esta localizado na linha do arquivo.
     # @param [Proc] proc (opcional) Um bloco para processar o valor do campo antes de atribui-lo ao objeto.
-    def field(field, range, proc = nil)
-      parse_values << [field, range, proc]
+    def field(field, range, proc = nil, &block)
+      parse_values << [field, range, proc || block]
     end
 
     # Le as linhas de um arquivo e retorna um array de objetos com os campos preenchidos de acordo com o layout definido.
@@ -57,21 +64,23 @@ module Brcobranca
         return load_lines_except_regex(filepath, options[:except], options[:length])
       end
 
-      File.open(filepath).each_with_object([]) do |line, lines|
-        next unless line_length_valid?(line, options[:length])
-
-        lines << load_line(line)
+      File.open(filepath) do |file|
+        file.each_with_object([]) do |line, lines|
+          lines << load_line(line) if line_valid?(line, options[:length])
+        end
       end
     end
 
     def load_lines_except_array(filepath, except, length = nil)
       lines = []
 
-      File.open(filepath).each_with_index do |line, i|
-        next if line.blank? || except.include?(i + 1)
-        next unless line_length_valid?(line, length)
+      File.open(filepath) do |file|
+        file.each_with_index do |line, i|
+          next if except.include?(i + 1)
+          next unless line_valid?(line, length)
 
-        lines << load_line(line)
+          lines << load_line(line)
+        end
       end
 
       lines
@@ -80,11 +89,13 @@ module Brcobranca
     def load_lines_except_regex(filepath, except, length = nil)
       lines = []
 
-      File.open(filepath).each do |line|
-        next if line.blank? || except.match?(line)
-        next unless line_length_valid?(line, length)
+      File.open(filepath) do |file|
+        file.each do |line|
+          next if except.match?(line)
+          next unless line_valid?(line, length)
 
-        lines << load_line(line)
+          lines << load_line(line)
+        end
       end
 
       lines
@@ -108,10 +119,29 @@ module Brcobranca
                                                "Erro original: (#{e.class}): #{e.message}"
     end
 
+    # Linha em branco nunca vira registro, com ou sem filtro.
+    def line_valid?(line, expected_length = nil)
+      !line.blank? && line_length_valid?(line, expected_length)
+    end
+
+    # Compara o tamanho da linha sem a quebra de linha (\n ou \r\n).
+    #
+    # Nao usar strip aqui: registros CNAB sao preenchidos com brancos a
+    # direita e seriam descartados por engano.
     def line_length_valid?(line, expected_length = nil)
       return true if expected_length.nil?
 
-      line.to_s.strip.length == expected_length.to_i
+      line.to_s.chomp.length == expected_length.to_i
+    end
+
+    private
+
+    # Copia dos campos da classe pai, quando ela tambem usa o ParseLine.
+    def parse_values_herdados
+      return [] unless is_a?(Class)
+
+      pai = superclass
+      pai.respond_to?(:parse_values) ? pai.parse_values.dup : []
     end
   end
 end

@@ -28,9 +28,41 @@ class SimpleParser
   end
 end
 
+# Classes para testar a heranca do layout entre classe mae e filha
+class ParentParser
+  extend Brcobranca::ParseLine
+
+  attr_accessor :campo_proprio, :campo_sobrescrito
+
+  fixed_width_layout do |layout|
+    layout.field :campo_proprio, 0..4
+    layout.field :campo_sobrescrito, 5..9
+  end
+end
+
+class ChildParser < ParentParser
+  fixed_width_layout do |layout|
+    layout.field :campo_sobrescrito, 10..14
+  end
+end
+
+# Classe para testar o transformador informado como bloco
+class BlockParser
+  extend Brcobranca::ParseLine
+
+  attr_accessor :quantidade
+
+  fixed_width_layout do |layout|
+    layout.field :quantidade, 0..4 do |value|
+      value.to_i * 2
+    end
+  end
+end
+
 # Classe para testar com layout complexo e transformadores que falham
 class FailingParser
   extend Brcobranca::ParseLine
+
   attr_accessor :value
 
   fixed_width_layout do |layout|
@@ -236,12 +268,27 @@ RSpec.describe Brcobranca::ParseLine do
         temp_file.rewind
       end
 
-      it 'considera apenas linhas com o tamanho especificado (usando line.size - 2)' do
+      it 'considera apenas linhas com o tamanho especificado' do
         results = TestParser.load_lines(temp_file.path, length: 50)
 
         expect(results.size).to eq(2)
         expect(results[0].name).to eq('João Silva')
         expect(results[1].name).to eq('Maria Santos')
+      end
+    end
+
+    context 'com filtro :length e brancos a direita' do
+      before do
+        # registro preenchido com brancos a direita, como num arquivo CNAB
+        temp_file.write("#{'João Silva          00025São Paulo         12'.ljust(50, ' ')}\r\n")
+        temp_file.rewind
+      end
+
+      it 'nao descarta a linha por causa do preenchimento' do
+        results = TestParser.load_lines(temp_file.path, length: 50)
+
+        expect(results.size).to eq(1)
+        expect(results[0].name).to eq('João Silva')
       end
     end
 
@@ -442,6 +489,40 @@ RSpec.describe Brcobranca::ParseLine do
         expect(result.active).to be(false)
         expect(result.date).to be_nil
       end
+    end
+  end
+
+  describe 'heranca do layout' do
+    it 'a classe filha comeca com os campos da classe mae' do
+      campos = ChildParser.parse_values.map(&:first)
+
+      expect(campos).to include(:campo_proprio)
+    end
+
+    it 'o campo redefinido na filha vence o da mae' do
+      ranges = ChildParser.parse_values.each_with_object({}) { |(campo, range, _), acc| acc[campo] = range }
+
+      expect(ranges[:campo_sobrescrito]).to eq(10..14)
+    end
+
+    it 'definir campo na filha nao altera o layout da mae' do
+      ranges = ParentParser.parse_values.each_with_object({}) { |(campo, range, _), acc| acc[campo] = range }
+
+      expect(ParentParser.parse_values.size).to eq(2)
+      expect(ranges[:campo_sobrescrito]).to eq(5..9)
+    end
+
+    it 'a filha realmente usa o proprio layout ao parsear' do
+      result = ChildParser.load_line('AAAAABBBBBCCCCC')
+
+      expect(result.campo_proprio).to eq('AAAAA')
+      expect(result.campo_sobrescrito).to eq('CCCCC')
+    end
+  end
+
+  describe 'transformador informado como bloco' do
+    it 'aplica o bloco ao valor do campo' do
+      expect(BlockParser.load_line('00021').quantidade).to eq(42)
     end
   end
 end
