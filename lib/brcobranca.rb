@@ -8,6 +8,7 @@ require 'brcobranca/formatacao_string'
 require 'brcobranca/calculo_data'
 require 'brcobranca/currency'
 require 'brcobranca/validations'
+require 'brcobranca/metodos_abstratos'
 require 'brcobranca/parse_line'
 require 'brcobranca/util/date'
 

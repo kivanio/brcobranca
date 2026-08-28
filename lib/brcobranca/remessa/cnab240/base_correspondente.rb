@@ -4,6 +4,11 @@ module Brcobranca
   module Remessa
     module Cnab240
       class BaseCorrespondente < Brcobranca::Remessa::Base
+        extend Brcobranca::MetodosAbstratos
+
+        # Cada banco precisa implementar:
+        metodos_abstratos :complemento_header, :convenio_lote, :cod_banco, :info_conta, :codigo_convenio
+
         # convenio do cedente
         attr_accessor :convenio
         # mensagem 1
@@ -248,51 +253,6 @@ module Brcobranca
           arquivo << monta_trailer_arquivo(contador, ((pagamentos.size * 2) + (contador * 2) + 2))
 
           arquivo.join("\r\n").remove_accents.upcase
-        end
-
-        # Complemento do registro
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def complemento_header
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Informacoes do convenio para o lote
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def convenio_lote
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Codigo do banco
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def cod_banco
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Informacoes da conta do cedente
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def info_conta
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Codigo do convenio
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def codigo_convenio
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Codigo para protesto

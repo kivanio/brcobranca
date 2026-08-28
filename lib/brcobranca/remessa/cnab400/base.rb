@@ -4,6 +4,11 @@ module Brcobranca
   module Remessa
     module Cnab400
       class Base < Brcobranca::Remessa::Base
+        extend Brcobranca::MetodosAbstratos
+
+        # Cada banco precisa implementar:
+        metodos_abstratos :monta_detalhe, :info_conta, :cod_banco, :nome_banco, :complemento
+
         validates_presence_of :carteira, message: 'não pode estar em branco.'
 
         # Data da geracao do arquivo seguindo o padrao DDMMAA
@@ -50,15 +55,6 @@ module Brcobranca
           "9#{''.rjust(393, ' ')}#{sequencial.to_s.rjust(6, '0')}"
         end
 
-        # Registro detalhe do arquivo remessa
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def monta_detalhe(_pagamento, _sequencial)
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
         # Gera o arquivo com os registros
         #
         # @return [String]
@@ -94,42 +90,6 @@ module Brcobranca
 
           remittance.encode(remittance.encoding, universal_newline: true).encode(remittance.encoding,
                                                                                  crlf_newline: true)
-        end
-
-        # Informacoes referentes a conta do cedente
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def info_conta
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Numero do banco na camara de compensacao
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def cod_banco
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Nome por extenso do banco cobrador
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def nome_banco
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Complemento do registro header
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def complemento
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
       end
     end
