@@ -37,7 +37,8 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'
+          ruby-version: '3.3'
+          bundler: default
           bundler-cache: true # runs 'bundle install' and caches installed
 
       # Exit code 1 = ofensas encontradas (reportadas via SARIF, não quebram o job).

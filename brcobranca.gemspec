@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
   gem.homepage = 'https://github.com/kivanio/brcobranca'
   gem.files = Dir['Rakefile', '{lib}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*', 'History*']
   gem.require_paths = ['lib']
-  gem.required_ruby_version = '>= 2.7.0'
+  gem.required_ruby_version = '>= 3.3.0'
 
   gem.metadata = {
     'homepage_uri' => 'https://github.com/kivanio/brcobranca',
