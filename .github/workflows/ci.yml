@@ -9,12 +9,17 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
+  workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
@@ -30,23 +35,24 @@ jobs:
           - '3.2'
           - '3.3'
           - '3.4'
+          - '4.0'
           - 'head'
     continue-on-error: ${{ endsWith(matrix.ruby, 'head') }}
     env:
       BUNDLE_WITHOUT: development
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-    - name: Install ghostscript
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install ghostscript
-        which ghostscript
+      - name: Install ghostscript
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install ghostscript
+          which ghostscript
 
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true # runs 'bundle install' and caches installed
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true # runs 'bundle install' and caches installed
 
-    - name: Run tests
-      run: bundle exec rake
+      - name: Run tests
+        run: bundle exec rake
