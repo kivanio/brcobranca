@@ -4,6 +4,12 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Base < Brcobranca::Remessa::Base
+        extend Brcobranca::MetodosAbstratos
+
+        # Cada banco precisa implementar:
+        metodos_abstratos :complemento_header, :versao_layout_arquivo, :versao_layout_lote,
+                          :convenio_lote, :nome_banco, :cod_banco, :info_conta, :codigo_convenio
+
         # convenio do cedente
         attr_accessor :convenio
         # mensagem 1
@@ -373,33 +379,6 @@ module Brcobranca
           end
         end
 
-        # Complemento do registro
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def complemento_header
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Numero da versao do layout do arquivo
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def versao_layout_arquivo
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Numero da versao do layout do lote
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def versao_layout_lote
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
         # Densidade de gravacao do arquivo
         def densidade_gravacao
           '00000'
@@ -413,51 +392,6 @@ module Brcobranca
         # Uso exclusivo da Empresa
         def uso_exclusivo_empresa
           ''.rjust(20, '0')
-        end
-
-        # Informacoes do convenio para o lote
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def convenio_lote
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Nome do banco
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def nome_banco
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Codigo do banco
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def cod_banco
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Informacoes da conta do cedente
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def info_conta
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
-        end
-
-        # Codigo do convenio
-        #
-        # Este metodo deve ser sobrescrevido na classe do banco
-        #
-        def codigo_convenio
-          raise Brcobranca::NaoImplementado,
-                'Sobreescreva este método na classe referente ao banco que você esta criando'
         end
 
         # Complemento do Segmento R

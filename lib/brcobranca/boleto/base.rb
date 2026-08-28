@@ -17,6 +17,11 @@ module Brcobranca
       # Validações
       include Brcobranca::Validations
 
+      extend Brcobranca::MetodosAbstratos
+
+      # Cada banco precisa implementar:
+      metodos_abstratos :nosso_numero_boleto, :agencia_conta_boleto, :codigo_barras_segunda_parte
+
       # <b>REQUERIDO</b>: Número do convênio/contrato do cliente junto ao banco emissor
       attr_accessor :convenio
       # <b>REQUERIDO</b>: Tipo de moeda utilizada (Real(R$) e igual a 9)
@@ -163,16 +168,6 @@ module Brcobranca
         nosso_numero.modulo11(mapeamento: { 10 => 0, 11 => 0 })
       end
 
-      # @abstract Deverá ser sobreescrito para cada banco.
-      def nosso_numero_boleto
-        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
-      end
-
-      # @abstract Deverá ser sobreescrito para cada banco.
-      def agencia_conta_boleto
-        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
-      end
-
       # Valor total do documento: <b>quantidate * valor</b>
       # @return [Float]
       def valor_documento
@@ -223,13 +218,6 @@ module Brcobranca
                      message: "tamanho(#{codigo.size}) prévio do código de barras(#{codigo}) inválido, deveria ser 43 dígitos")
           raise Brcobranca::BoletoInvalido, self
         end
-      end
-
-      # Monta a segunda parte do código de barras, que é específico para cada banco.
-      #
-      # @abstract Deverá ser sobreescrito para cada banco.
-      def codigo_barras_segunda_parte
-        raise Brcobranca::NaoImplementado, 'Sobreescreva este método na classe referente ao banco que você esta criando'
       end
 
       private
