@@ -75,7 +75,7 @@ module Brcobranca
         # Posicoes conforme manual "Cobranca FEBRABAN 240" do Itau, item
         # 3.2 (Arquivo Retorno), Segmentos T e U.
         class Line < Base
-          extend ParseLine::FixedWidth # Extendendo parseline
+          extend ParseLine
 
           REGISTRO_T_FIELDS = %w[
             codigo_registro codigo_ocorrencia agencia_com_dv carteira
