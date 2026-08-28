@@ -4,33 +4,7 @@ module Brcobranca
   module Retorno
     module Cnab240
       class Sicredi < Brcobranca::Retorno::Cnab240::Base
-        # Regex para remoção de headers e trailers além de registros diferentes de T ou U
-        REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/.freeze
-
-        def self.load_lines(file, options = {})
-          default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U }
-          options = default_options.merge!(options)
-
-          Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
-            retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
-          end
-        end
-
-        def self.generate_retorno_based_on_cnab_lines(cnab_lines)
-          retorno = new
-          cnab_lines.each do |line|
-            if line.tipo_registro == 'T'
-              Line::REGISTRO_T_FIELDS.each do |attr|
-                retorno.send(:"#{attr}=", line.send(attr))
-              end
-            else
-              Line::REGISTRO_U_FIELDS.each do |attr|
-                retorno.send(:"#{attr}=", line.send(attr))
-              end
-            end
-          end
-          retorno
-        end
+        extend Brcobranca::Retorno::Cnab240::RegistrosTU
 
         # Linha de mapeamento do retorno do arquivo CNAB 240
         # O registro CNAB 240 possui 2 tipos de registros que juntos geram um registro de retorno bancário

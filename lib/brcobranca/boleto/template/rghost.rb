@@ -85,6 +85,8 @@ module Brcobranca
                                                               y: "#{@y - 1.67} cm")
           end
 
+          desenha_qrcode_pix(doc, boleto)
+
           # Gerando stream
           formato = options.delete(:formato) || Brcobranca.configuration.formato
           resolucao = options.delete(:resolucao) || Brcobranca.configuration.resolucao
@@ -116,6 +118,8 @@ module Brcobranca
                                                                 y: "#{@y - 1.67} cm")
             end
 
+            desenha_qrcode_pix(doc, boleto)
+
             # Cria nova página se não for o último boleto
             doc.next_page unless index == boletos.length - 1
           end
@@ -140,6 +144,17 @@ module Brcobranca
           @x += x
           @y += y
           doc.moveto x: "#{@x} cm", y: "#{@y} cm"
+        end
+
+        # Ganchos sobrescritos pelo template RghostBolepix, que desenha o
+        # QRCode do PIX e os descontos/abatimentos. Aqui sao no-op ou apenas
+        # o deslocamento equivalente.
+        def desenha_qrcode_pix(_doc, _boleto); end
+
+        def desenha_descontos_e_abatimentos(_doc, _boleto); end
+
+        def move_para_linha_do_sacado(doc, _boleto)
+          move_more(doc, -15, -1.3)
         end
 
         # Monta o cabeçalho do layout do boleto
@@ -187,7 +202,7 @@ module Brcobranca
           move_more(doc, 5, 0)
           doc.show boleto.valor_documento.to_currency
 
-          move_more(doc, -15, -1.3)
+          move_para_linha_do_sacado(doc, boleto)
           doc.show "#{boleto.sacado} - #{boleto.sacado_documento.formata_documento}"
 
           move_more(doc, 0, -0.3)
@@ -265,6 +280,8 @@ module Brcobranca
 
           move_more(doc, 10.1, 0)
           doc.show boleto.valor_documento.to_currency
+
+          desenha_descontos_e_abatimentos(doc, boleto)
 
           if boleto.instrucoes
             doc.text_area boleto.instrucoes, width: '14 cm', text_align: :left, x: "#{@x -= 15.8} cm", y: "#{@y -= 0.9} cm",

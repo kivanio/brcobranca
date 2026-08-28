@@ -152,6 +152,7 @@ module Brcobranca
 
     module Cnab240
       autoload :Base,          'brcobranca/retorno/cnab240/base'
+      autoload :RegistrosTU,   'brcobranca/retorno/cnab240/registros_tu'
       autoload :Itau,          "brcobranca/retorno/cnab240/itau"
       autoload :Santander,     'brcobranca/retorno/cnab240/santander'
       autoload :Sicredi,       'brcobranca/retorno/cnab240/sicredi'
