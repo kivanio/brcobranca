@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require 'parseline'
-
 module Brcobranca
   module Retorno
     module Cnab400
       # Formato de Retorno CNAB 400
       # Baseado em: http://download.itau.com.br/bankline/layout_cobranca_400bytes_cnab_itau_mensagem.pdf
       class Itau < Brcobranca::Retorno::Cnab400::Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+        extend ParseLine
 
         # Load lines
         def self.load_lines(file, options = {})

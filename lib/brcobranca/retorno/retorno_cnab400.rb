@@ -6,14 +6,13 @@
 # Classe original desenvolvida a partir do layout do Itau.
 # Movido para: cnab400/itau.rb
 #
-require 'parseline'
 module Brcobranca
   module Retorno
     # Formato de Retorno CNAB 400
 
     # Baseado em: http://download.itau.com.br/bankline/layout_cobranca_400bytes_cnab_itau_mensagem.pdf
     class RetornoCnab400 < Base
-      extend ParseLine::FixedWidth # Extendendo parseline
+      extend ParseLine
 
       def self.load_lines(file, options = {})
         default_options = { except: [1] } # por padrao ignora a primeira linha que é header

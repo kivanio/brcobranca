@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'parseline'
-
 module Brcobranca
   module Retorno
     module Cnab240
@@ -39,7 +37,7 @@ module Brcobranca
         # O primeiro é do tipo T que retorna dados gerais sobre a transação
         # O segundo é do tipo U que retorna os valores da transação
         class Line < Base
-          extend ParseLine::FixedWidth # Extendendo parseline
+          extend ParseLine
 
           REGISTRO_T_FIELDS = %w[codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira
                                  data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia].freeze

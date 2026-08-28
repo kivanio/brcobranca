@@ -4,7 +4,7 @@ module Brcobranca
   module Retorno
     module Cnab400
       class Banrisul < Brcobranca::Retorno::Cnab400::Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+        extend ParseLine
 
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header

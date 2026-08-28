@@ -1,6 +1,6 @@
 require:
   - rubocop-performance
-  - 'test_prof/rubocop'
+  - "test_prof/rubocop"
   - rubocop-rspec
   - rubocop-packaging
 
@@ -15,3 +15,21 @@ Style/FrozenStringLiteralComment:
 Layout/LineLength:
   Max: 125
   AllowedPatterns: ['\A#']
+
+Style/SuperArguments:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: true
+  Prefixes:
+    - quando
+    - com
+    - sem
+
+RSpec/MultipleExpectations:
+  Enabled: true
+  Max: 10
+
+RSpec/ExampleLength:
+  Enabled: true
+  Max: 25

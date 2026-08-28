@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-require 'parseline'
-
 module Brcobranca
   module Retorno
     module Cnab400
       # Formato de Retorno CNAB 400
       class BancoNordeste < Brcobranca::Retorno::Base
-        extend ParseLine::FixedWidth
+        extend ParseLine
 
         def self.load_lines(file, options = {})
           default_options = { except: [1] } # por padrao ignora a primeira linha que é header

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'parseline'
 module Brcobranca
   module Retorno
     # Formato de Retorno CNAB 240
@@ -12,7 +11,9 @@ module Brcobranca
         default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U }
         options = default_options.merge!(options)
 
-        Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
+        # self::Line (e nao Line) para que uma subclasse, como o
+        # Cnab240::Caixa, use o proprio layout em vez do generico.
+        self::Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
           retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
         end
       end
@@ -21,11 +22,11 @@ module Brcobranca
         retorno = new
         cnab_lines.each do |line|
           if line.tipo_registro == 'T'
-            Line::REGISTRO_T_FIELDS.each do |attr|
+            self::Line::REGISTRO_T_FIELDS.each do |attr|
               retorno.send(:"#{attr}=", line.send(attr))
             end
           else
-            Line::REGISTRO_U_FIELDS.each do |attr|
+            self::Line::REGISTRO_U_FIELDS.each do |attr|
               retorno.send(:"#{attr}=", line.send(attr))
             end
           end
@@ -38,7 +39,7 @@ module Brcobranca
       # O primeiro é do tipo T que retorna dados gerais sobre a transação
       # O segundo é do tipo U que retorna os valores da transação
       class Line < Base
-        extend ParseLine::FixedWidth # Extendendo parseline
+        extend ParseLine
 
         REGISTRO_T_FIELDS = %w[codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira
                                data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia].freeze
