@@ -25,7 +25,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
-          bundler: latest
+          bundler: default
           bundler-cache: true
 
       - name: Lint Ruby files

@@ -48,9 +48,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          # O BUNDLED WITH do Gemfile.lock e antigo demais para o ruby-head
-          # (quebra em `uninitialized constant Pathname::SEPARATOR_PAT`).
-          bundler: latest
+          # Usa o bundler que acompanha cada Ruby em vez do BUNDLED WITH
+          # (2.4.14) do Gemfile.lock. No ruby-head e a unica opcao que pode
+          # funcionar: todo bundler ja lancado quebra em `uninitialized
+          # constant Pathname::SEPARATOR_PAT`, corrigido apenas no master do
+          # rubygems (ruby/rubygems#9529).
+          bundler: default
           bundler-cache: true # runs 'bundle install' and caches installed
 
       - name: Run tests
