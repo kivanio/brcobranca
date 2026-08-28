@@ -31,3 +31,6 @@ pkg
 pkg/*.8
 doc
 doc/*.*
+
+## CLAUDE CODE
+.claude/settings.local.json
