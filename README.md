@@ -70,6 +70,45 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 - Santander (CNAB400)
 - Santander (CNAB240)
 
+### Preenchimento automático do sacado (CPF/CNPJ)
+
+Recurso opcional para preencher os dados do sacado (pagador) a partir de uma consulta
+por CPF ou CNPJ. É totalmente aditivo: a gem continua funcionando sem rede caso o
+recurso não seja usado, e nada no núcleo do boleto ou da remessa é alterado.
+
+A implementação de referência (`CpfCnpjComBrLookup`) consome a API pública de
+[cpfcnpj.com.br](https://www.cpfcnpj.com.br/dev/) usando apenas a biblioteca padrão
+(`Net::HTTP`), sem introduzir dependências novas. O token de acesso é obtido no painel,
+em **API > Tokens**. Para testar a integração sem consumir saldo, use o token público de
+testes `5ae973d7a997af13f0aaf2bf60e65803`, que devolve dados fictícios.
+
+```ruby
+fonte = Brcobranca::PessoaLookup::CpfCnpjComBrLookup.new(token: 'seu_token')
+resolver = Brcobranca::PessoaLookup::Resolver.new(fonte)
+
+# Campos granulares para a remessa (CNAB)
+atributos = resolver.por_documento('12345678909', formato: :cnab)
+pagamento = Brcobranca::Remessa::Pagamento.new(
+  atributos.merge(nosso_numero: '1', data_vencimento: Date.current, valor: 199.90)
+)
+
+# Endereço achatado em uma única string para o boleto
+dados_boleto = resolver.por_documento('11222333000181', formato: :boleto)
+boleto = Brcobranca::Boleto::Itau.new(dados_boleto.merge(valor: 199.90))
+```
+
+O documento é detectado automaticamente: 11 dígitos são tratados como CPF (pacote 3, nome
+e endereço) e 14 caracteres como CNPJ (pacote 5, razão social e endereço). Para incluir
+situação cadastral, porte e Simples Nacional, configure `pacote_cnpj: 6`; esses campos são
+úteis apenas como filtro de negócio, pois não têm destino nos dados do sacado.
+
+A cobertura de endereço é de aproximadamente D+0 e varia conforme a base consultada. O
+recurso falha fechado: qualquer indisponibilidade de rede, tempo limite ou resposta
+ilegível levanta uma exceção (`Brcobranca::PessoaLookup::Indisponivel` e derivadas) em vez
+de devolver dados incompletos. A fonte de dados é qualquer objeto que responda a
+`consultar_cpf` e `consultar_cnpj`, o que permite trocar o provedor ou usar um objeto de
+teste sem alterar o resolver.
+
 ### Documentação
 
 Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki).
