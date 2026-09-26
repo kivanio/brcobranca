@@ -102,6 +102,11 @@ RSpec.describe Brcobranca::Boleto::Credisis do # :nodoc:[all]
     expect(boleto_novo.carteira).to eql('18')
   end
 
+  it 'usa o limitador 8 no modulo 11 de um CNPJ' do
+    boleto_novo = described_class.new @valid_attributes.merge(documento_cedente: '69103604000160')
+    expect(boleto_novo.documento_cedente_dv).to be(5)
+  end
+
   it 'Montar código de barras' do
     @valid_attributes[:valor] = 135.00
     @valid_attributes[:data_documento] = Date.parse('2008-02-01')

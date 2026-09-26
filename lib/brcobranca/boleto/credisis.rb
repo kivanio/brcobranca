@@ -91,7 +91,9 @@ module Brcobranca
       # Caso for CNPJ, utilizar 8 no limitador da multiplicação.
       def documento_cedente_dv
         options = { mapeamento: { 0 => 1, 10 => 1, 11 => 1 } }
-        options.merge(multiplicador: [8, 7, 6, 5, 4, 3, 2]) if documento_cedente.to_s.size > 11
+        if documento_cedente.to_s.size > 11
+          options[:multiplicador] = [8, 7, 6, 5, 4, 3, 2]
+        end
         documento_cedente.modulo11(options)
       end
 
