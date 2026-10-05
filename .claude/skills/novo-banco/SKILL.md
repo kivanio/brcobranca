@@ -57,7 +57,7 @@ Atenção: o alvo é **Ruby 3.3** (RuboCop `TargetRubyVersion: 3.3`, matriz de C
 
 O total tem que fechar: primeira parte (18) + segunda parte (25) = 43, + DV = 44. Se o tamanho não bater, `Base#codigo_barras` levanta `BoletoInvalido` dizendo o tamanho encontrado.
 
-Logos: `lib/brcobranca/arquivos/logos/<class_name>.eps` e `<class_name>_carne.eps` (`class_name` = nome da classe em minúsculas). Sem eles o shared example `busca_logotipo` falha.
+Logos: `lib/brcobranca/arquivos/logos/<class_name>.eps` e `<class_name>_carne.eps` (templates RGhost) e `lib/brcobranca/arquivos/logos/png/<class_name>.png` (template Prawn), com `class_name` = nome da classe em minúsculas. Sem eles o shared example `busca_logotipo` falha.
 
 ## 3. Remessa
 

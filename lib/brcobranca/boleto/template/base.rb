@@ -18,6 +18,8 @@ module Brcobranca
             [Brcobranca::Boleto::Template::Rghost2]
           when :both
             [Brcobranca::Boleto::Template::Rghost, Brcobranca::Boleto::Template::RghostCarne]
+          when :prawn
+            [Brcobranca::Boleto::Template::Prawn]
           else
             [Brcobranca::Boleto::Template::Rghost]
           end

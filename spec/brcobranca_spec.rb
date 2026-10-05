@@ -3,6 +3,12 @@
 require 'spec_helper'
 
 RSpec.describe 'Brcobranca' do
+  after do
+    # Restaura as configurações para os valores padrão após cada teste
+    Brcobranca.configuration.gerador = :rghost
+    Brcobranca.configuration.formato = :pdf
+  end
+
   describe 'gerador' do
     context 'rghost' do
       before { Brcobranca.configuration.gerador = :rghost }

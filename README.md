@@ -72,6 +72,8 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 
 ### Documentação
 
+- [Templates de boleto](docs/templates.md): como escolher e configurar o gerador (RGhost ou Prawn), formatos de saída, PIX e carnê.
+
 Caso queira verificar(ou adicionar) alguma documentação, acesse [nosso wiki](https://github.com/kivanio/brcobranca/wiki).
 
 ### Rubydoc
