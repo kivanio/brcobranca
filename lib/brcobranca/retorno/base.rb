@@ -11,6 +11,21 @@ module Brcobranca
       attr_accessor :tipo_chave_dict,
                     :codigo_chave_dict,
                     :txid
+
+      # Campos do Split Payment (IBS/CBS) dos registros opcionais Segmento X-03
+      # e X-04 do arquivo de retorno (Layout Padrao Febraban 240 posicoes V11.0,
+      # 11/09/2026) - veja Brcobranca::Retorno::Cnab240::SegmentoSplitPayment.
+      attr_accessor :identificacao_registro_opcional,
+                    :documento_fiscal,
+                    :valor_cbs_informado, :valor_ibs_informado,
+                    :valor_cbs_corrigido, :valor_ibs_corrigido,
+                    :valor_cbs_em_aberto, :valor_ibs_em_aberto,
+                    :valor_cbs_segregado, :valor_ibs_segregado,
+                    # Segmento X-03
+                    :id_split, :tipo_id_split,
+                    # Segmento X-04
+                    :valor_pago_ausente_split,
+                    :valor_repassado_novo_titular, :valor_residual
     end
   end
 end

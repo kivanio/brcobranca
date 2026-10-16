@@ -5,6 +5,10 @@ module Brcobranca
     class Pagamento
       include Brcobranca::Validations
 
+      # Posicoes do campo X101 (Documento Fiscal) do Segmento X-03 do Split
+      # Payment, veja o Layout Padrao Febraban 240 posicoes V11.0, pag. 84
+      POSICOES_DOCUMENTO_FISCAL = 50
+
       # <b>REQUERIDO</b>: nosso numero
       attr_accessor :nosso_numero
       # <b>REQUERIDO</b>: data do vencimento do boleto
@@ -91,6 +95,16 @@ module Brcobranca
       attr_accessor :parcela
       # <b>OPCIONAL</b>: Chave da Nota Fiscal Eletrônica
       attr_accessor :chave_nfe
+      # <b>OPCIONAL</b>: Número da chave do Documento Fiscal (DF-e), campo X101
+      # do Split Payment do IBS/CBS. É de preenchimento opcional quando o CBS e
+      # o IBS Informado são informados
+      attr_accessor :documento_fiscal
+      # <b>OPCIONAL</b>: Valor do CBS Informado, campo X102 do Split Payment
+      # do IBS/CBS. Precisa ser informado em conjunto com o IBS Informado
+      attr_accessor :valor_cbs
+      # <b>OPCIONAL</b>: Valor do IBS Informado, campo X103 do Split Payment
+      # do IBS/CBS. Precisa ser informado em conjunto com o CBS Informado
+      attr_accessor :valor_ibs
 
       validates_presence_of :nosso_numero, :data_vencimento, :valor,
                             :documento_sacado, :nome_sacado, :endereco_sacado,
@@ -100,6 +114,35 @@ module Brcobranca
       validates_length_of :cod_desconto, is: 1, message: 'deve ter 1 dígito.'
       validates_length_of :especie_titulo, is: 2, message: 'deve ter 2 dígitos.', allow_blank: true
       validates_length_of :identificacao_ocorrencia, is: 2, message: 'deve ter 2 dígitos.'
+
+      # Regras dos valores informados do Split Payment: o CBS e o IBS Informado
+      # precisam ser preenchidos sempre em conjunto, mesmo que um deles seja
+      # zero, e a soma dos dois não pode ser superior ao valor nominal do título,
+      # veja o Layout Padrão Febraban 240 posições V11.0, pág. 85 (códigos 'X2' e
+      # 'X1' dos motivos da ocorrência do retorno).
+      validates_each :valor_cbs do |pagamento, _atributo, _valor|
+        cbs_informado = pagamento.valor_cbs
+        ibs_informado = pagamento.valor_ibs
+
+        if cbs_informado.nil? != ibs_informado.nil?
+          pagamento.errors.add :valor_cbs, 'deve ser informado em conjunto com o IBS Informado.'
+          next
+        end
+        # Sem o valor do titulo nao ha o que comparar (a presenca do valor e
+        # validada a parte). Um titulo de valor zero entra na comparacao: nele
+        # a soma do CBS e do IBS nao pode ser positiva.
+        next if cbs_informado.nil? || pagamento.valor.nil?
+
+        # A soma e comparada em centavos e com o mesmo arredondamento dos
+        # campos X102/X103 (veja #formata_valor_split): somar os Floats de
+        # origem recusaria um titulo valido (0.1 + 0.2 > 0.3) e um CBS de 5.005
+        # e escrito como 5.00 no campo
+        centavos = ->(valor) { format('%.2f', valor.to_f).delete('.').to_i }
+        next if centavos.call(cbs_informado) + centavos.call(ibs_informado) <= centavos.call(pagamento.valor)
+
+        pagamento.errors.add :valor_cbs,
+                             'a soma do CBS e do IBS Informado não pode ser superior ao valor do título.'
+      end
 
       # Nova instancia da classe Pagamento
       #
@@ -290,6 +333,80 @@ module Brcobranca
         format_value(:valor_abatimento, tamanho)
       end
 
+      # Verifica se o titulo gera o registro opcional Segmento X-03 do Split
+      # Payment do IBS/CBS, veja Brcobranca::Remessa::Cnab240::Base#monta_lote.
+      #
+      # O Recebedor sinaliza a opcao pelo Split Payment informando o CBS e o IBS
+      # Informado (campos X102 e X103) - os dois sempre em conjunto, mesmo que um
+      # deles seja zero - e a Chave do Documento Fiscal (X101) fica opcional:
+      # "ao realizar o preenchimento, o Recebedor sinaliza a opcao por utilizar o
+      # Split Payment" (Layout Padrao Febraban 240 posicoes V11.0, pag. 85).
+      #
+      # O Codigo de Movimento (campo C004) nao entra na decisao de proposito. A
+      # norma define o dominio de C004, mas cada Banco escolhe os codigos que
+      # aceita - o mesmo codigo pode nao existir no Banco, ter outro significado
+      # ou nao ser o evento em que o Segmento X-03 e previsto -, e essa lista
+      # nao caberia aqui: Pagamento e comum a todos os Bancos e a gem nao tem a
+      # tabela de codigos de cada um. Quem monta o titulo (o ERP, que tem a
+      # tabela do Banco) sinaliza o registro preenchendo o CBS/IBS Informado nos
+      # movimentos em que o Banco preve o Segmento X-03, e nao preenche nos
+      # demais.
+      #
+      # @return [Boolean]
+      #
+      def split_payment?
+        !valor_cbs.nil? && !valor_ibs.nil?
+      end
+
+      # Formata a chave do Documento Fiscal (campo X101) em 50 posicoes
+      #
+      # O campo e Alfa no layout e a chave do DF-e pode ter letras (o CNPJ
+      # alfanumerico entra na composicao da chave), por isso so a pontuacao e
+      # removida: filtrar apenas os digitos truncaria a chave.
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      # @return [String]
+      #
+      # @raise [Brcobranca::ValorInvalido] quando a chave nao cabe nas posicoes
+      #   do campo X101: a chave cortada identificaria outro Documento Fiscal
+      #   para o Banco.
+      #
+      def formata_documento_fiscal(tamanho = POSICOES_DOCUMENTO_FISCAL)
+        chave = documento_fiscal.to_s.gsub(/[^0-9A-Za-z]/, '').upcase
+
+        if chave.size > POSICOES_DOCUMENTO_FISCAL
+          raise ValorInvalido,
+                "#{self.class}#formata_documento_fiscal: a chave do Documento Fiscal tem #{chave.size} " \
+                "caracteres e nao cabe nas #{POSICOES_DOCUMENTO_FISCAL} posicoes do campo X101"
+        end
+
+        chave.ljust(tamanho, ' ')[0...tamanho]
+      end
+
+      # Formata o valor do CBS Informado (campo X102) no padrao 13,2
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      # @return [String]
+      #
+      def formata_valor_cbs(tamanho = 15)
+        formata_valor_split(valor_cbs, tamanho)
+      end
+
+      # Formata o valor do IBS Informado (campo X103) no padrao 13,2
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      # @return [String]
+      #
+      def formata_valor_ibs(tamanho = 15)
+        formata_valor_split(valor_ibs, tamanho)
+      end
+
       # Retorna a identificacao do pagador
       # Se for pessoa fisica (CPF com 11 digitos) é 1
       # Se for juridica (CNPJ com 14 digitos) é 2
@@ -309,6 +426,55 @@ module Brcobranca
       end
 
       private
+
+      # Formata os valores informados do Split Payment (CBS/IBS), campos
+      # X102 e X103 do Layout Padrao Febraban 240 posicoes V11.0: 13 digitos,
+      # sendo 2 decimais.
+      #
+      # @param valor [Numeric]
+      #
+      # @param tamanho [Integer]
+      #   quantidade de caracteres a ser retornado
+      #
+      # @return [String]
+      #
+      # @raise [Brcobranca::ValorInvalido] quando o valor nao e numerico (o
+      #   `to_f` de uma String devolveria 0.0 para 'abc' ou 1.0 para '1,80' e o
+      #   campo sairia preenchido com um valor que o Recebedor nao informou),
+      #   nao e um numero finito, e negativo ou nao cabe nas posicoes do campo.
+      #   Um valor maior deixa o registro com mais de 240 posicoes e um negativo
+      #   coloca um sinal no campo numerico.
+      #
+      def formata_valor_split(valor, tamanho = 13)
+        valida_tipo_valor_split!(valor)
+
+        valor = valor.to_f
+        # O -0.0 e igual a zero, mas o format mantem o sinal e o campo
+        # numerico sairia com um hifen (X102/X103 sao Numeric 13,2)
+        valor = 0.0 if valor.zero?
+        valor_formatado = format('%.2f', valor).delete('.')
+
+        if !valor.finite? || valor.negative? || valor_formatado.size > tamanho
+          raise ValorInvalido,
+                "#{self.class}#formata_valor_split: #{valor} nao cabe nas #{tamanho} posicoes do " \
+                'campo (13 digitos, sendo 2 decimais)'
+        end
+
+        valor_formatado.rjust(tamanho, '0')
+      end
+
+      # Valida que o valor informado do Split Payment (CBS/IBS) e um Numeric
+      #
+      # @param valor [Numeric]
+      #
+      # @raise [Brcobranca::ValorInvalido] quando o valor nao e numerico
+      #
+      def valida_tipo_valor_split!(valor)
+        return if valor.is_a?(Numeric)
+
+        raise ValorInvalido,
+              "#{self.class}#formata_valor_split: #{valor.inspect} deve ser um numero (Numeric)"
+      end
 
       def format_value(attribute, tamanho)
         value = send(attribute)

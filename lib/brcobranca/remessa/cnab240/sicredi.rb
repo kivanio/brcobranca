@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Sicredi < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         attr_accessor :modalidade_carteira, :parcela, :byte_idt, :posto
 
         #       Parcela - 02 posições (11 a 12) - "01" se parcela única

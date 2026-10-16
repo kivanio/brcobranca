@@ -12,6 +12,7 @@ module Brcobranca
         # O segundo é do tipo U que retorna os valores da transação
         class Line < Base
           extend ParseLine
+          extend Brcobranca::Retorno::Cnab240::SegmentoSplitPayment
 
           REGISTRO_T_FIELDS = %w[codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira
                                  data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia].freeze
@@ -46,6 +47,10 @@ module Brcobranca
             parse.field :motivo_ocorrencia, 213..222, lambda { |motivos|
               motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
             }
+
+            # Registros opcionais do Split Payment IBS/CBS: Segmento X-03/X-04
+            # (Layout Padrao Febraban 240 posicoes V11.0)
+            campos_segmento_split(parse)
 
             # Dados que não consegui extrair dos registros T e U
             # parse.field :convenio,31..37

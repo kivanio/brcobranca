@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Sicoob < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         attr_accessor :modalidade_carteira, :tipo_formulario, :parcela, :posto
 
         # identificacao da emissao do boleto (attr na classe base)

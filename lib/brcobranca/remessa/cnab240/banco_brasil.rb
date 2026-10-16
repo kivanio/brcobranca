@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class BancoBrasil < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         # variacao da carteira
         attr_accessor :variacao
 

@@ -153,6 +153,7 @@ module Brcobranca
     module Cnab240
       autoload :Base,          'brcobranca/retorno/cnab240/base'
       autoload :RegistrosTU,   'brcobranca/retorno/cnab240/registros_tu'
+      autoload :SegmentoSplitPayment, 'brcobranca/retorno/cnab240/segmento_split_payment'
       autoload :Itau,          "brcobranca/retorno/cnab240/itau"
       autoload :Santander,     'brcobranca/retorno/cnab240/santander'
       autoload :Sicredi,       'brcobranca/retorno/cnab240/sicredi'
@@ -191,6 +192,7 @@ module Brcobranca
     module Cnab240
       autoload :Base,               'brcobranca/remessa/cnab240/base'
       autoload :BaseCorrespondente, 'brcobranca/remessa/cnab240/base_correspondente'
+      autoload :SplitPayment,       'brcobranca/remessa/cnab240/split_payment'
       autoload :Caixa,              'brcobranca/remessa/cnab240/caixa'
       autoload :Itau,               "brcobranca/remessa/cnab240/itau"
       autoload :BancoBrasil,        'brcobranca/remessa/cnab240/banco_brasil'

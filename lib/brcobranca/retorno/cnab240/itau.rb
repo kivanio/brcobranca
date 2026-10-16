@@ -4,23 +4,9 @@ module Brcobranca
   module Retorno
     module Cnab240
       class Itau < Brcobranca::Retorno::Cnab240::Base
-        # Regex para remocao de headers/trailers e registros diferentes de T
-        # ou U.
-        REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U =
-          /^((?!^.{7}3.{5}[TU].*$).)*$/
-
-        def self.load_lines(file, options = {})
-          default_options = {
-            except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U
-          }
-          options = default_options.merge(options)
-
-          lines = Line.load_lines(file, options)
-          lines.each_slice(2).inject([]) do |retornos, cnab_lines|
-            validate_par_t_u!(cnab_lines)
-            retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
-          end
-        end
+        # Carga dos pares de registros T/U e dos registros opcionais do Split
+        # Payment IBS/CBS, com a validacao do par T/U propria do Itau.
+        extend Brcobranca::Retorno::Cnab240::RegistrosTU
 
         # Garante que cada grupo de linhas T/U produzido por .load_lines
         # esta completo e na ordem esperada antes de virar um retorno.
@@ -39,22 +25,6 @@ module Brcobranca
           raise ArgumentError,
                 "Par de registros T/U invalido ou incompleto no retorno " \
                 "do Itau (sequencial: #{sequencial.inspect})"
-        end
-
-        def self.generate_retorno_based_on_cnab_lines(cnab_lines)
-          retorno = new
-          cnab_lines.each do |line|
-            if line.tipo_registro == "T"
-              Line::REGISTRO_T_FIELDS.each do |attr|
-                retorno.send(:"#{attr}=", line.send(attr))
-              end
-            else
-              Line::REGISTRO_U_FIELDS.each do |attr|
-                retorno.send(:"#{attr}=", line.send(attr))
-              end
-            end
-          end
-          retorno
         end
 
         # Linha de mapeamento do retorno do arquivo CNAB 240 do Itau.
@@ -76,6 +46,7 @@ module Brcobranca
         # 3.2 (Arquivo Retorno), Segmentos T e U.
         class Line < Base
           extend ParseLine
+          extend Brcobranca::Retorno::Cnab240::SegmentoSplitPayment
 
           REGISTRO_T_FIELDS = %w[
             codigo_registro codigo_ocorrencia agencia_com_dv carteira
@@ -118,6 +89,9 @@ module Brcobranca
             parse.field :outros_recebimento, 92..106
             parse.field :data_ocorrencia, 137..144
             parse.field :data_credito, 145..152
+
+            # registros opcionais do Split Payment IBS/CBS (X-03/X-04)
+            campos_segmento_split(parse)
           end
         end
       end

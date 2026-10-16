@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Ailos < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         # digito da agencia
         attr_accessor :digito_agencia
 
@@ -132,9 +136,12 @@ module Brcobranca
         end
 
         def total_segmentos(pagamentos)
-          pagamentos.inject(0) do |total, pagamento|
-            total + (pagamento.codigo_multa == '0' ? 2 : 3)
+          total = pagamentos.inject(0) do |soma, pagamento|
+            soma + (pagamento.codigo_multa == '0' ? 2 : 3)
           end
+          # O Segmento R do AILOS e opcional (codigo_multa), o do Split Payment
+          # nao: os dois precisam entrar na contagem do trailer do arquivo
+          total + total_segmentos_split_payment(pagamentos)
         end
 
         def monta_segmento_r(pagamento, nro_lote, contador)

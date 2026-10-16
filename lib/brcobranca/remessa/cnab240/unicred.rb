@@ -12,6 +12,10 @@ module Brcobranca
       # diversos campos tratados como filler) e no segmento R, onde ficam as
       # mensagens do titulo.
       class Unicred < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         # Parametro de movimento vinculado ao cedente no momento do
         # cadastramento (campo 22 do header de arquivo - UN001).
         attr_accessor :parametro_movimento

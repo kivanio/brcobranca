@@ -34,7 +34,6 @@ module Brcobranca
         attr_accessor :codigo_baixa
         # dias_baixa (verificar o padrao nas classes referentes aos bancos)
         attr_accessor :dias_baixa
-
         validates_presence_of :agencia, :conta_corrente, message: 'não pode estar em branco.'
         validates_presence_of :documento_cedente, message: 'não pode estar em branco.'
         validates_length_of :codigo_carteira, is: 1, message: 'deve ter 1 dígito.'
@@ -326,14 +325,27 @@ module Brcobranca
             contador += 1
             lote << monta_segmento_q(pagamento, nro_lote, contador)
             contador += 1
-            next unless respond_to?(:monta_segmento_r)
+            if respond_to?(:monta_segmento_r)
+              seg_r = monta_segmento_r(pagamento, nro_lote, contador)
 
-            seg_r = monta_segmento_r(pagamento, nro_lote, contador)
-
-            unless seg_r.blank?
-              lote << seg_r
-              contador += 1
+              unless seg_r.blank?
+                lote << seg_r
+                contador += 1
+              end
             end
+
+            # Registro opcional Segmento X-03 com os dados do Split Payment do
+            # IBS/CBS, veja Layout Padrao Febraban 240 posicoes V11.0 pag. 85.
+            # So e gerado quando o Banco implementa o segmento e o titulo gera o
+            # registro, ou seja, quando o CBS/IBS Informado e informado, veja
+            # Brcobranca::Remessa::Pagamento#split_payment?.
+            next unless respond_to?(:monta_segmento_split) && pagamento.split_payment?
+
+            seg_split = monta_segmento_split(pagamento, nro_lote, contador)
+            next if seg_split.blank?
+
+            lote << seg_split
+            contador += 1
           end
           contador += 1 # trailer
 
@@ -366,11 +378,17 @@ module Brcobranca
         end
 
         def total_segmentos(pagamentos)
-          if respond_to?(:monta_segmento_r)
-            pagamentos.size * 3
-          else
-            pagamentos.size * 2
-          end
+          total = pagamentos.size * (respond_to?(:monta_segmento_r) ? 3 : 2)
+          total + total_segmentos_split_payment(pagamentos)
+        end
+
+        # Registro opcional do Split Payment (IBS/CBS): um detalhe a mais por
+        # titulo que possui os dados de Split Payment. Bancos que sobrescrevem
+        # #total_segmentos precisam somar este total (veja Cnab240::Ailos).
+        def total_segmentos_split_payment(pagamentos)
+          return 0 unless respond_to?(:monta_segmento_split)
+
+          pagamentos.count(&:split_payment?)
         end
 
         # Complemento do registro
