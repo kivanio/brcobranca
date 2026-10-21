@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Itau < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         validates_length_of :agencia, maximum: 4,
                                       message: "deve ter 4 dígitos."
         validates_length_of :conta_corrente, maximum: 5,

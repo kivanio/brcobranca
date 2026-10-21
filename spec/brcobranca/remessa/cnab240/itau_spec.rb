@@ -318,4 +318,78 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Itau do
       }
     end
   end
+
+  context 'Split Payment (IBS/CBS)' do
+    # O arquivo de remessa carrega a hora de geracao no header: sem congelar o
+    # tempo a comparacao com a fixture nao tem como ser estavel
+    before { Timecop.freeze(Time.local(2015, 7, 14, 16, 15, 15)) }
+
+    after { Timecop.return }
+
+    let(:pagamento_split) do
+      Brcobranca::Remessa::Pagamento.new(valor: 199.9,
+                                         data_vencimento: Date.current,
+                                         nosso_numero: 456,
+                                         numero: 456,
+                                         documento_sacado: '12345678901',
+                                         nome_sacado: 'PAGADOR TESTE LTDA',
+                                         endereco_sacado: 'RUA TESTE, 100',
+                                         bairro_sacado: 'CENTRO',
+                                         cep_sacado: '12345678',
+                                         cidade_sacado: 'SAO PAULO',
+                                         uf_sacado: 'SP',
+                                         documento_fiscal: '35260647906085000135550010000012341000012345',
+                                         valor_cbs: 1.8,
+                                         valor_ibs: 0.2)
+    end
+    let(:com_split) { subject.class.new(params.merge(pagamentos: [pagamento_split])) }
+    let(:segmento_x) { com_split.gera_arquivo.split("\r\n").find { |linha| linha[13] == 'X' } }
+
+    it 'gera o registro opcional Segmento X-03 depois dos segmentos do titulo' do
+      linhas = com_split.gera_arquivo.split("\r\n").reject(&:blank?)
+
+      expect(linhas.map { |linha| linha[13] }).to eq [' ', '0', 'P', 'Q', 'R', 'X', ' ', ' ']
+    end
+
+    it 'informa os campos de controle do Segmento X-03' do
+      expect(segmento_x.size).to eq 240
+      expect(segmento_x[0..2]).to eq '341'                   # banco
+      expect(segmento_x[3..6]).to eq '0001'                          # lote de servico
+      expect(segmento_x[7]).to eq '3'                                # tipo de registro
+      expect(segmento_x[13]).to eq 'X'                               # cod. segmento
+      expect(segmento_x[15..16]).to eq '03'                          # ident. registro opcional (G067)
+    end
+
+    it 'informa os campos X101, X102 e X103 do Segmento X-03' do
+      # O X-03 nao tem codigo de movimento (C004): as posicoes 16-17 sao a
+      # identificacao do registro opcional (G067)
+      expect(segmento_x[17..66]).to eq '35260647906085000135550010000012341000012345'.ljust(50, ' ')
+      expect(segmento_x[67..81]).to eq '000000000000180'             # CBS informado X102 (1,80)
+      expect(segmento_x[82..96]).to eq '000000000000020'             # IBS informado X103 (0,20)
+      expect(segmento_x[97..239].strip).to be_blank                  # campos do Banco + FEBRABAN/CNAB
+    end
+
+    it 'conta o Segmento X-03 nas quantidades de registros do lote e do arquivo' do
+      linhas = com_split.gera_arquivo.split("\r\n").reject(&:blank?)
+      trailer_lote = linhas[6]
+      trailer_arquivo = linhas.last
+
+      # header + P/Q/R + X + trailer do lote
+      expect(linhas.size).to eq 8
+      expect(trailer_lote[17..22].to_i).to eq linhas.size - 2
+      expect(trailer_arquivo[23..28].to_i).to eq linhas.size
+    end
+
+    it 'nao gera o Segmento X-03 para titulos sem dados de Split Payment' do
+      segmentos = itau.gera_arquivo.split("\r\n").map { |linha| linha[13] }
+
+      expect(segmentos).not_to include('X')
+    end
+
+    it 'gera o arquivo com o Segmento X-03' do
+      arquivo = com_split.gera_arquivo
+
+      expect(arquivo).to eq(read_remessa('remessa-itau-cnab240-split-payment.rem', arquivo))
+    end
+  end
 end

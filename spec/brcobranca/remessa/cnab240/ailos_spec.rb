@@ -162,4 +162,10 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Ailos do
       it { expect(ailos.gera_arquivo).to eq(read_remessa('remessa-ailos-cnab240.rem', ailos.gera_arquivo)) }
     end
   end
+
+  context 'Split Payment (IBS/CBS)' do
+    # O include do modulo SplitPayment e o unico liga/desliga por banco: o
+    # exemplo compartilhado prova o Segmento X-03 no arquivo deste banco.
+    it_behaves_like 'cnab240 com split payment'
+  end
 end

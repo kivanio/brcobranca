@@ -257,3 +257,52 @@ shared_examples_for 'cnab240' do
     end
   end
 end
+
+# O registro opcional do Split Payment (IBS/CBS) e o padrao Febraban (Segmento
+# X-03 da V11.0): o mesmo exemplo vale para todo banco que inclui
+# Brcobranca::Remessa::Cnab240::SplitPayment, entao o spec do banco precisa
+# definir os `let` :pagamento e :params.
+shared_examples_for 'cnab240 com split payment' do
+  let(:pagamento_split) do
+    pagamento.dup.tap do |com_split|
+      com_split.documento_fiscal = '35260647906085000135550010000012341000012345'
+      com_split.valor_cbs = 1.8
+      com_split.valor_ibs = 0.2
+    end
+  end
+  let(:linhas_com_split) do
+    subject.class.new(params.merge(pagamentos: [pagamento_split]))
+           .gera_arquivo.split("\r\n").reject(&:blank?)
+  end
+  let(:segmento_x03) { linhas_com_split.find { |linha| linha[13] == 'X' } }
+
+  it 'gera o registro opcional Segmento X-03' do
+    expect(segmento_x03).not_to be_nil
+    expect(segmento_x03[13]).to eq 'X'
+  end
+
+  it 'informa os campos do Segmento X-03' do
+    expect(segmento_x03.size).to eq 240
+    expect(segmento_x03[13]).to eq 'X'                          # cod. segmento
+    expect(segmento_x03[15..16]).to eq '03'                     # ident. registro opcional (G067)
+    expect(segmento_x03[17..66]).to eq '35260647906085000135550010000012341000012345'.ljust(50, ' ')
+    expect(segmento_x03[67..81]).to eq '000000000000180'        # CBS informado X102 (1,80)
+    expect(segmento_x03[82..96]).to eq '000000000000020'        # IBS informado X103 (0,20)
+    expect(segmento_x03[97..239].strip).to be_blank             # campos do Banco + FEBRABAN/CNAB
+  end
+
+  it 'conta o Segmento X-03 nos registros do lote e do arquivo' do
+    trailer_lote = linhas_com_split.find { |linha| linha[7] == '5' }
+    trailer_arquivo = linhas_com_split.last
+
+    # header + P/Q/R + X + trailer do lote
+    expect(trailer_lote[17..22].to_i).to eq linhas_com_split.size - 2
+    expect(trailer_arquivo[23..28].to_i).to eq linhas_com_split.size
+  end
+
+  it 'nao gera o Segmento X-03 para titulo sem os dados do Split Payment' do
+    segmentos = subject.class.new(params).gera_arquivo.split("\r\n").map { |linha| linha[13] }
+
+    expect(segmentos).not_to include('X')
+  end
+end

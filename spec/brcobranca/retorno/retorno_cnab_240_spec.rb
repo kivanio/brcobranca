@@ -50,4 +50,86 @@ RSpec.describe Brcobranca::Retorno::RetornoCnab240 do
     # pagamento.indicador_valor.should eql('')
     # pagamento.valor_ajuste.should eql('')
   end
+
+  # Os registros opcionais do Split Payment (IBS/CBS) sao o padrao Febraban
+  # (Segmento X-03 + X-04 no Layout Padrao 240 posicoes V11.0) e valem tambem
+  # para o layout generico do CNAB 240, usado pelos bancos que nao tem classe
+  # propria de retorno (ex.: Caixa).
+  describe 'Segmento X-03 e X-04 (Split Payment IBS/CBS)' do
+    let(:arquivo) do
+      File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'CNAB240ITAU-SPLIT-PAYMENT.RET')
+    end
+
+    it 'le os campos do Split Payment do titulo que tem os registros' do
+      retornos = described_class.load_lines(arquivo)
+
+      expect(retornos.size).to eq(2)
+      expect(retornos.first.identificacao_registro_opcional).to eql('03')
+      expect(retornos.first.documento_fiscal).
+        to eql('35260647906085000135550010000012341000012345')
+      expect(retornos.first.valor_cbs_segregado).to eql('000000000000180')
+      expect(retornos.first.valor_ibs_segregado).to eql('000000000000020')
+      expect(retornos.first.id_split).to eql('E2E12345678901234567890123456789012')
+      expect(retornos.first.tipo_id_split).to eql('E2E')
+      expect(retornos.first.valor_pago_ausente_split).to eql('000000000000180')
+      expect(retornos.first.valor_repassado_novo_titular).to eql('000000000000180')
+      expect(retornos.first.valor_residual).to eql('000000000000000')
+      expect(retornos.last.documento_fiscal).to be_nil
+    end
+  end
+
+  describe 'arquivo sem o par T/U' do
+    # Os registros opcionais (Y/X) nao iniciam um titulo no arquivo de retorno:
+    # um arquivo que so tem esses segmentos (ex.: Retorno de Boleto de
+    # Pagamento, com G, H, Y e X) nao gera retorno nenhum.
+    let(:arquivo_sem_t_u) do
+      Tempfile.new(['retorno_cnab240_sem_t_u', '.RET']).tap do |arquivo|
+        arquivo.write("3410001300001Y 03#{' ' * 222}\r\n")
+        arquivo.rewind
+      end
+    end
+
+    after do
+      arquivo_sem_t_u.close
+      arquivo_sem_t_u.unlink
+    end
+
+    it 'nao gera retorno para os registros opcionais sem o titulo' do
+      expect(described_class.load_lines(arquivo_sem_t_u.path)).to eq []
+    end
+  end
+
+  describe 'registros opcionais do Split Payment de outro lote' do
+    # Os registros X-03/X-04 acompanham o titulo do mesmo lote: um lote sem o
+    # par T/U (ex.: o lote de G/H do Pagamento de Boleto, cujos segmentos sao
+    # descartados pelo filtro) nao pode ter os seus dados do Split Payment
+    # lidos como se fossem do titulo do lote anterior.
+    let(:arquivo_split) do
+      File.join(File.dirname(__FILE__), '..', '..', 'arquivos', 'CNAB240ITAU-SPLIT-PAYMENT.RET')
+    end
+    let(:arquivo_outro_lote) do
+      Tempfile.new(['retorno_cnab240_outro_lote', '.RET']).tap do |arquivo|
+        linhas = File.read(arquivo_split).split("\r\n")
+        # Os registros opcionais do primeiro titulo passam para o lote 0002,
+        # que nao tem o par T/U no arquivo
+        linhas[3][3..6] = '0002'
+        linhas[4][3..6] = '0002'
+        arquivo.write("#{linhas.join("\r\n")}\r\n")
+        arquivo.rewind
+      end
+    end
+
+    after do
+      arquivo_outro_lote.close
+      arquivo_outro_lote.unlink
+    end
+
+    it 'nao associa os registros do Split Payment ao titulo do lote anterior' do
+      retornos = described_class.load_lines(arquivo_outro_lote.path)
+
+      expect(retornos.size).to eq(2)
+      expect(retornos.first.documento_fiscal).to be_nil
+      expect(retornos.first.valor_pago_ausente_split).to be_nil
+    end
+  end
 end

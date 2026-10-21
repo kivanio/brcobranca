@@ -4,6 +4,10 @@ module Brcobranca
   module Remessa
     module Cnab240
       class Caixa < Brcobranca::Remessa::Cnab240::Base
+        # Habilita o registro opcional Segmento X-03 (dados do Split Payment
+        # IBS/CBS, Layout Padrao Febraban 240 posicoes V11.0).
+        include Brcobranca::Remessa::Cnab240::SplitPayment
+
         # digito da agencia
         attr_accessor :digito_agencia
         # versao do aplicativo da CAIXA

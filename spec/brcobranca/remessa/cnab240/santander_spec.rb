@@ -302,4 +302,10 @@ RSpec.describe Brcobranca::Remessa::Cnab240::Santander do
       it { expect(santander.gera_arquivo).to eq(read_remessa('remessa-santander-cnab240.rem', santander.gera_arquivo)) }
     end
   end
+
+  context 'Split Payment (IBS/CBS)' do
+    # O include do modulo SplitPayment e o unico liga/desliga por banco: o
+    # exemplo compartilhado prova o Segmento X-03 no arquivo deste banco.
+    it_behaves_like 'cnab240 com split payment'
+  end
 end

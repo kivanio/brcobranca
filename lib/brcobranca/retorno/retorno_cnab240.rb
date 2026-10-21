@@ -4,35 +4,12 @@ module Brcobranca
   module Retorno
     # Formato de Retorno CNAB 240
     class RetornoCnab240 < Base
-      # Regex para remoção de headers e trailers além de registros diferentes de T ou U
-      REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U = /^((?!^.{7}3.{5}[T|U].*$).)*$/.freeze
-
-      def self.load_lines(file, options = {})
-        default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_OU_U }
-        options = default_options.merge!(options)
-
-        # self::Line (e nao Line) para que uma subclasse, como o
-        # Cnab240::Caixa, use o proprio layout em vez do generico.
-        self::Line.load_lines(file, options).each_slice(2).reduce([]) do |retornos, cnab_lines|
-          retornos << generate_retorno_based_on_cnab_lines(cnab_lines)
-        end
-      end
-
-      def self.generate_retorno_based_on_cnab_lines(cnab_lines)
-        retorno = new
-        cnab_lines.each do |line|
-          if line.tipo_registro == 'T'
-            self::Line::REGISTRO_T_FIELDS.each do |attr|
-              retorno.send(:"#{attr}=", line.send(attr))
-            end
-          else
-            self::Line::REGISTRO_U_FIELDS.each do |attr|
-              retorno.send(:"#{attr}=", line.send(attr))
-            end
-          end
-        end
-        retorno
-      end
+      # Carga dos pares de registros T/U e dos registros opcionais do Split
+      # Payment IBS/CBS (X-03/X-04). O modulo usa self::Line (e nao
+      # Line) para que uma
+      # subclasse, como o Cnab240::Caixa, use o proprio layout em vez do
+      # generico.
+      extend Brcobranca::Retorno::Cnab240::RegistrosTU
 
       # Linha de mapeamento do retorno do arquivo CNAB 240
       # O registro CNAB 240 possui 2 tipos de registros que juntos geram um registro de retorno bancário
@@ -40,6 +17,7 @@ module Brcobranca
       # O segundo é do tipo U que retorna os valores da transação
       class Line < Base
         extend ParseLine
+        extend Brcobranca::Retorno::Cnab240::SegmentoSplitPayment
 
         REGISTRO_T_FIELDS = %w[codigo_registro codigo_ocorrencia agencia_com_dv cedente_com_dv nosso_numero carteira
                                data_vencimento valor_titulo banco_recebedor agencia_recebedora_com_dv sequencial valor_tarifa motivo_ocorrencia].freeze
@@ -74,6 +52,10 @@ module Brcobranca
           parse.field :motivo_ocorrencia, 213..222, lambda { |motivos|
             motivos.scan(/.{2}/).reject(&:blank?).reject { |motivo| motivo == '00' }
           }
+
+          # Registros opcionais do Split Payment IBS/CBS: Segmento X-03/X-04
+          # (Segmento X-03/X-04, Layout Padrao Febraban 240 posicoes V11.0)
+          campos_segmento_split(parse)
 
           # Dados que não consegui extrair dos registros T e U
           # parse.field :convenio,31..37
