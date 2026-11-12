@@ -39,6 +39,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | 136 - Unicred           | 21 - [Magno Costa](https://github.com/mbcosta)                                                    |                                                                                                                                                                                                             |
 | 097 - CREDISIS          | Todas as carteiras presentes na documentação - [Marcelo J. Both](https://github.com/marceloboth)  |                                                                                                                                                                                                             |
 | 745 - Citibank          | 3                                                                                                 |                                                                                                                                                                                                             |
+| 208 - BTG Pactual       | 1 (cobrança simples)                                                                              | [kit](docs/BtgPactual)                                                                                                                                                                                      |
 
 ### Retornos e Remessas
 
@@ -60,6 +61,7 @@ Criado pelo pessoal da [Akretion](http://www.akretion.com) muito TOP \o/
 | UNICRED           | 400             | 400 e 240             |
 | AILOS             | 240             | 240                   |
 | CREDISIS          | 400             | 400                   |
+| BTG Pactual       | 240             | 240                   |
 
 - Banco do Brasil (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)
 - Caixa Economica Federal (CNAB240) [Isabella](https://github.com/isabellaSantos) da [Zaez](http://www.zaez.net)

@@ -39,6 +39,8 @@ shared_examples_for 'cnab240' do
       p[:variacao] = '123'
     elsif subject.instance_of?(Brcobranca::Remessa::Cnab240::Sicredi)
       p.merge!(byte_idt: '2', posto: '14', digito_conta: '5')
+    elsif subject.instance_of?(Brcobranca::Remessa::Cnab240::BtgPactual)
+      p[:digito_conta] = '5'
     elsif subject.instance_of?(Brcobranca::Remessa::Cnab240::Ailos)
       pagamento.codigo_multa = '2'
       pagamento.percentual_multa = 2.00

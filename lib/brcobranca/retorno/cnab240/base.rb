@@ -17,6 +17,8 @@ module Brcobranca
             Brcobranca::Retorno::Cnab240::Itau.load_lines(file, options)
           when "085"
             Brcobranca::Retorno::Cnab240::Ailos.load_lines(file, options)
+          when "208"
+            Brcobranca::Retorno::Cnab240::BtgPactual.load_lines(file, options)
           when "748"
             Brcobranca::Retorno::Cnab240::Sicredi.load_lines(file, options)
           when "756"
@@ -28,12 +30,14 @@ module Brcobranca
 
         # Codigo do banco lido do arquivo.
         # Registro Header [0..2]
+        #
+        # Ignora o BOM UTF-8 no inicio do arquivo (o BTG Pactual gera os
+        # retornos com ele), que deslocaria o codigo do banco.
         def self.codigo_banco_do_arquivo(file)
-          arquivo = File.open(file)
-          header = arquivo.gets
-          codigo_banco = header.blank? ? nil : header[0..2]
-          arquivo.close
-          codigo_banco
+          header = File.open(file, &:gets)
+          return nil if header.blank?
+
+          header.b.delete_prefix("\xEF\xBB\xBF".b)[0..2]
         end
       end
     end

@@ -1,0 +1,29 @@
+LEIAME - Kit Implantação CNAB
+
+Este kit contém arquivos que auxiliam a configuração do CNAB no formato Febraban assim 
+como a montagem de boletos e cálculo do código de barras.
+
+# Máscara boleto BTG PACTUAL.pdf
+Exemplo de boleto gerado pelo BTG
+
+# Regra de Cálculo do Código de Barras e Linha Digitavel.pdf
+Explica todas as regras de cálculo para gerar linha digitável e código de barras compatíveis com sistema de
+geração de boleto do BTG.
+
+# Tradutor Linha Digitável BTG.xlsx
+Utilize esse arquivo para validar ou comparar uma linha digitável gerada fora do sistema BTG. 
+
+# Exemplos de CNAB .ret e .rem
+Arquivos CNAB de exemplo para comparação de formatação.
+
+# Central de Atendimento
+    Ligue para 3003-6299 (capitais e regiões metropolitanas)0800-777-6299 (demais localidades).
+    Atendimento disponível 24 horas por dia, 7 dias por semana.
+
+# SAC
+    Telefone: 0800-772-2827
+    E-mail: sac@btgpactual.com
+
+# Ouvidoria
+    Telefone: 0800-722-0048
+    Horário de atendimento: segunda a sexta-feira, das 9h às 18h (exceto feriados).
