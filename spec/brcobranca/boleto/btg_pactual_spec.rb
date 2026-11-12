@@ -94,16 +94,17 @@ RSpec.describe Brcobranca::Boleto::BtgPactual do
 
   it 'Gerar boleto nos formatos válidos com método to_' do
     boleto_novo = described_class.new(valid_attributes)
+    assinaturas = {
+      'pdf' => ['%PDF'.b],
+      'jpg' => ["\xFF\xD8\xFF".b],
+      'tif' => ["II*\x00".b, "MM\x00*".b],
+      'png' => ["\x89PNG\r\n\x1A\n".b]
+    }
 
-    %w[pdf jpg tif png].each do |format|
-      file_body = boleto_novo.send(:"to_#{format}")
-      tmp_file = Tempfile.new(['foobar.', format])
-      tmp_file.puts file_body
-      tmp_file.close
-      expect(File).to exist(tmp_file.path)
-      expect(File.stat(tmp_file.path)).not_to be_zero
-      expect(File.delete(tmp_file.path)).to be(1)
-      expect(File).not_to exist(tmp_file.path)
+    assinaturas.each do |formato, inicios|
+      conteudo = boleto_novo.send(:"to_#{formato}")
+      expect(conteudo).to be_a(String)
+      expect(inicios).to include(conteudo.b[0, inicios.first.size]), "#{formato} sem a assinatura esperada"
     end
   end
 end

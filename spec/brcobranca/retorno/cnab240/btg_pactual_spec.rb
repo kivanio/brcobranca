@@ -54,9 +54,46 @@ RSpec.describe Brcobranca::Retorno::Cnab240::BtgPactual do
       expect(pagamento.txid).to be_nil
     end
 
+    it 'ignora headers e trailers mesmo com filtro except do chamador' do
+      retornos = described_class.load_lines(arquivo, except: /^$/)
+      expect(retornos.size).to eq(3)
+      expect(retornos.map(&:codigo_registro).uniq).to eq(['3'])
+    end
+
     it 'é despachado pela base a partir do código 208, apesar do BOM no header' do
       expect(Brcobranca::Retorno::Cnab240::Base.codigo_banco_do_arquivo(arquivo)).to eq('208')
       expect(Brcobranca::Retorno::Cnab240::Base.load_lines(arquivo).first).to be_a(described_class)
+    end
+  end
+
+  context 'com segmentos T e U fora de ordem' do
+    let(:linhas) { File.readlines(File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', 'CNAB240BTGPACTUAL.RET')) }
+    let(:t) { linhas.find { |l| l[13] == 'T' } }
+    let(:u) { linhas.find { |l| l[13] == 'U' } }
+    let(:arquivo_invalido) { Tempfile.new(['btg', '.RET']) }
+
+    after { arquivo_invalido.close! }
+
+    def le(*segmentos)
+      arquivo_invalido.write(segmentos.join)
+      arquivo_invalido.flush
+      described_class.load_lines(arquivo_invalido.path)
+    end
+
+    it 'rejeita T sem U antes do próximo T' do
+      expect { le(t, t, u) }.to raise_error(ArgumentError, /Segmento T sem o segmento U/)
+    end
+
+    it 'rejeita T sem U no fim do arquivo' do
+      expect { le(t, u, t) }.to raise_error(ArgumentError, /fim do retorno/)
+    end
+
+    it 'rejeita U sem T anterior' do
+      expect { le(u, t, u) }.to raise_error(ArgumentError, /Segmento U sem segmento T/)
+    end
+
+    it 'rejeita U duplicado' do
+      expect { le(t, u, u) }.to raise_error(ArgumentError, /Segmento U sem segmento T anterior ou duplicado/)
     end
   end
 

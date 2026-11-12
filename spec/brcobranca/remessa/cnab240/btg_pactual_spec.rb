@@ -64,6 +64,40 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BtgPactual do
       expect(described_class.new(params.merge(convenio: nil)).valid?).to be true
     end
 
+    it 'rejeita dígito da agência com mais de 1 caractere' do
+      btg.digito_agencia = '12'
+      expect(btg.invalid?).to be true
+      expect(btg.errors.full_messages).to include('Digito agencia deve ter no máximo 1 caractere alfanumérico.')
+    end
+
+    it 'rejeita quebra de linha no dígito da agência, no dígito da conta e no convênio' do
+      objeto = described_class.new(params.merge(digito_agencia: "\n", digito_conta: "\r", convenio: "4220\r\n91"))
+      expect(objeto.invalid?).to be true
+      expect(objeto.errors.full_messages).to include(
+        'Digito agencia deve ter no máximo 1 caractere alfanumérico.',
+        'Digito conta não pode conter caracteres de controle.',
+        'Convenio não pode conter caracteres de controle.'
+      )
+    end
+
+    it 'rejeita versões de layout não numéricas' do
+      objeto = described_class.new(params.merge(versao_layout_arquivo: 'ABC'))
+      expect(objeto.invalid?).to be true
+      expect(objeto.errors.full_messages).to include('Versao layout arquivo deve ter 3 dígitos.')
+    end
+
+    it 'mede o tamanho de valores numéricos pela quantidade de dígitos' do
+      expect(described_class.new(params.merge(agencia: 50, conta_corrente: 2_172_140)).valid?).to be true
+      expect(described_class.new(params.merge(conta_corrente: 12_345_678)).invalid?).to be true
+    end
+
+    it 'rejeita nosso número com mais de 11 dígitos em vez de truncar' do
+      pagamento.nosso_numero = '9912345678901'
+      expect(btg.invalid?).to be true
+      expect(btg.errors.full_messages).to include('Nosso numero 9912345678901 deve ser menor ou igual a 11 dígitos.')
+      expect { btg.gera_arquivo }.to raise_error(Brcobranca::RemessaInvalida)
+    end
+
     it 'limita o convênio a 20 caracteres' do
       btg.convenio = '1' * 21
       expect(btg.invalid?).to be true
@@ -83,6 +117,13 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BtgPactual do
     it 'usa as versoes de layout do FEBRABAN 10.9 por padrao' do
       expect(btg.versao_layout_arquivo).to eq '103'
       expect(btg.versao_layout_lote).to eq '060'
+    end
+
+    it 'converte versoes de layout numericas para texto' do
+      objeto = described_class.new(params.merge(versao_layout_arquivo: 103, versao_layout_lote: 60))
+      expect(objeto.monta_header_arquivo[163..165]).to eq '103'
+      expect(objeto.invalid?).to be true
+      expect(objeto.errors.full_messages).to include('Versao layout lote deve ter 3 dígitos.')
     end
 
     it 'permite sobrescrever as versoes de layout' do
@@ -119,8 +160,8 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BtgPactual do
       expect(comp_p[14..33]).to eq '00000000000000006380' # nosso numero
     end
 
-    it 'usa apenas os 11 ultimos digitos do nosso numero' do
-      pagamento.nosso_numero = '9912345678901'
+    it 'nosso numero com 11 digitos alinhado a direita em 20 posicoes' do
+      pagamento.nosso_numero = '12345678901'
       expect(btg.formata_nosso_numero(pagamento)).to eq '00000000012345678901'
     end
 

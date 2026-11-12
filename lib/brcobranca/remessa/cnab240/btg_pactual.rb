@@ -12,17 +12,41 @@ module Brcobranca
         # digito verificador da agencia (opcional, o BTG trabalha sem DV de agencia)
         attr_writer :digito_agencia
         # versao do layout do arquivo (G019); padrao FEBRABAN 10.9
-        attr_accessor :versao_layout_arquivo
+        attr_writer :versao_layout_arquivo
         # versao do layout do lote de cobranca (G030); padrao FEBRABAN 10.9
-        attr_accessor :versao_layout_lote
+        attr_writer :versao_layout_lote
 
         validates_presence_of :digito_conta, message: 'não pode estar em branco.'
         validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
         validates_length_of :digito_conta, is: 1, message: 'deve ter 1 dígito.'
+        # O leitor devolve sempre 1 caractere (branco quando não informado).
+        validates_format_of :digito_agencia, with: /\A[0-9A-Za-z ]\z/,
+                                             message: 'deve ter no máximo 1 caractere alfanumérico.'
         validates_length_of :convenio, maximum: 20, message: 'deve ser menor ou igual a 20 caracteres.'
-        validates_length_of :versao_layout_arquivo, is: 3, message: 'deve ter 3 dígitos.'
-        validates_length_of :versao_layout_lote, is: 3, message: 'deve ter 3 dígitos.'
+        validates_format_of :versao_layout_arquivo, with: /\A\d{3}\z/, message: 'deve ter 3 dígitos.'
+        validates_format_of :versao_layout_lote, with: /\A\d{3}\z/, message: 'deve ter 3 dígitos.'
+
+        # Quebras de linha ou outros caracteres de controle dividiriam os
+        # registros de posição fixa do arquivo.
+        validates_each :campos_sem_caracteres_de_controle do |record, _attr, _value|
+          %i[digito_conta convenio].each do |campo|
+            next unless record.send(campo).to_s.match?(/[[:cntrl:]]/)
+
+            record.errors.add(campo, 'não pode conter caracteres de controle.')
+          end
+        end
+
+        # O nosso número do BTG tem 11 posições (seção 4.4.4 do manual); um valor
+        # maior é rejeitado em vez de truncado, para não registrar outro título.
+        validates_each :nosso_numero_pagamentos do |record, _attr, _value|
+          Array(record.pagamentos).each do |pagamento|
+            next unless pagamento.respond_to?(:nosso_numero)
+            next if pagamento.nosso_numero.to_s.size <= 11
+
+            record.errors.add(:nosso_numero, "#{pagamento.nosso_numero} deve ser menor ou igual a 11 dígitos.")
+          end
+        end
 
         def initialize(campos = {})
           campos = { emissao_boleto: '2',
@@ -44,6 +68,16 @@ module Brcobranca
 
         def digito_agencia
           @digito_agencia.to_s.empty? ? ' ' : @digito_agencia.to_s
+        end
+
+        # Sempre String, para que um valor numérico (ex.: 103) não seja
+        # concatenado como caractere no header.
+        def versao_layout_arquivo
+          @versao_layout_arquivo.to_s
+        end
+
+        def versao_layout_lote
+          @versao_layout_lote.to_s
         end
 
         def codigo_convenio
@@ -86,12 +120,13 @@ module Brcobranca
         end
 
         # Nosso número sem o DV (seção 4.4.4 do manual: "certifique-se de não enviar
-        # o dígito verificador"), com os 11 últimos algarismos, alinhado à direita.
-        # Zeros fazem o BTG gerar o número (G069).
+        # o dígito verificador"), alinhado à direita. O tamanho máximo de 11
+        # algarismos é validado em nosso_numero_pagamentos. Zeros fazem o BTG
+        # gerar o número (G069).
         #
         # @return [String] 20 caracteres numéricos.
         def formata_nosso_numero(pagamento)
-          pagamento.nosso_numero.to_s.rjust(11, '0')[-11..].rjust(20, '0')
+          pagamento.nosso_numero.to_s.rjust(20, '0')
         end
 
         def complemento_trailer

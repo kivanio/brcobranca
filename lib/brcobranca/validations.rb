@@ -165,12 +165,12 @@ module Brcobranca
           end
         end
         if rule[-1][:minimum] && rule[-1][:maximum]
-          if !value || value.size < rule[-1][:minimum] || value.size > rule[-1][:maximum]
+          if !value || value.to_s.size < rule[-1][:minimum] || value.to_s.size > rule[-1][:maximum]
             all_checked = false
             errors.add variable, rule[-1][:message]
           end
         elsif rule[-1][:maximum]
-          if value && value.size > rule[-1][:maximum]
+          if value && value.to_s.size > rule[-1][:maximum]
             all_checked = false
             errors.add variable, rule[-1][:message]
           end

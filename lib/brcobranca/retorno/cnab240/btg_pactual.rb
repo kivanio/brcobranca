@@ -14,15 +14,50 @@ module Brcobranca
         REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_U_OU_Y = /^((?!^.{7}3.{5}[TUY].*$).)*$/
 
         # Lê o arquivo e devolve um retorno por título (T + U + Y-04 opcional).
+        #
+        # Cada T precisa ser seguido de exatamente um U antes do próximo T ou
+        # do fim do arquivo; o Y é opcional. Arquivo fora dessa ordem levanta
+        # ArgumentError, como em Cnab240::Itau, para não gerar retorno parcial.
         def self.load_lines(file, options = {})
           default_options = { except: REGEX_DE_EXCLUSAO_DE_REGISTROS_NAO_T_U_OU_Y }
           options = default_options.merge!(options)
 
-          Line.load_lines(file, options).each_with_object([]) do |line, retornos|
-            retornos << new if line.tipo_registro == 'T' || retornos.empty?
+          retornos = []
+          aguardando_u = false
+          Line.load_lines(file, options).each do |line|
+            # Mesmo com um filtro `except` próprio do chamador, headers e
+            # trailers nunca viram título.
+            next unless line.codigo_registro == '3' && %w[T U Y].include?(line.tipo_registro)
+
+            aguardando_u = valida_sequencia!(line, aguardando_u, retornos.empty?)
+            retornos << new if line.tipo_registro == 'T'
             preenche(retornos.last, line)
           end
+          raise ArgumentError, 'Segmento T sem o segmento U correspondente no fim do retorno do BTG Pactual' if aguardando_u
+
+          retornos
         end
+
+        # Devolve se, após esta linha, ainda falta o U do título corrente.
+        def self.valida_sequencia!(line, aguardando_u, sem_titulo)
+          case line.tipo_registro
+          when 'T'
+            erro_sequencia!('Segmento T sem o segmento U correspondente', line) if aguardando_u
+            true
+          when 'U'
+            erro_sequencia!('Segmento U sem segmento T anterior ou duplicado', line) unless aguardando_u
+            false
+          else
+            erro_sequencia!('Segmento Y sem segmento T anterior', line) if sem_titulo
+            aguardando_u
+          end
+        end
+        private_class_method :valida_sequencia!
+
+        def self.erro_sequencia!(mensagem, line)
+          raise ArgumentError, "#{mensagem} no retorno do BTG Pactual (sequencial: #{line.sequencial.inspect})"
+        end
+        private_class_method :erro_sequencia!
 
         def self.preenche(retorno, line)
           campos = case line.tipo_registro
