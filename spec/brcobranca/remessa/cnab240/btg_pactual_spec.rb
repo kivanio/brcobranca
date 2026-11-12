@@ -94,8 +94,23 @@ RSpec.describe Brcobranca::Remessa::Cnab240::BtgPactual do
     it 'rejeita nosso número com mais de 11 dígitos em vez de truncar' do
       pagamento.nosso_numero = '9912345678901'
       expect(btg.invalid?).to be true
-      expect(btg.errors.full_messages).to include('Nosso numero 9912345678901 deve ser menor ou igual a 11 dígitos.')
+      expect(btg.errors.full_messages).to include('Nosso numero "9912345678901" deve ter de 1 a 11 dígitos numéricos.')
       expect { btg.gera_arquivo }.to raise_error(Brcobranca::RemessaInvalida)
+    end
+
+    it 'rejeita nosso número com caracteres não numéricos ou quebra de linha' do
+      ["123\n", "12\r\n34", '12A', '12 34'].each do |nosso_numero|
+        pagamento.nosso_numero = nosso_numero
+        expect(btg.invalid?).to be(true), "#{nosso_numero.inspect} deveria ser rejeitado"
+        expect { btg.gera_arquivo }.to raise_error(Brcobranca::RemessaInvalida)
+      end
+    end
+
+    it 'aceita nosso número numérico de 1 a 11 dígitos' do
+      [1, '6380', '12345678901'].each do |nosso_numero|
+        pagamento.nosso_numero = nosso_numero
+        expect(btg.valid?).to be(true), "#{nosso_numero.inspect} deveria ser aceito"
+      end
     end
 
     it 'limita o convênio a 20 caracteres' do

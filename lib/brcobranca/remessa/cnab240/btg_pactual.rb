@@ -37,14 +37,15 @@ module Brcobranca
           end
         end
 
-        # O nosso número do BTG tem 11 posições (seção 4.4.4 do manual); um valor
-        # maior é rejeitado em vez de truncado, para não registrar outro título.
+        # O nosso número do BTG tem até 11 algarismos (seção 4.4.4 do manual). Valor
+        # maior é rejeitado em vez de truncado, para não registrar outro título, e
+        # qualquer caractere não numérico (inclusive quebra de linha) também.
         validates_each :nosso_numero_pagamentos do |record, _attr, _value|
           Array(record.pagamentos).each do |pagamento|
             next unless pagamento.respond_to?(:nosso_numero)
-            next if pagamento.nosso_numero.to_s.size <= 11
+            next if pagamento.nosso_numero.to_s.match?(/\A\d{1,11}\z/)
 
-            record.errors.add(:nosso_numero, "#{pagamento.nosso_numero} deve ser menor ou igual a 11 dígitos.")
+            record.errors.add(:nosso_numero, "#{pagamento.nosso_numero.inspect} deve ter de 1 a 11 dígitos numéricos.")
           end
         end
 
