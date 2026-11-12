@@ -119,6 +119,7 @@ module Brcobranca
     autoload :Safra,         'brcobranca/boleto/safra'
     autoload :Citibank,      'brcobranca/boleto/citibank'
     autoload :Ailos,         'brcobranca/boleto/ailos'
+    autoload :BtgPactual,    'brcobranca/boleto/btg_pactual'
 
     # Módulos para classes de template
     module Template
@@ -159,6 +160,7 @@ module Brcobranca
       autoload :Sicoob,        'brcobranca/retorno/cnab240/sicoob'
       autoload :Caixa,         'brcobranca/retorno/cnab240/caixa'
       autoload :Ailos,         'brcobranca/retorno/cnab240/ailos'
+      autoload :BtgPactual,    'brcobranca/retorno/cnab240/btg_pactual'
     end
   end
 
@@ -200,6 +202,7 @@ module Brcobranca
       autoload :Sicredi,            'brcobranca/remessa/cnab240/sicredi'
       autoload :Unicred,            'brcobranca/remessa/cnab240/unicred'
       autoload :Ailos,              'brcobranca/remessa/cnab240/ailos'
+      autoload :BtgPactual,         'brcobranca/remessa/cnab240/btg_pactual'
     end
   end
 
