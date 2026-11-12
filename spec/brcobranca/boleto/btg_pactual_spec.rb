@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Boleto::BtgPactual do
-  # Dados da máscara de boleto do kit de homologação (docs/BtgPactual).
+  # Dados da mascara de boleto do kit de homologacao (docs/BtgPactual).
   let(:valid_attributes) do
     {
       valor: 200.00,

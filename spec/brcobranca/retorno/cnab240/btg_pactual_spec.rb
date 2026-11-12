@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Brcobranca::Retorno::Cnab240::BtgPactual do
-  # Arquivos de exemplo do kit de homologação do BTG (docs/BtgPactual).
+  # Arquivos de exemplo do kit de homologacao do BTG (docs/BtgPactual).
   let(:arquivo) { File.join(File.dirname(__FILE__), '..', '..', '..', 'arquivos', nome_arquivo) }
 
   context 'retorno padrão' do

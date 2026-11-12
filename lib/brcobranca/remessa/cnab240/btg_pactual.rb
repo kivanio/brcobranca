@@ -5,9 +5,9 @@ module Brcobranca
     module Cnab240
       # Remessa CNAB 240 do BTG Pactual (208).
       #
-      # O BTG segue o layout FEBRABAN 240 v10.9 sem particularidades de posição
+      # O BTG segue o layout FEBRABAN 240 v10.9 sem particularidades de posicao
       # (docs/BtgPactual). Suporta os segmentos P, Q e R na remessa; o Y-04
-      # (Bolepix) é apenas de retorno.
+      # (Bolepix) e apenas de retorno.
       class BtgPactual < Brcobranca::Remessa::Cnab240::Base
         # digito verificador da agencia (opcional, o BTG trabalha sem DV de agencia)
         attr_writer :digito_agencia
@@ -20,7 +20,7 @@ module Brcobranca
         validates_length_of :agencia, maximum: 4, message: 'deve ser menor ou igual a 4 dígitos.'
         validates_length_of :conta_corrente, maximum: 7, message: 'deve ser menor ou igual a 7 dígitos.'
         validates_length_of :digito_conta, is: 1, message: 'deve ter 1 dígito.'
-        # O leitor devolve sempre 1 caractere (branco quando não informado).
+        # O leitor devolve sempre 1 caractere (branco quando nao informado).
         validates_format_of :digito_agencia, with: /\A[0-9A-Za-z ]\z/,
                                              message: 'deve ter no máximo 1 caractere alfanumérico.'
         validates_length_of :convenio, maximum: 20, message: 'deve ser menor ou igual a 20 caracteres.'
@@ -28,7 +28,7 @@ module Brcobranca
         validates_format_of :versao_layout_lote, with: /\A\d{3}\z/, message: 'deve ter 3 dígitos.'
 
         # Quebras de linha ou outros caracteres de controle dividiriam os
-        # registros de posição fixa do arquivo.
+        # registros de posicao fixa do arquivo.
         validates_each :campos_sem_caracteres_de_controle do |record, _attr, _value|
           %i[digito_conta convenio].each do |campo|
             next unless record.send(campo).to_s.match?(/[[:cntrl:]]/)
@@ -37,9 +37,9 @@ module Brcobranca
           end
         end
 
-        # O nosso número do BTG tem até 11 algarismos (seção 4.4.4 do manual). Valor
-        # maior é rejeitado em vez de truncado, para não registrar outro título, e
-        # qualquer caractere não numérico (inclusive quebra de linha) também.
+        # O nosso numero do BTG tem ate 11 algarismos (secao 4.4.4 do manual). Valor
+        # maior e rejeitado em vez de truncado, para nao registrar outro titulo, e
+        # qualquer caractere nao numerico (inclusive quebra de linha) tambem.
         validates_each :nosso_numero_pagamentos do |record, _attr, _value|
           Array(record.pagamentos).each do |pagamento|
             next unless pagamento.respond_to?(:nosso_numero)
@@ -71,7 +71,7 @@ module Brcobranca
           @digito_agencia.to_s.empty? ? ' ' : @digito_agencia.to_s
         end
 
-        # Sempre String, para que um valor numérico (ex.: 103) não seja
+        # Sempre String, para que um valor numerico (ex.: 103) nao seja
         # concatenado como caractere no header.
         def versao_layout_arquivo
           @versao_layout_arquivo.to_s
@@ -120,30 +120,30 @@ module Brcobranca
           "#{conta_corrente.to_s.rjust(12, '0')}#{digito_conta} #{formata_nosso_numero(pagamento)}"
         end
 
-        # Nosso número sem o DV (seção 4.4.4 do manual: "certifique-se de não enviar
-        # o dígito verificador"), alinhado à direita. O tamanho máximo de 11
-        # algarismos é validado em nosso_numero_pagamentos. Zeros fazem o BTG
-        # gerar o número (G069).
+        # Nosso numero sem o DV (secao 4.4.4 do manual: "certifique-se de nao enviar
+        # o digito verificador"), alinhado a direita. O tamanho maximo de 11
+        # algarismos e validado em nosso_numero_pagamentos. Zeros fazem o BTG
+        # gerar o numero (G069).
         #
-        # @return [String] 20 caracteres numéricos.
+        # @return [String] 20 caracteres numericos.
         def formata_nosso_numero(pagamento)
           pagamento.nosso_numero.to_s.rjust(20, '0')
         end
 
         def complemento_trailer
           # CAMPO                               TAMANHO
-          # Totalização cobrança simples        6 + 17
-          # Totalização cobrança vinculada      6 + 17
-          # Totalização cobrança caucionada     6 + 17
-          # Totalização cobrança descontada     6 + 17
-          # Número do aviso de lançamento       8
+          # Totalizacao cobranca simples        6 + 17
+          # Totalizacao cobranca vinculada      6 + 17
+          # Totalizacao cobranca caucionada     6 + 17
+          # Totalizacao cobranca descontada     6 + 17
+          # Numero do aviso de lancamento       8
           # Uso exclusivo FEBRABAN              117
           # Os totais só são usados no retorno (C070/C071); na remessa vão zerados.
           "#{''.rjust(92, '0')}#{''.rjust(125, ' ')}"
         end
 
-        # Trailer do arquivo com a quantidade de contas para conciliação (G037) zerada,
-        # já que o campo é numérico.
+        # Trailer do arquivo com a quantidade de contas para conciliacao (G037) zerada,
+        # ja que o campo e numerico.
         def monta_trailer_arquivo(nro_lotes, sequencial)
           trailer = ''                                        # CAMPO                     TAMANHO
           trailer += cod_banco                                # codigo banco              3
